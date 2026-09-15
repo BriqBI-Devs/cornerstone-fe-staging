@@ -22,7 +22,7 @@ const NAV_ITEMS = [
 const FOOTER_COLUMNS = [
   {
     heading: "News",
-    links: ["Must reads", "Newsletters", "News archive"],
+    links: ["Newsletters", "News archive"],
   },
   {
     heading: "Departments",
@@ -108,7 +108,7 @@ export function PublicLayout() {
         )}
 
         <div className="border-b border-brand-navy py-6 text-center">
-          <h1 className="font-serif text-4xl font-bold tracking-wide text-brand-navy">
+          <h1 className="font-serif text-5xl font-bold tracking-wide text-brand-navy">
             CORNERSTONE
           </h1>
           <p className="mt-1 text-xs uppercase tracking-[0.2em] text-brand-navy/55">

@@ -46,7 +46,7 @@ export function UpcomingEvents() {
               <span className="text-[10px] font-semibold uppercase tracking-wide text-brand-navy/55">
                 {event.month}
               </span>
-              <span className="font-serif text-lg font-bold leading-none text-brand-navy">
+              <span className="text-lg font-bold leading-none text-brand-navy">
                 {event.day}
               </span>
               <span className="text-[10px] text-brand-navy/55">{event.weekday}</span>

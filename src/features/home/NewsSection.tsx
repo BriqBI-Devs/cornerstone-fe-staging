@@ -1,8 +1,10 @@
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import { useEffect, useState } from "react";
 import { Card } from "../../components/ui/Card";
 import { NewsListItem } from "../../components/ui/NewsListItem";
 import { PlaceholderImage } from "../../components/ui/PlaceholderImage";
+import { cn } from "../../lib/cn";
 
 const FEATURED_ARTICLES = [
   {
@@ -23,59 +25,59 @@ const FEATURED_ARTICLES = [
       "All staff are invited to join leadership for a look back at Q2 and what's ahead for Q3 — plus live Q&A.",
     meta: "Jul 14 · 2 min read",
   },
+  {
+    title: "Safety Stand-Down: What Every Site Needs to Know",
+    excerpt:
+      "This Friday at 7:00 AM, every field site will pause for a company-wide safety stand-down — here's what to expect.",
+    meta: "Jul 10 · 3 min read",
+  },
+  {
+    title: "Meet the IT Team: MFA Rollout Office Hours",
+    excerpt:
+      "The MFA rollout completes this month — stop by walk-up help Tuesdays and Thursdays, 12–2, on the 4th floor kitchen.",
+    meta: "Jul 7 · 2 min read",
+  },
 ];
 
 const ARTICLES = [
   {
-    category: "Builders",
-    title: "Topping-out at the Bronx site: 312 affordable homes closer to move-in",
-    meta: "Jul 8 · 3 min read",
+    category: "Workiversaries",
+    title: "This month's Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)",
+    meta: "Jul 5 · 1 min read",
   },
   {
-    category: "Corporate Comms",
-    title: "Q3 All-Hands: what to know before Friday",
-    meta: "Jul 7 · 2 min read",
+    category: "New Hires",
+    title: "Welcome Alex Kim, Priya Shah, Tomás Rivera, and Sarah Hunt — our July new hires",
+    meta: "Jul 6 · 1 min read",
   },
   {
-    category: "Operations",
-    title: "How to finish your MFA setup in under five minutes",
-    meta: "Jul 6 · 2 min read",
+    category: "Your News and Photos",
+    title: "The 12-foot snowman that stole the show after last winter's storm",
+    meta: "Jul 3 · 2 min read",
   },
   {
-    category: "Workforce and Contractor Diversity",
-    title: "WCD Team Engages with MWBE Firms at the 2026 Regional Opportunities Expo",
-    meta: "Aug 31 · 4 min read",
-  },
-  {
-    category: "Property Management",
+    category: "Your News and Photos",
     title: "Fulton Park Supports Students with Annual Book Bag Giveaway",
     meta: "Sep 2 · 2 min read",
   },
   {
-    category: "Community Investment",
+    category: "Company + Culture",
     title:
       "July Community Digest is out — Saratoga harvest photos, new childcare seats, and the fall volunteer day poll",
     meta: "Jul 6 · 2 min read",
   },
-  {
-    category: "Operations",
-    title: "Benefits drop-in hours this week — 4th floor kitchen, Tuesdays and Thursdays",
-    meta: "Jul 10 · 1 min read",
-  },
-  {
-    category: "Builders",
-    title: "Margaret Carestia shares topping-out ceremony photos from the Bronx site",
-    meta: "Jul 8 · 2 min read",
-  },
-  {
-    category: "HR Central",
-    title: "How to finish your MFA setup in under five minutes: a follow-up walkthrough",
-    meta: "Jul 12 · 2 min read",
-  },
 ];
 
 export function NewsSection() {
-  const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 2700 })]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 2700 })]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    onSelect();
+  }, [emblaApi]);
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr]">
@@ -85,7 +87,7 @@ export function NewsSection() {
             {FEATURED_ARTICLES.map((article) => (
               <div key={article.title} className="min-w-0 shrink-0 grow-0 basis-full">
                 <PlaceholderImage label="hero news photo" className="aspect-[16/10] w-full" />
-                <h2 className="mt-3 font-serif text-xl font-bold text-brand-navy md:text-2xl">
+                <h2 className="mt-3 text-xl font-bold text-brand-navy md:text-2xl">
                   {article.title}
                 </h2>
                 <p className="mt-2 text-sm text-brand-navy/75">{article.excerpt}</p>
@@ -98,6 +100,20 @@ export function NewsSection() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="mt-3 flex justify-center gap-1.5">
+          {FEATURED_ARTICLES.slice(0, 5).map((article, i) => (
+            <button
+              key={article.title}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => emblaApi?.scrollTo(i)}
+              className={cn(
+                "h-1.5 w-1.5 rounded-full transition-colors",
+                i === selectedIndex ? "bg-brand-navy" : "bg-brand-navy/25",
+              )}
+            />
+          ))}
         </div>
       </div>
 
