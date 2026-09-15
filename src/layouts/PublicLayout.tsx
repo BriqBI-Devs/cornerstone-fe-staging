@@ -14,8 +14,6 @@ const NAV_ITEMS = [
   { to: "/company-culture", label: "Company + Culture" },
   { to: "/events", label: "Events" },
   { to: "/people", label: "People" },
-  { to: "/departments", label: "Departments" },
-  { to: "/documents", label: "Documents" },
   { to: "/policies-resources", label: "Policies + Resources" },
 ];
 
