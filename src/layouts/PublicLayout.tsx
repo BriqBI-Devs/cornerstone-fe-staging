@@ -39,7 +39,7 @@ const FOOTER_COLUMNS = [
 
 export function PublicLayout() {
   const dateAndWeather = useDateAndWeather();
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(true);
   const [appsOpen, setAppsOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const isHome = useLocation().pathname === "/";
