@@ -1,7 +1,6 @@
-import { Clock, FileText, Star } from "lucide-react";
+import { Clock, FileText, Plus, Settings2, Star } from "lucide-react";
 import { cn } from "../../lib/cn";
 import { Card } from "../../components/ui/Card";
-import { SectionHeading } from "../../components/ui/SectionHeading";
 
 const FAVORITE_APPS = [
   { image: "outlook-img.png", label: "Outlook" },
@@ -12,19 +11,25 @@ const FAVORITE_APPS = [
 ];
 
 const RECENT = [
-  "Q3 headcount review.xlsx",
+  "Q3 headcount review",
   "Benefits enrollment guide",
-  "Fulton Park site plans.pdf",
+  "Fulton Park site plans",
   "New hire onboarding checklist",
-  "Q3 town hall slides.pptx",
+  "Q3 town hall slides",
 ];
 
 export function CustomizableWorkspace() {
   return (
     <Card className="border-t-2 border-t-brand-accent">
-      <SectionHeading title="My workspace" />
+      <div className="flex items-center justify-between">
+        <h2 className="text-base font-semibold text-brand-navy">My workspace</h2>
+        <button className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs font-medium text-brand-navy/70 hover:bg-surface-subtle">
+          <Settings2 className="h-3.5 w-3.5" />
+          Customize
+        </button>
+      </div>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div>
           <p className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-brand-navy/55">
             <Star className="h-3 w-3" /> Favorites
@@ -46,6 +51,12 @@ export function CustomizableWorkspace() {
                 <span className="text-xs font-medium text-brand-navy">{app.label}</span>
               </a>
             ))}
+            <button className="flex flex-col items-center justify-center gap-1.5 rounded-card border border-dashed border-border p-2 text-center text-brand-navy/40 transition-colors hover:border-brand-link/40 hover:text-brand-link">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl">
+                <Plus className="h-4 w-4" />
+              </span>
+              <span className="text-xs font-medium">Add</span>
+            </button>
           </div>
         </div>
 
@@ -59,11 +70,13 @@ export function CustomizableWorkspace() {
                 key={item}
                 href="#"
                 className={cn(
-                  "flex items-center gap-2.5 py-2 text-sm text-brand-navy hover:text-brand-link",
+                  "-mx-2 flex items-center gap-2.5 rounded-card px-2 py-2 text-sm text-brand-navy transition-colors hover:bg-surface-subtle",
                   i > 0 && "border-t border-border",
                 )}
               >
-                <FileText className="h-3.5 w-3.5 shrink-0 text-brand-navy/45" />
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-brand-link/10 text-brand-link">
+                  <FileText className="h-3.5 w-3.5" />
+                </span>
                 <span className="truncate">{item}</span>
               </a>
             ))}

@@ -19,7 +19,7 @@ export function PulsePoll() {
   return (
     <Card className="flex h-full flex-col border-t-2 border-t-brand-link">
       <div className="mb-3 flex items-center gap-2">
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-50 text-brand-link">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-link/10 text-brand-link">
           <MessageSquare className="h-3.5 w-3.5" />
         </span>
         <p className="text-[15px] font-bold text-brand-navy">Pulse poll</p>
@@ -31,7 +31,7 @@ export function PulsePoll() {
               <button
                 key={option.label}
                 onClick={() => setSelected(option.label)}
-                className="w-full rounded-md border border-border px-3 py-2 text-left text-sm font-medium text-brand-navy transition-colors hover:bg-surface-subtle"
+                className="w-full rounded-md border border-border px-3 py-2 text-left text-sm font-medium text-brand-navy transition-colors hover:border-brand-link/40 hover:bg-surface-subtle"
               >
                 {option.label}
               </button>

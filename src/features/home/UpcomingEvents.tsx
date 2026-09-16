@@ -1,4 +1,4 @@
-import { Clock, MapPin, User } from "lucide-react";
+import { Clock, MapPin } from "lucide-react";
 import { Card } from "../../components/ui/Card";
 import { SectionHeading } from "../../components/ui/SectionHeading";
 
@@ -32,31 +32,40 @@ const EVENTS = [
   },
 ];
 
+function initials(name: string) {
+  return name
+    .split(" ")
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
 export function UpcomingEvents() {
   return (
     <Card className="flex h-full flex-col">
       <SectionHeading title="Upcoming events" />
-      <div className="space-y-4">
+      <div className="space-y-3">
         {EVENTS.map((event) => (
           <div
             key={event.title}
-            className="flex items-start gap-3 border-b border-border pb-4 last:border-b-0 last:pb-0"
+            className="flex items-start gap-4 rounded-card border border-border p-3 transition-colors hover:border-brand-link/40 hover:bg-surface-subtle"
           >
-            <div className="flex w-14 shrink-0 flex-col items-center rounded-card border border-border py-1.5">
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-brand-navy/55">
+            <div className="flex w-14 shrink-0 flex-col items-center rounded-card bg-brand-navy py-1.5 text-white">
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
                 {event.month}
               </span>
-              <span className="text-lg font-bold leading-none text-brand-navy">
-                {event.day}
-              </span>
-              <span className="text-[10px] text-brand-navy/55">{event.weekday}</span>
+              <span className="text-lg font-bold leading-none">{event.day}</span>
+              <span className="text-[10px] text-white/70">{event.weekday}</span>
             </div>
 
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold text-brand-navy">{event.title}</p>
               <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-brand-navy/65">
-                <span className="flex items-center gap-1">
-                  <User className="h-3 w-3" />
+                <span className="flex items-center gap-1.5">
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-brand-navy/10 text-[8px] font-semibold text-brand-navy">
+                    {initials(event.host)}
+                  </span>
                   {event.host}
                 </span>
                 <span className="flex items-center gap-1">
@@ -72,7 +81,7 @@ export function UpcomingEvents() {
 
             <a
               href="#"
-              className="shrink-0 self-center rounded-md border border-border px-3 py-1.5 text-sm font-medium text-brand-navy hover:bg-surface-subtle"
+              className="shrink-0 self-center rounded-md border border-border px-3 py-1.5 text-sm font-medium text-brand-navy hover:bg-white"
             >
               Go to event
             </a>
