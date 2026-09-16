@@ -4,8 +4,8 @@ import { SectionHeading } from "../../components/ui/SectionHeading";
 
 const EVENTS = [
   {
-    month: "Jul",
-    day: "10",
+    month: "Sep",
+    day: "18",
     weekday: "Friday",
     title: "Safety stand-down · all sites",
     host: "EHS Team",
@@ -13,17 +13,17 @@ const EVENTS = [
     location: "Every field site",
   },
   {
-    month: "Jul",
-    day: "14",
+    month: "Sep",
+    day: "22",
     weekday: "Tuesday",
-    title: "Q3 town hall",
+    title: "Q3 Deal Data walkthrough",
     host: "Leadership Team",
     time: "12:00 PM",
     location: "All staff · virtual",
   },
   {
-    month: "Jul",
-    day: "18",
+    month: "Sep",
+    day: "26",
     weekday: "Saturday",
     title: "River Crossing site tour",
     host: "Margaret Carestia",

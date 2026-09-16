@@ -1,14 +1,14 @@
-import { MessageSquarePlus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
-import { AlertBar } from "../../features/home/AlertBar";
 import { CustomizableWorkspace } from "../../features/home/CustomizableWorkspace";
+import { FeedbackAndIdeas } from "../../features/home/FeedbackAndIdeas";
 import { HomeSidebar } from "../../features/home/HomeSidebar";
 import { HowWeWork } from "../../features/home/HowWeWork";
+import { KPICards } from "../../features/home/KPICards";
+import { LinkedInFeed } from "../../features/home/LinkedInFeed";
 import { ManagerNotices } from "../../features/home/ManagerNotices";
 import { NewsSection } from "../../features/home/NewsSection";
-import { PeopleFinder } from "../../features/home/PeopleFinder";
-import { QuickLinksTools } from "../../features/home/QuickLinksTools";
-import { SocialRow } from "../../features/home/SocialRow";
+import { PulsePoll } from "../../features/home/SocialRow";
 import { UpcomingEvents } from "../../features/home/UpcomingEvents";
 import { WhereWeWork } from "../../features/home/WhereWeWork";
 
@@ -44,30 +44,23 @@ export function HomePage() {
           )}
         </div>
 
-        <AlertBar />
         <NewsSection />
+        <UpcomingEvents />
         <ManagerNotices />
+        <KPICards />
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <UpcomingEvents />
-          <QuickLinksTools />
+          <WhereWeWork />
+          <HowWeWork />
         </div>
 
-        <WhereWeWork />
-        <HowWeWork />
-        <SocialRow />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <PulsePoll />
+          <FeedbackAndIdeas />
+        </div>
 
+        <LinkedInFeed />
         <CustomizableWorkspace />
-
-        <a
-          href="mailto:intranet@lmdevelopmentpartners.com?subject=Cornerstone%20Feedback"
-          className="flex items-center justify-center gap-2 rounded-card border border-dashed border-border p-4 text-sm font-semibold text-brand-navy hover:border-brand-accent hover:bg-surface-subtle"
-        >
-          <MessageSquarePlus className="h-4 w-4" />
-          Share feedback or an idea
-        </a>
-
-        <PeopleFinder />
       </div>
     </div>
   );

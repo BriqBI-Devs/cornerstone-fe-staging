@@ -1,9 +1,7 @@
 import { MessageSquare } from "lucide-react";
 import { useState } from "react";
 import { Card } from "../../components/ui/Card";
-import { SectionHeading } from "../../components/ui/SectionHeading";
 import { cn } from "../../lib/cn";
-import { LinkedInFeed } from "./LinkedInFeed";
 
 const POLL = {
   question: "Where should the fall volunteer day be?",
@@ -15,64 +13,7 @@ const POLL = {
   closesIn: "7 days",
 };
 
-const CELEBRATIONS = [
-  {
-    icon: "🎂",
-    label: "3 birthdays this month",
-    people: [
-      { name: "Denise Ramirez", detail: "12 July" },
-      { name: "Marcus Lee", detail: "14 July" },
-      { name: "Ana Gómez", detail: "16 July" },
-    ],
-  },
-  {
-    icon: "🎉",
-    label: "2 Workiversaries this month",
-    people: [
-      { name: "Denise Ramirez", detail: "10 years" },
-      { name: "Margaret Carestia", detail: "12 years" },
-    ],
-  },
-];
-
-function Celebrations() {
-  return (
-    <Card className="flex h-full flex-col border-t-2 border-t-brand-accent">
-      <SectionHeading title="Celebrations" />
-      <div className="space-y-4">
-        {CELEBRATIONS.map((group, i) => (
-          <div key={group.label} className={cn(i > 0 && "border-t border-border pt-4")}>
-            <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-accent/15 text-sm">
-                {group.icon}
-              </span>
-              <p className="text-sm font-semibold text-brand-navy">{group.label}</p>
-            </div>
-            <ul className="mt-2 space-y-1.5 pl-9">
-              {group.people.map((person) => (
-                <li
-                  key={person.name}
-                  className="flex items-center justify-between gap-2 text-sm text-brand-navy/75"
-                >
-                  <span>{person.name}</span>
-                  <span className="shrink-0 text-xs text-brand-navy/55">{person.detail}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-      <a
-        href="#"
-        className="mt-auto block pt-4 text-right text-sm font-semibold text-brand-navy hover:underline"
-      >
-        View more →
-      </a>
-    </Card>
-  );
-}
-
-function PulsePoll() {
+export function PulsePoll() {
   const [selected, setSelected] = useState<string | null>(null);
 
   return (
@@ -118,23 +59,10 @@ function PulsePoll() {
         <p className="text-xs text-brand-navy/55">
           {POLL.votes} votes so far · closes in {POLL.closesIn}
         </p>
-        <a
-          href="#"
-          className="shrink-0 text-sm font-semibold text-brand-navy hover:underline"
-        >
+        <a href="#" className="shrink-0 text-sm font-semibold text-brand-navy hover:underline">
           View more →
         </a>
       </div>
     </Card>
-  );
-}
-
-export function SocialRow() {
-  return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <Celebrations />
-      <PulsePoll />
-      <LinkedInFeed />
-    </div>
   );
 }

@@ -10,11 +10,9 @@ export function ManagerNotices() {
   return (
     <Card className="flex items-center justify-between gap-3 border-l-4 border-l-brand-accent">
       <div className="min-w-0">
-        <h2 className="text-sm font-semibold text-brand-navy">
-          Manager-only strip (hidden for non-managers)
-        </h2>
+        <h2 className="text-sm font-semibold text-brand-navy">Manager Monday</h2>
         <p className="mt-1 text-sm text-brand-navy/75">
-          Manager Monday: Q3 headcount review starts next week — check your inbox.
+          Q3 headcount review starts next week — check your inbox for the prep deck.
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-3">

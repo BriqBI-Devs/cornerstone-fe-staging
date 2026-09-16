@@ -8,34 +8,34 @@ import { cn } from "../../lib/cn";
 
 const FEATURED_ARTICLES = [
   {
-    title: "July is BIPOC Mental Health Awareness Month",
+    title: "September is Suicide Prevention Awareness Month",
     excerpt:
       "Resources, events, and conversations across L+M this month — starting with Magellan Healthcare's toolkit for teams and managers.",
-    meta: "Jul 2 · 4 min read",
+    meta: "Sep 2 · 4 min read",
   },
   {
     title: "Fun, Food, and Family at River Crossing",
     excerpt:
       "We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time.",
-    meta: "Sep 4 · 3 min read",
+    meta: "Sep 6 · 3 min read",
   },
   {
     title: "Q3 Town Hall: what to expect this Friday",
     excerpt:
       "All staff are invited to join leadership for a look back at Q2 and what's ahead for Q3 — plus live Q&A.",
-    meta: "Jul 14 · 2 min read",
+    meta: "Sep 15 · 2 min read",
   },
   {
     title: "Safety Stand-Down: What Every Site Needs to Know",
     excerpt:
       "This Friday at 7:00 AM, every field site will pause for a company-wide safety stand-down — here's what to expect.",
-    meta: "Jul 10 · 3 min read",
+    meta: "Sep 15 · 3 min read",
   },
   {
     title: "Meet the IT Team: MFA Rollout Office Hours",
     excerpt:
       "The MFA rollout completes this month — stop by walk-up help Tuesdays and Thursdays, 12–2, on the 4th floor kitchen.",
-    meta: "Jul 7 · 2 min read",
+    meta: "Sep 10 · 2 min read",
   },
 ];
 
@@ -43,28 +43,28 @@ const ARTICLES = [
   {
     category: "Workiversaries",
     title: "This month's Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)",
-    meta: "Jul 5 · 1 min read",
+    meta: "Sep 9 · 1 min read",
   },
   {
     category: "New Hires",
-    title: "Welcome Alex Kim, Priya Shah, Tomás Rivera, and Sarah Hunt — our July new hires",
-    meta: "Jul 6 · 1 min read",
+    title: "Welcome Alex Kim, Priya Shah, Tomás Rivera, and Sarah Hunt — our September new hires",
+    meta: "Sep 8 · 1 min read",
   },
   {
     category: "Your News and Photos",
     title: "The 12-foot snowman that stole the show after last winter's storm",
-    meta: "Jul 3 · 2 min read",
+    meta: "Sep 5 · 2 min read",
   },
   {
     category: "Your News and Photos",
     title: "Fulton Park Supports Students with Annual Book Bag Giveaway",
-    meta: "Sep 2 · 2 min read",
+    meta: "Sep 3 · 2 min read",
   },
   {
     category: "Company + Culture",
     title:
-      "July Community Digest is out — Saratoga harvest photos, new childcare seats, and the fall volunteer day poll",
-    meta: "Jul 6 · 2 min read",
+      "September Community Digest is out — Saratoga harvest photos, new childcare seats, and the fall volunteer day poll",
+    meta: "Sep 7 · 2 min read",
   },
 ];
 
