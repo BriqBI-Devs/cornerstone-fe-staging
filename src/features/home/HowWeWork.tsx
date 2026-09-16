@@ -18,7 +18,7 @@ export function HowWeWork() {
                 href="#"
                 className="group flex items-center gap-3 rounded-card px-2 py-2 -mx-2 text-sm text-brand-navy transition-colors hover:bg-surface-subtle"
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-link/10 text-brand-link">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-brand-navy/10 text-brand-navy">
                   <Icon className="h-4 w-4" />
                 </span>
                 <span className="flex-1 font-medium">{link}</span>

@@ -9,7 +9,7 @@ export function ManagerNotices() {
 
   return (
     <Card className="flex items-center gap-3 border-l-4 border-l-brand-accent bg-brand-accent/10">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-accent/15 text-brand-accent">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-brand-accent/15 text-brand-accent">
         <Megaphone className="h-4 w-4" />
       </span>
 

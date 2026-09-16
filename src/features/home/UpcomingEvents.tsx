@@ -49,7 +49,7 @@ export function UpcomingEvents() {
         {EVENTS.map((event) => (
           <div
             key={event.title}
-            className="flex items-start gap-4 rounded-card border border-border p-3 transition-colors hover:border-brand-link/40 hover:bg-surface-subtle"
+            className="flex items-start gap-4 rounded-card border border-border p-3 transition-colors hover:border-brand-navy/40 hover:bg-surface-subtle"
           >
             <div className="flex w-14 shrink-0 flex-col items-center rounded-card bg-brand-navy py-1.5 text-white">
               <span className="text-[10px] font-semibold uppercase tracking-wide text-white/70">

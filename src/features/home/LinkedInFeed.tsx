@@ -19,7 +19,7 @@ export function LinkedInFeed() {
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#0A66C2] text-xs font-bold text-white">
           in
         </span>
-        <p className="text-[15px] font-bold text-brand-navy">Latest from LinkedIn</p>
+        <p className="text-[15px] font-semibold text-brand-navy">Latest from LinkedIn</p>
       </div>
       <div className="space-y-3">
         {POSTS.map((post) => (

@@ -1,4 +1,4 @@
-import { Clock, FileText, Plus, Settings2, Star } from "lucide-react";
+import { Clock, FileText, Plus, Star } from "lucide-react";
 import { cn } from "../../lib/cn";
 import { Card } from "../../components/ui/Card";
 
@@ -21,13 +21,7 @@ const RECENT = [
 export function CustomizableWorkspace() {
   return (
     <Card className="border-t-2 border-t-brand-accent">
-      <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold text-brand-navy">My workspace</h2>
-        <button className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs font-medium text-brand-navy/70 hover:bg-surface-subtle">
-          <Settings2 className="h-3.5 w-3.5" />
-          Customize
-        </button>
-      </div>
+      <h2 className="text-base font-semibold text-brand-navy">My workspace</h2>
 
       <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div>
@@ -51,7 +45,7 @@ export function CustomizableWorkspace() {
                 <span className="text-xs font-medium text-brand-navy">{app.label}</span>
               </a>
             ))}
-            <button className="flex flex-col items-center justify-center gap-1.5 rounded-card border border-dashed border-border p-2 text-center text-brand-navy/40 transition-colors hover:border-brand-link/40 hover:text-brand-link">
+            <button className="flex flex-col items-center justify-center gap-1.5 rounded-card border border-dashed border-border p-2 text-center text-brand-navy/40 transition-colors hover:border-brand-navy/40 hover:text-brand-navy">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl">
                 <Plus className="h-4 w-4" />
               </span>
@@ -74,7 +68,7 @@ export function CustomizableWorkspace() {
                   i > 0 && "border-t border-border",
                 )}
               >
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-brand-link/10 text-brand-link">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-brand-navy/10 text-brand-navy">
                   <FileText className="h-3.5 w-3.5" />
                 </span>
                 <span className="truncate">{item}</span>

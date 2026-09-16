@@ -19,10 +19,10 @@ export function PulsePoll() {
   return (
     <Card className="flex h-full flex-col border-t-2 border-t-brand-link">
       <div className="mb-3 flex items-center gap-2">
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-link/10 text-brand-link">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-brand-link/10 text-brand-link">
           <MessageSquare className="h-3.5 w-3.5" />
         </span>
-        <p className="text-[15px] font-bold text-brand-navy">Pulse poll</p>
+        <p className="text-[15px] font-semibold text-brand-navy">Pulse poll</p>
       </div>
       <p className="text-sm text-brand-navy">{POLL.question}</p>
       <div className="mt-3 space-y-2">

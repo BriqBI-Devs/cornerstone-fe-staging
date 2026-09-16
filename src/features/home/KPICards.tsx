@@ -9,12 +9,7 @@ const STATS = [
   { label: "Apartments managed", value: "18,600" },
 ];
 
-const THEMES = [
-  { icon: Home, bg: "bg-brand-link/10", text: "text-brand-link" },
-  { icon: Building2, bg: "bg-brand-accent/15", text: "text-brand-accent" },
-  { icon: HardHat, bg: "bg-brand-navy/10", text: "text-brand-navy" },
-  { icon: Users, bg: "bg-brand-link/10", text: "text-brand-link" },
-];
+const ICONS = [Home, Building2, HardHat, Users];
 
 export function KPICards() {
   return (
@@ -22,13 +17,10 @@ export function KPICards() {
       <SectionHeading title="L+M at a glance" />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {STATS.map((stat, index) => {
-          const { icon: Icon, bg, text } = THEMES[index];
+          const Icon = ICONS[index];
           return (
-            <div
-              key={stat.label}
-              className="rounded-card border border-border p-4 transition-colors hover:border-brand-link/40 hover:bg-surface-subtle"
-            >
-              <span className={`flex h-8 w-8 items-center justify-center rounded-full ${bg} ${text}`}>
+            <div key={stat.label} className="rounded-card border border-border p-4">
+              <span className="flex h-8 w-8 items-center justify-center rounded bg-brand-link/10 text-brand-link">
                 <Icon className="h-4 w-4" />
               </span>
               <p className="mt-3 text-2xl font-bold text-brand-navy">{stat.value}</p>
