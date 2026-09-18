@@ -16,7 +16,7 @@ const BOTTOM_ITEMS = [
 
 export function HomeSidebar() {
   return (
-    <div className="sticky top-0 hidden h-screen w-14 shrink-0 flex-col items-center gap-1 self-start rounded-card bg-brand-navy py-4 md:flex">
+    <div className="sticky top-[217px] hidden h-[calc(100svh_-_217px)] w-14 shrink-0 flex-col items-center gap-1 self-start rounded-card bg-brand-navy py-4 md:flex">
       <button
         aria-label="Toggle panel"
         className="mb-2 flex h-9 w-9 items-center justify-center rounded-md text-white/60 hover:bg-white/10 hover:text-white"

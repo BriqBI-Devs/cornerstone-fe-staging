@@ -1,4 +1,4 @@
-import { Building2, Home, HardHat, Users } from "lucide-react";
+import { Building2, HeartHandshake, Home, HardHat, Map, Users } from "lucide-react";
 import { Card } from "../../components/ui/Card";
 import { SectionHeading } from "../../components/ui/SectionHeading";
 
@@ -7,15 +7,17 @@ const STATS = [
   { label: "Projects in pre-development", value: "48" },
   { label: "Units in construction", value: "1,214" },
   { label: "Apartments managed", value: "18,600" },
+  { label: "States with L+M presence", value: "9" },
+  { label: "Volunteer hours this year", value: "12,400" },
 ];
 
-const ICONS = [Home, Building2, HardHat, Users];
+const ICONS = [Home, Building2, HardHat, Users, Map, HeartHandshake];
 
 export function KPICards() {
   return (
     <Card>
       <SectionHeading title="L+M at a glance" />
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {STATS.map((stat, index) => {
           const Icon = ICONS[index];
           return (

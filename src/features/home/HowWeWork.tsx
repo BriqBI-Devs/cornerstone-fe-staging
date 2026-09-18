@@ -1,15 +1,46 @@
-import { BookOpen, ChevronRight, Heart, Mail } from "lucide-react";
+import {
+  BookOpen,
+  ChevronRight,
+  ClipboardList,
+  FileText,
+  GraduationCap,
+  HandHeart,
+  Heart,
+  LifeBuoy,
+  Mail,
+  ShieldCheck,
+} from "lucide-react";
 import { Card } from "../../components/ui/Card";
 import { SectionHeading } from "../../components/ui/SectionHeading";
 
-const LINKS = ["Company Guide", "Mission + Values", "Newsletters"];
-const ICONS = [BookOpen, Heart, Mail];
+const LINKS = [
+  "Company Guide",
+  "Mission + Values",
+  "How we support employees",
+  "Benefits + Wellbeing",
+  "Learning + Development",
+  "Policies + Handbook",
+  "Project Delivery Playbook",
+  "Newsletters",
+  "IT Help Desk",
+];
+const ICONS = [
+  BookOpen,
+  Heart,
+  HandHeart,
+  ShieldCheck,
+  GraduationCap,
+  FileText,
+  ClipboardList,
+  Mail,
+  LifeBuoy,
+];
 
 export function HowWeWork() {
   return (
     <Card>
       <SectionHeading title="How we work" />
-      <ul className="space-y-1">
+      <ul className="grid grid-cols-1 gap-x-2 gap-y-1 sm:grid-cols-2">
         {LINKS.map((link, index) => {
           const Icon = ICONS[index];
           return (

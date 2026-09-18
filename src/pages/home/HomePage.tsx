@@ -8,6 +8,7 @@ import { KPICards } from "../../features/home/KPICards";
 import { LinkedInFeed } from "../../features/home/LinkedInFeed";
 import { ManagerNotices } from "../../features/home/ManagerNotices";
 import { NewsSection } from "../../features/home/NewsSection";
+import { PopularLinks } from "../../features/home/PopularLinks";
 import { PulsePoll } from "../../features/home/SocialRow";
 import { UpcomingEvents } from "../../features/home/UpcomingEvents";
 import { WhereWeWork } from "../../features/home/WhereWeWork";
@@ -27,7 +28,9 @@ export function HomePage() {
       <HomeSidebar />
 
       <div className="flex flex-1 flex-col gap-6">
-        <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
+        {/* top-[217px] clears the pinned header in PublicLayout
+            (utility bar 53 + masthead 117 + nav 47). */}
+        <div className="sticky top-[217px] z-20 -mt-6 flex items-center justify-between gap-4 border-b border-border bg-surface pb-4 pt-6">
           <h1 className="shrink-0 text-lg font-semibold text-brand-navy">
             {getGreeting()}, Jordan
           </h1>
@@ -45,7 +48,14 @@ export function HomePage() {
         </div>
 
         <NewsSection />
-        <UpcomingEvents />
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <UpcomingEvents />
+          </div>
+          <PopularLinks />
+        </div>
+
         <ManagerNotices />
         <KPICards />
 

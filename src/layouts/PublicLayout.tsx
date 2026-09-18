@@ -1,6 +1,6 @@
 import { Bell, LayoutGrid, Search, X } from "lucide-react";
 import { useRef, useState } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Avatar } from "../components/ui/Avatar";
 import { cn } from "../lib/cn";
 import { useClickOutside } from "../lib/useClickOutside";
@@ -9,7 +9,6 @@ import { AppLauncherPanel } from "./AppLauncherPanel";
 import { NotificationsPanel } from "./NotificationsPanel";
 
 const NAV_ITEMS = [
-  { to: "/", label: "Home" },
   { to: "/news", label: "News" },
   { to: "/company-culture", label: "Company + Culture" },
   { to: "/events", label: "Events" },
@@ -51,14 +50,20 @@ export function PublicLayout() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="bg-surface">
+      {/* Everything above the grey line under the greeting stays pinned.
+          The whole block is one sticky element whose parent is the root
+          column — sticky is bounded by its own parent's box, so the pieces
+          cannot be stuck individually from in here. */}
+      <header className="sticky top-0 z-30 bg-surface">
         <div className="grid grid-cols-3 items-center border-b border-border px-4 pb-2 pt-4 text-xs text-brand-navy/65 md:px-8">
           <span>{dateAndWeather}</span>
-          <img
-            src="/cornerstone-assets/L+m-development-partners-logo.avif"
-            alt="L+M Development Partners"
-            className="mx-auto h-6 w-auto object-contain"
-          />
+          <Link to="/" aria-label="Cornerstone home" className="justify-self-center">
+            <img
+              src="/cornerstone-assets/L+m-development-partners-logo.avif"
+              alt="L+M Development Partners"
+              className="h-6 w-auto object-contain"
+            />
+          </Link>
           <div className="flex items-center justify-end gap-4">
             <button
               onClick={() => setSearchOpen((open) => !open)}
@@ -93,7 +98,7 @@ export function PublicLayout() {
         </div>
 
         {searchOpen && !isHome && (
-          <div className="border-b border-border px-4 py-3 md:px-8">
+          <div className="border-b border-border bg-surface px-4 py-3 md:px-8">
             <div className="mx-auto flex max-w-[600px] items-center gap-2 rounded-full bg-surface-subtle px-4 py-2">
               <Search className="h-4 w-4 shrink-0 text-brand-navy/50" />
               <input
@@ -108,7 +113,9 @@ export function PublicLayout() {
 
         <div className="border-b border-brand-navy py-6 text-center">
           <h1 className="font-serif text-5xl font-bold tracking-wide text-brand-navy">
-            CORNERSTONE
+            <Link to="/" className="transition-opacity hover:opacity-80">
+              CORNERSTONE
+            </Link>
           </h1>
           <p className="mt-1 text-xs uppercase tracking-[0.2em] text-brand-navy/55">
             The L+M Development Partners Daily
@@ -121,7 +128,6 @@ export function PublicLayout() {
               <NavLink
                 key={item.to}
                 to={item.to}
-                end={item.to === "/"}
                 className={({ isActive }) =>
                   cn(
                     "whitespace-nowrap border-b-2 pb-1 text-xs font-semibold uppercase tracking-wide",
@@ -136,6 +142,7 @@ export function PublicLayout() {
             ))}
           </nav>
         </div>
+
       </header>
 
       <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 py-6 md:px-8">

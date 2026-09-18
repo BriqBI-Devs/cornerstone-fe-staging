@@ -1,15 +1,23 @@
-import { Building2, ChevronRight, MapPin } from "lucide-react";
+import { Building, Building2, ChevronRight, HardHat, Map, MapPin, Sprout, Wrench } from "lucide-react";
 import { Card } from "../../components/ui/Card";
 import { SectionHeading } from "../../components/ui/SectionHeading";
 
-const LINKS = ["Deal Data + Construction", "Building List", "Offices, Space & Parking"];
-const ICONS = [Building2, Building2, MapPin];
+const LINKS = [
+  "Deal Data + Construction",
+  "Building List",
+  "Offices, Space & Parking",
+  "Regional Offices Directory",
+  "Community Investment Sites",
+  "Property Operations Hub",
+  "Facilities Requests",
+];
+const ICONS = [Building2, Building, MapPin, Map, Sprout, Wrench, HardHat];
 
 export function WhereWeWork() {
   return (
     <Card>
       <SectionHeading title="Where we work" />
-      <ul className="space-y-1">
+      <ul className="grid grid-cols-1 gap-x-2 gap-y-1 sm:grid-cols-2">
         {LINKS.map((link, index) => {
           const Icon = ICONS[index];
           return (
