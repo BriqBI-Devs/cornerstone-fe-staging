@@ -17,16 +17,16 @@ export function KPICards() {
   return (
     <Card>
       <SectionHeading title="L+M at a glance" />
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-6 gap-2">
         {STATS.map((stat, index) => {
           const Icon = ICONS[index];
           return (
-            <div key={stat.label} className="rounded-card border border-border p-4">
-              <span className="flex h-8 w-8 items-center justify-center rounded bg-brand-link/10 text-brand-link">
-                <Icon className="h-4 w-4" />
+            <div key={stat.label} className="rounded-card border border-border p-3">
+              <span className="flex h-7 w-7 items-center justify-center rounded bg-brand-link/10 text-brand-link">
+                <Icon className="h-3.5 w-3.5" />
               </span>
-              <p className="mt-3 text-2xl font-bold text-brand-navy">{stat.value}</p>
-              <p className="mt-1 text-xs text-brand-navy/65">{stat.label}</p>
+              <p className="mt-2 text-lg font-bold text-brand-navy">{stat.value}</p>
+              <p className="mt-1 text-[11px] leading-tight text-brand-navy/65">{stat.label}</p>
             </div>
           );
         })}

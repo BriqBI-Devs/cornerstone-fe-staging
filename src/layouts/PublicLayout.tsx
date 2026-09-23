@@ -1,4 +1,4 @@
-import { Bell, LayoutGrid, Search, X } from "lucide-react";
+import { Bell, LayoutGrid, Search } from "lucide-react";
 import { useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Avatar } from "../components/ui/Avatar";
@@ -38,7 +38,6 @@ const FOOTER_COLUMNS = [
 
 export function PublicLayout() {
   const dateAndWeather = useDateAndWeather();
-  const [searchOpen, setSearchOpen] = useState(true);
   const [appsOpen, setAppsOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const isHome = useLocation().pathname === "/";
@@ -59,19 +58,12 @@ export function PublicLayout() {
           <span>{dateAndWeather}</span>
           <Link to="/" aria-label="Cornerstone home" className="justify-self-center">
             <img
-              src="/cornerstone-assets/L+m-development-partners-logo.avif"
-              alt="L+M Development Partners"
+              src="/cornerstone-assets/L+m-logo.avif"
+              alt="L+M"
               className="h-6 w-auto object-contain"
             />
           </Link>
           <div className="flex items-center justify-end gap-4">
-            <button
-              onClick={() => setSearchOpen((open) => !open)}
-              aria-label={searchOpen ? "Close search" : "Search"}
-              className="flex h-7 w-7 items-center justify-center text-brand-navy/75 hover:text-brand-navy"
-            >
-              {searchOpen ? <X className="h-4 w-4" /> : <Search className="h-4 w-4" />}
-            </button>
             <div ref={appsRef} className="relative flex h-7 w-7 items-center justify-center">
               <button
                 onClick={() => setAppsOpen((open) => !open)}
@@ -97,7 +89,7 @@ export function PublicLayout() {
           </div>
         </div>
 
-        {searchOpen && !isHome && (
+        {!isHome && (
           <div className="border-b border-border bg-surface px-4 py-3 md:px-8">
             <div className="mx-auto flex max-w-[600px] items-center gap-2 rounded-full bg-surface-subtle px-4 py-2">
               <Search className="h-4 w-4 shrink-0 text-brand-navy/50" />
@@ -118,7 +110,7 @@ export function PublicLayout() {
             </Link>
           </h1>
           <p className="mt-1 text-xs uppercase tracking-[0.2em] text-brand-navy/55">
-            The L+M Development Partners Daily
+            The L+M Daily
           </p>
         </div>
 
@@ -146,7 +138,7 @@ export function PublicLayout() {
       </header>
 
       <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 py-6 md:px-8">
-        <Outlet context={{ searchOpen }} />
+        <Outlet />
       </main>
 
       <footer className="border-t-2 border-brand-accent bg-brand-navy text-white">

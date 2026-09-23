@@ -1,17 +1,17 @@
-import { Building, Building2, ChevronRight, HardHat, Map, MapPin, Sprout, Wrench } from "lucide-react";
+import { ChevronRight, HardHat, Map, Sprout, Wrench } from "lucide-react";
 import { Card } from "../../components/ui/Card";
 import { SectionHeading } from "../../components/ui/SectionHeading";
 
+// Deal Data + Construction, Building List, and Offices/Space & Parking are
+// intentionally left out here — they already live in Popular Links (Quick
+// Links) above the fold, and listing them twice was flagged as duplication.
 const LINKS = [
-  "Deal Data + Construction",
-  "Building List",
-  "Offices, Space & Parking",
   "Regional Offices Directory",
   "Community Investment Sites",
   "Property Operations Hub",
   "Facilities Requests",
 ];
-const ICONS = [Building2, Building, MapPin, Map, Sprout, Wrench, HardHat];
+const ICONS = [Map, Sprout, Wrench, HardHat];
 
 export function WhereWeWork() {
   return (
