@@ -13,12 +13,12 @@ export function PopularLinks() {
   return (
     <Card className="flex h-full flex-col">
       <SectionHeading title="Popular links" />
-      <div className="flex flex-1 flex-col gap-3">
+      <div className="flex flex-col gap-3">
         {LINKS.map(({ label, icon: Icon }) => (
           <a
             key={label}
             href="#"
-            className="group flex flex-1 items-center gap-3 rounded-card border border-border p-3 text-sm font-semibold text-brand-navy transition-colors hover:border-brand-navy/40 hover:bg-surface-subtle"
+            className="group flex items-center gap-3 rounded-card border border-border p-3 text-sm font-semibold text-brand-navy transition-colors hover:border-brand-navy/40 hover:bg-surface-subtle"
           >
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-card bg-brand-navy text-white">
               <Icon className="h-4 w-4" />
