@@ -1,13 +1,11 @@
 import { Search } from "lucide-react";
+import { AdjustableHomeTiles } from "../../features/home/tile-editor/AdjustableHomeTiles";
 import { CustomizableWorkspace } from "../../features/home/CustomizableWorkspace";
-import { FeedbackAndIdeas } from "../../features/home/FeedbackAndIdeas";
 import { HowWeWork } from "../../features/home/HowWeWork";
 import { KPICards } from "../../features/home/KPICards";
-import { LinkedInFeed } from "../../features/home/LinkedInFeed";
 import { ManagerNotices } from "../../features/home/ManagerNotices";
 import { NewsSection } from "../../features/home/NewsSection";
 import { PopularLinks } from "../../features/home/PopularLinks";
-import { PulsePoll } from "../../features/home/SocialRow";
 import { UpcomingEvents } from "../../features/home/UpcomingEvents";
 import { WhereWeWork } from "../../features/home/WhereWeWork";
 
@@ -62,12 +60,8 @@ export function HomePage() {
         <HowWeWork />
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <PulsePoll />
-        <FeedbackAndIdeas />
-      </div>
+      <AdjustableHomeTiles />
 
-      <LinkedInFeed />
       <CustomizableWorkspace />
     </div>
   );

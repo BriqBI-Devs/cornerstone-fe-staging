@@ -1,14 +1,18 @@
 import { Lightbulb } from "lucide-react";
 import { Card } from "../../components/ui/Card";
 
-export function FeedbackAndIdeas() {
+interface FeedbackAndIdeasProps {
+  title?: string;
+}
+
+export function FeedbackAndIdeas({ title = "Feedback and ideas" }: FeedbackAndIdeasProps = {}) {
   return (
     <Card className="flex h-full flex-col border-t-2 border-t-brand-accent bg-brand-navy text-white">
       <div className="mb-3 flex items-center gap-2">
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-brand-accent/20 text-brand-accent">
           <Lightbulb className="h-3.5 w-3.5" />
         </span>
-        <p className="text-[15px] font-semibold text-white">Feedback and ideas</p>
+        <p className="text-[15px] font-semibold text-white">{title}</p>
       </div>
       <p className="text-sm text-white/70">
         We welcome your feedback about the intranet, as well as any story ideas you might have or
