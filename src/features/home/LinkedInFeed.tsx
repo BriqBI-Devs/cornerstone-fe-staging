@@ -12,14 +12,18 @@ const POSTS = [
   },
 ];
 
-export function LinkedInFeed() {
+interface LinkedInFeedProps {
+  title?: string;
+}
+
+export function LinkedInFeed({ title = "Latest from LinkedIn" }: LinkedInFeedProps = {}) {
   return (
-    <Card className="border-t-2 border-t-[#0A66C2]">
+    <Card className="flex h-full flex-col border-t-2 border-t-[#0A66C2]">
       <div className="mb-3 flex items-center gap-2">
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#0A66C2] text-xs font-bold text-white">
           in
         </span>
-        <p className="text-[15px] font-semibold text-brand-navy">Latest from LinkedIn</p>
+        <p className="text-[15px] font-semibold text-brand-navy">{title}</p>
       </div>
       <div className="space-y-3">
         {POSTS.map((post) => (
@@ -36,7 +40,7 @@ export function LinkedInFeed() {
           </a>
         ))}
       </div>
-      <p className="mt-3 text-xs text-brand-navy/45">
+      <p className="mt-auto pt-3 text-xs text-brand-navy/45">
         Placeholder — pending confirmation of company-wide LinkedIn access
       </p>
     </Card>

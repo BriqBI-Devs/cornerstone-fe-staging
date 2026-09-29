@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { PublicLayout } from "../layouts/PublicLayout";
 import { ComingSoonPage } from "../pages/coming-soon/ComingSoonPage";
 import { HomePage } from "../pages/home/HomePage";
+import { PoliciesResourcesPage } from "../pages/policies-resources/PoliciesResourcesPage";
 
 const COMING_SOON_ROUTES: { path: string; title: string }[] = [
   { path: "news", title: "News" },
@@ -10,7 +11,6 @@ const COMING_SOON_ROUTES: { path: string; title: string }[] = [
   { path: "people", title: "People" },
   { path: "departments", title: "Departments" },
   { path: "documents", title: "Documents" },
-  { path: "policies-resources", title: "Policies + Resources" },
 ];
 
 export const router = createBrowserRouter([
@@ -18,6 +18,7 @@ export const router = createBrowserRouter([
     element: <PublicLayout />,
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "policies-resources", element: <PoliciesResourcesPage /> },
       ...COMING_SOON_ROUTES.map((route) => ({
         path: `/${route.path}`,
         element: <ComingSoonPage title={route.title} />,

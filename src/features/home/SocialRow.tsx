@@ -13,7 +13,11 @@ const POLL = {
   closesIn: "7 days",
 };
 
-export function PulsePoll() {
+interface PulsePollProps {
+  title?: string;
+}
+
+export function PulsePoll({ title = "Pulse poll" }: PulsePollProps = {}) {
   const [selected, setSelected] = useState<string | null>(null);
 
   return (
@@ -22,7 +26,7 @@ export function PulsePoll() {
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-brand-link/10 text-brand-link">
           <MessageSquare className="h-3.5 w-3.5" />
         </span>
-        <p className="text-[15px] font-semibold text-brand-navy">Pulse poll</p>
+        <p className="text-[15px] font-semibold text-brand-navy">{title}</p>
       </div>
       <p className="text-sm text-brand-navy">{POLL.question}</p>
       <div className="mt-3 space-y-2">

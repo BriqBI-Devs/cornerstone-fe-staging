@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Document Library — Tabbed Listing Design</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #f7f7f5;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    color: #1b2a3a;
+  }
+  a { text-decoration: none; color: inherit; }
+  .mono { font-family: "Cascadia Mono", "Courier New", monospace; }
+
+  /* Tab nav — same pattern as v7 */
+  .tab-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-top: 32px;
+    border-bottom: 1px solid #e5e5e0;
+  }
+  .tab {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 0 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: rgba(27,42,58,0.5);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+  }
+  .tab svg { flex-shrink: 0; }
+  .tab.active {
+    color: #1d4ed8;
+    border-bottom-color: #1d4ed8;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 28px;
+  }
+  .section-head h2 { font-size: 15px; font-weight: 700; margin: 0; }
+
+  .card { background: #ffffff; border: 1px solid #e5e5e0; border-radius: 8px; }
+
+  /* Row listing — same component as document-library-mockup-v6-ledger.html */
+  .ledger-row {
+    display: grid;
+    grid-template-columns: 30px 1fr 80px 140px;
+    align-items: center;
+    gap: 16px;
+    padding: 15px 4px;
+    border-bottom: 1px dashed #e5e5e0;
+  }
+  .ledger-row:last-child { border-bottom: none; }
+  .ledger-row[hidden] { display: none; }
+  .ledger-row.head { padding-bottom: 11px; border-bottom: 1px solid #e5e5e0; }
+  .row-num { font-size: 12px; color: rgba(27,42,58,0.35); }
+  .file-name { font-size: 14.5px; font-weight: 600; color: #1d4ed8; }
+  .file-sub { font-size: 11.5px; color: rgba(27,42,58,0.5); margin-top: 3px; }
+  .col-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(27,42,58,0.45); }
+  .cell-mono { font-size: 12.5px; color: rgba(27,42,58,0.65); }
+  .cell-mono.redirect { display: inline-flex; align-items: center; gap: 5px; color: #0891b2; font-weight: 600; }
+  .cell-mono.redirect svg { width: 12px; height: 12px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<div style="width: 100%; max-width: 1160px; margin: 0 auto; padding: 56px 40px 80px;">
+
+  <h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 40px; font-weight: 700; margin: 0;">
+    Policies + Resources
+  </h1>
+  <p style="max-width: 460px; margin: 10px 0 0; font-size: 14.5px; line-height: 1.6; color: rgba(27,42,58,0.7);">
+    Everything filed under this category — documents to download and pages to open, listed together.
+  </p>
+
+  <div style="display: flex; align-items: center; gap: 10px; margin-top: 24px; max-width: 480px; padding: 10px 16px; background: #ffffff; border: 1px solid #e5e5e0; border-radius: 999px;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(27,42,58,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="7"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <span style="font-size: 13.5px; color: rgba(27,42,58,0.5);">Search files…</span>
+  </div>
+
+  <!-- Tab nav — same as v7, folder icon on every tab -->
+  <div class="tab-nav" id="categoryTabs">
+    <span class="tab active" data-category="Policies">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h5l2 2h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path></svg>
+      Policies
+    </span>
+    <span class="tab" data-category="HR">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h5l2 2h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path></svg>
+      HR
+    </span>
+    <span class="tab" data-category="Marketing">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h5l2 2h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path></svg>
+      Marketing
+    </span>
+    <span class="tab" data-category="Building List">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h5l2 2h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path></svg>
+      Building List
+    </span>
+  </div>
+
+  <div class="section-head">
+    <h2 id="sectionTitle">Policies</h2>
+  </div>
+
+  <!-- Row listing — files and links live in the same SharePoint folder, so they're listed together. -->
+  <div class="card" id="filesCard" style="margin-top: 18px; padding: 6px 20px;">
+
+    <div class="ledger-row head">
+      <span class="col-label mono">No.</span>
+      <span class="col-label">Filename</span>
+      <span class="col-label">Size</span>
+      <span class="col-label">Filed</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">01</span>
+      <div>
+        <div class="file-name">IT Help Desk</div>
+        <div class="file-sub mono">Help Centers</div>
+      </div>
+      <span class="cell-mono mono">—</span>
+      <span class="cell-mono mono redirect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path></svg>External link</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">02</span>
+      <div>
+        <div class="file-name">HR Help Center</div>
+        <div class="file-sub mono">Help Centers</div>
+      </div>
+      <span class="cell-mono mono">—</span>
+      <span class="cell-mono mono redirect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path></svg>External link</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">03</span>
+      <div>
+        <div class="file-name">IT Systems Status</div>
+        <div class="file-sub mono">Help Centers</div>
+      </div>
+      <span class="cell-mono mono">—</span>
+      <span class="cell-mono mono redirect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path></svg>External link</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">04</span>
+      <div>
+        <div class="file-name">Org Directory</div>
+        <div class="file-sub mono">Facilities &amp; Forms</div>
+      </div>
+      <span class="cell-mono mono">—</span>
+      <span class="cell-mono mono redirect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path></svg>External link</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">05</span>
+      <div>
+        <div class="file-name">Q3 Deal Data Summary.pdf</div>
+        <div class="file-sub mono">Prashanth Rayapudi</div>
+      </div>
+      <span class="cell-mono mono">2.4 MB</span>
+      <span class="cell-mono mono">09.12 · 9:14 AM</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">06</span>
+      <div>
+        <div class="file-name">Employee Handbook 2026.pdf</div>
+        <div class="file-sub mono">HR Team</div>
+      </div>
+      <span class="cell-mono mono">1.1 MB</span>
+      <span class="cell-mono mono">09.03 · 11:02 AM</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">07</span>
+      <div>
+        <div class="file-name">Benefits Enrollment Worksheet.xlsx</div>
+        <div class="file-sub mono">HR Team</div>
+      </div>
+      <span class="cell-mono mono">340 KB</span>
+      <span class="cell-mono mono">08.28 · 3:47 PM</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">08</span>
+      <div>
+        <div class="file-name">Brand Guidelines.pdf</div>
+        <div class="file-sub mono">Marketing</div>
+      </div>
+      <span class="cell-mono mono">8.7 MB</span>
+      <span class="cell-mono mono">08.15 · 10:20 AM</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">09</span>
+      <div>
+        <div class="file-name">L+M Logo Pack.zip</div>
+        <div class="file-sub mono">Marketing</div>
+      </div>
+      <span class="cell-mono mono">14.2 MB</span>
+      <span class="cell-mono mono">08.10 · 4:05 PM</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">10</span>
+      <div>
+        <div class="file-name">Building List Master.xlsx</div>
+        <div class="file-sub mono">Prashanth Rayapudi</div>
+      </div>
+      <span class="cell-mono mono">1.8 MB</span>
+      <span class="cell-mono mono">07.30 · 1:33 PM</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">11</span>
+      <div>
+        <div class="file-name">Q3 Town Hall Deck.pptx</div>
+        <div class="file-sub mono">Leadership Team</div>
+      </div>
+      <span class="cell-mono mono">6.1 MB</span>
+      <span class="cell-mono mono">07.22 · 2:15 PM</span>
+    </div>
+
+    <div class="ledger-row">
+      <span class="row-num mono">12</span>
+      <div>
+        <div class="file-name">Remote Work Policy — Draft.docx</div>
+        <div class="file-sub mono">Prashanth Rayapudi</div>
+      </div>
+      <span class="cell-mono mono">220 KB</span>
+      <span class="cell-mono mono">07.18 · 9:58 AM</span>
+    </div>
+
+    <!-- Revealed by "Load more files" -->
+    <div class="ledger-row" hidden>
+      <span class="row-num mono">13</span>
+      <div>
+        <div class="file-name">Org Chart 2026.pdf</div>
+        <div class="file-sub mono">HR Team</div>
+      </div>
+      <span class="cell-mono mono">640 KB</span>
+      <span class="cell-mono mono">07.05 · 10:40 AM</span>
+    </div>
+
+    <div class="ledger-row" hidden>
+      <span class="row-num mono">14</span>
+      <div>
+        <div class="file-name">Facilities Request Form.pdf</div>
+        <div class="file-sub mono">Prashanth Rayapudi</div>
+      </div>
+      <span class="cell-mono mono">310 KB</span>
+      <span class="cell-mono mono">06.28 · 4:12 PM</span>
+    </div>
+
+  </div>
+
+  <div style="text-align: center; margin-top: 24px;">
+    <button type="button" id="loadMoreBtn" style="font: 600 13.5px/1 'Inter', sans-serif; color: #1b2a3a; background: none; border: none; border-bottom: 1px solid #1b2a3a; padding-bottom: 2px; cursor: pointer;">Load more files</button>
+  </div>
+
+  <script>
+    var filesCard = document.getElementById('filesCard');
+
+    // Category tabs — any tab can be selected; section title follows the active one
+    var categoryTabs = document.getElementById('categoryTabs');
+    var sectionTitle = document.getElementById('sectionTitle');
+    categoryTabs.querySelectorAll('.tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        categoryTabs.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        sectionTitle.textContent = tab.getAttribute('data-category');
+      });
+    });
+
+    // Load more — reveals the last 2 hidden rows, then hides itself
+    var loadMoreBtn = document.getElementById('loadMoreBtn');
+    loadMoreBtn.addEventListener('click', function () {
+      var hidden = filesCard.querySelectorAll('.ledger-row[hidden]');
+      for (var i = 0; i < Math.min(2, hidden.length); i++) {
+        hidden[i].removeAttribute('hidden');
+      }
+      if (!filesCard.querySelector('.ledger-row[hidden]')) {
+        loadMoreBtn.style.display = 'none';
+      }
+    });
+  </script>
+
+</div>
+</body>
+</html>
