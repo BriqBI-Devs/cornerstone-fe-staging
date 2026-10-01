@@ -1,146 +1,267 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Policies + Resources — Page Design</title>
+<title>Policies + Resources</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --bg: #f7f7f5;
+    --card: #ffffff;
+    --border: #e5e5e0;
+    --heading: #1b2a3a;
+    --text: rgba(27, 42, 58, 0.6);
+    --accent: #1d4ed8;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *, *::before, *::after { box-sizing: border-box; }
   body {
     margin: 0;
-    background: #f7f7f5;
-    font-family: "Inter", system-ui, -apple-system, sans-serif;
-    color: #1b2a3a;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
-  a { text-decoration: none; color: inherit; }
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+  header { text-align: left; }
+  h1 {
+    margin: 0 0 10px;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--heading);
+  }
+  header p {
+    margin: 0;
+    max-width: 640px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .grid {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
   .card {
-    background: #ffffff;
-    border: 1px solid #e5e5e0;
-    border-radius: 8px;
-    padding: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    min-height: 180px;
+    text-decoration: none;
+    transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
   }
-  .card.accent-top { border-top: 3px solid #1d4ed8; }
-  .card.accent-top.gold { border-top: 3px solid #f5c518; }
-  .card h2 { font-size: 16px; font-weight: 700; margin: 0 0 10px; }
-  .card-meta {
-    font-size: 13px;
-    color: rgba(27,42,58,0.55);
-    margin: 0;
-    flex: 1;
+  .card[hidden] { display: none; }
+  .card:hover {
+    box-shadow: 0 8px 20px rgba(27, 42, 58, 0.1);
+    transform: translateY(-2px);
+    border-color: rgba(27, 42, 58, 0.18);
   }
-  .card-meta strong { color: #1b2a3a; font-weight: 600; }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 32px;
-  }
-  .view-more {
-    margin-top: 16px;
-    padding-top: 14px;
-    border-top: 1px solid #e5e5e0;
-    font-size: 13px;
-    font-weight: 600;
-    color: #1d4ed8;
+  .thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 2;
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
   }
-  .view-more:hover { text-decoration: underline; }
-  .view-more svg { width: 12px; height: 12px; }
+  .thumb svg { width: 34px; height: 34px; }
+  .thumb.on-light { background: #eef2ff; color: var(--accent); }
+  .thumb.on-navy { background: #1b2a3a; color: #ffffff; }
+  .thumb.on-purple { background: #4c1d95; color: #ffffff; }
+  .thumb.on-teal { background: #0b4f52; color: #ffffff; }
+  .card .body {
+    padding: 16px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .meta {
+    margin: 0 0 8px;
+    font-size: 12px;
+    color: var(--text);
+  }
+  .card h2 {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--heading);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card p.desc {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--text);
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .more { margin-top: 40px; text-align: center; }
+  .more .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 20px;
+    font: 600 12.5px/1 "Inter", sans-serif;
+    color: var(--accent);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .more .btn:hover { background: rgba(29, 78, 216, 0.08); border-color: var(--accent); }
+  .more .btn svg { width: 12px; height: 12px; }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1040px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 760px) {
     .grid { grid-template-columns: repeat(2, 1fr); }
   }
-  @media (max-width: 580px) {
+  @media (max-width: 480px) {
+    .wrap { padding-top: 40px; }
     .grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
-<div style="width: 100%; max-width: 1240px; margin: 0 auto; padding: 56px 40px 80px;">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="icon-link" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07l-1.42 1.41M14 11a5 5 0 0 0-7.07 0l-2.83 2.83a5 5 0 0 0 7.07 7.07l1.41-1.41"/></symbol>
+    <symbol id="icon-doc" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></symbol>
+    <symbol id="icon-form" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 2h6l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m9 13 2 2 4-4"/></symbol>
+    <symbol id="arrow" viewBox="0 0 12 12"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
 
-  <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(27,42,58,0.5);">
-    <span>Cornerstone</span><span>/</span><span style="color: #1b2a3a;">Policies + Resources</span>
-  </div>
+<main class="wrap">
+  <header>
+    <h1>Policies + Resources</h1>
+    <p>Help centers, brand resources, and the policies that keep L+M running — HR, safety, IT, and facilities guidance in one place.</p>
+  </header>
 
-  <h1 style="font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin: 10px 0 0;">
-    Policies + Resources
-  </h1>
-  <p style="max-width: 640px; margin: 10px 0 0; font-size: 14.5px; line-height: 1.6; color: rgba(27,42,58,0.7);">
-    Help centers, brand resources, and the policies that keep L+M running — HR, safety, IT, and
-    facilities guidance in one place.
-  </p>
+  <section class="grid" id="categoryGrid">
 
-  <div class="grid" id="categoryGrid">
+    <a class="card" href="file-listing.html?from=Help%20Centers&amp;desc=IT%20Help%20Desk%2C%20HR%20Help%20Center%2C%20and%20live%20IT%20systems%20status.">
+      <div class="thumb on-light"><svg><use href="#icon-link"/></svg></div>
+      <div class="body">
+        <p class="meta">3 links</p>
+        <h2>Help Centers</h2>
+        <p class="desc">IT Help Desk, HR Help Center, and live IT systems status.</p>
+      </div>
+    </a>
 
-    <!-- Help centers — links, not files -->
-    <div class="card accent-top">
-      <h2>Help centers</h2>
-      <p class="card-meta"><strong>3 links</strong> · IT Help Desk, HR Help Center, IT Systems Status</p>
-      <a class="view-more" href="files-listing.html?from=Help%20centers">View more <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg></a>
-    </div>
+    <a class="card" href="file-listing.html?from=Marketing%20Resources&amp;desc=Brand%20assets%2C%20logo%20packs%2C%20letterhead%20templates%2C%20and%20the%20company%20guide.">
+      <div class="thumb on-navy"><svg><use href="#icon-doc"/></svg></div>
+      <div class="body">
+        <p class="meta">3 files · Updated Aug 2026</p>
+        <h2>Marketing Resources</h2>
+        <p class="desc">Brand assets, logo packs, letterhead templates, and the company guide.</p>
+      </div>
+    </a>
 
-    <!-- Marketing Resources — files -->
-    <div class="card accent-top gold">
-      <h2>Marketing resources</h2>
-      <p class="card-meta"><strong>3 files</strong> · Updated Aug 2026</p>
-      <a class="view-more" href="files-listing.html?from=Marketing%20resources">View more <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg></a>
-    </div>
+    <a class="card" href="file-listing.html?from=Safety%20%26%20Compliance&amp;desc=Site%20safety%20protocols%20and%20emergency%20procedures.">
+      <div class="thumb on-teal"><svg><use href="#icon-shield"/></svg></div>
+      <div class="body">
+        <p class="meta">2 files · Updated Aug 2026</p>
+        <h2>Safety &amp; Compliance</h2>
+        <p class="desc">Site safety protocols and emergency procedures.</p>
+      </div>
+    </a>
 
-    <!-- Safety & Compliance — files -->
-    <div class="card accent-top gold">
-      <h2>Safety &amp; compliance</h2>
-      <p class="card-meta"><strong>2 files</strong> · Updated Aug 2026</p>
-      <a class="view-more" href="files-listing.html?from=Safety%20%26%20compliance">View more <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg></a>
-    </div>
+    <a class="card" href="file-listing.html?from=Employee%20Policies">
+      <div class="thumb on-purple"><svg><use href="#icon-doc"/></svg></div>
+      <div class="body">
+        <p class="meta">4 files · Updated Sep 2026</p>
+        <h2>Employee Policies</h2>
+        <p class="desc">Employee Handbook, benefits, code of conduct, and remote work policy.</p>
+      </div>
+    </a>
 
-    <!-- Employee Policies — files -->
-    <div class="card accent-top">
-      <h2>Employee policies</h2>
-      <p class="card-meta"><strong>4 files</strong> · Updated Sep 2026</p>
-      <a class="view-more" href="files-listing.html?from=Employee%20policies">View more <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg></a>
-    </div>
+    <a class="card" href="file-listing.html?from=Operations%20%26%20IT">
+      <div class="thumb on-light"><svg><use href="#icon-doc"/></svg></div>
+      <div class="body">
+        <p class="meta">3 files · Updated Jul 2026</p>
+        <h2>Operations &amp; IT</h2>
+        <p class="desc">Expense &amp; travel policy, IT acceptable use, and password &amp; MFA guidance.</p>
+      </div>
+    </a>
 
-    <!-- Operations & IT — files -->
-    <div class="card accent-top">
-      <h2>Operations &amp; IT</h2>
-      <p class="card-meta"><strong>3 files</strong> · Updated Jul 2026</p>
-      <a class="view-more" href="files-listing.html?from=Operations%20%26%20IT">View more <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg></a>
-    </div>
+    <a class="card" href="file-listing.html?from=Facilities%20%26%20Forms">
+      <div class="thumb on-navy"><svg><use href="#icon-form"/></svg></div>
+      <div class="body">
+        <p class="meta">3 items · Updated Jul 2026</p>
+        <h2>Facilities &amp; Forms</h2>
+        <p class="desc">Parking &amp; badge access, common forms, and the org directory.</p>
+      </div>
+    </a>
 
-    <!-- Facilities & Forms — mixed files and links -->
-    <div class="card accent-top gold">
-      <h2>Facilities &amp; forms</h2>
-      <p class="card-meta"><strong>3 items</strong> · Updated Jul 2026</p>
-      <a class="view-more" href="files-listing.html?from=Facilities%20%26%20forms">View more <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg></a>
-    </div>
+    <a class="card" href="file-listing.html?from=Training%20%26%20Onboarding">
+      <div class="thumb on-purple"><svg><use href="#icon-doc"/></svg></div>
+      <div class="body">
+        <p class="meta">3 files · Updated Jun 2026</p>
+        <h2>Training &amp; Onboarding</h2>
+        <p class="desc">New hire checklists, LMS access, and role-specific training paths.</p>
+      </div>
+    </a>
+
+    <a class="card" href="file-listing.html?from=Vendor%20%26%20Contracts">
+      <div class="thumb on-light"><svg><use href="#icon-doc"/></svg></div>
+      <div class="body">
+        <p class="meta">2 files · Updated May 2026</p>
+        <h2>Vendor &amp; Contracts</h2>
+        <p class="desc">Vendor agreements, procurement forms, and contract templates.</p>
+      </div>
+    </a>
+
+    <a class="card" href="file-listing.html?from=Building%20Envelope%20%26%20Sustainability">
+      <div class="thumb on-teal"><svg><use href="#icon-shield"/></svg></div>
+      <div class="body">
+        <p class="meta">4 files · Updated Jun 2026</p>
+        <h2>Building Envelope &amp; Sustainability</h2>
+        <p class="desc">Roof surveys, parapet reports, and site inspection procedures.</p>
+      </div>
+    </a>
 
     <!-- Revealed one at a time by the "Load more" button below -->
-    <div class="card accent-top" hidden>
-      <h2>Training &amp; onboarding</h2>
-      <p class="card-meta"><strong>3 files</strong> · Updated Jun 2026</p>
-      <a class="view-more" href="files-listing.html?from=Training%20%26%20onboarding">View more <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg></a>
-    </div>
+    <a class="card" href="file-listing.html?from=Risk%20%26%20Insurance" hidden>
+      <div class="thumb on-navy"><svg><use href="#icon-doc"/></svg></div>
+      <div class="body">
+        <p class="meta">3 files · Updated May 2026</p>
+        <h2>Risk &amp; Insurance</h2>
+        <p class="desc">Vendor insurance requirements, incident reporting, and claims procedures.</p>
+      </div>
+    </a>
 
-    <div class="card accent-top gold" hidden>
-      <h2>Vendor &amp; contracts</h2>
-      <p class="card-meta"><strong>2 files</strong> · Updated May 2026</p>
-      <a class="view-more" href="files-listing.html?from=Vendor%20%26%20contracts">View more <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg></a>
-    </div>
+  </section>
 
+  <div class="more">
+    <button class="btn" id="loadMoreBtn" type="button">Load more <svg><use href="#arrow"/></svg></button>
   </div>
-
-  <div style="text-align: center; margin-top: 28px;">
-    <button type="button" id="loadMoreBtn" style="font: 600 13.5px/1 'Inter', sans-serif; color: #1b2a3a; background: none; border: none; border-bottom: 1px solid #1b2a3a; padding-bottom: 2px; cursor: pointer;">Load more</button>
-  </div>
-</div>
+</main>
 
 <script>
   // Reveals exactly one more hidden category card per click; hides the button once none remain.
