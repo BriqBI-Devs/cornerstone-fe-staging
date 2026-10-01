@@ -16,22 +16,28 @@ const DESIGN_OPTIONS: DesignOption[] = [
     href: "/privacy&resources/design1/Guide%20Categories.html",
   },
   {
-    name: "Design 2 — Equal Grid + Metadata",
+    name: "Design 2 — Resource Thumbnail Cards",
     summary:
-      "Simplified equal-size card grid showing item counts and last-updated info instead of full sub-item lists.",
+      "Same categories as Design 1, restyled as image-thumbnail cards with a type badge (Links, Brochure, Guide, Policy, Forms) above each title. Uses the same file listing detail page as Design 1.",
     href: "/privacy&resources/design2/index.html",
   },
   {
-    name: "Design 3 — Tabbed Card Grid",
+    name: "Design 3 — Equal Grid + Metadata",
     summary:
-      "File-type card grid with category tabs across the top and a Files / Links toggle for the listing below.",
-    href: "/privacy&resources/design3/document-library-mockup-v7-tabs.html",
+      "Simplified equal-size card grid showing item counts and last-updated info instead of full sub-item lists.",
+    href: "/privacy&resources/design3/index.html",
   },
   {
-    name: "Design 4 — Tabbed Ledger Table",
+    name: "Design 4 — Tabbed Card Grid",
+    summary:
+      "File-type card grid with category tabs across the top and a Files / Links toggle for the listing below.",
+    href: "/privacy&resources/design4/document-library-mockup-v7-tabs.html",
+  },
+  {
+    name: "Design 5 — Tabbed Ledger Table",
     summary:
       "Same category tabs and Files / Links toggle, presented as a compact numbered ledger table instead of cards.",
-    href: "/privacy&resources/design4/document-library-mockup-v8-listing.html",
+    href: "/privacy&resources/design5/document-library-mockup-v8-listing.html",
   },
 ];
 
