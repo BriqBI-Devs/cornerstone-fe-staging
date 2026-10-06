@@ -1,78 +1,83 @@
-import { ArrowUpRight } from "lucide-react";
-import { Badge } from "../../components/ui/Badge";
+import { ArrowRight } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { Card } from "../../components/ui/Card";
+import { SearchInput } from "../../components/ui/SearchInput";
+import { RESOURCE_CATEGORIES } from "../../features/policies-resources/data";
 
-interface DesignOption {
-  name: string;
-  summary: string;
-  href: string;
-}
-
-const DESIGN_OPTIONS: DesignOption[] = [
-  {
-    name: "Design 1 — Category Cards",
-    summary:
-      "Bento-style landing with equal category cards. Each card links to a combined Files & Links detail page, filterable by category.",
-    href: "/privacy&resources/design1/Guide%20Categories.html",
-  },
-  {
-    name: "Design 2 — Resource Thumbnail Cards",
-    summary:
-      "Same categories as Design 1, restyled as image-thumbnail cards with a type badge (Links, Brochure, Guide, Policy, Forms) above each title. Uses the same file listing detail page as Design 1.",
-    href: "/privacy&resources/design2/index.html",
-  },
-  {
-    name: "Design 3 — Equal Grid + Metadata",
-    summary:
-      "Simplified equal-size card grid showing item counts and last-updated info instead of full sub-item lists.",
-    href: "/privacy&resources/design3/index.html",
-  },
-  {
-    name: "Design 4 — Tabbed Card Grid",
-    summary:
-      "File-type card grid with category tabs across the top and a Files / Links toggle for the listing below.",
-    href: "/privacy&resources/design4/document-library-mockup-v7-tabs.html",
-  },
-  {
-    name: "Design 5 — Tabbed Ledger Table",
-    summary:
-      "Same category tabs and Files / Links toggle, presented as a compact numbered ledger table instead of cards.",
-    href: "/privacy&resources/design5/document-library-mockup-v8-listing.html",
-  },
-];
+const INITIAL_VISIBLE_COUNT = 8;
 
 export function PoliciesResourcesPage() {
-  return (
-    <div className="flex flex-col gap-6">
-      <Card className="border-l-4 border-l-brand-accent bg-brand-accent/10">
-        <div className="flex items-center gap-2">
-          <Badge variant="accent">Temporary</Badge>
-          <span className="text-sm font-semibold text-brand-navy">For client review — not final</span>
-        </div>
-        <p className="mt-2 text-sm text-brand-navy/75">
-          We're exploring a few different directions for the Policies + Resources page. Open each
-          option below and let us know which one to move forward with — or which pieces to mix
-          together.
-        </p>
-      </Card>
+  const [query, setQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {DESIGN_OPTIONS.map((option) => (
-          <Card key={option.name} className="flex flex-col">
-            <h2 className="text-base font-semibold text-brand-navy">{option.name}</h2>
-            <p className="mt-2 flex-1 text-sm text-brand-navy/70">{option.summary}</p>
-            <a
-              href={option.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium text-brand-navy transition-colors hover:border-brand-navy/40 hover:bg-surface-subtle"
+  const filteredCategories = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return RESOURCE_CATEGORIES;
+    return RESOURCE_CATEGORIES.filter(
+      (category) =>
+        category.name.toLowerCase().includes(normalized) ||
+        category.description.toLowerCase().includes(normalized),
+    );
+  }, [query]);
+
+  const isSearching = query.trim().length > 0;
+  const visibleCategories = isSearching ? filteredCategories : filteredCategories.slice(0, visibleCount);
+  const hasMore = !isSearching && visibleCount < filteredCategories.length;
+
+  return (
+    <div className="flex flex-col gap-8 py-6">
+      <div>
+        <h1 className="mb-[10px] text-[32px] font-extrabold tracking-[-0.02em] text-brand-navy">
+          Policies + Resources
+        </h1>
+        <p className="max-w-[460px] text-sm leading-[1.6] text-brand-navy/60">
+          Help centers, brand resources, and the policies that keep L+M running — HR, safety, IT, and
+          facilities guidance in one place.
+        </p>
+      </div>
+
+      <SearchInput
+        value={query}
+        onChange={setQuery}
+        placeholder="Search policies and resources…"
+        className="max-w-md"
+      />
+
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {visibleCategories.map((category) => (
+          <Card key={category.slug} className="flex flex-col p-6">
+            <h2 className="mb-4 text-[15.5px] font-bold text-brand-navy">{category.name}</h2>
+            <p className="mb-5 flex-1 text-[13.5px] leading-[1.55] text-brand-navy/60">
+              {category.description}
+            </p>
+            <Link
+              to={`/policies-resources/${category.slug}`}
+              className="inline-flex w-fit items-center gap-2 self-start rounded-md border border-border bg-surface px-5 py-[9px] text-[12.5px] font-semibold text-brand-link transition-colors hover:border-brand-link hover:bg-brand-link/[0.08]"
             >
-              View design
-              <ArrowUpRight className="h-3.5 w-3.5" />
-            </a>
+              View All
+              <ArrowRight className="h-3 w-3" />
+            </Link>
           </Card>
         ))}
       </div>
+
+      {visibleCategories.length === 0 && (
+        <p className="text-sm text-brand-navy/55">No categories match "{query}".</p>
+      )}
+
+      {hasMore && (
+        <div className="mt-2 text-center">
+          <button
+            type="button"
+            onClick={() => setVisibleCount((count) => count + INITIAL_VISIBLE_COUNT)}
+            className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-[30px] py-[11px] text-[12.5px] font-semibold text-brand-link transition-colors hover:border-brand-link hover:bg-brand-link/[0.08]"
+          >
+            Load more
+            <ArrowRight className="h-3 w-3" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
