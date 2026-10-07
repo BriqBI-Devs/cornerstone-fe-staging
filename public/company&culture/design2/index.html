@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Company + Culture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    --bg: #f7f7f5;
+    --card: #ffffff;
+    --border: #e5e5e0;
+    --heading: #1b2a3a;
+    --text: rgba(27, 42, 58, 0.6);
+    --item: rgba(27, 42, 58, 0.45);
+    --accent: #1d4ed8;
+    --accent-hover: rgba(29, 78, 216, 0.08);
+    --ph-bg: #e4edf7;
+    --tag-events: #b45309;
+    --tag-people: #be185d;
+    --tag-community: #15803d;
+    --tag-news: #1d4ed8;
+    --tag-newsletters: #7c3aed;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .crumb {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(27, 42, 58, 0.45);
+    margin-bottom: 10px;
+  }
+  .crumb span.current { color: var(--heading); }
+
+  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  h1 {
+    margin: 0 0 10px;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--heading);
+  }
+  header p {
+    margin: 0;
+    max-width: 520px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 280px;
+    flex-shrink: 0;
+    padding: 10px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  .search-box svg { width: 16px; height: 16px; flex-shrink: 0; color: rgba(27, 42, 58, 0.5); }
+  .search-box span { font-size: 13.5px; color: rgba(27, 42, 58, 0.5); }
+
+  .placeholder {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--ph-bg);
+    background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px);
+    overflow: hidden;
+  }
+  .placeholder span {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: rgba(27, 42, 58, 0.6);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .tag.events { color: var(--tag-events); }
+  .tag.people { color: var(--tag-people); }
+  .tag.community { color: var(--tag-community); }
+  .tag.news { color: var(--tag-news); }
+  .tag.newsletters { color: var(--tag-newsletters); }
+
+  .tag-pill {
+    display: inline-flex;
+    width: fit-content;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 4px 11px;
+    margin-bottom: 10px;
+  }
+  .tag-pill.events { background: rgba(255, 255, 255, 0.16); color: #ffffff; }
+  .tag-pill.people { background: rgba(255, 255, 255, 0.16); color: #ffffff; }
+  .tag-pill.community { background: rgba(255, 255, 255, 0.16); color: #ffffff; }
+  .tag-pill.news { background: rgba(255, 255, 255, 0.16); color: #ffffff; }
+  .tag-pill.newsletters { background: rgba(255, 255, 255, 0.16); color: #ffffff; }
+
+  /* Hero — full-bleed photo tiles with a gradient scrim and overlaid text,
+     matching the SharePoint Hero web part (the real target platform) and
+     LumApps' hero-widget convention: headline + short copy + one CTA. */
+  .bento {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 14px;
+    height: 420px;
+  }
+  .hero-tile {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    isolation: isolate;
+    box-shadow: 0 1px 3px rgba(16, 24, 35, 0.08);
+  }
+  .hero-tile .placeholder {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.4s ease;
+  }
+  .hero-tile:hover .placeholder { transform: scale(1.05); }
+  .hero-tile .scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8, 13, 20, 0.88) 0%, rgba(8, 13, 20, 0.4) 55%, rgba(8, 13, 20, 0) 85%);
+  }
+  .hero-tile .content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .hero-tile .content > * { transition: opacity 0.15s ease; }
+  .hero-tile.updating .content > * { opacity: 0; }
+
+  .feature { grid-column: 1; grid-row: 1 / 3; }
+  .feature .content { padding: 26px; }
+  .feature h2 {
+    margin: 0 0 8px;
+    font-size: 23px;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+  }
+  .feature .excerpt {
+    margin: 0 0 14px;
+    max-width: 420px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .feature .cta {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+    padding-bottom: 2px;
+  }
+  .feature .cta:hover { border-color: #ffffff; }
+  .feature .cta svg { width: 12px; height: 12px; }
+
+  .side { grid-column: 2; }
+  .side.row-1 { grid-row: 1; }
+  .side.row-2 { grid-row: 2; }
+  .side .content { padding: 16px; }
+  .side h3 {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #ffffff;
+  }
+  .side .meta { margin: 4px 0 0; font-size: 11.5px; color: rgba(255, 255, 255, 0.75); }
+
+  @media (max-width: 760px) {
+    .bento { grid-template-columns: 1fr; grid-template-rows: none; height: auto; }
+    .feature { grid-column: 1; grid-row: auto; height: 260px; }
+    .side { grid-column: 1; height: 150px; }
+    header { flex-direction: column; align-items: stretch; }
+    .search-box { width: 100%; }
+  }
+
+  /* Category panels — each category is its own intranet-style list widget:
+     a bordered card with a colored accent strip, a header, and a vertical
+     list of rows (thumbnail + title + description + date), rather than a
+     horizontal card grid. Arranged two-up, like a real intranet dashboard. */
+  .panel-grid {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .category-panel {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .icon-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .icon-badge svg { width: 16px; height: 16px; }
+  .icon-badge.people,
+  .icon-badge.community,
+  .icon-badge.events,
+  .icon-badge.newsletters {
+    background: var(--accent-hover);
+    color: var(--accent);
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+  }
+  .panel-head .titles { flex: 1; min-width: 0; }
+  .panel-head h2 {
+    margin: 0;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .panel-head a {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .panel-head a:hover { text-decoration: underline; }
+
+  .panel-list { display: flex; flex-direction: column; }
+  .list-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    border-top: 1px solid var(--border);
+    text-decoration: none;
+    transition: background 0.12s ease;
+  }
+  .list-row:hover { background: var(--bg); }
+  .list-row .placeholder {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 8px;
+  }
+  .list-row .placeholder span { font-size: 9px; padding: 2px 5px; }
+  .list-row .row-text { min-width: 0; flex: 1; }
+  .list-row h3 {
+    margin: 0 0 3px;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--heading);
+  }
+  .list-row:hover h3 { color: var(--accent); }
+  .list-row .desc {
+    margin: 0 0 4px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--text);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .list-row .meta { margin: 0; font-size: 11px; color: var(--item); }
+
+  @media (max-width: 760px) {
+    .panel-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div>
+      <div class="crumb">Cornerstone / <span class="current">Company + Culture</span></div>
+      <h1>Company + Culture</h1>
+      <p>Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
+    </div>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <span>Search stories…</span>
+    </div>
+  </header>
+
+  <section class="bento">
+    <article class="hero-tile feature">
+      <div class="placeholder"><span>feature image</span></div>
+      <div class="scrim"></div>
+      <div class="content">
+        <span class="tag-pill events" id="featureTag">Events</span>
+        <h2 id="featureTitle">Fun, Food, and Family at River Crossing</h2>
+        <p class="excerpt" id="featureExcerpt">We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time.</p>
+        <a class="cta" href="#">
+          Read the story
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
+        </a>
+      </div>
+    </article>
+
+    <article class="hero-tile side row-1">
+      <div class="placeholder"><span>img</span></div>
+      <div class="scrim"></div>
+      <div class="content">
+        <span class="tag-pill people" id="side1Tag">People</span>
+        <h3 id="side1Title">This month's Workiversaries</h3>
+        <p class="meta" id="side1Meta">Denise Ramirez, Margaret Carestia</p>
+      </div>
+    </article>
+
+    <article class="hero-tile side row-2">
+      <div class="placeholder"><span>img</span></div>
+      <div class="scrim"></div>
+      <div class="content">
+        <span class="tag-pill community" id="side2Tag">Community</span>
+        <h3 id="side2Title">Book Bag Giveaway</h3>
+        <p class="meta" id="side2Meta">Sep 3</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="panel-grid">
+    <article class="category-panel">
+      <div class="panel-head">
+        <span class="icon-badge people">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+        </span>
+        <div class="titles"><h2>Workiversaries</h2></div>
+        <a href="listing.html?category=workiversaries">View all →</a>
+      </div>
+      <div class="panel-list">
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>This month's Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)</h3>
+            <p class="desc">Two incredible team members hit major milestones this month — here's to many more.</p>
+            <p class="meta">Sep 9</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Celebrating 5 Years: Priya Osei &amp; Marcus Field</h3>
+            <p class="desc">Five years of dedication across Property Operations and Asset Management.</p>
+            <p class="meta">Sep 2</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Full September Workiversary List</h3>
+            <p class="desc">See every team member celebrating a work anniversary this month.</p>
+            <p class="meta">Sep 1</p>
+          </div>
+        </a>
+      </div>
+    </article>
+
+    <article class="category-panel">
+      <div class="panel-head">
+        <span class="icon-badge people">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>
+        </span>
+        <div class="titles"><h2>New Hires &amp; Welcomes</h2></div>
+        <a href="listing.html?category=new-hires">View all →</a>
+      </div>
+      <div class="panel-list">
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Welcome Alex Kim, Priya Shah, Tomás Rivera, and Sarah Hunt — our September new hires</h3>
+            <p class="desc">Say hello to the newest additions across Finance, Marketing, and Operations.</p>
+            <p class="meta">Sep 8</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Laura Reyes Welcomes Baby Lily, Making a Family of Four</h3>
+            <p class="desc">Congratulations to Laura and her family on the newest addition.</p>
+            <p class="meta">Sep 28</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Connor Marsh Welcomes Baby Jeremiah</h3>
+            <p class="desc">Big congratulations from the whole L+M family.</p>
+            <p class="meta">Sep 20</p>
+          </div>
+        </a>
+      </div>
+    </article>
+
+    <article class="category-panel">
+      <div class="panel-head">
+        <span class="icon-badge community">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </span>
+        <div class="titles"><h2>Community + Connection</h2></div>
+        <a href="listing.html?category=community">View all →</a>
+      </div>
+      <div class="panel-list">
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>September Community Digest is out</h3>
+            <p class="desc">Saratoga harvest photos, new childcare seats, and the fall volunteer day poll.</p>
+            <p class="meta">Sep 7</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Fulton Park Supports Students with Annual Book Bag Giveaway</h3>
+            <p class="desc">Local students received backpacks and supplies ahead of the new school year.</p>
+            <p class="meta">Sep 3</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>The 12-Foot Snowman That Stole the Show</h3>
+            <p class="desc">After last winter's storm, one snowman became the talk of the office.</p>
+            <p class="meta">Sep 5</p>
+          </div>
+        </a>
+      </div>
+    </article>
+
+    <article class="category-panel">
+      <div class="panel-head">
+        <span class="icon-badge events">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </span>
+        <div class="titles"><h2>Cultural Observances</h2></div>
+        <a href="listing.html?category=cultural">View all →</a>
+      </div>
+      <div class="panel-list">
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Commemorating Juneteenth Across Our Communities</h3>
+            <p class="desc">Teams across every office marked the occasion with events and reflection.</p>
+            <p class="meta">Jun 19</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>L+M Shows Up and Shines at the Harlem Heritage Parade</h3>
+            <p class="desc">Dozens of team members marched alongside residents and community partners.</p>
+            <p class="meta">Jun 20</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Honoring Hispanic Heritage Month: Stories from Our Team</h3>
+            <p class="desc">Team members share what heritage month means to them and their families.</p>
+            <p class="meta">Sep 15</p>
+          </div>
+        </a>
+      </div>
+    </article>
+
+    <article class="category-panel">
+      <div class="panel-head">
+        <span class="icon-badge newsletters">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        </span>
+        <div class="titles"><h2>Company Guide</h2></div>
+        <a href="listing.html?category=guide">View all →</a>
+      </div>
+      <div class="panel-list">
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Company Guide — Table of Contents</h3>
+            <p class="desc">Your starting point for everything you need to know about L+M.</p>
+            <p class="meta">Mar 5</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Meet the Teams: Communications &amp; Marketing</h3>
+            <p class="desc">What this team does, who's on it, and how to reach them.</p>
+            <p class="meta">Aug 12</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Meet the Teams: Building Envelope &amp; Sustainability</h3>
+            <p class="desc">Roof surveys, parapet reports, and the team behind them.</p>
+            <p class="meta">Jul 30</p>
+          </div>
+        </a>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script>
+  // Auto-updating hero — the layout is a fixed 3-tile bento (not a scroll
+  // track), so instead of swiping between slides, a pool of 5 stories
+  // rotates through the feature + 2 side tiles automatically, fading text
+  // out/in on each change. Pauses while the hero is hovered.
+  var STORIES = [
+    {
+      tag: "events", tagLabel: "Events",
+      title: "Fun, Food, and Family at River Crossing",
+      excerpt: "We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time.",
+      meta: "Sep 6"
+    },
+    {
+      tag: "events", tagLabel: "Cultural Observances",
+      title: "L+M Shows Up and Shines at the Harlem Heritage Parade",
+      excerpt: "Dozens of team members marched alongside residents and community partners, celebrating the neighborhoods we call home.",
+      meta: "Jun 20"
+    },
+    {
+      tag: "people", tagLabel: "People",
+      title: "Laura Reyes Welcomes Baby Lily",
+      excerpt: "Congratulations to Laura and her family on the newest addition, making a family of four.",
+      meta: "Sep 28"
+    },
+    {
+      tag: "community", tagLabel: "Community",
+      title: "Book Bag Giveaway",
+      excerpt: "Fulton Park supported students with its annual book bag giveaway ahead of the new school year.",
+      meta: "Sep 3"
+    },
+    {
+      tag: "newsletters", tagLabel: "Company Guide",
+      title: "Meet the Teams: Communications & Marketing",
+      excerpt: "What this team does, who's on it, and how to reach them.",
+      meta: "Aug 12"
+    }
+  ];
+
+  var featureTile = document.querySelector('.hero-tile.feature');
+  var side1Tile = document.querySelector('.hero-tile.side.row-1');
+  var side2Tile = document.querySelector('.hero-tile.side.row-2');
+  var featureTag = document.getElementById('featureTag');
+  var featureTitle = document.getElementById('featureTitle');
+  var featureExcerpt = document.getElementById('featureExcerpt');
+  var side1Tag = document.getElementById('side1Tag');
+  var side1Title = document.getElementById('side1Title');
+  var side1Meta = document.getElementById('side1Meta');
+  var side2Tag = document.getElementById('side2Tag');
+  var side2Title = document.getElementById('side2Title');
+  var side2Meta = document.getElementById('side2Meta');
+
+  var offset = 0;
+  function render() {
+    var a = STORIES[offset % STORIES.length];
+    var b = STORIES[(offset + 1) % STORIES.length];
+    var c = STORIES[(offset + 2) % STORIES.length];
+
+    featureTag.className = 'tag-pill ' + a.tag;
+    featureTag.textContent = a.tagLabel;
+    featureTitle.textContent = a.title;
+    featureExcerpt.textContent = a.excerpt;
+
+    side1Tag.className = 'tag-pill ' + b.tag;
+    side1Title.textContent = b.title;
+    side1Meta.textContent = b.meta;
+
+    side2Tag.className = 'tag-pill ' + c.tag;
+    side2Title.textContent = c.title;
+    side2Meta.textContent = c.meta;
+  }
+
+  function advance() {
+    [featureTile, side1Tile, side2Tile].forEach(function (tile) { tile.classList.add('updating'); });
+    setTimeout(function () {
+      offset = (offset + 1) % STORIES.length;
+      render();
+      [featureTile, side1Tile, side2Tile].forEach(function (tile) { tile.classList.remove('updating'); });
+    }, 150);
+  }
+
+  var autoplayId;
+  function startAutoplay() {
+    // Shorter first delay so the hero doesn't sit static for a full cycle
+    // before showing it's alive; settles into the normal cadence after that.
+    autoplayId = setTimeout(function () {
+      advance();
+      autoplayId = setInterval(advance, 5000);
+    }, 1000);
+  }
+  function stopAutoplay() {
+    clearTimeout(autoplayId);
+    clearInterval(autoplayId);
+  }
+  var bento = document.querySelector('.bento');
+  bento.addEventListener('mouseenter', stopAutoplay);
+  bento.addEventListener('mouseleave', startAutoplay);
+  startAutoplay();
+</script>
+</body>
+</html>
