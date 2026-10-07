@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Company + Culture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    --bg: #f7f7f5;
+    --card: #ffffff;
+    --border: #e5e5e0;
+    --heading: #1b2a3a;
+    --text: rgba(27, 42, 58, 0.6);
+    --item: rgba(27, 42, 58, 0.45);
+    --accent: #1d4ed8;
+    --accent-hover: rgba(29, 78, 216, 0.08);
+    --ph-bg: #e4edf7;
+    --tag-events: #b45309;
+    --tag-people: #be185d;
+    --tag-community: #15803d;
+    --tag-news: #1d4ed8;
+    --tag-newsletters: #7c3aed;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .crumb {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(27, 42, 58, 0.45);
+    margin-bottom: 10px;
+  }
+  .crumb span.current { color: var(--heading); }
+
+  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  h1 {
+    margin: 0 0 10px;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--heading);
+  }
+  header p {
+    margin: 0;
+    max-width: 520px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 280px;
+    flex-shrink: 0;
+    padding: 10px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  .search-box svg { width: 16px; height: 16px; flex-shrink: 0; color: rgba(27, 42, 58, 0.5); }
+  .search-box span { font-size: 13.5px; color: rgba(27, 42, 58, 0.5); }
+
+  .placeholder {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--ph-bg);
+    background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px);
+    overflow: hidden;
+  }
+  .placeholder span {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: rgba(27, 42, 58, 0.6);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .tag.events { color: var(--tag-events); }
+  .tag.people { color: var(--tag-people); }
+  .tag.community { color: var(--tag-community); }
+  .tag.news { color: var(--tag-news); }
+  .tag.newsletters { color: var(--tag-newsletters); }
+
+  .tag-pill {
+    display: inline-flex;
+    width: fit-content;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 4px 11px;
+    margin-bottom: 12px;
+  }
+  .tag-pill.events { background: rgba(255,255,255,0.15); color: #fde3bf; }
+
+  /* Hero — white-theme editorial layout: centered tag + large headline +
+     excerpt + CTA stacked above one full-width photo, rather than a
+     side-by-side split. Multiple "pages" (slides) in a scroll-snap track,
+     same carousel mechanic as Design 1 (arrows + dots + autoplay). */
+  .hero-wrap { position: relative; margin-top: 32px; }
+  .hero-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .hero-track::-webkit-scrollbar { display: none; }
+
+  .hero-editorial {
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+    text-align: center;
+  }
+  .hero-editorial .hero-text {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .hero-editorial .tag-pill {
+    margin: 0 auto 16px;
+  }
+  .hero-editorial .tag-pill.events { background: rgba(180, 83, 9, 0.1); color: var(--tag-events); }
+  .hero-editorial .tag-pill.people { background: rgba(190, 24, 93, 0.1); color: var(--tag-people); }
+  .hero-editorial .tag-pill.community { background: rgba(21, 128, 61, 0.1); color: var(--tag-community); }
+  .hero-editorial .tag-pill.newsletters { background: rgba(124, 58, 237, 0.1); color: var(--tag-newsletters); }
+  .hero-editorial h2 {
+    margin: 0 0 14px;
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--heading);
+  }
+  .hero-editorial .excerpt {
+    margin: 0 auto 22px;
+    max-width: 480px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .hero-editorial .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 11px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+  .hero-editorial .cta-btn:hover { background: #1740b8; }
+  .hero-editorial .cta-btn svg { width: 13px; height: 13px; }
+
+  .hero-photo-full {
+    margin: 28px auto 0;
+    max-width: 920px;
+    aspect-ratio: 21 / 6;
+    border-radius: 14px;
+  }
+
+  .hero-nav {
+    position: absolute;
+    top: 38%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--heading);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(27, 42, 58, 0.08);
+    z-index: 2;
+  }
+  .hero-nav:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-nav.prev { left: 0; }
+  .hero-nav.next { right: 0; }
+  .hero-nav svg { width: 14px; height: 14px; }
+
+  .hero-dots { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
+  .hero-dots button {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    border: none;
+    padding: 0;
+    background: var(--border);
+    cursor: pointer;
+  }
+  .hero-dots button.active { background: var(--accent); }
+
+  @media (max-width: 760px) {
+    .hero-nav { display: none; }
+    header { flex-direction: column; align-items: stretch; }
+    .search-box { width: 100%; }
+    .hero-editorial h2 { font-size: 26px; }
+    .hero-photo-full { aspect-ratio: 4 / 3; }
+  }
+
+  /* Category panels — each category is its own intranet-style list widget:
+     a bordered card with a colored accent strip, a header, and a vertical
+     list of rows (thumbnail + title + description + date), rather than a
+     horizontal card grid. Arranged two-up, like a real intranet dashboard. */
+  .panel-grid {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .category-panel {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+  }
+  .panel-head .icon-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .panel-head .icon-badge svg { width: 16px; height: 16px; }
+  .icon-badge.people { background: rgba(190, 24, 93, 0.1); color: var(--tag-people); }
+  .icon-badge.community { background: rgba(21, 128, 61, 0.1); color: var(--tag-community); }
+  .icon-badge.events { background: rgba(180, 83, 9, 0.1); color: var(--tag-events); }
+  .icon-badge.newsletters { background: rgba(124, 58, 237, 0.1); color: var(--tag-newsletters); }
+
+  .panel-head .titles { flex: 1; min-width: 0; }
+  .panel-head h2 {
+    margin: 0;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .panel-head a {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .panel-head a:hover { text-decoration: underline; }
+
+  .panel-list { display: flex; flex-direction: column; }
+  .list-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    border-top: 1px solid var(--border);
+    text-decoration: none;
+    transition: background 0.12s ease;
+  }
+  .list-row:hover { background: var(--bg); }
+  .list-row .placeholder {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 8px;
+  }
+  .list-row .placeholder span { font-size: 9px; padding: 2px 5px; }
+  .list-row .row-text { min-width: 0; flex: 1; }
+  .list-row h3 {
+    margin: 0 0 3px;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--heading);
+  }
+  .list-row:hover h3 { color: var(--accent); }
+  .list-row .desc {
+    margin: 0 0 4px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--text);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .list-row .meta { margin: 0; font-size: 11px; color: var(--item); }
+
+  @media (max-width: 760px) {
+    .panel-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div>
+      <div class="crumb">Cornerstone / <span class="current">Company + Culture</span></div>
+      <h1>Company + Culture</h1>
+      <p>Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
+    </div>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <span>Search stories…</span>
+    </div>
+  </header>
+
+  <div class="hero-wrap">
+    <button class="hero-nav prev" id="heroPrev" aria-label="Previous story">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="hero-nav next" id="heroNext" aria-label="Next story">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+
+    <div class="hero-track" id="heroTrack">
+      <section class="hero-editorial">
+        <div class="hero-text">
+          <span class="tag-pill events">Featured Story</span>
+          <h2>Fun, Food, and Family at River Crossing</h2>
+          <p class="excerpt">We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time — see the full photo recap.</p>
+          <a class="cta-btn" href="#">
+            Read the story
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
+          </a>
+        </div>
+        <div class="placeholder hero-photo-full"><span>feature image</span></div>
+      </section>
+
+      <section class="hero-editorial">
+        <div class="hero-text">
+          <span class="tag-pill events">Cultural Observances</span>
+          <h2>L+M Shows Up and Shines at the Harlem Heritage Parade</h2>
+          <p class="excerpt">Dozens of L+M team members marched alongside residents and community partners this year, celebrating the neighborhoods we call home.</p>
+          <a class="cta-btn" href="#">
+            Read the story
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
+          </a>
+        </div>
+        <div class="placeholder hero-photo-full"><span>feature image</span></div>
+      </section>
+
+      <section class="hero-editorial">
+        <div class="hero-text">
+          <span class="tag-pill people">New Hires &amp; Welcomes</span>
+          <h2>Laura Reyes Welcomes Baby Lily, Making a Family of Four</h2>
+          <p class="excerpt">Congratulations to Laura and her family on the newest addition — we can't wait to see Lily at the next all-staff family day.</p>
+          <a class="cta-btn" href="#">
+            Read the story
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
+          </a>
+        </div>
+        <div class="placeholder hero-photo-full"><span>feature image</span></div>
+      </section>
+
+      <section class="hero-editorial">
+        <div class="hero-text">
+          <span class="tag-pill community">Community + Connection</span>
+          <h2>Fulton Park Supports Students with Annual Book Bag Giveaway</h2>
+          <p class="excerpt">Local students headed back to school with new backpacks and supplies this week, thanks to dozens of volunteers across our offices.</p>
+          <a class="cta-btn" href="#">
+            Read the story
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
+          </a>
+        </div>
+        <div class="placeholder hero-photo-full"><span>feature image</span></div>
+      </section>
+
+      <section class="hero-editorial">
+        <div class="hero-text">
+          <span class="tag-pill newsletters">Company Guide</span>
+          <h2>Meet the Teams: Communications &amp; Marketing</h2>
+          <p class="excerpt">What this team does, who's on it, and how to reach them — the latest addition to the Company Guide.</p>
+          <a class="cta-btn" href="#">
+            Read the story
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
+          </a>
+        </div>
+        <div class="placeholder hero-photo-full"><span>feature image</span></div>
+      </section>
+    </div>
+
+    <div class="hero-dots" id="heroDots">
+      <button class="active" data-index="0" aria-label="Go to story 1"></button>
+      <button data-index="1" aria-label="Go to story 2"></button>
+      <button data-index="2" aria-label="Go to story 3"></button>
+      <button data-index="3" aria-label="Go to story 4"></button>
+      <button data-index="4" aria-label="Go to story 5"></button>
+    </div>
+  </div>
+
+  <section class="panel-grid">
+    <article class="category-panel">
+      <div class="panel-head">
+        <span class="icon-badge people">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+        </span>
+        <div class="titles"><h2>Workiversaries</h2></div>
+        <a href="listing.html?category=workiversaries">View all →</a>
+      </div>
+      <div class="panel-list">
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>This month's Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)</h3>
+            <p class="desc">Two incredible team members hit major milestones this month — here's to many more.</p>
+            <p class="meta">Sep 9</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Celebrating 5 Years: Priya Osei &amp; Marcus Field</h3>
+            <p class="desc">Five years of dedication across Property Operations and Asset Management.</p>
+            <p class="meta">Sep 2</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Full September Workiversary List</h3>
+            <p class="desc">See every team member celebrating a work anniversary this month.</p>
+            <p class="meta">Sep 1</p>
+          </div>
+        </a>
+      </div>
+    </article>
+
+    <article class="category-panel">
+      <div class="panel-head">
+        <span class="icon-badge people">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>
+        </span>
+        <div class="titles"><h2>New Hires &amp; Welcomes</h2></div>
+        <a href="listing.html?category=new-hires">View all →</a>
+      </div>
+      <div class="panel-list">
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Welcome Alex Kim, Priya Shah, Tomás Rivera, and Sarah Hunt — our September new hires</h3>
+            <p class="desc">Say hello to the newest additions across Finance, Marketing, and Operations.</p>
+            <p class="meta">Sep 8</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Laura Reyes Welcomes Baby Lily, Making a Family of Four</h3>
+            <p class="desc">Congratulations to Laura and her family on the newest addition.</p>
+            <p class="meta">Sep 28</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Connor Marsh Welcomes Baby Jeremiah</h3>
+            <p class="desc">Big congratulations from the whole L+M family.</p>
+            <p class="meta">Sep 20</p>
+          </div>
+        </a>
+      </div>
+    </article>
+
+    <article class="category-panel">
+      <div class="panel-head">
+        <span class="icon-badge community">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </span>
+        <div class="titles"><h2>Community + Connection</h2></div>
+        <a href="listing.html?category=community">View all →</a>
+      </div>
+      <div class="panel-list">
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>September Community Digest is out</h3>
+            <p class="desc">Saratoga harvest photos, new childcare seats, and the fall volunteer day poll.</p>
+            <p class="meta">Sep 7</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Fulton Park Supports Students with Annual Book Bag Giveaway</h3>
+            <p class="desc">Local students received backpacks and supplies ahead of the new school year.</p>
+            <p class="meta">Sep 3</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>The 12-Foot Snowman That Stole the Show</h3>
+            <p class="desc">After last winter's storm, one snowman became the talk of the office.</p>
+            <p class="meta">Sep 5</p>
+          </div>
+        </a>
+      </div>
+    </article>
+
+    <article class="category-panel">
+      <div class="panel-head">
+        <span class="icon-badge events">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </span>
+        <div class="titles"><h2>Cultural Observances</h2></div>
+        <a href="listing.html?category=cultural">View all →</a>
+      </div>
+      <div class="panel-list">
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Commemorating Juneteenth Across Our Communities</h3>
+            <p class="desc">Teams across every office marked the occasion with events and reflection.</p>
+            <p class="meta">Jun 19</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>L+M Shows Up and Shines at the Harlem Heritage Parade</h3>
+            <p class="desc">Dozens of team members marched alongside residents and community partners.</p>
+            <p class="meta">Jun 20</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Honoring Hispanic Heritage Month: Stories from Our Team</h3>
+            <p class="desc">Team members share what heritage month means to them and their families.</p>
+            <p class="meta">Sep 15</p>
+          </div>
+        </a>
+      </div>
+    </article>
+
+    <article class="category-panel">
+      <div class="panel-head">
+        <span class="icon-badge newsletters">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        </span>
+        <div class="titles"><h2>Company Guide</h2></div>
+        <a href="listing.html?category=guide">View all →</a>
+      </div>
+      <div class="panel-list">
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Company Guide — Table of Contents</h3>
+            <p class="desc">Your starting point for everything you need to know about L+M.</p>
+            <p class="meta">Mar 5</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Meet the Teams: Communications &amp; Marketing</h3>
+            <p class="desc">What this team does, who's on it, and how to reach them.</p>
+            <p class="meta">Aug 12</p>
+          </div>
+        </a>
+        <a class="list-row" href="#">
+          <div class="placeholder"><span>photo</span></div>
+          <div class="row-text">
+            <h3>Meet the Teams: Building Envelope &amp; Sustainability</h3>
+            <p class="desc">Roof surveys, parapet reports, and the team behind them.</p>
+            <p class="meta">Jul 30</p>
+          </div>
+        </a>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script>
+  // Hero carousel — scroll-snap track driven by prev/next arrows and dot clicks,
+  // with the active dot synced while the user drags/swipes the track directly,
+  // plus autoplay that pauses on hover or manual interaction.
+  var heroTrack = document.getElementById('heroTrack');
+  var heroDots = document.querySelectorAll('#heroDots button');
+  var slideCount = heroDots.length;
+
+  function goToSlide(index) {
+    heroTrack.scrollTo({ left: heroTrack.clientWidth * index, behavior: 'smooth' });
+  }
+  function setActiveDot(index) {
+    heroDots.forEach(function (dot, i) { dot.classList.toggle('active', i === index); });
+  }
+
+  document.getElementById('heroPrev').addEventListener('click', function () {
+    var current = Math.round(heroTrack.scrollLeft / heroTrack.clientWidth);
+    goToSlide(Math.max(0, current - 1));
+  });
+  document.getElementById('heroNext').addEventListener('click', function () {
+    var current = Math.round(heroTrack.scrollLeft / heroTrack.clientWidth);
+    goToSlide(Math.min(slideCount - 1, current + 1));
+  });
+  heroDots.forEach(function (dot) {
+    dot.addEventListener('click', function () { goToSlide(Number(dot.dataset.index)); });
+  });
+
+  var scrollTimeout;
+  heroTrack.addEventListener('scroll', function () {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function () {
+      setActiveDot(Math.round(heroTrack.scrollLeft / heroTrack.clientWidth));
+    }, 80);
+  });
+
+  var autoplayId;
+  function startAutoplay() {
+    autoplayId = setInterval(function () {
+      var current = Math.round(heroTrack.scrollLeft / heroTrack.clientWidth);
+      goToSlide((current + 1) % slideCount);
+    }, 3000);
+  }
+  function stopAutoplay() { clearInterval(autoplayId); }
+  var heroWrap = document.querySelector('.hero-wrap');
+  heroWrap.addEventListener('mouseenter', stopAutoplay);
+  heroWrap.addEventListener('mouseleave', startAutoplay);
+  heroTrack.addEventListener('pointerdown', stopAutoplay);
+  startAutoplay();
+</script>
+</body>
+</html>
