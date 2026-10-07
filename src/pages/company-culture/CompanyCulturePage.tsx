@@ -21,6 +21,12 @@ const DESIGN_OPTIONS: DesignOption[] = [
       "A full-bleed photo hero (auto-rotating through a pool of stories) above the same category card grid as Design 1.",
     href: "/company&culture/design2/index.html",
   },
+  {
+    name: "Design 3 — Editorial Hero Carousel + Category Cards",
+    summary:
+      "A centered, white-theme editorial hero (large headline + photo) that scrolls through 5 stories via arrows, dots, and autoplay, above the same category card grid as Designs 1 and 2.",
+    href: "/company&culture/design3/index.html",
+  },
 ];
 
 export function CompanyCulturePage() {
