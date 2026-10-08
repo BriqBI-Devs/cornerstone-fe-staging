@@ -10,22 +10,34 @@ interface DesignOption {
 
 const DESIGN_OPTIONS: DesignOption[] = [
   {
-    name: "Design 1 — Category Widget Cards",
+    name: "Design 1 — Full Landing Page",
     summary:
-      "No hero — the page opens straight into a grid of category cards (Workiversaries, New Hires & Welcomes, Community + Connection, Cultural Observances, Company Guide), each a white panel with a colored icon badge and a list of stories.",
+      "Everything visible on one scroll: a featured story, an About card with a Read more toggle, an auto-rotating Latest stories carousel, and a panel per category listing its pages with a View more row.",
     href: "/company&culture/design1/index.html",
   },
   {
-    name: "Design 2 — Photo Hero + Category Cards",
+    name: "Design 2 — Stories Feed + Sidebar",
     summary:
-      "A full-bleed photo hero (auto-rotating through a pool of stories) above the same category card grid as Design 1.",
+      "A featured story, then a two-column layout: a grid of the latest stories (with category labels) on the left, and a sticky sidebar on the right with the category list and an About card with Read more.",
     href: "/company&culture/design2/index.html",
   },
   {
-    name: "Design 3 — Editorial Hero Carousel + Category Cards",
+    name: "Design 3 — Carousel + Category Accordion",
     summary:
-      "A centered, white-theme editorial hero (large headline + photo) that scrolls through 5 stories via arrows, dots, and autoplay, above the same category card grid as Designs 1 and 2.",
+      "An auto-scrolling Latest stories carousel, an About card with Read more, and collapsible category sections (one open at a time) that each list their pages, with a View all link to the full category listing.",
     href: "/company&culture/design3/index.html",
+  },
+  {
+    name: "Design 4 — Magazine Front Page",
+    summary:
+      "An About note at the top, a large featured story, four Latest story cards, then a newest-first More stories feed with Load more and a View all categories button.",
+    href: "/company&culture/design4/index.html",
+  },
+  {
+    name: "Design 5 — Featured Band + Category Cards",
+    summary:
+      "An About strip at the top, a full-width navy featured-story band, category cards showing each category's latest date, and an auto-scrolling Latest stories carousel.",
+    href: "/company&culture/design5/index.html",
   },
 ];
 

@@ -30,10 +30,10 @@
     -webkit-font-smoothing: antialiased;
   }
   a { color: inherit; text-decoration: none; }
-  a:focus-visible, button:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
   .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
 
   .placeholder {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,63 +51,101 @@
     padding: 3px 8px;
   }
 
-  /* Whole story is clickable, but the category label stays its own link */
-  .story { position: relative; }
-  .stretch::after { content: ""; position: absolute; inset: 0; z-index: 1; }
-  .kicker { position: relative; z-index: 2; display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); }
-  .kicker:hover { text-decoration: underline; }
+  .kicker { font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
   .byline { font-size: 12.5px; color: var(--item); }
+  .byline b { color: var(--heading); font-weight: 600; }
 
   .hero-inner { padding: 44px 24px 0; text-align: center; max-width: 660px; margin: 0 auto; }
   .hero h1 { margin: 0 0 12px; font-size: 36px; font-weight: 800; line-height: 1.08; letter-spacing: -0.035em; color: var(--heading); }
   .hero .lead { margin: 0 auto; max-width: 560px; font-size: 16px; line-height: 1.65; color: var(--text); }
 
-  /* ---------- About (near the top) ---------- */
-  .about-note { margin-top: 32px; padding: 18px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 160px 1fr; gap: 24px; }
-  .about-note h2 { margin: 2px 0 0; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
-  .about-note p { margin: 0 0 8px; max-width: 760px; font-size: 14.5px; line-height: 1.7; color: var(--text); }
-  .about-note p[hidden] { display: none; }
+  /* ---------- Front page ---------- */
+  .front {
+    margin-top: 36px;
+    padding-bottom: 40px;
+    border-bottom: 2px solid var(--heading);
+  }
+  .lead-story { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
+  .lead-story .placeholder { width: 100%; aspect-ratio: 16 / 10; border-radius: 6px; }
+  .lead-story .kicker { display: block; margin: 0 0 12px; }
+  .lead-story h2 { margin: 0 0 14px; font-size: 36px; font-weight: 800; line-height: 1.12; letter-spacing: -0.035em; color: var(--heading); }
+  .lead-story:hover h2 { color: var(--accent); }
+  .lead-story p { margin: 0 0 16px; font-size: 16px; line-height: 1.65; color: var(--text); }
+
+  .headlines { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .headline { display: block; }
+  .headline .placeholder { width: 100%; aspect-ratio: 16 / 10; border-radius: 6px; }
+  .headline .kicker { display: block; margin: 12px 0 0; font-size: 10.5px; }
+  .headline h3 { margin: 5px 0 6px; font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--heading); }
+  .headline:hover h3 { color: var(--accent); }
+
+  .section { padding-top: 44px; }
+  .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+  .section-head h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--heading); }
+  .section-head p { margin: 4px 0 0; font-size: 13.5px; color: var(--text); }
+
   .link-btn { font: 600 13px "Inter", sans-serif; color: var(--accent); background: none; border: none; padding: 0; cursor: pointer; }
   .link-btn:hover { text-decoration: underline; }
 
-  /* ---------- Featured ---------- */
-  .front { margin-top: 36px; padding-bottom: 40px; border-bottom: 2px solid var(--heading); }
-  .lead-story { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
-  .lead-story .placeholder { width: 100%; aspect-ratio: 16 / 10; border-radius: 8px; }
-  .lead-story .kicker { margin-bottom: 12px; }
-  .lead-story h2 { margin: 0 0 14px; font-size: 36px; font-weight: 800; line-height: 1.12; letter-spacing: -0.035em; color: var(--heading); }
-  .lead-story:hover h2 a { color: var(--accent); }
-  .lead-story p { margin: 0 0 16px; font-size: 16px; line-height: 1.65; color: var(--text); }
-
-  /* ---------- Stories ---------- */
-  .section { padding-top: 44px; }
-  .toolbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
-  .toolbar h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--heading); }
-  .toolbar p { margin: 4px 0 0; font-size: 13.5px; color: var(--text); }
-  .btn-outline { font-size: 13.5px; font-weight: 600; color: var(--accent); background: var(--card); border: 1px solid var(--accent); border-radius: 9px; padding: 9px 18px; white-space: nowrap; transition: background 0.15s, color 0.15s; }
+  .btn-outline {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: 9px;
+    padding: 9px 18px;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+  }
   .btn-outline:hover { background: var(--accent); color: #fff; }
-
-  .headlines { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-  .card .placeholder { width: 100%; aspect-ratio: 16 / 10; border-radius: 8px; }
-  .card .kicker { margin: 12px 0 0; font-size: 10.5px; }
-  .card h3 { margin: 5px 0 6px; font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--heading); }
-  .card:hover h3 a { color: var(--accent); }
-
-  .feed { margin-top: 28px; border-top: 1px solid var(--border); }
-  .feed:empty { display: none; }
-  .row { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--border); }
-  .row .placeholder { width: 140px; height: 94px; flex-shrink: 0; border-radius: 8px; }
-  .row h3 { margin: 5px 0 6px; font-size: 16.5px; font-weight: 700; line-height: 1.35; color: var(--heading); }
-  .row:hover h3 a { color: var(--accent); }
-  .row p { margin: 0 0 6px; font-size: 13.5px; line-height: 1.55; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-
-  .status { margin: 20px 0 0; text-align: center; font-size: 12.5px; color: var(--item); }
-  .more { margin-top: 12px; text-align: center; }
+  /* ---------- Chronological feed ---------- */
+  .feed { border-top: 1px solid var(--border); }
+  .feed-row { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .feed-row[hidden] { display: none; }
+  .feed-row .placeholder { width: 140px; height: 94px; flex-shrink: 0; border-radius: 6px; }
+  .feed-row h3 { margin: 5px 0 6px; font-size: 16.5px; font-weight: 700; line-height: 1.35; color: var(--heading); }
+  .feed-row:hover h3 { color: var(--accent); }
+  .feed-row p {
+    margin: 0 0 6px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .more { margin-top: 22px; text-align: center; }
   .more[hidden] { display: none; }
-  .more button { font: 600 13.5px "Inter", sans-serif; color: var(--accent); background: var(--card); border: 1px solid var(--accent); border-radius: 9px; padding: 11px 26px; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .more button {
+    font: 600 13.5px "Inter", sans-serif;
+    color: var(--accent);
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: 9px;
+    padding: 11px 26px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
   .more button:hover { background: var(--accent); color: #fff; }
 
-  .page-end { height: 80px; }
+  /* ---------- About ---------- */
+  .about-note {
+    margin-top: 32px;
+    padding: 18px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+  }
+  .about-note h2 { margin: 2px 0 0; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .about-note p { margin: 0 0 8px; max-width: 760px; font-size: 15px; font-weight: 500; line-height: 1.7; color: var(--heading); }
+  .about-note p[hidden] { display: none; }
+
+  .page-end { height: 72px; }
 
   @media (max-width: 900px) {
     .lead-story { grid-template-columns: 1fr; gap: 24px; }
@@ -118,12 +156,8 @@
     .hero h1 { font-size: 28px; }
     .lead-story h2 { font-size: 26px; }
     .headlines { grid-template-columns: 1fr; }
-    .row .placeholder { width: 96px; height: 72px; }
-    .row h3 { font-size: 15px; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    * { transition: none !important; }
+    .feed-row .placeholder { width: 96px; height: 72px; }
+    .feed-row h3 { font-size: 15px; }
   }
 </style>
 </head>
@@ -147,19 +181,37 @@
     </div>
   </section>
 
-  <section class="front" id="front" aria-label="Featured story"></section>
+  <section class="front">
+    <a class="lead-story" href="article.html?story=river-crossing-family-day">
+      <div class="placeholder"><span>featured photo</span></div>
+      <div>
+        <span class="kicker">Featured · Community + Connection</span>
+        <h2>Fun, Food, and Family at River Crossing</h2>
+        <p>We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time. Food trucks, games, and live music brought the whole L+M family together.</p>
+        <span class="byline">by <b>Jamie Ortiz</b> · Sep 6, 2026 · 2 min read</span>
+      </div>
+    </a>
+  </section>
 
-  <section class="section" id="stories" aria-label="Latest stories">
-    <div class="toolbar">
+  <section class="section">
+    <div class="section-head">
       <div>
         <h2>Latest stories</h2>
-        <p>Newest first, from across every office.</p>
+        <p>The four newest stories, fresh from across every office.</p>
+      </div>
+    </div>
+    <div class="headlines" id="headlines"></div>
+  </section>
+
+  <section class="section" id="stories">
+    <div class="section-head">
+      <div>
+        <h2>More stories</h2>
+        <p>Keep reading — older stories from every category, newest first.</p>
       </div>
       <a class="btn-outline" id="allCatsBtn" href="listing.html">View all categories →</a>
     </div>
-    <div class="headlines" id="headlines"></div>
     <div class="feed" id="feed"></div>
-    <p class="status" id="status" role="status" aria-live="polite"></p>
     <div class="more" id="moreWrap"><button id="moreBtn" type="button">Load more stories</button></div>
   </section>
 
@@ -167,7 +219,8 @@
 </main>
 
 <script>
-  // Add categories here; the page layout does not grow with them.
+
+  // Add categories here; the landing page layout never grows with them.
   var CATEGORIES = [
     { key: "workiversaries", title: "Workiversaries", items: [
       { slug: "workiversaries-sep", title: "This month’s Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)", desc: "Two incredible team members hit major milestones this month — here’s to many more.", date: "Sep 9, 2026" },
@@ -197,8 +250,8 @@
     ]}
   ];
 
-  var FEATURED_SLUG = "river-crossing-family-day";
-  var CARD_COUNT = 4;
+  var LEAD_SLUG = "river-crossing-family-day";
+  var HEADLINE_COUNT = 4;
   var FEED_PAGE = 6;
 
   function esc(s) { return s.replace(/&/g, "&amp;"); }
@@ -209,70 +262,52 @@
   });
   ALL.sort(function (a, b) { return b.time - a.time; });
 
-  var latestByCat = {};
-  ALL.forEach(function (e) { if (!latestByCat[e.cat.key]) latestByCat[e.cat.key] = e.time; });
-  var ranked = CATEGORIES.slice().sort(function (a, b) { return latestByCat[b.key] - latestByCat[a.key]; });
-  document.getElementById("allCatsBtn").href = "listing.html?category=" + ranked[0].key;
+  // Lead is featured on its own; side headlines are the newest after it; the feed continues from there
+  var REST = ALL.filter(function (e) { return e.story.slug !== LEAD_SLUG; });
+  var HEADLINES = REST.slice(0, HEADLINE_COUNT);
+  var FEED = REST.slice(HEADLINE_COUNT);
 
-  function catLink(e, prefix) {
-    return '<a class="kicker" href="listing.html?category=' + e.cat.key + '">' + (prefix || "") + esc(e.cat.title) + '</a>';
-  }
-  function storyHref(e) { return "article.html?story=" + e.story.slug; }
-
-  // Featured story, built from the same data as everything else
-  var feat = ALL.filter(function (e) { return e.story.slug === FEATURED_SLUG; })[0];
-  document.getElementById("front").innerHTML =
-    '<article class="story lead-story">' +
-      '<div class="placeholder"><span>featured photo</span></div>' +
-      '<div>' + catLink(feat, "Featured · ") +
-        '<h2><a class="stretch" href="' + storyHref(feat) + '">' + esc(feat.story.title) + '</a></h2>' +
-        '<p>' + esc(feat.story.desc) + '</p>' +
-        '<span class="byline">' + feat.story.date + '</span></div>' +
-    '</article>';
-
-  var headlines = document.getElementById("headlines");
-  var feed = document.getElementById("feed");
-  var statusEl = document.getElementById("status");
-  var moreWrap = document.getElementById("moreWrap");
-  var feedLimit = FEED_PAGE;
-
-  function cardHtml(e) {
-    return '<article class="story card"><div class="placeholder"><span>photo</span></div>' +
-      catLink(e) +
-      '<h3><a class="stretch" href="' + storyHref(e) + '">' + esc(e.story.title) + '</a></h3>' +
-      '<span class="byline">' + e.story.date + '</span></article>';
-  }
-  function rowHtml(e) {
-    return '<article class="story row"><div class="placeholder"><span>photo</span></div><div>' +
-      catLink(e) +
-      '<h3><a class="stretch" href="' + storyHref(e) + '">' + esc(e.story.title) + '</a></h3>' +
-      '<p>' + esc(e.story.desc) + '</p><span class="byline">' + e.story.date + '</span></div></article>';
-  }
-
-  // The featured story is not repeated below.
-  function render(focusFrom) {
-    var items = ALL.filter(function (e) { return e.story.slug !== FEATURED_SLUG; });
-    var cards = items.slice(0, CARD_COUNT);
-    var rest = items.slice(CARD_COUNT);
-    var shownRest = rest.slice(0, feedLimit);
-
-    headlines.innerHTML = cards.map(cardHtml).join("");
-    feed.innerHTML = shownRest.map(rowHtml).join("");
-    statusEl.textContent = "Showing " + (cards.length + shownRest.length) + " of " + items.length + " stories";
-    moreWrap.hidden = shownRest.length >= rest.length;
-
-    if (typeof focusFrom === "number") {
-      var target = feed.children[focusFrom];
-      if (target) target.querySelector("h3 a").focus();
-    }
-  }
-
-  document.getElementById("moreBtn").addEventListener("click", function () {
-    var before = feed.children.length;
-    feedLimit += FEED_PAGE;
-    render(before);
+  var headlinesEl = document.getElementById("headlines");
+  HEADLINES.forEach(function (f) {
+    var a = document.createElement("a");
+    a.className = "headline";
+    a.href = "article.html?story=" + f.story.slug;
+    a.innerHTML =
+      '<div class="placeholder"><span>photo</span></div>' +
+      '<div><span class="kicker">' + esc(f.cat.title) + '</span>' +
+      '<h3>' + esc(f.story.title) + '</h3>' +
+      '<span class="byline">' + f.story.date + '</span></div>';
+    headlinesEl.appendChild(a);
   });
-  render();
+
+  // The listing page sidebar holds the full category list; open it on the most recently active category
+  document.getElementById("allCatsBtn").href = "listing.html?category=" + ALL[0].cat.key;
+
+  // Chronological feed with Load more
+  var feed = document.getElementById("feed");
+  var rows = FEED.map(function (e) {
+    var a = document.createElement("a");
+    a.className = "feed-row";
+    a.href = "article.html?story=" + e.story.slug;
+    a.hidden = true;
+    a.innerHTML =
+      '<div class="placeholder"><span>photo</span></div>' +
+      '<div><span class="kicker">' + esc(e.cat.title) + '</span>' +
+      '<h3>' + esc(e.story.title) + '</h3>' +
+      '<p>' + esc(e.story.desc) + '</p>' +
+      '<span class="byline">' + e.story.date + '</span></div>';
+    feed.appendChild(a);
+    return a;
+  });
+  var moreWrap = document.getElementById("moreWrap");
+  var shownRows = 0;
+  function showMore() {
+    rows.slice(shownRows, shownRows + FEED_PAGE).forEach(function (r) { r.hidden = false; });
+    shownRows = Math.min(rows.length, shownRows + FEED_PAGE);
+    moreWrap.hidden = shownRows >= rows.length;
+  }
+  document.getElementById("moreBtn").addEventListener("click", showMore);
+  showMore();
 
   document.getElementById("aboutToggle").addEventListener("click", function () {
     var more = document.getElementById("aboutMore");
