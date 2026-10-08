@@ -10,72 +10,57 @@
 <style>
   :root {
     box-sizing: border-box;
-    --bg: #f7f7f5;
+    --bg: #f8f9fb;
     --card: #ffffff;
-    --border: #e5e5e0;
+    --border: #e6e8ec;
     --heading: #1b2a3a;
-    --text: rgba(27, 42, 58, 0.6);
+    --text: rgba(27, 42, 58, 0.62);
     --item: rgba(27, 42, 58, 0.45);
     --accent: #1d4ed8;
+    --accent-dark: #1e40af;
     --accent-hover: rgba(29, 78, 216, 0.08);
     --ph-bg: #e4edf7;
-    --tag-events: #b45309;
-    --tag-people: #be185d;
-    --tag-community: #15803d;
-    --tag-newsletters: #7c3aed;
   }
   *, *::before, *::after { box-sizing: border-box; }
   body {
     margin: 0;
-    background: var(--bg);
+    background: var(--card);
     color: var(--text);
     font-family: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
 
-  .back-link {
-    display: inline-flex;
+  .crumbs {
+    display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: rgba(27, 42, 58, 0.55);
-    text-decoration: none;
-    margin-bottom: 22px;
+    padding-top: 28px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--item);
   }
-  .back-link:hover { color: var(--accent); }
-  .back-link svg { width: 13px; height: 13px; }
+  .crumbs a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .crumbs a:hover { text-decoration: underline; }
+  .crumbs svg { width: 12px; height: 12px; }
 
-  .page-head { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+  .page-head { display: flex; align-items: center; gap: 20px; padding: 24px 0 28px; border-bottom: 1px solid var(--border); }
   .icon-badge {
-    width: 44px;
-    height: 44px;
-    border-radius: 999px;
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    background: var(--accent-hover);
+    color: var(--accent);
   }
-  .icon-badge svg { width: 20px; height: 20px; }
-  .icon-badge.people { background: rgba(190, 24, 93, 0.1); color: var(--tag-people); }
-  .icon-badge.community { background: rgba(21, 128, 61, 0.1); color: var(--tag-community); }
-  .icon-badge.events { background: rgba(180, 83, 9, 0.1); color: var(--tag-events); }
-  .icon-badge.newsletters { background: rgba(124, 58, 237, 0.1); color: var(--tag-newsletters); }
+  .icon-badge svg { width: 27px; height: 27px; }
+  .page-head h1 { margin: 0 0 6px; font-size: 34px; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; color: var(--heading); }
+  .page-desc { margin: 0; font-size: 15.5px; line-height: 1.55; color: var(--text); }
 
-  h1 {
-    margin: 0;
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--heading);
-  }
-  .page-desc {
-    margin: 0 0 28px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text);
-  }
+  .layout { display: grid; grid-template-columns: 1fr 280px; gap: 32px; align-items: start; padding: 32px 0 80px; }
 
   .placeholder {
     position: relative;
@@ -87,26 +72,21 @@
     overflow: hidden;
   }
   .placeholder span {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 500;
     color: rgba(27, 42, 58, 0.6);
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 6px;
-    padding: 2px 6px;
+    padding: 2px 7px;
   }
 
-  .list-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }
+  .list-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
   .list-row {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 14px 18px;
+    gap: 18px;
+    padding: 18px 20px;
     border-top: 1px solid var(--border);
     text-decoration: none;
     transition: background 0.12s ease;
@@ -114,61 +94,94 @@
   .list-row:first-of-type { border-top: none; }
   .list-row[hidden] { display: none; }
   .list-row:hover { background: var(--bg); }
-  .list-row .placeholder { width: 64px; height: 64px; flex-shrink: 0; border-radius: 8px; }
+  .list-row .placeholder { width: 108px; height: 76px; flex-shrink: 0; border-radius: 10px; }
   .list-row .row-text { min-width: 0; flex: 1; }
-  .list-row h3 {
-    margin: 0 0 3px;
-    font-size: 13.5px;
-    font-weight: 700;
-    line-height: 1.35;
-    color: var(--heading);
-  }
+  .list-row h3 { margin: 0 0 5px; font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--heading); }
   .list-row:hover h3 { color: var(--accent); }
   .list-row .desc {
-    margin: 0 0 4px;
-    font-size: 12px;
-    line-height: 1.45;
+    margin: 0 0 6px;
+    font-size: 13px;
+    line-height: 1.5;
     color: var(--text);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
-  .list-row .meta { margin: 0; font-size: 11px; color: var(--item); }
+  .list-row .meta { margin: 0; font-size: 12px; color: var(--item); }
 
-  .more { margin-top: 28px; text-align: center; }
+  .more { margin-top: 24px; text-align: center; }
   .more .btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 24px;
-    font: 600 12.5px/1 "Inter", sans-serif;
+    padding: 11px 26px;
+    font: 600 13.5px/1 "Inter", sans-serif;
     color: var(--accent);
     background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
+    border: 1px solid var(--accent);
+    border-radius: 9px;
     cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
   }
-  .more .btn:hover { background: var(--accent-hover); border-color: var(--accent); }
-  .more .btn svg { width: 12px; height: 12px; }
+  .more .btn:hover { background: var(--accent); color: #fff; }
+  .more .btn svg { width: 13px; height: 13px; }
+
+  .aside { position: sticky; top: 24px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 22px; }
+  .aside h2 { margin: 0 0 8px; padding-bottom: 14px; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--heading); }
+  .aside-link { display: flex; align-items: center; gap: 12px; padding: 10px 12px; margin: 0 -12px; border-radius: 12px; text-decoration: none; color: var(--heading); transition: background 0.15s; }
+  .aside-link:hover { background: var(--bg); }
+  .aside-link .ai { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: linear-gradient(135deg, #e3ecff, #f3f7ff); color: var(--accent); transition: background 0.15s, color 0.15s; }
+  .aside-link .ai svg { width: 16px; height: 16px; }
+  .aside-link:hover .ai { background: var(--accent); color: #fff; }
+  .aside-link .an { flex: 1; min-width: 0; font-size: 13.5px; font-weight: 600; line-height: 1.3; }
+  .aside-link .ac { font-size: 12px; font-weight: 600; color: var(--item); }
+  .aside-link.current { background: var(--accent-hover); }
+  .aside-link.current .ai { background: var(--accent); color: #fff; }
+  .aside-link.current .an { color: var(--accent); font-weight: 700; }
+  .aside-link.current .ac { color: var(--accent); }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    .aside { position: static; }
+  }
+  @media (max-width: 600px) {
+    .page-head { flex-wrap: wrap; gap: 14px; }
+    .page-head h1 { font-size: 26px; }
+    .list-row .placeholder { width: 84px; height: 64px; }
+  }
 </style>
 </head>
 <body>
-<main class="wrap">
-  <a class="back-link" href="index.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    Back to Company + Culture
-  </a>
+<main class="container">
+  <nav class="crumbs">
+    <a href="index.html">Company + Culture</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    <span id="crumbCurrent">Category</span>
+  </nav>
 
   <div class="page-head">
     <span class="icon-badge" id="pageIcon"></span>
-    <h1 id="pageTitle">Category</h1>
+    <div>
+      <h1 id="pageTitle">Category</h1>
+      <p class="page-desc" id="pageDesc"></p>
+    </div>
   </div>
-  <p class="page-desc" id="pageDesc"></p>
 
-  <div class="list-card" id="itemList"></div>
+  <div class="layout">
+    <div>
+      <div class="list-card" id="itemList"></div>
+      <div class="more" id="moreWrap" hidden>
+        <button class="btn" id="loadMoreBtn" type="button">
+          Load more
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
+        </button>
+      </div>
+    </div>
 
-  <div class="more" id="moreWrap" hidden>
-    <button class="btn" id="loadMoreBtn" type="button">
-      Load more
-      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
-    </button>
+    <aside class="aside">
+      <h2>All categories</h2>
+      <div id="catLinks"></div>
+    </aside>
   </div>
 </main>
 
@@ -178,6 +191,35 @@
     community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
     events: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
     newsletters: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'
+  };
+
+  var STORY_SLUGS = {
+    "This month's Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)": "workiversaries-sep",
+    "Celebrating 5 Years: Priya Osei & Marcus Field": "workiversaries-5-years",
+    "Full September Workiversary List": "workiversaries-full-list",
+    "Welcome Alex Kim, Priya Shah, Tomás Rivera, and Sarah Hunt — our September new hires": "welcome-september-new-hires",
+    "Laura Reyes Welcomes Baby Lily, Making a Family of Four": "laura-reyes-baby-lily",
+    "Connor Marsh Welcomes Baby Jeremiah": "connor-marsh-baby-jeremiah",
+    "Fun, Food, and Family at River Crossing": "river-crossing-family-day",
+    "September Community Digest is out": "september-community-digest",
+    "Fulton Park Supports Students with Annual Book Bag Giveaway": "fulton-park-book-bags",
+    "The 12-Foot Snowman That Stole the Show": "12-foot-snowman",
+    "Commemorating Juneteenth Across Our Communities": "juneteenth",
+    "L+M Shows Up and Shines at the Harlem Heritage Parade": "harlem-heritage-parade",
+    "Honoring Hispanic Heritage Month: Stories from Our Team": "hispanic-heritage-month",
+    "Company Guide — Table of Contents": "company-guide-toc",
+    "Meet the Teams: Communications & Marketing": "meet-the-teams-comms-marketing",
+    "Meet the Teams: Building Envelope & Sustainability": "meet-the-teams-building-envelope",
+    "August Workiversaries: Tom Delgado (15 years)": "august-workiversaries",
+    "July Workiversaries: Nina Castillo (8 years), Owen Brooks (3 years)": "july-workiversaries",
+    "Welcome August New Hires: Jordan Blake, Mia Chen": "august-new-hires",
+    "Ravi Patel & Family Welcome Baby Arjun": "ravi-patel-baby-arjun",
+    "Fall Volunteer Day Announced": "fall-volunteer-day",
+    "August Community Digest": "august-community-digest",
+    "Celebrating Diwali Across Our Offices": "diwali-across-offices",
+    "Women's History Month Spotlight": "womens-history-month-spotlight",
+    "Meet the Teams: Risk & Insurance": "meet-the-teams-risk-insurance",
+    "Meet the Teams: Accounting & Finance": "meet-the-teams-accounting-finance"
   };
 
   var CATEGORIES = {
@@ -210,6 +252,7 @@
       desc: "Digests, giveaways, and volunteer days.",
       icon: "community",
       items: [
+        { title: "Fun, Food, and Family at River Crossing", desc: "We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time.", meta: "Sep 6" },
         { title: "September Community Digest is out", desc: "Saratoga harvest photos, new childcare seats, and the fall volunteer day poll.", meta: "Sep 7" },
         { title: "Fulton Park Supports Students with Annual Book Bag Giveaway", desc: "Local students received backpacks and supplies ahead of the new school year.", meta: "Sep 3" },
         { title: "The 12-Foot Snowman That Stole the Show", desc: "After last winter's storm, one snowman became the talk of the office.", meta: "Sep 5" },
@@ -242,21 +285,32 @@
       ]
     }
   };
-
   var slug = new URLSearchParams(window.location.search).get("category") || "workiversaries";
-  var category = CATEGORIES[slug] || CATEGORIES.workiversaries;
+  if (!CATEGORIES[slug]) slug = "workiversaries";
+  var category = CATEGORIES[slug];
 
+  document.title = category.title + " — Company + Culture";
+  document.getElementById("crumbCurrent").textContent = category.title;
   document.getElementById("pageTitle").textContent = category.title;
   document.getElementById("pageDesc").textContent = category.desc;
   var pageIcon = document.getElementById("pageIcon");
-  pageIcon.className = "icon-badge " + category.icon;
   pageIcon.innerHTML = ICONS[category.icon];
+
+  var catLinks = document.getElementById("catLinks");
+  Object.keys(CATEGORIES).forEach(function (key) {
+    var c = CATEGORIES[key];
+    var a = document.createElement("a");
+    a.href = "listing.html?category=" + key;
+    a.className = "aside-link" + (key === slug ? " current" : "");
+    a.innerHTML = '<span class="ai">' + (ICONS[c.icon] || "") + '</span><span class="an">' + c.title.replace("&", "&amp;") + '</span><span class="ac">' + c.items.length + '</span>';
+    catLinks.appendChild(a);
+  });
 
   var itemList = document.getElementById("itemList");
   category.items.forEach(function (item) {
     var row = document.createElement("a");
     row.className = "list-row";
-    row.href = "#";
+    row.href = STORY_SLUGS[item.title] ? "article.html?story=" + STORY_SLUGS[item.title] : "#";
     if (item.hidden) row.hidden = true;
     row.innerHTML =
       '<div class="placeholder"><span>photo</span></div>' +

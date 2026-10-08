@@ -10,70 +10,28 @@
 <style>
   :root {
     box-sizing: border-box;
-    --bg: #f7f7f5;
+    --bg: #f8f9fb;
     --card: #ffffff;
-    --border: #e5e5e0;
+    --border: #e6e8ec;
     --heading: #1b2a3a;
-    --text: rgba(27, 42, 58, 0.6);
+    --text: rgba(27, 42, 58, 0.62);
     --item: rgba(27, 42, 58, 0.45);
     --accent: #1d4ed8;
+    --accent-dark: #1e40af;
     --accent-hover: rgba(29, 78, 216, 0.08);
     --ph-bg: #e4edf7;
-    --tag-events: #b45309;
-    --tag-people: #be185d;
-    --tag-community: #15803d;
-    --tag-news: #1d4ed8;
-    --tag-newsletters: #7c3aed;
   }
   *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    background: var(--bg);
+    background: var(--card);
     color: var(--text);
     font-family: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 1160px; margin: 0 auto; padding: 48px 24px 80px; }
-
-  .crumb {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(27, 42, 58, 0.45);
-    margin-bottom: 10px;
-  }
-  .crumb span.current { color: var(--heading); }
-
-  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-  h1 {
-    margin: 0 0 10px;
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--heading);
-  }
-  header p {
-    margin: 0;
-    max-width: 520px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text);
-  }
-
-  .search-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 280px;
-    flex-shrink: 0;
-    padding: 10px 16px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-  }
-  .search-box svg { width: 16px; height: 16px; flex-shrink: 0; color: rgba(27, 42, 58, 0.5); }
-  .search-box span { font-size: 13.5px; color: rgba(27, 42, 58, 0.5); }
+  a { color: inherit; }
+  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
 
   .placeholder {
     position: relative;
@@ -94,228 +52,201 @@
     padding: 3px 8px;
   }
 
-  .tag {
-    display: inline-block;
-    font-size: 10.5px;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  .tag.events { color: var(--tag-events); }
-  .tag.people { color: var(--tag-people); }
-  .tag.community { color: var(--tag-community); }
-  .tag.news { color: var(--tag-news); }
-  .tag.newsletters { color: var(--tag-newsletters); }
-
-  .tag-pill {
-    display: inline-flex;
-    width: fit-content;
-    font-size: 10.5px;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    border-radius: 999px;
-    padding: 4px 11px;
-    margin-bottom: 12px;
-  }
-  .tag-pill.events { background: rgba(255,255,255,0.15); color: #fde3bf; }
-
-  /* Hero — white-theme editorial layout: centered tag + large headline +
-     excerpt + CTA stacked above one full-width photo, rather than a
-     side-by-side split. Multiple "pages" (slides) in a scroll-snap track,
-     same carousel mechanic as Design 1 (arrows + dots + autoplay). */
-  .hero-wrap { position: relative; margin-top: 32px; }
-  .hero-track {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-  }
-  .hero-track::-webkit-scrollbar { display: none; }
-
-  .hero-editorial {
-    flex: 0 0 100%;
-    min-width: 0;
-    scroll-snap-align: start;
+  /* ---------- Hero ---------- */
+  .hero { background: var(--card); }
+  .hero-inner {
+    padding: 44px 24px 0;
     text-align: center;
-  }
-  .hero-editorial .hero-text {
-    max-width: 640px;
+    max-width: 660px;
     margin: 0 auto;
   }
-  .hero-editorial .tag-pill {
-    margin: 0 auto 16px;
-  }
-  .hero-editorial .tag-pill.events { background: rgba(180, 83, 9, 0.1); color: var(--tag-events); }
-  .hero-editorial .tag-pill.people { background: rgba(190, 24, 93, 0.1); color: var(--tag-people); }
-  .hero-editorial .tag-pill.community { background: rgba(21, 128, 61, 0.1); color: var(--tag-community); }
-  .hero-editorial .tag-pill.newsletters { background: rgba(124, 58, 237, 0.1); color: var(--tag-newsletters); }
-  .hero-editorial h2 {
-    margin: 0 0 14px;
-    font-size: 34px;
+  .hero h1 {
+    margin: 0 0 12px;
+    font-size: 36px;
     font-weight: 800;
-    line-height: 1.25;
-    letter-spacing: -0.02em;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
     color: var(--heading);
   }
-  .hero-editorial .excerpt {
-    margin: 0 auto 22px;
-    max-width: 480px;
-    font-size: 14.5px;
-    line-height: 1.6;
+  .hero .lead {
+    margin: 0 auto;
+    max-width: 560px;
+    font-size: 16px;
+    line-height: 1.65;
     color: var(--text);
   }
-  .hero-editorial .cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent);
-    color: #ffffff;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 11px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-  }
-  .hero-editorial .cta-btn:hover { background: #1740b8; }
-  .hero-editorial .cta-btn svg { width: 13px; height: 13px; }
 
-  .hero-photo-full {
-    margin: 28px auto 0;
-    max-width: 920px;
-    aspect-ratio: 21 / 6;
-    border-radius: 14px;
+  /* ---------- About ---------- */
+  .about-inline {
+    margin-top: 48px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 28px;
   }
-
-  .hero-nav {
-    position: absolute;
-    top: 38%;
-    transform: translateY(-50%);
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    color: var(--heading);
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(27, 42, 58, 0.08);
-    z-index: 2;
-  }
-  .hero-nav:hover { border-color: var(--accent); color: var(--accent); }
-  .hero-nav.prev { left: 0; }
-  .hero-nav.next { right: 0; }
-  .hero-nav svg { width: 14px; height: 14px; }
-
-  .hero-dots { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
-  .hero-dots button {
-    width: 7px;
-    height: 7px;
-    border-radius: 999px;
+  .about-inline h2 { margin: 3px 0 0; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .about-inline p { margin: 0 0 8px; max-width: 760px; font-size: 16px; font-weight: 500; line-height: 1.65; color: var(--heading); }
+  .about-inline p.more { font-size: 14.5px; font-weight: 400; color: var(--text); }
+  .about-inline p[hidden] { display: none; }
+  .about-inline .link-btn {
+    font: 600 13px "Inter", sans-serif;
+    color: var(--accent);
+    background: none;
     border: none;
     padding: 0;
-    background: var(--border);
     cursor: pointer;
   }
-  .hero-dots button.active { background: var(--accent); }
-
+  .about-inline .link-btn:hover { text-decoration: underline; }
   @media (max-width: 760px) {
-    .hero-nav { display: none; }
-    header { flex-direction: column; align-items: stretch; }
-    .search-box { width: 100%; }
-    .hero-editorial h2 { font-size: 26px; }
-    .hero-photo-full { aspect-ratio: 4 / 3; }
+    .about-inline { grid-template-columns: 1fr; gap: 6px; }
   }
+  /* ---------- Latest carousel ---------- */
+  .section { padding: 48px 0 0; }
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .section-head h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--heading); }
+  .section-head p { margin: 5px 0 0; font-size: 14px; color: var(--text); }
+  .section-head a { font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; white-space: nowrap; }
+  .section-head a:hover { text-decoration: underline; }
 
-  /* Category panels — each category is its own intranet-style list widget:
-     a bordered card with a colored accent strip, a header, and a vertical
-     list of rows (thumbnail + title + description + date), rather than a
-     horizontal card grid. Arranged two-up, like a real intranet dashboard. */
-  .panel-grid {
-    margin-top: 48px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+  .carousel-wrap { position: relative; }
+  .carousel-track {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
   }
-  .category-panel {
-    position: relative;
+  .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-card {
+    flex: 0 0 calc((100% - 36px) / 3);
+    scroll-snap-align: start;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 14px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .carousel-card:hover { box-shadow: 0 10px 24px rgba(16, 24, 35, 0.09); transform: translateY(-2px); }
+  .carousel-card .placeholder { width: 100%; aspect-ratio: 16 / 9; }
+  .carousel-card .card-body { padding: 16px 18px 18px; }
+  .carousel-card h3 {
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    font-weight: 700;
+    line-height: 1.38;
+    color: var(--heading);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
   }
-
-  .panel-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 18px;
-  }
-  .panel-head .icon-badge {
-    width: 34px;
-    height: 34px;
+  .carousel-card .byline { margin: 0; font-size: 12px; color: var(--item); }
+  .carousel-card .byline .cat-name { color: var(--accent); font-weight: 600; }
+  .carousel-nav {
+    position: absolute;
+    top: 30%;
+    width: 36px;
+    height: 36px;
     border-radius: 999px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-  }
-  .panel-head .icon-badge svg { width: 16px; height: 16px; }
-  .icon-badge.people { background: rgba(190, 24, 93, 0.1); color: var(--tag-people); }
-  .icon-badge.community { background: rgba(21, 128, 61, 0.1); color: var(--tag-community); }
-  .icon-badge.events { background: rgba(180, 83, 9, 0.1); color: var(--tag-events); }
-  .icon-badge.newsletters { background: rgba(124, 58, 237, 0.1); color: var(--tag-newsletters); }
-
-  .panel-head .titles { flex: 1; min-width: 0; }
-  .panel-head h2 {
-    margin: 0;
-    font-size: 15.5px;
-    font-weight: 700;
+    background: var(--card);
     color: var(--heading);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(16, 24, 35, 0.12);
+    cursor: pointer;
+    z-index: 3;
   }
-  .panel-head a {
-    flex-shrink: 0;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--accent);
-    text-decoration: none;
-  }
-  .panel-head a:hover { text-decoration: underline; }
+  .carousel-nav:hover { border-color: var(--accent); color: var(--accent); }
+  .carousel-nav svg { width: 17px; height: 17px; }
+  .carousel-nav.prev { left: -18px; }
+  .carousel-nav.next { right: -18px; }
 
-  .panel-list { display: flex; flex-direction: column; }
-  .list-row {
+  /* ---------- Accordion ---------- */
+  .accordion { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .accordion-item { border-top: 1px solid var(--border); }
+  .accordion-item:first-child { border-top: none; }
+
+  .accordion-trigger {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 12px 18px;
-    border-top: 1px solid var(--border);
-    text-decoration: none;
-    transition: background 0.12s ease;
+    width: 100%;
+    padding: 18px 22px;
+    background: var(--card);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    transition: background 0.12s;
   }
-  .list-row:hover { background: var(--bg); }
-  .list-row .placeholder {
-    width: 64px;
-    height: 64px;
+  .accordion-trigger:hover { background: var(--bg); }
+  .accordion-trigger .icon-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-hover);
+    color: var(--accent);
     flex-shrink: 0;
-    border-radius: 8px;
   }
-  .list-row .placeholder span { font-size: 9px; padding: 2px 5px; }
-  .list-row .row-text { min-width: 0; flex: 1; }
-  .list-row h3 {
-    margin: 0 0 3px;
-    font-size: 13.5px;
-    font-weight: 700;
-    line-height: 1.35;
-    color: var(--heading);
+  .accordion-trigger .icon-badge svg { width: 17px; height: 17px; }
+  .accordion-trigger .trigger-text { flex: 1; min-width: 0; }
+  .accordion-trigger h3 { margin: 0; font-size: 16px; font-weight: 700; color: var(--heading); }
+  .accordion-trigger .trigger-desc { margin: 3px 0 0; font-size: 13px; color: var(--text); }
+  .accordion-trigger .chevron {
+    width: 20px;
+    height: 20px;
+    color: var(--item);
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
   }
-  .list-row:hover h3 { color: var(--accent); }
-  .list-row .desc {
+  .accordion-item.open .accordion-trigger .chevron { transform: rotate(180deg); }
+  .accordion-item.open .accordion-trigger { background: var(--bg); }
+
+  .accordion-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .accordion-item.open .accordion-panel { max-height: 600px; }
+
+  .accordion-content { padding: 0 22px 8px; background: var(--bg); }
+  .story-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 16px;
+    margin-bottom: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+  .story-row:first-child { margin-top: 14px; }
+  .story-row:last-child { margin-bottom: 14px; }
+  .story-row:hover { border-color: rgba(29, 78, 216, 0.3); box-shadow: 0 4px 12px rgba(16, 24, 35, 0.06); }
+  .story-row .placeholder { width: 72px; height: 56px; flex-shrink: 0; border-radius: 8px; }
+  .story-row .placeholder span { font-size: 9px; padding: 2px 5px; }
+  .story-row .row-text { min-width: 0; flex: 1; }
+  .story-row h4 { margin: 0 0 4px; font-size: 14px; font-weight: 700; line-height: 1.35; color: var(--heading); }
+  .story-row:hover h4 { color: var(--accent); }
+  .story-row .row-desc {
     margin: 0 0 4px;
-    font-size: 12px;
+    font-size: 12.5px;
     line-height: 1.45;
     color: var(--text);
     display: -webkit-box;
@@ -323,345 +254,245 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .list-row .meta { margin: 0; font-size: 11px; color: var(--item); }
+  .story-row .row-meta { margin: 0; font-size: 11.5px; color: var(--item); }
+  .view-all-link {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    margin: 0 16px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.12s;
+  }
+  .view-all-link:hover { background: var(--accent-hover); }
 
+  .page-end { height: 80px; }
+
+  @media (max-width: 1000px) {
+    .carousel-card { flex: 0 0 calc((100% - 18px) / 2); }
+  }
   @media (max-width: 760px) {
-    .panel-grid { grid-template-columns: 1fr; }
+    .carousel-card { flex: 0 0 85%; }
+    .carousel-nav { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 28px; }
+    .hero-inner { padding: 32px 24px 0; }
+    .accordion-trigger { padding: 14px 16px; gap: 10px; }
+    .accordion-trigger h3 { font-size: 14px; }
+    .accordion-content { padding: 0 12px 8px; }
   }
 </style>
 </head>
 <body>
-<main class="wrap">
-  <header>
-    <div>
-      <div class="crumb">Cornerstone / <span class="current">Company + Culture</span></div>
-      <h1>Company + Culture</h1>
-      <p>Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
-    </div>
-    <div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-      <span>Search stories…</span>
-    </div>
-  </header>
 
-  <div class="hero-wrap">
-    <button class="hero-nav prev" id="heroPrev" aria-label="Previous story">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
-    <button class="hero-nav next" id="heroNext" aria-label="Next story">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-    </button>
-
-    <div class="hero-track" id="heroTrack">
-      <section class="hero-editorial">
-        <div class="hero-text">
-          <span class="tag-pill events">Featured Story</span>
-          <h2>Fun, Food, and Family at River Crossing</h2>
-          <p class="excerpt">We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time — see the full photo recap.</p>
-          <a class="cta-btn" href="#">
-            Read the story
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
-          </a>
-        </div>
-        <div class="placeholder hero-photo-full"><span>feature image</span></div>
-      </section>
-
-      <section class="hero-editorial">
-        <div class="hero-text">
-          <span class="tag-pill events">Cultural Observances</span>
-          <h2>L+M Shows Up and Shines at the Harlem Heritage Parade</h2>
-          <p class="excerpt">Dozens of L+M team members marched alongside residents and community partners this year, celebrating the neighborhoods we call home.</p>
-          <a class="cta-btn" href="#">
-            Read the story
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
-          </a>
-        </div>
-        <div class="placeholder hero-photo-full"><span>feature image</span></div>
-      </section>
-
-      <section class="hero-editorial">
-        <div class="hero-text">
-          <span class="tag-pill people">New Hires &amp; Welcomes</span>
-          <h2>Laura Reyes Welcomes Baby Lily, Making a Family of Four</h2>
-          <p class="excerpt">Congratulations to Laura and her family on the newest addition — we can't wait to see Lily at the next all-staff family day.</p>
-          <a class="cta-btn" href="#">
-            Read the story
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
-          </a>
-        </div>
-        <div class="placeholder hero-photo-full"><span>feature image</span></div>
-      </section>
-
-      <section class="hero-editorial">
-        <div class="hero-text">
-          <span class="tag-pill community">Community + Connection</span>
-          <h2>Fulton Park Supports Students with Annual Book Bag Giveaway</h2>
-          <p class="excerpt">Local students headed back to school with new backpacks and supplies this week, thanks to dozens of volunteers across our offices.</p>
-          <a class="cta-btn" href="#">
-            Read the story
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
-          </a>
-        </div>
-        <div class="placeholder hero-photo-full"><span>feature image</span></div>
-      </section>
-
-      <section class="hero-editorial">
-        <div class="hero-text">
-          <span class="tag-pill newsletters">Company Guide</span>
-          <h2>Meet the Teams: Communications &amp; Marketing</h2>
-          <p class="excerpt">What this team does, who's on it, and how to reach them — the latest addition to the Company Guide.</p>
-          <a class="cta-btn" href="#">
-            Read the story
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6h9M7 2.5 10.5 6 7 9.5"/></svg>
-          </a>
-        </div>
-        <div class="placeholder hero-photo-full"><span>feature image</span></div>
-      </section>
-    </div>
-
-    <div class="hero-dots" id="heroDots">
-      <button class="active" data-index="0" aria-label="Go to story 1"></button>
-      <button data-index="1" aria-label="Go to story 2"></button>
-      <button data-index="2" aria-label="Go to story 3"></button>
-      <button data-index="3" aria-label="Go to story 4"></button>
-      <button data-index="4" aria-label="Go to story 5"></button>
-    </div>
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Company + Culture</h1>
+    <p class="lead">Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
   </div>
+</header>
 
-  <section class="panel-grid">
-    <article class="category-panel">
-      <div class="panel-head">
-        <span class="icon-badge people">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-        </span>
-        <div class="titles"><h2>Workiversaries</h2></div>
-        <a href="listing.html?category=workiversaries">View all →</a>
-      </div>
-      <div class="panel-list">
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>This month's Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)</h3>
-            <p class="desc">Two incredible team members hit major milestones this month — here's to many more.</p>
-            <p class="meta">Sep 9</p>
-          </div>
-        </a>
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Celebrating 5 Years: Priya Osei &amp; Marcus Field</h3>
-            <p class="desc">Five years of dedication across Property Operations and Asset Management.</p>
-            <p class="meta">Sep 2</p>
-          </div>
-        </a>
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Full September Workiversary List</h3>
-            <p class="desc">See every team member celebrating a work anniversary this month.</p>
-            <p class="meta">Sep 1</p>
-          </div>
-        </a>
-      </div>
-    </article>
+<main class="container">
 
-    <article class="category-panel">
-      <div class="panel-head">
-        <span class="icon-badge people">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>
-        </span>
-        <div class="titles"><h2>New Hires &amp; Welcomes</h2></div>
-        <a href="listing.html?category=new-hires">View all →</a>
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Latest stories</h2>
+        <p>Fresh from across every office this month.</p>
       </div>
-      <div class="panel-list">
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Welcome Alex Kim, Priya Shah, Tomás Rivera, and Sarah Hunt — our September new hires</h3>
-            <p class="desc">Say hello to the newest additions across Finance, Marketing, and Operations.</p>
-            <p class="meta">Sep 8</p>
-          </div>
-        </a>
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Laura Reyes Welcomes Baby Lily, Making a Family of Four</h3>
-            <p class="desc">Congratulations to Laura and her family on the newest addition.</p>
-            <p class="meta">Sep 28</p>
-          </div>
-        </a>
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Connor Marsh Welcomes Baby Jeremiah</h3>
-            <p class="desc">Big congratulations from the whole L+M family.</p>
-            <p class="meta">Sep 20</p>
-          </div>
-        </a>
-      </div>
-    </article>
-
-    <article class="category-panel">
-      <div class="panel-head">
-        <span class="icon-badge community">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </span>
-        <div class="titles"><h2>Community + Connection</h2></div>
-        <a href="listing.html?category=community">View all →</a>
-      </div>
-      <div class="panel-list">
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>September Community Digest is out</h3>
-            <p class="desc">Saratoga harvest photos, new childcare seats, and the fall volunteer day poll.</p>
-            <p class="meta">Sep 7</p>
-          </div>
-        </a>
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Fulton Park Supports Students with Annual Book Bag Giveaway</h3>
-            <p class="desc">Local students received backpacks and supplies ahead of the new school year.</p>
-            <p class="meta">Sep 3</p>
-          </div>
-        </a>
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>The 12-Foot Snowman That Stole the Show</h3>
-            <p class="desc">After last winter's storm, one snowman became the talk of the office.</p>
-            <p class="meta">Sep 5</p>
-          </div>
-        </a>
-      </div>
-    </article>
-
-    <article class="category-panel">
-      <div class="panel-head">
-        <span class="icon-badge events">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-        </span>
-        <div class="titles"><h2>Cultural Observances</h2></div>
-        <a href="listing.html?category=cultural">View all →</a>
-      </div>
-      <div class="panel-list">
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Commemorating Juneteenth Across Our Communities</h3>
-            <p class="desc">Teams across every office marked the occasion with events and reflection.</p>
-            <p class="meta">Jun 19</p>
-          </div>
-        </a>
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>L+M Shows Up and Shines at the Harlem Heritage Parade</h3>
-            <p class="desc">Dozens of team members marched alongside residents and community partners.</p>
-            <p class="meta">Jun 20</p>
-          </div>
-        </a>
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Honoring Hispanic Heritage Month: Stories from Our Team</h3>
-            <p class="desc">Team members share what heritage month means to them and their families.</p>
-            <p class="meta">Sep 15</p>
-          </div>
-        </a>
-      </div>
-    </article>
-
-    <article class="category-panel">
-      <div class="panel-head">
-        <span class="icon-badge newsletters">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-        </span>
-        <div class="titles"><h2>Company Guide</h2></div>
-        <a href="listing.html?category=guide">View all →</a>
-      </div>
-      <div class="panel-list">
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Company Guide — Table of Contents</h3>
-            <p class="desc">Your starting point for everything you need to know about L+M.</p>
-            <p class="meta">Mar 5</p>
-          </div>
-        </a>
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Meet the Teams: Communications &amp; Marketing</h3>
-            <p class="desc">What this team does, who's on it, and how to reach them.</p>
-            <p class="meta">Aug 12</p>
-          </div>
-        </a>
-        <a class="list-row" href="#">
-          <div class="placeholder"><span>photo</span></div>
-          <div class="row-text">
-            <h3>Meet the Teams: Building Envelope &amp; Sustainability</h3>
-            <p class="desc">Roof surveys, parapet reports, and the team behind them.</p>
-            <p class="meta">Jul 30</p>
-          </div>
-        </a>
-      </div>
-    </article>
+    </div>
+    <div class="carousel-wrap" id="carouselWrap">
+      <button class="carousel-nav prev" type="button" aria-label="Previous">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="carousel-track" id="carouselTrack"></div>
+      <button class="carousel-nav next" type="button" aria-label="Next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
   </section>
+
+  <section class="about-inline" aria-label="About Company + Culture">
+    <h2>About</h2>
+    <div>
+      <p>This is where L+M celebrates the people behind the work — anniversaries, new faces, community moments, and the traditions that make every office feel like home.</p>
+      <p class="more" id="aboutMore" hidden>Whether you're welcoming a new teammate, congratulating a colleague on a workiversary, or catching up on what's happening in the communities we serve, this is where those moments live. New here? The Company Guide is the best place to start.</p>
+      <button class="link-btn" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutMore">Read more</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Browse by category</h2>
+        <p>Expand a category to see its latest pages.</p>
+      </div>
+      <a href="listing.html?category=workiversaries">View all →</a>
+    </div>
+    <div class="accordion" id="accordion"></div>
+  </section>
+
+  <div class="page-end"></div>
 </main>
 
 <script>
-  // Hero carousel — scroll-snap track driven by prev/next arrows and dot clicks,
-  // with the active dot synced while the user drags/swipes the track directly,
-  // plus autoplay that pauses on hover or manual interaction.
-  var heroTrack = document.getElementById('heroTrack');
-  var heroDots = document.querySelectorAll('#heroDots button');
-  var slideCount = heroDots.length;
+  var ICONS = {
+    workiversaries: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+    "new-hires": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>',
+    community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+    cultural: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+    guide: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'
+  };
 
-  function goToSlide(index) {
-    heroTrack.scrollTo({ left: heroTrack.clientWidth * index, behavior: 'smooth' });
+  var CHEVRON = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+
+  var CATEGORIES = [
+    { key: "workiversaries", title: "Workiversaries", desc: "Celebrating the milestones our team members reach each month.", items: [
+      { slug: "workiversaries-sep", title: "This month’s Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)", desc: "Two incredible team members hit major milestones this month — here’s to many more.", date: "Sep 9, 2026" },
+      { slug: "workiversaries-5-years", title: "Celebrating 5 Years: Priya Osei & Marcus Field", desc: "Five years of dedication across Property Operations and Asset Management.", date: "Sep 2, 2026" },
+      { slug: "workiversaries-full-list", title: "Full September Workiversary List", desc: "See every team member celebrating a work anniversary this month.", date: "Sep 1, 2026" }
+    ]},
+    { key: "new-hires", title: "New Hires & Welcomes", desc: "Meet the newest faces and cheer on personal milestones.", items: [
+      { slug: "welcome-september-new-hires", title: "Welcome Alex Kim, Priya Shah, Tomás Rivera, and Sarah Hunt — our September new hires", desc: "Say hello to the newest additions across Finance, Marketing, and Operations.", date: "Sep 8, 2026" },
+      { slug: "laura-reyes-baby-lily", title: "Laura Reyes Welcomes Baby Lily, Making a Family of Four", desc: "Congratulations to Laura and her family on the newest addition.", date: "Sep 28, 2026" },
+      { slug: "connor-marsh-baby-jeremiah", title: "Connor Marsh Welcomes Baby Jeremiah", desc: "Big congratulations from the whole L+M family.", date: "Sep 20, 2026" }
+    ]},
+    { key: "community", title: "Community + Connection", desc: "Events, giving back, and the stories from our neighborhoods.", items: [
+      { slug: "river-crossing-family-day", title: "Fun, Food, and Family at River Crossing", desc: "We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time.", date: "Sep 6, 2026" },
+      { slug: "september-community-digest", title: "September Community Digest is out", desc: "Saratoga harvest photos, new childcare seats, and the fall volunteer day poll.", date: "Sep 7, 2026" },
+      { slug: "fulton-park-book-bags", title: "Fulton Park Supports Students with Annual Book Bag Giveaway", desc: "Local students received backpacks and supplies ahead of the new school year.", date: "Sep 3, 2026" },
+      { slug: "12-foot-snowman", title: "The 12-Foot Snowman That Stole the Show", desc: "After last winter’s storm, one snowman became the talk of the office.", date: "Sep 5, 2026" }
+    ]},
+    { key: "cultural", title: "Cultural Observances", desc: "Honoring the heritage and traditions of our communities.", items: [
+      { slug: "hispanic-heritage-month", title: "Honoring Hispanic Heritage Month: Stories from Our Team", desc: "Team members share what heritage month means to them and their families.", date: "Sep 15, 2026" },
+      { slug: "harlem-heritage-parade", title: "L+M Shows Up and Shines at the Harlem Heritage Parade", desc: "Dozens of team members marched alongside residents and community partners.", date: "Jun 20, 2026" },
+      { slug: "juneteenth", title: "Commemorating Juneteenth Across Our Communities", desc: "Teams across every office marked the occasion with events and reflection.", date: "Jun 19, 2026" }
+    ]},
+    { key: "guide", title: "Company Guide", desc: "Your starting point for teams, roles, and how we work.", items: [
+      { slug: "company-guide-toc", title: "Company Guide — Table of Contents", desc: "Your starting point for everything you need to know about L+M.", date: "Mar 5, 2026" },
+      { slug: "meet-the-teams-comms-marketing", title: "Meet the Teams: Communications & Marketing", desc: "What this team does, who’s on it, and how to reach them.", date: "Aug 12, 2026" },
+      { slug: "meet-the-teams-building-envelope", title: "Meet the Teams: Building Envelope & Sustainability", desc: "Roof surveys, parapet reports, and the team behind them.", date: "Jul 30, 2026" }
+    ]}
+  ];
+
+  var LATEST_SLUGS = [
+    "river-crossing-family-day", "hispanic-heritage-month", "workiversaries-sep",
+    "welcome-september-new-hires", "laura-reyes-baby-lily", "september-community-digest"
+  ];
+
+  function esc(s) { return s.replace(/&/g, "&amp;"); }
+
+  function findStoryWithCat(slug) {
+    for (var i = 0; i < CATEGORIES.length; i++) {
+      for (var j = 0; j < CATEGORIES[i].items.length; j++) {
+        if (CATEGORIES[i].items[j].slug === slug) return { story: CATEGORIES[i].items[j], cat: CATEGORIES[i].title };
+      }
+    }
+    return null;
   }
-  function setActiveDot(index) {
-    heroDots.forEach(function (dot, i) { dot.classList.toggle('active', i === index); });
+
+  // Carousel
+  var track = document.getElementById("carouselTrack");
+  LATEST_SLUGS.forEach(function (slug) {
+    var found = findStoryWithCat(slug);
+    if (!found) return;
+    var a = document.createElement("a");
+    a.className = "carousel-card";
+    a.href = "article.html?story=" + slug;
+    a.innerHTML =
+      '<div class="placeholder"><span>photo</span></div>' +
+      '<div class="card-body">' +
+        '<h3>' + esc(found.story.title) + '</h3>' +
+        '<p class="byline">In <span class="cat-name">' + esc(found.cat) + '</span> · ' + found.story.date + '</p>' +
+      '</div>';
+    track.appendChild(a);
+  });
+
+  var autoplayTimer = null;
+  function scrollCarousel(direction) {
+    var card = track.querySelector(".carousel-card");
+    var step = card.getBoundingClientRect().width + 18;
+    var atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    var atStart = track.scrollLeft <= 4;
+    if (direction > 0 && atEnd) {
+      track.scrollTo({ left: 0, behavior: "smooth" });
+    } else if (direction < 0 && atStart) {
+      track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
+    } else {
+      track.scrollBy({ left: direction * step, behavior: "smooth" });
+    }
   }
+  function startAutoplay() { stopAutoplay(); autoplayTimer = setInterval(function () { scrollCarousel(1); }, 4000); }
+  function stopAutoplay() { if (autoplayTimer) clearInterval(autoplayTimer); autoplayTimer = null; }
 
-  document.getElementById('heroPrev').addEventListener('click', function () {
-    var current = Math.round(heroTrack.scrollLeft / heroTrack.clientWidth);
-    goToSlide(Math.max(0, current - 1));
+  var wrap = document.getElementById("carouselWrap");
+  wrap.querySelector(".prev").addEventListener("click", function () { scrollCarousel(-1); });
+  wrap.querySelector(".next").addEventListener("click", function () { scrollCarousel(1); });
+  wrap.addEventListener("mouseenter", stopAutoplay);
+  wrap.addEventListener("mouseleave", startAutoplay);
+  wrap.addEventListener("focusin", stopAutoplay);
+  wrap.addEventListener("focusout", startAutoplay);
+  wrap.addEventListener("pointerdown", stopAutoplay);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) stopAutoplay(); else startAutoplay();
   });
-  document.getElementById('heroNext').addEventListener('click', function () {
-    var current = Math.round(heroTrack.scrollLeft / heroTrack.clientWidth);
-    goToSlide(Math.min(slideCount - 1, current + 1));
-  });
-  heroDots.forEach(function (dot) {
-    dot.addEventListener('click', function () { goToSlide(Number(dot.dataset.index)); });
-  });
-
-  var scrollTimeout;
-  heroTrack.addEventListener('scroll', function () {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(function () {
-      setActiveDot(Math.round(heroTrack.scrollLeft / heroTrack.clientWidth));
-    }, 80);
-  });
-
-  var autoplayId;
-  function startAutoplay() {
-    autoplayId = setInterval(function () {
-      var current = Math.round(heroTrack.scrollLeft / heroTrack.clientWidth);
-      goToSlide((current + 1) % slideCount);
-    }, 3000);
-  }
-  function stopAutoplay() { clearInterval(autoplayId); }
-  var heroWrap = document.querySelector('.hero-wrap');
-  heroWrap.addEventListener('mouseenter', stopAutoplay);
-  heroWrap.addEventListener('mouseleave', startAutoplay);
-  heroTrack.addEventListener('pointerdown', stopAutoplay);
   startAutoplay();
+
+  // Accordion
+  var accordionEl = document.getElementById("accordion");
+  CATEGORIES.forEach(function (cat, idx) {
+    var item = document.createElement("div");
+    item.className = "accordion-item" + (idx === 0 ? " open" : "");
+
+    var rows = cat.items.map(function (it) {
+      return '<a class="story-row" href="article.html?story=' + it.slug + '">' +
+        '<div class="placeholder"><span>photo</span></div>' +
+        '<div class="row-text">' +
+          '<h4>' + esc(it.title) + '</h4>' +
+          '<p class="row-desc">' + esc(it.desc) + '</p>' +
+          '<p class="row-meta">' + it.date + '</p>' +
+        '</div></a>';
+    }).join("");
+
+    item.innerHTML =
+      '<button class="accordion-trigger" type="button" aria-expanded="' + (idx === 0 ? 'true' : 'false') + '">' +
+        '<span class="icon-badge">' + ICONS[cat.key] + '</span>' +
+        '<div class="trigger-text"><h3>' + esc(cat.title) + '</h3>' +
+        '<span class="trigger-desc">' + esc(cat.desc) + '</span></div>' +
+        CHEVRON +
+      '</button>' +
+      '<div class="accordion-panel"><div class="accordion-content">' +
+        rows +
+        '<a class="view-all-link" href="listing.html?category=' + cat.key + '">View all in ' + esc(cat.title) + ' →</a>' +
+      '</div></div>';
+
+    item.querySelector(".accordion-trigger").addEventListener("click", function () {
+      var isOpen = item.classList.contains("open");
+      document.querySelectorAll(".accordion-item.open").forEach(function (el) {
+        el.classList.remove("open");
+        el.querySelector(".accordion-trigger").setAttribute("aria-expanded", "false");
+      });
+      if (!isOpen) {
+        item.classList.add("open");
+        this.setAttribute("aria-expanded", "true");
+      }
+    });
+
+    accordionEl.appendChild(item);
+  });
+
+  // About toggle
+  document.getElementById("aboutToggle").addEventListener("click", function () {
+    var more = document.getElementById("aboutMore");
+    var expanded = more.hidden;
+    more.hidden = !expanded;
+    this.setAttribute("aria-expanded", String(expanded));
+    this.textContent = expanded ? "Read less" : "Read more";
+  });
 </script>
 </body>
 </html>
