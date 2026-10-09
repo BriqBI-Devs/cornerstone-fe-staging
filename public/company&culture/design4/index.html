@@ -8,193 +8,143 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* Tokens taken from the Cornerstone app (src/index.css) */
   :root {
     box-sizing: border-box;
-    --bg: #f8f9fb;
-    --card: #ffffff;
-    --border: #e6e8ec;
-    --heading: #1b2a3a;
-    --text: rgba(27, 42, 58, 0.62);
-    --item: rgba(27, 42, 58, 0.45);
-    --accent: #1d4ed8;
-    --accent-hover: rgba(29, 78, 216, 0.08);
-    --ph-bg: #e4edf7;
+    --navy: #1b2a3a;
+    --link: #1d4ed8;
+    --yellow: #f5c518;
+    --subtle: #f7f7f5;
+    --border: #e5e5e0;
+    --t75: rgba(27, 42, 58, 0.75);
+    --t60: rgba(27, 42, 58, 0.6);
+    --t55: rgba(27, 42, 58, 0.55);
+    --radius: 8px;
   }
   *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--card);
-    color: var(--text);
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
+  body { margin: 0; background: #fff; color: var(--navy); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   a { color: inherit; text-decoration: none; }
-  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  h1, h2, h3, p { margin: 0; }
 
-  .placeholder {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--ph-bg);
-    background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px);
-    overflow: hidden;
-  }
-  .placeholder span {
-    font-size: 10.5px;
-    font-weight: 500;
-    color: rgba(27, 42, 58, 0.6);
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 3px 8px;
-  }
+  .page { max-width: 1280px; margin: 0 auto; padding: 24px 32px 56px; display: flex; flex-direction: column; gap: 32px; }
 
-  .kicker { font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
-  .byline { font-size: 12.5px; color: var(--item); }
-  .byline b { color: var(--heading); font-weight: 600; }
+  .ph { display: flex; align-items: center; justify-content: center; background-color: #e4edf7; background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px); border-radius: var(--radius); overflow: hidden; }
+  .ph span { border: 1px solid var(--border); background: #fff; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--t60); }
 
-  .hero-inner { padding: 44px 24px 0; text-align: center; max-width: 660px; margin: 0 auto; }
-  .hero h1 { margin: 0 0 12px; font-size: 36px; font-weight: 800; line-height: 1.08; letter-spacing: -0.035em; color: var(--heading); }
-  .hero .lead { margin: 0 auto; max-width: 560px; font-size: 16px; line-height: 1.65; color: var(--text); }
+  /* Whole item is clickable; the category label stays its own link */
+  .item { position: relative; }
+  .stretch::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+  .cat { position: relative; z-index: 2; display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.025em; text-transform: uppercase; color: var(--link); }
+  .cat:hover { text-decoration: underline; }
+  .meta { font-size: 12px; color: var(--t55); }
 
-  /* ---------- Front page ---------- */
-  .front {
-    margin-top: 36px;
-    padding-bottom: 40px;
-    border-bottom: 2px solid var(--heading);
-  }
-  .lead-story { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
-  .lead-story .placeholder { width: 100%; aspect-ratio: 16 / 10; border-radius: 6px; }
-  .lead-story .kicker { display: block; margin: 0 0 12px; }
-  .lead-story h2 { margin: 0 0 14px; font-size: 36px; font-weight: 800; line-height: 1.12; letter-spacing: -0.035em; color: var(--heading); }
-  .lead-story:hover h2 { color: var(--accent); }
-  .lead-story p { margin: 0 0 16px; font-size: 16px; line-height: 1.65; color: var(--text); }
-
-  .headlines { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-  .headline { display: block; }
-  .headline .placeholder { width: 100%; aspect-ratio: 16 / 10; border-radius: 6px; }
-  .headline .kicker { display: block; margin: 12px 0 0; font-size: 10.5px; }
-  .headline h3 { margin: 5px 0 6px; font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--heading); }
-  .headline:hover h3 { color: var(--accent); }
-
-  .section { padding-top: 44px; }
-  .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
-  .section-head h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--heading); }
-  .section-head p { margin: 4px 0 0; font-size: 13.5px; color: var(--text); }
-
-  .link-btn { font: 600 13px "Inter", sans-serif; color: var(--accent); background: none; border: none; padding: 0; cursor: pointer; }
-  .link-btn:hover { text-decoration: underline; }
-
-  .btn-outline {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: var(--accent);
-    background: var(--card);
-    border: 1px solid var(--accent);
-    border-radius: 9px;
-    padding: 9px 18px;
-    white-space: nowrap;
-    transition: background 0.15s, color 0.15s;
-  }
-  .btn-outline:hover { background: var(--accent); color: #fff; }
-  /* ---------- Chronological feed ---------- */
-  .feed { border-top: 1px solid var(--border); }
-  .feed-row { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--border); }
-  .feed-row[hidden] { display: none; }
-  .feed-row .placeholder { width: 140px; height: 94px; flex-shrink: 0; border-radius: 6px; }
-  .feed-row h3 { margin: 5px 0 6px; font-size: 16.5px; font-weight: 700; line-height: 1.35; color: var(--heading); }
-  .feed-row:hover h3 { color: var(--accent); }
-  .feed-row p {
-    margin: 0 0 6px;
-    font-size: 13.5px;
-    line-height: 1.55;
-    color: var(--text);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .more { margin-top: 22px; text-align: center; }
-  .more[hidden] { display: none; }
-  .more button {
-    font: 600 13.5px "Inter", sans-serif;
-    color: var(--accent);
-    background: var(--card);
-    border: 1px solid var(--accent);
-    border-radius: 9px;
-    padding: 11px 26px;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-  }
-  .more button:hover { background: var(--accent); color: #fff; }
+  /* ---------- Page header ---------- */
+  .page-head h1 { margin-bottom: 10px; font-size: 32px; font-weight: 800; letter-spacing: -0.02em; }
+  .page-head p { max-width: 460px; font-size: 14px; line-height: 1.6; color: var(--t60); }
 
   /* ---------- About ---------- */
   .about-note {
-    margin-top: 32px;
-    padding: 18px 0;
+    padding: 20px 0;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     display: grid;
     grid-template-columns: 160px 1fr;
     gap: 24px;
   }
-  .about-note h2 { margin: 2px 0 0; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
-  .about-note p { margin: 0 0 8px; max-width: 760px; font-size: 15px; font-weight: 500; line-height: 1.7; color: var(--heading); }
+  .about-note h2 { margin-top: 2px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--link); }
+  .about-note p { margin-bottom: 8px; max-width: 760px; font-size: 15px; font-weight: 500; line-height: 1.7; color: var(--navy); }
   .about-note p[hidden] { display: none; }
+  .text-btn { padding: 0; background: none; border: none; cursor: pointer; font: 600 14px "Inter", sans-serif; color: var(--navy); }
+  .text-btn:hover { text-decoration: underline; }
 
-  .page-end { height: 72px; }
+  /* ---------- Lead story ---------- */
+  .lead-story { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color 0.15s; }
+  .lead-story:hover { border-color: rgba(27, 42, 58, 0.4); }
+  .lead-story .ph { width: 100%; aspect-ratio: 16 / 10; border-radius: 0; }
+  .lead-body { padding: 24px 32px 24px 0; }
+  .lead-body .cat { margin-bottom: 10px; }
+  .lead-body h2 { margin-bottom: 12px; font-size: 26px; font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
+  .lead-story:hover h2 a { text-decoration: underline; }
+  .lead-body p { margin-bottom: 12px; font-size: 14.5px; line-height: 1.6; color: var(--t75); }
+
+  /* ---------- Headline cards ---------- */
+  .section { padding-top: 12px; }
+  .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; padding-top: 10px; border-top: 3px solid var(--yellow); }
+  .sec-head h2 { font-size: 15px; font-weight: 600; }
+  .sec-head p { margin-top: 4px; font-size: 13px; color: var(--t60); }
+  .sec-head > a { font-size: 14px; font-weight: 600; white-space: nowrap; }
+  .sec-head > a:hover { text-decoration: underline; }
+
+  .headlines { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .hcard { border: 1px solid var(--border); border-radius: var(--radius); background: #fff; transition: border-color 0.15s, background 0.15s; }
+  .hcard:hover { border-color: rgba(27, 42, 58, 0.4); background: var(--subtle); }
+  .hcard .ph { width: 100%; aspect-ratio: 16 / 10; border-radius: var(--radius) var(--radius) 0 0; }
+  .hcard-body { padding: 12px 16px 16px; }
+  .hcard h3 { margin: 4px 0 6px; font-size: 14.5px; font-weight: 700; line-height: 1.35; }
+  .hcard:hover h3 a { color: var(--link); }
+
+  /* ---------- Chronological feed ---------- */
+  .feed { border-top: 1px solid var(--border); }
+  .frow { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .frow[hidden] { display: none; }
+  .frow:hover { background: var(--subtle); }
+  .frow .ph { width: 140px; height: 94px; flex-shrink: 0; }
+  .frow-text { min-width: 0; flex: 1; }
+  .frow h3 { margin: 4px 0 6px; font-size: 16px; font-weight: 700; line-height: 1.35; }
+  .frow:hover h3 a { color: var(--link); }
+  .frow p { margin-bottom: 6px; font-size: 13.5px; line-height: 1.55; color: var(--t60); display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .more { margin-top: 22px; text-align: center; }
+  .more[hidden] { display: none; }
+  .more button { font: 600 13.5px "Inter", sans-serif; color: var(--link); background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 11px 26px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+  .more button:hover { border-color: var(--link); background: rgba(29, 78, 216, 0.08); }
+
+  .btn-outline { font-size: 13.5px; font-weight: 600; color: var(--link); background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 9px 16px; white-space: nowrap; transition: border-color 0.15s, background 0.15s; }
+  .btn-outline:hover { border-color: var(--link); background: rgba(29, 78, 216, 0.08); }
 
   @media (max-width: 900px) {
-    .lead-story { grid-template-columns: 1fr; gap: 24px; }
-    .headlines { grid-template-columns: repeat(2, 1fr); }
     .about-note { grid-template-columns: 1fr; gap: 6px; }
+    .lead-story { grid-template-columns: 1fr; gap: 0; }
+    .lead-story .ph { border-radius: var(--radius) var(--radius) 0 0; }
+    .lead-body { padding: 20px; }
+    .headlines { grid-template-columns: repeat(2, 1fr); }
   }
-  @media (max-width: 600px) {
-    .hero h1 { font-size: 28px; }
-    .lead-story h2 { font-size: 26px; }
+  @media (max-width: 640px) {
+    .page { padding: 20px 16px 40px; gap: 28px; }
+    .page-head h1 { font-size: 26px; }
+    .lead-body h2 { font-size: 21px; }
     .headlines { grid-template-columns: 1fr; }
-    .feed-row .placeholder { width: 96px; height: 72px; }
-    .feed-row h3 { font-size: 15px; }
+    .frow .ph { width: 96px; height: 72px; }
+    .frow h3 { font-size: 15px; }
   }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="hero-inner">
-    <h1>Company + Culture</h1>
-    <p class="lead">Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
-  </div>
-</header>
+<main class="page">
 
-<main class="container">
+  <header class="page-head">
+    <h1>Company + Culture</h1>
+    <p>Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
+  </header>
 
   <section class="about-note" aria-label="About Company + Culture">
     <h2>About</h2>
     <div>
       <p>Company + Culture is where L+M celebrates the people behind the work — the anniversaries, the new faces, the community moments, and the traditions that make every office feel like home.</p>
       <p id="aboutMore" hidden>Whether you're welcoming a new teammate, congratulating a colleague on a workiversary, or catching up on what's happening in the communities we serve, this is where those moments live. New here? The Company Guide is the best place to start.</p>
-      <button class="link-btn" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutMore">Read more</button>
+      <button class="text-btn" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutMore">Read more</button>
     </div>
   </section>
 
-  <section class="front">
-    <a class="lead-story" href="article.html?story=river-crossing-family-day">
-      <div class="placeholder"><span>featured photo</span></div>
-      <div>
-        <span class="kicker">Featured · Community + Connection</span>
-        <h2>Fun, Food, and Family at River Crossing</h2>
-        <p>We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time. Food trucks, games, and live music brought the whole L+M family together.</p>
-        <span class="byline">by <b>Jamie Ortiz</b> · Sep 6, 2026 · 2 min read</span>
-      </div>
-    </a>
-  </section>
+  <a class="item lead-story" id="leadStory" href="#">
+    <div class="ph"><span>featured photo</span></div>
+    <div class="lead-body" id="leadBody"></div>
+  </a>
 
-  <section class="section">
-    <div class="section-head">
+  <section class="section" aria-label="Latest stories">
+    <div class="sec-head">
       <div>
         <h2>Latest stories</h2>
         <p>The four newest stories, fresh from across every office.</p>
@@ -203,8 +153,8 @@
     <div class="headlines" id="headlines"></div>
   </section>
 
-  <section class="section" id="stories">
-    <div class="section-head">
+  <section class="section" id="stories" aria-label="More stories">
+    <div class="sec-head">
       <div>
         <h2>More stories</h2>
         <p>Keep reading — older stories from every category, newest first.</p>
@@ -215,11 +165,9 @@
     <div class="more" id="moreWrap"><button id="moreBtn" type="button">Load more stories</button></div>
   </section>
 
-  <div class="page-end"></div>
 </main>
 
 <script>
-
   // Add categories here; the landing page layout never grows with them.
   var CATEGORIES = [
     { key: "workiversaries", title: "Workiversaries", items: [
@@ -255,6 +203,8 @@
   var FEED_PAGE = 6;
 
   function esc(s) { return s.replace(/&/g, "&amp;"); }
+  function catLink(cat) { return '<a class="cat" href="listing.html?category=' + cat.key + '">' + esc(cat.title) + '</a>'; }
+  function storyHref(slug) { return "article.html?story=" + slug; }
 
   var ALL = [];
   CATEGORIES.forEach(function (cat) {
@@ -262,21 +212,30 @@
   });
   ALL.sort(function (a, b) { return b.time - a.time; });
 
-  // Lead is featured on its own; side headlines are the newest after it; the feed continues from there
+  function find(slug) { for (var i = 0; i < ALL.length; i++) if (ALL[i].story.slug === slug) return ALL[i]; return null; }
+
+  // Lead is featured on its own; headline cards are the newest after it; the feed continues from there
+  var lead = find(LEAD_SLUG);
+  document.getElementById("leadStory").href = storyHref(lead.story.slug);
+  document.getElementById("leadBody").innerHTML =
+    catLink(lead.cat) +
+    '<h2><a class="stretch" href="' + storyHref(lead.story.slug) + '">' + esc(lead.story.title) + '</a></h2>' +
+    '<p>' + esc(lead.story.desc) + '</p>' +
+    '<span class="meta">' + lead.story.date + '</span>';
+
   var REST = ALL.filter(function (e) { return e.story.slug !== LEAD_SLUG; });
   var HEADLINES = REST.slice(0, HEADLINE_COUNT);
   var FEED = REST.slice(HEADLINE_COUNT);
 
   var headlinesEl = document.getElementById("headlines");
-  HEADLINES.forEach(function (f) {
-    var a = document.createElement("a");
-    a.className = "headline";
-    a.href = "article.html?story=" + f.story.slug;
+  HEADLINES.forEach(function (e) {
+    var a = document.createElement("article");
+    a.className = "item hcard";
     a.innerHTML =
-      '<div class="placeholder"><span>photo</span></div>' +
-      '<div><span class="kicker">' + esc(f.cat.title) + '</span>' +
-      '<h3>' + esc(f.story.title) + '</h3>' +
-      '<span class="byline">' + f.story.date + '</span></div>';
+      '<div class="ph"><span>photo</span></div>' +
+      '<div class="hcard-body">' + catLink(e.cat) +
+      '<h3><a class="stretch" href="' + storyHref(e.story.slug) + '">' + esc(e.story.title) + '</a></h3>' +
+      '<span class="meta">' + e.story.date + '</span></div>';
     headlinesEl.appendChild(a);
   });
 
@@ -286,27 +245,33 @@
   // Chronological feed with Load more
   var feed = document.getElementById("feed");
   var rows = FEED.map(function (e) {
-    var a = document.createElement("a");
-    a.className = "feed-row";
-    a.href = "article.html?story=" + e.story.slug;
+    var a = document.createElement("article");
+    a.className = "item frow";
     a.hidden = true;
     a.innerHTML =
-      '<div class="placeholder"><span>photo</span></div>' +
-      '<div><span class="kicker">' + esc(e.cat.title) + '</span>' +
-      '<h3>' + esc(e.story.title) + '</h3>' +
+      '<div class="ph"><span>photo</span></div>' +
+      '<div class="frow-text">' + catLink(e.cat) +
+      '<h3><a class="stretch" href="' + storyHref(e.story.slug) + '">' + esc(e.story.title) + '</a></h3>' +
       '<p>' + esc(e.story.desc) + '</p>' +
-      '<span class="byline">' + e.story.date + '</span></div>';
+      '<span class="meta">' + e.story.date + '</span></div>';
     feed.appendChild(a);
     return a;
   });
   var moreWrap = document.getElementById("moreWrap");
   var shownRows = 0;
-  function showMore() {
+  function showMore(focusFrom) {
     rows.slice(shownRows, shownRows + FEED_PAGE).forEach(function (r) { r.hidden = false; });
     shownRows = Math.min(rows.length, shownRows + FEED_PAGE);
     moreWrap.hidden = shownRows >= rows.length;
+    if (typeof focusFrom === "number") {
+      var target = feed.children[focusFrom];
+      if (target) target.querySelector("h3 a").focus();
+    }
   }
-  document.getElementById("moreBtn").addEventListener("click", showMore);
+  document.getElementById("moreBtn").addEventListener("click", function () {
+    var before = feed.querySelectorAll(".frow:not([hidden])").length;
+    showMore(before);
+  });
   showMore();
 
   document.getElementById("aboutToggle").addEventListener("click", function () {

@@ -22,9 +22,9 @@ const DESIGN_OPTIONS: DesignOption[] = [
     href: "/company&culture/design2/index.html",
   },
   {
-    name: "Design 3 — Carousel + Category Accordion",
+    name: "Design 3 — Editorial Feature + Category Rows",
     summary:
-      "An auto-scrolling Latest stories carousel, an About card with Read more, and collapsible category sections (one open at a time) that each list their pages, with a View all link to the full category listing.",
+      "A large featured story up top (no card box), an auto-scrolling Latest stories strip, then More stories revealed one category at a time via Load more, and an About note at the bottom.",
     href: "/company&culture/design3/index.html",
   },
   {

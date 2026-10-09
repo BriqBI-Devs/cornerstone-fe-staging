@@ -8,322 +8,141 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* Tokens taken from the Cornerstone app (src/index.css) */
   :root {
     box-sizing: border-box;
-    --bg: #f8f9fb;
-    --card: #ffffff;
-    --border: #e6e8ec;
-    --heading: #1b2a3a;
-    --text: rgba(27, 42, 58, 0.62);
-    --item: rgba(27, 42, 58, 0.45);
-    --accent: #1d4ed8;
-    --accent-dark: #1e40af;
-    --accent-hover: rgba(29, 78, 216, 0.08);
-    --ph-bg: #e4edf7;
+    --navy: #1b2a3a;
+    --link: #1d4ed8;
+    --yellow: #f5c518;
+    --subtle: #f7f7f5;
+    --border: #e5e5e0;
+    --t75: rgba(27, 42, 58, 0.75);
+    --t60: rgba(27, 42, 58, 0.6);
+    --t55: rgba(27, 42, 58, 0.55);
+    --radius: 8px;
   }
   *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; }
-  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  body { margin: 0; background: #fff; color: var(--navy); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  h1, h2, h3, p { margin: 0; }
 
-  .placeholder {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--ph-bg);
-    background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px);
-    overflow: hidden;
-  }
-  .placeholder span {
-    font-size: 10.5px;
-    font-weight: 500;
-    color: rgba(27, 42, 58, 0.6);
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 3px 8px;
-  }
+  .page { max-width: 1280px; margin: 0 auto; padding: 24px 32px 56px; display: flex; flex-direction: column; gap: 32px; }
 
-  /* ---------- Hero ---------- */
-  .hero { background: var(--bg); }
-  .hero-inner {
-    position: relative;
-    z-index: 1;
-    max-width: 660px;
-    margin: 0 auto;
-    padding: 44px 24px 0;
-    text-align: center;
-  }
-  .hero h1 {
-    margin: 0 0 12px;
-    font-size: 36px;
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: -0.035em;
-    color: var(--heading);
-  }
-  .hero .lead {
-    margin: 0 auto;
-    max-width: 560px;
-    font-size: 16px;
-    line-height: 1.65;
-    color: var(--text);
-  }
+  .ph { display: flex; align-items: center; justify-content: center; background-color: #e4edf7; background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px); overflow: hidden; }
+  .ph span { border: 1px solid var(--border); background: #fff; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--t60); }
+
+  /* Whole item is clickable; the category label stays its own link */
+  .item { position: relative; }
+  .stretch::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+  .cat { position: relative; z-index: 2; display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.025em; text-transform: uppercase; color: var(--link); }
+  .cat:hover { text-decoration: underline; }
+  .meta { font-size: 12px; color: var(--t55); }
+
+  /* ---------- Page header ---------- */
+  .page-head h1 { margin-bottom: 10px; font-size: 32px; font-weight: 800; letter-spacing: -0.02em; }
+  .page-head p { max-width: 460px; font-size: 14px; line-height: 1.6; color: var(--t60); }
 
   /* ---------- Featured ---------- */
-  .featured {
-    display: grid;
-    grid-template-columns: 1.15fr 1fr;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    text-decoration: none;
-    margin-top: 56px;
-    transition: box-shadow 0.2s ease;
-  }
-  .featured:hover { box-shadow: 0 14px 32px rgba(16, 24, 35, 0.09); }
-  .featured .placeholder { min-height: 280px; }
-  .featured-body {
-    padding: 36px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .cat-pill {
-    align-self: flex-start;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: var(--accent-hover);
-    border-radius: 999px;
-    padding: 4px 11px;
-    margin-bottom: 14px;
-  }
-  .featured-body h3 {
-    margin: 0 0 12px;
-    font-size: 24px;
-    font-weight: 800;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    color: var(--heading);
-  }
-  .featured-body p { margin: 0 0 16px; font-size: 14.5px; line-height: 1.65; color: var(--text); }
-  .featured-body .byline { margin: 0; font-size: 12.5px; color: var(--item); }
-  .featured-body .byline b { color: var(--heading); font-weight: 600; }
+  .featured { display: grid; grid-template-columns: 1.2fr 1fr; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff; transition: border-color 0.15s; }
+  .featured:hover { border-color: rgba(27, 42, 58, 0.4); }
+  .featured .ph { min-height: 300px; }
+  .f-body { display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
+  .f-label { display: flex; align-items: center; gap: 8px; }
+  .f-label .feat { font-size: 12px; font-weight: 700; letter-spacing: 0.025em; text-transform: uppercase; color: var(--navy); }
+  .f-label .feat::after { content: "\00b7"; margin-left: 8px; color: var(--t55); font-weight: 400; }
+  .featured h2 { margin-top: 6px; font-size: 24px; font-weight: 700; line-height: 1.25; }
+  .featured:hover h2 a { text-decoration: underline; }
+  .featured p.excerpt { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--t75); }
+  .featured .meta { margin-top: 10px; }
+  .featured .meta a { position: relative; z-index: 2; font-weight: 600; color: var(--navy); }
+  .featured .meta a:hover { text-decoration: underline; }
 
-  /* ---------- Main layout: stories + sidebar ---------- */
-  .main-layout {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 28px;
-    align-items: start;
-    padding: 56px 0 72px;
-  }
+  /* ---------- Stories + sidebar ---------- */
+  .main-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+  .sec-head { margin-bottom: 24px; padding-top: 22px; border-top: 3px solid var(--yellow); }
+  .sec-head h2 { font-size: 15px; font-weight: 600; }
+  .sec-head p { margin-top: 6px; font-size: 13px; color: var(--t60); }
 
-  .section-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 22px;
-  }
-  .section-label h2 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--heading);
-  }
-  .section-label p { margin: 4px 0 0; font-size: 13.5px; color: var(--text); }
+  .story-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .card { border: 1px solid var(--border); border-radius: var(--radius); background: #fff; transition: border-color 0.15s, background 0.15s; }
+  .card:hover { border-color: rgba(27, 42, 58, 0.4); background: var(--subtle); }
+  .card .ph { width: 100%; aspect-ratio: 16 / 10; border-radius: var(--radius) var(--radius) 0 0; }
+  .card-body { padding: 12px 16px 16px; }
+  .card h3 { margin: 4px 0 6px; font-size: 15px; font-weight: 700; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-  /* ---------- Story grid ---------- */
-  .story-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .story-card {
-    display: flex;
-    flex-direction: column;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    overflow: hidden;
-    text-decoration: none;
-    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-  }
-  .story-card:hover { box-shadow: 0 16px 32px rgba(16, 24, 35, 0.1); transform: translateY(-3px); border-color: rgba(29, 78, 216, 0.25); }
-  .story-card .placeholder { width: 100%; aspect-ratio: 16 / 10; transition: transform 0.4s ease; }
-  .story-card:hover .placeholder { transform: scale(1.04); }
-  .story-card-body { padding: 18px 20px 16px; flex: 1; display: flex; flex-direction: column; }
-  .story-card-body .card-cat {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .story-card-body .card-cat::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: var(--accent); }
-  .story-card-body h3 {
-    margin: 0 0 16px;
-    font-size: 16px;
-    font-weight: 800;
-    line-height: 1.35;
-    letter-spacing: -0.015em;
-    color: var(--heading);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .story-card:hover .story-card-body h3 { color: var(--accent); }
-  .story-card-body .card-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: auto 0 0;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--item);
-  }
-  .story-card-body .card-meta::after { content: "→"; font-size: 15px; color: var(--accent); transition: transform 0.2s ease; }
-  .story-card:hover .card-meta::after { transform: translateX(4px); }
+  .sidebar { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 24px; }
+  .side-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px 12px; }
+  .side-card h2 { margin-bottom: 8px; font-size: 15px; font-weight: 600; }
+  .link-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-weight: 600; transition: border-color 0.15s, background 0.15s; }
+  .link-row:hover { border-color: rgba(27, 42, 58, 0.4); background: var(--subtle); }
+  .link-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 6px; background: var(--navy); color: #fff; }
+  .link-icon svg { width: 16px; height: 16px; }
+  .link-row .name { flex: 1; min-width: 0; }
+  .link-row .chev { width: 16px; height: 16px; flex-shrink: 0; color: rgba(27, 42, 58, 0.3); transition: transform 0.15s, color 0.15s; }
+  .link-row:hover .chev { transform: translateX(2px); color: rgba(27, 42, 58, 0.6); }
+  .more-cats { display: block; margin: 2px 0 6px auto; }
 
-  /* ---------- Sidebar ---------- */
-  .sidebar { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 20px; }
+  .about { border-top: 3px solid var(--yellow); padding-top: 18px; }
+  .about p { margin-bottom: 10px; font-size: 14px; line-height: 1.65; color: var(--t75); }
+  .about p[hidden] { display: none; }
+  .text-btn { padding: 0; background: none; border: none; cursor: pointer; font: 600 14px "Inter", sans-serif; color: var(--navy); }
+  .text-btn:hover { text-decoration: underline; }
+  .about .text-btn { margin-bottom: 6px; }
 
-  .side-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 22px; }
-  .side-card h3 {
-    margin: 0 0 8px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--heading);
-  }
-
-  .cat-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    margin: 0 -12px;
-    text-decoration: none;
-    border-radius: 12px;
-    transition: background 0.15s;
-  }
-  .cat-link:hover { background: var(--accent-hover); }
-  .cat-link .cl-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #e3ecff, #f3f7ff);
-    color: var(--accent);
-    flex-shrink: 0;
-    transition: background 0.15s, color 0.15s;
-  }
-  .cat-link:hover .cl-icon { background: var(--accent); color: #fff; }
-  .cat-link .cl-icon svg { width: 16px; height: 16px; }
-  .cat-link .cl-text { min-width: 0; flex: 1; }
-  .cat-link h4 { margin: 0; font-size: 13.5px; font-weight: 700; color: var(--heading); }
-  .cat-link p { margin: 2px 0 0; font-size: 12px; color: var(--item); }
-  .cat-link .cl-arrow { width: 14px; height: 14px; color: rgba(27, 42, 58, 0.25); flex-shrink: 0; transition: color 0.15s, transform 0.15s; }
-  .cat-link:hover .cl-arrow { color: var(--accent); transform: translateX(3px); }
-
-  .about-side h3 + p { margin-top: 14px; }
-  .about-side p { margin: 0 0 10px; font-size: 13.5px; line-height: 1.7; color: rgba(27, 42, 58, 0.8); }
-  .about-side p[hidden] { display: none; }
-  .about-side .link-btn {
-    font: 600 13px "Inter", sans-serif;
-    color: var(--accent);
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-  }
-  .about-side .link-btn:hover { text-decoration: underline; }
-
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     .main-layout { grid-template-columns: 1fr; }
-    .sidebar { position: static; flex-direction: row; flex-wrap: wrap; }
-    .sidebar .side-card { flex: 1 1 260px; }
+    .sidebar { position: static; }
     .featured { grid-template-columns: 1fr; }
-    .featured .placeholder { min-height: 200px; }
-    .featured-body { padding: 24px; }
+    .featured .ph { min-height: 220px; }
   }
-  @media (max-width: 600px) {
-    .hero h1 { font-size: 28px; }
-    .hero-inner { padding: 32px 24px 0; }
+  @media (max-width: 640px) {
+    .page { padding: 20px 16px 40px; gap: 28px; }
+    .page-head h1 { font-size: 26px; }
     .story-grid { grid-template-columns: 1fr; }
-    .sidebar { flex-direction: column; }
+    .f-body { padding: 20px; }
+    .featured h2 { font-size: 20px; }
   }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="hero-inner">
+<main class="page">
+
+  <header class="page-head">
     <h1>Company + Culture</h1>
-    <p class="lead">Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
-  </div>
-</header>
+    <p>Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
+  </header>
 
-<main class="container">
-
-  <a class="featured" href="article.html?story=river-crossing-family-day">
-    <div class="placeholder"><span>featured photo</span></div>
-    <div class="featured-body">
-      <span class="cat-pill">Community + Connection</span>
-      <h3>Fun, Food, and Family at River Crossing</h3>
-      <p>We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time. Food trucks, games, and live music brought the whole L+M family together.</p>
-      <p class="byline">by <b>Jamie Ortiz</b> · Sep 6, 2026</p>
-    </div>
-  </a>
+  <article class="item featured" id="featured"></article>
 
   <div class="main-layout">
-    <div>
-      <div class="section-label">
-        <div>
-          <h2>Latest stories</h2>
-          <p>Fresh from across every office this month.</p>
-        </div>
+    <section aria-label="Latest stories">
+      <div class="sec-head">
+        <h2>Latest stories</h2>
+        <p>Fresh from across every office this month.</p>
       </div>
       <div class="story-grid" id="storyGrid"></div>
-    </div>
+    </section>
 
     <aside class="sidebar">
-      <div class="side-card">
-        <h3>Categories</h3>
+      <section class="side-card" aria-label="Categories">
+        <h2>Categories</h2>
         <div id="catLinks"></div>
-      </div>
-      <div class="side-card about-side">
-        <h3>About this section</h3>
+        <a class="text-btn more-cats" id="moreCats" href="listing.html" hidden>View more →</a>
+      </section>
+
+      <section class="side-card about" aria-label="About Company + Culture">
+        <h2>About Company + Culture</h2>
         <p>Company + Culture celebrates the people behind the work — anniversaries, new faces, community moments, and the traditions that make every office feel like home.</p>
-        <p id="sideAboutMore" hidden>Whether you're welcoming a new teammate, congratulating a colleague on a workiversary, or catching up on what's happening in the communities we serve, this is where those moments live. New here? The Company Guide is the best place to start.</p>
-        <button class="link-btn" id="sideAboutToggle" type="button" aria-expanded="false">Read more</button>
-      </div>
+        <p id="aboutMore" hidden>Whether you're welcoming a new teammate, congratulating a colleague on a workiversary, or catching up on what's happening in the communities we serve, this is where those moments live. New here? The Company Guide is the best place to start.</p>
+        <button class="text-btn" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutMore">Read more →</button>
+      </section>
     </aside>
   </div>
 
 </main>
-
 
 <script>
   var ICONS = {
@@ -333,85 +152,102 @@
     cultural: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
     guide: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'
   };
+  var CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
 
   var CATEGORIES = [
-    { key: "workiversaries", title: "Workiversaries", desc: "Milestones each month", items: [
+    { key: "workiversaries", title: "Workiversaries", items: [
       { slug: "workiversaries-sep", title: "This month’s Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)", date: "Sep 9, 2026" },
       { slug: "workiversaries-5-years", title: "Celebrating 5 Years: Priya Osei & Marcus Field", date: "Sep 2, 2026" },
       { slug: "workiversaries-full-list", title: "Full September Workiversary List", date: "Sep 1, 2026" }
     ]},
-    { key: "new-hires", title: "New Hires & Welcomes", desc: "New faces & milestones", items: [
+    { key: "new-hires", title: "New Hires & Welcomes", items: [
       { slug: "welcome-september-new-hires", title: "Welcome Alex Kim, Priya Shah, Tomás Rivera, and Sarah Hunt — our September new hires", date: "Sep 8, 2026" },
       { slug: "laura-reyes-baby-lily", title: "Laura Reyes Welcomes Baby Lily, Making a Family of Four", date: "Sep 28, 2026" },
       { slug: "connor-marsh-baby-jeremiah", title: "Connor Marsh Welcomes Baby Jeremiah", date: "Sep 20, 2026" }
     ]},
-    { key: "community", title: "Community + Connection", desc: "Events & neighborhoods", items: [
+    { key: "community", title: "Community + Connection", items: [
       { slug: "river-crossing-family-day", title: "Fun, Food, and Family at River Crossing", date: "Sep 6, 2026" },
       { slug: "september-community-digest", title: "September Community Digest is out", date: "Sep 7, 2026" },
       { slug: "fulton-park-book-bags", title: "Fulton Park Supports Students with Annual Book Bag Giveaway", date: "Sep 3, 2026" },
       { slug: "12-foot-snowman", title: "The 12-Foot Snowman That Stole the Show", date: "Sep 5, 2026" }
     ]},
-    { key: "cultural", title: "Cultural Observances", desc: "Heritage & traditions", items: [
+    { key: "cultural", title: "Cultural Observances", items: [
       { slug: "hispanic-heritage-month", title: "Honoring Hispanic Heritage Month: Stories from Our Team", date: "Sep 15, 2026" },
       { slug: "harlem-heritage-parade", title: "L+M Shows Up and Shines at the Harlem Heritage Parade", date: "Jun 20, 2026" },
       { slug: "juneteenth", title: "Commemorating Juneteenth Across Our Communities", date: "Jun 19, 2026" }
     ]},
-    { key: "guide", title: "Company Guide", desc: "Teams, roles & how we work", items: [
+    { key: "guide", title: "Company Guide", items: [
       { slug: "company-guide-toc", title: "Company Guide — Table of Contents", date: "Mar 5, 2026" },
       { slug: "meet-the-teams-comms-marketing", title: "Meet the Teams: Communications & Marketing", date: "Aug 12, 2026" },
       { slug: "meet-the-teams-building-envelope", title: "Meet the Teams: Building Envelope & Sustainability", date: "Jul 30, 2026" }
     ]}
   ];
 
-  var LATEST_SLUGS = [
-    "laura-reyes-baby-lily", "hispanic-heritage-month", "workiversaries-sep",
-    "welcome-september-new-hires", "september-community-digest", "connor-marsh-baby-jeremiah"
-  ];
+  var FEATURED = { slug: "river-crossing-family-day", excerpt: "We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time.", meta: "Sep 6 · 3 min read" };
+  var LATEST_SLUGS = ["laura-reyes-baby-lily", "hispanic-heritage-month", "workiversaries-sep", "welcome-september-new-hires", "september-community-digest", "connor-marsh-baby-jeremiah"];
+  var VISIBLE_CATS = 4;
 
   function esc(s) { return s.replace(/&/g, "&amp;"); }
+  function find(slug) {
+    for (var i = 0; i < CATEGORIES.length; i++)
+      for (var j = 0; j < CATEGORIES[i].items.length; j++)
+        if (CATEGORIES[i].items[j].slug === slug) return { story: CATEGORIES[i].items[j], cat: CATEGORIES[i] };
+    return null;
+  }
+  function catLink(cat) { return '<a class="cat" href="listing.html?category=' + cat.key + '">' + esc(cat.title) + '</a>'; }
+  function storyHref(slug) { return "article.html?story=" + slug; }
 
-  var arrowSvg = '<svg class="cl-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+  // Featured story
+  var f = find(FEATURED.slug);
+  document.getElementById("featured").innerHTML =
+    '<div class="ph"><span>hero news photo</span></div>' +
+    '<div class="f-body">' +
+      '<div class="f-label"><span class="feat">Featured</span>' + catLink(f.cat) + '</div>' +
+      '<h2><a class="stretch" href="' + storyHref(f.story.slug) + '">' + esc(f.story.title) + '</a></h2>' +
+      '<p class="excerpt">' + esc(FEATURED.excerpt) + '</p>' +
+      '<p class="meta">' + FEATURED.meta + ' · <a href="' + storyHref(f.story.slug) + '">Read the story →</a></p>' +
+    '</div>';
 
+  // Latest stories grid
+  var grid = document.getElementById("storyGrid");
+  LATEST_SLUGS.forEach(function (slug) {
+    var e = find(slug);
+    var el = document.createElement("article");
+    el.className = "item card";
+    el.innerHTML =
+      '<div class="ph"><span>photo</span></div>' +
+      '<div class="card-body">' + catLink(e.cat) +
+      '<h3><a class="stretch" href="' + storyHref(slug) + '">' + esc(e.story.title) + '</a></h3>' +
+      '<p class="meta">' + e.story.date + '</p></div>';
+    grid.appendChild(el);
+  });
+
+  // Categories: newest-active first; only the first few show, "View more" opens the listing page
+  function newestTime(cat) { return Math.max.apply(null, cat.items.map(function (i) { return new Date(i.date).getTime(); })); }
+  var byActivity = CATEGORIES.slice().sort(function (a, b) { return newestTime(b) - newestTime(a); });
   var catLinks = document.getElementById("catLinks");
-  CATEGORIES.forEach(function (cat) {
+  byActivity.slice(0, VISIBLE_CATS).forEach(function (cat) {
     var a = document.createElement("a");
-    a.className = "cat-link";
+    a.className = "link-row";
     a.href = "listing.html?category=" + cat.key;
-    a.innerHTML =
-      '<span class="cl-icon">' + ICONS[cat.key] + '</span>' +
-      '<div class="cl-text"><h4>' + esc(cat.title) + '</h4><p>' + esc(cat.desc) + '</p></div>' +
-      arrowSvg;
+    a.innerHTML = '<span class="link-icon">' + ICONS[cat.key] + '</span><span class="name">' + esc(cat.title) + '</span>' + CHEV;
     catLinks.appendChild(a);
   });
+  if (byActivity.length > VISIBLE_CATS) {
+    var more = document.getElementById("moreCats");
+    more.hidden = false;
+    more.href = "listing.html?category=" + byActivity[VISIBLE_CATS].key;
+  }
 
-  var storyGrid = document.getElementById("storyGrid");
-  LATEST_SLUGS.forEach(function (slug) {
-    CATEGORIES.forEach(function (cat) {
-      cat.items.forEach(function (it) {
-        if (it.slug !== slug) return;
-        var a = document.createElement("a");
-        a.className = "story-card";
-        a.href = "article.html?story=" + slug;
-        a.innerHTML =
-          '<div class="placeholder"><span>photo</span></div>' +
-          '<div class="story-card-body">' +
-            '<span class="card-cat">' + esc(cat.title) + '</span>' +
-            '<h3>' + esc(it.title) + '</h3>' +
-            '<span class="card-meta">' + it.date + '</span>' +
-          '</div>';
-        storyGrid.appendChild(a);
-      });
-    });
+  // About toggle
+  var aboutToggle = document.getElementById("aboutToggle");
+  var aboutMore = document.getElementById("aboutMore");
+  aboutToggle.addEventListener("click", function () {
+    var expanded = aboutMore.hidden;
+    aboutMore.hidden = !expanded;
+    aboutToggle.setAttribute("aria-expanded", String(expanded));
+    aboutToggle.textContent = expanded ? "Read less" : "Read more →";
   });
-
-  document.getElementById("sideAboutToggle").addEventListener("click", function () {
-    var more = document.getElementById("sideAboutMore");
-    var expanded = more.hidden;
-    more.hidden = !expanded;
-    this.setAttribute("aria-expanded", String(expanded));
-    this.textContent = expanded ? "Read less" : "Read more";
-  });
-
 </script>
 </body>
 </html>

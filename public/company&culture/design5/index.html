@@ -8,218 +8,184 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* Tokens taken from the Cornerstone app (src/index.css) */
   :root {
     box-sizing: border-box;
-    --bg: #f8f9fb;
-    --card: #ffffff;
-    --border: #e6e8ec;
-    --heading: #1b2a3a;
-    --text: rgba(27, 42, 58, 0.62);
-    --item: rgba(27, 42, 58, 0.45);
-    --accent: #1d4ed8;
-    --accent-hover: rgba(29, 78, 216, 0.08);
-    --ph-bg: #e4edf7;
-    --navy: #264266;
+    --navy: #1b2a3a;
+    --link: #1d4ed8;
+    --yellow: #f5c518;
+    --subtle: #f7f7f5;
+    --border: #e5e5e0;
+    --t75: rgba(27, 42, 58, 0.75);
+    --t60: rgba(27, 42, 58, 0.6);
+    --t55: rgba(27, 42, 58, 0.55);
+    --radius: 8px;
   }
   *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--card);
-    color: var(--text);
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
+  body { margin: 0; background: #fff; color: var(--navy); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
   a { color: inherit; text-decoration: none; }
-  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after { transition: none !important; }
-  }
-  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  h1, h2, h3, p { margin: 0; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
-  .placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--ph-bg);
-    background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px);
-    overflow: hidden;
-  }
-  .placeholder span {
-    font-size: 10.5px;
-    font-weight: 500;
-    color: rgba(27, 42, 58, 0.6);
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 3px 8px;
-  }
+  .page { max-width: 1280px; margin: 0 auto; padding: 24px 32px 56px; display: flex; flex-direction: column; gap: 32px; }
 
-  .hero-inner { padding: 44px 24px 0; text-align: center; max-width: 660px; margin: 0 auto; }
-  .hero h1 { margin: 0 0 12px; font-size: 36px; font-weight: 800; line-height: 1.08; letter-spacing: -0.035em; color: var(--heading); }
-  .hero .lead { margin: 0 auto; max-width: 560px; font-size: 16px; line-height: 1.65; color: var(--text); }
+  .ph { display: flex; align-items: center; justify-content: center; background-color: #e4edf7; background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px); overflow: hidden; }
+  .ph span { border: 1px solid var(--border); background: #fff; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--t60); }
 
-  /* ---------- About lede (top) ---------- */
-  .lede { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 28px; margin-top: 36px; padding: 22px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .lede-label { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); padding-top: 5px; }
-  .lede p { margin: 0 0 8px; font-size: 19px; font-weight: 500; line-height: 1.55; letter-spacing: -0.01em; color: var(--heading); max-width: 760px; }
-  .lede p[hidden] { display: none; }
-  .lede p.more { font-size: 15px; font-weight: 400; line-height: 1.7; letter-spacing: 0; color: var(--text); }
-  .link-btn { font: 600 13px "Inter", sans-serif; color: var(--accent); background: none; border: none; padding: 0; cursor: pointer; }
-  .link-btn:hover { text-decoration: underline; }
-
-  /* ---------- Featured band (full width) ---------- */
-  .band { margin-top: 36px; background: var(--navy); color: #fff; }
-  .band-inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; align-items: center; padding: 48px 24px; }
-  .band .kicker { display: block; margin-bottom: 14px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #bcd0f5; }
-  .band h2 { margin: 0 0 14px; font-size: 38px; font-weight: 800; line-height: 1.1; letter-spacing: -0.035em; color: #fff; }
-  .band p { margin: 0 0 22px; font-size: 16px; line-height: 1.65; color: rgba(255, 255, 255, 0.84); max-width: 480px; }
-  .band .byline { display: block; margin-bottom: 22px; font-size: 13px; color: rgba(255, 255, 255, 0.62); }
-  .btn-light { display: inline-block; font-size: 13.5px; font-weight: 700; color: var(--heading); background: #fff; border-radius: 9px; padding: 11px 20px; transition: background 0.15s; }
-  .btn-light:hover { background: #e8eefc; }
-  .band-photo { display: block; border-radius: 18px; overflow: hidden; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.28); }
-  .band-photo .placeholder { width: 100%; aspect-ratio: 4 / 3; transition: transform 0.5s ease; }
-  .band-photo:hover .placeholder { transform: scale(1.03); }
-
-  .section { margin-top: 56px; }
-  .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
-  .section-head h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--heading); }
-  .section-head p { margin: 4px 0 0; font-size: 13.5px; color: var(--text); }
-  .section-head a { font-size: 13.5px; font-weight: 600; color: var(--accent); white-space: nowrap; }
-  .section-head a:hover { text-decoration: underline; }
-
-  /* ---------- Category cards ---------- */
-  .cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  .cat { display: flex; flex-direction: column; padding: 22px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
-  .cat:hover { transform: translateY(-3px); border-color: rgba(29, 78, 216, 0.4); box-shadow: 0 14px 30px rgba(16, 24, 35, 0.09); }
-  .cat .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  .cat .disc { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #e3ecff, #f3f7ff); color: var(--accent); transition: background 0.2s, color 0.2s; }
-  .cat .disc svg { width: 22px; height: 22px; }
-  .cat:hover .disc { background: var(--accent); color: #fff; }
-  .cat .arrow { width: 18px; height: 18px; color: rgba(27, 42, 58, 0.25); transition: color 0.2s, transform 0.2s; }
-  .cat:hover .arrow { color: var(--accent); transform: translateX(3px); }
-  .cat h3 { margin: 0 0 6px; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; color: var(--heading); }
-  .cat p { margin: 0 0 16px; flex: 1; font-size: 13px; line-height: 1.55; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .cat .fresh { font-size: 12px; color: var(--item); }
-  .cat .fresh b { font-weight: 700; color: var(--heading); }
-  .cat.all { background: var(--bg); border-style: dashed; }
-  .cat.all .disc { background: var(--card); color: var(--item); border: 1px dashed rgba(27, 42, 58, 0.3); }
-  .cat.all:hover .disc { background: var(--heading); color: #fff; border-color: var(--heading); }
-  .cat.all .fresh b { color: var(--accent); }
-
-  /* ---------- Latest ---------- */
-  .latest-tools { display: flex; align-items: center; gap: 8px; }
-  .c-btn { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: var(--card); color: var(--heading); border: 1px solid var(--border); border-radius: 999px; cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s; }
-  .c-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-hover); }
-  .c-btn svg { width: 16px; height: 16px; }
-  .carousel { position: relative; }
-  .latest { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 6px 2px 16px; }
-  .latest::-webkit-scrollbar { display: none; }
-  .tile { position: relative; flex: 0 0 calc((100% - 60px) / 3.5); scroll-snap-align: start; display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-  .tile:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(16, 24, 35, 0.12); }
+  /* Whole item is clickable; the category label stays its own link */
+  .item { position: relative; }
   .stretch::after { content: ""; position: absolute; inset: 0; z-index: 1; }
-  .tile .photo { position: relative; overflow: hidden; }
-  .tile .photo .placeholder { width: 100%; aspect-ratio: 4 / 3; transition: transform 0.4s ease; }
-  .tile:hover .photo .placeholder { transform: scale(1.04); }
-  .tile .date { position: absolute; left: 12px; top: 12px; z-index: 1; padding: 6px 10px; border-radius: 8px; background: var(--card); text-align: center; line-height: 1; box-shadow: 0 4px 10px rgba(16, 24, 35, 0.12); }
-  .tile .date b { display: block; font-size: 18px; font-weight: 800; color: var(--heading); letter-spacing: -0.02em; }
-  .tile .date i { display: block; margin-top: 3px; font-style: normal; font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); }
-  .tile-body { display: flex; flex-direction: column; flex: 1; padding: 16px 18px 16px; }
-  .tile .meta { position: relative; z-index: 2; align-self: flex-start; margin-bottom: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
-  .tile .meta:hover { text-decoration: underline; }
-  .tile h3 { margin: 0; font-size: 15.5px; font-weight: 700; line-height: 1.38; color: var(--heading); display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .tile:hover h3 { color: var(--accent); }
-  .tile p { margin: 8px 0 12px; flex: 1; font-size: 13px; line-height: 1.55; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .tile .go { align-self: flex-end; width: 30px; height: 30px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: var(--accent-hover); color: var(--accent); transition: background 0.2s, color 0.2s, transform 0.2s; }
-  .tile .go svg { width: 14px; height: 14px; }
-  .tile:hover .go { background: var(--accent); color: #fff; transform: translateX(2px); }  .bar { position: relative; height: 4px; margin-top: 4px; background: var(--border); border-radius: 999px; overflow: hidden; }
-  .bar span { position: absolute; top: 0; bottom: 0; left: 0; width: 25%; background: var(--accent); border-radius: 999px; transition: left 0.2s ease, width 0.2s ease; }
-  .page-end { height: 80px; }
+  .cat { position: relative; z-index: 2; display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.025em; text-transform: uppercase; color: var(--link); }
+  .cat:hover { text-decoration: underline; }
+  .meta { font-size: 12px; color: var(--t55); }
 
-  @media (max-width: 900px) {
-    .band-inner { grid-template-columns: 1fr; gap: 28px; padding: 36px 24px; }
-    .band h2 { font-size: 30px; }
-    .tile { flex-basis: calc((100% - 40px) / 2.5); }
+  /* ---------- Page header ---------- */
+  .page-head h1 { margin-bottom: 10px; font-size: 32px; font-weight: 800; letter-spacing: -0.02em; }
+  .page-head p { max-width: 460px; font-size: 14px; line-height: 1.6; color: var(--t60); }
+
+  /* ---------- About lede ---------- */
+  .lede { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 24px; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .lede-label { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--link); padding-top: 2px; }
+  .lede p { margin-bottom: 8px; max-width: 760px; font-size: 15px; font-weight: 500; line-height: 1.7; color: var(--navy); }
+  .lede p[hidden] { display: none; }
+  .lede p.more { font-size: 14px; font-weight: 400; color: var(--t60); }
+  .text-btn { padding: 0; background: none; border: none; cursor: pointer; font: 600 14px "Inter", sans-serif; color: var(--navy); }
+  .text-btn:hover { text-decoration: underline; }
+
+  /* ---------- Featured band ---------- */
+  .band { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--navy); color: #fff; }
+  .band-inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: center; padding: 36px; }
+  .band .kicker { display: block; margin-bottom: 10px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #9db4de; }
+  .band h2 { margin-bottom: 12px; font-size: 26px; font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; color: #fff; }
+  .band p { margin-bottom: 14px; font-size: 14.5px; line-height: 1.6; color: rgba(255, 255, 255, 0.8); max-width: 440px; }
+  .band .byline { display: block; margin-bottom: 18px; font-size: 12.5px; color: rgba(255, 255, 255, 0.55); }
+  .btn-light { display: inline-block; font-size: 13.5px; font-weight: 600; color: var(--navy); background: #fff; border-radius: 6px; padding: 9px 16px; transition: background 0.15s; }
+  .btn-light:hover { background: #e8eefc; }
+  .band-photo { display: block; border-radius: 6px; overflow: hidden; }
+  .band-photo .ph { width: 100%; aspect-ratio: 4 / 3; }
+
+  /* ---------- Section heading ---------- */
+  .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; padding-top: 10px; border-top: 3px solid var(--yellow); }
+  .sec-head.sec-head-light { padding-top: 22px; border-top: 1px solid var(--border); }
+  .sec-head h2 { font-size: 15px; font-weight: 600; }
+  .sec-head p { margin-top: 2px; font-size: 13px; color: var(--t60); }
+  .sec-head > a { font-size: 14px; font-weight: 600; white-space: nowrap; }
+  .sec-head > a:hover { text-decoration: underline; }
+  .arrows { display: flex; gap: 8px; }
+  .arrow-btn { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; background: #fff; color: var(--navy); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: border-color 0.15s, background 0.15s, color 0.15s; }
+  .arrow-btn:hover { border-color: var(--link); background: rgba(29, 78, 216, 0.08); color: var(--link); }
+  .arrow-btn svg { width: 16px; height: 16px; }
+
+  /* ---------- Category accordion ---------- */
+  .accordion { display: flex; flex-direction: column; gap: 12px; }
+  .acc { border: 1px solid var(--border); border-radius: var(--radius); background: #fff; overflow: hidden; transition: border-color 0.15s; }
+  .acc.open { border-color: rgba(27, 42, 58, 0.4); }
+  .acc-trigger { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 16px; text-align: left; background: none; border: none; cursor: pointer; font-family: inherit; color: var(--navy); transition: background 0.15s; }
+  .acc-trigger:hover { background: var(--subtle); }
+  .acc-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 6px; background: var(--navy); color: #fff; }
+  .acc-icon svg { width: 16px; height: 16px; }
+  .acc-text { flex: 1; min-width: 0; }
+  .acc-text h3 { font-size: 15.5px; font-weight: 700; }
+  .acc-text p { margin-top: 2px; font-size: 13px; color: var(--t60); }
+  .chevron { width: 18px; height: 18px; flex-shrink: 0; color: rgba(27, 42, 58, 0.45); transition: transform 0.2s ease; }
+  .acc.open .chevron { transform: rotate(180deg); }
+  .acc-panel[hidden] { display: none; }
+  .row { display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-top: 1px solid var(--border); transition: background 0.15s; }
+  .row:hover { background: var(--subtle); }
+  .row .ph { width: 56px; height: 56px; flex-shrink: 0; }
+  .row .ph span { padding: 2px 6px; font-size: 10px; }
+  .row-text { min-width: 0; flex: 1; }
+  .row h4 { margin-bottom: 3px; font-size: 14px; font-weight: 600; line-height: 1.35; }
+  .row:hover h4 a { color: var(--link); }
+  .acc-more { display: block; padding: 12px 16px; border-top: 1px solid var(--border); text-align: right; font-size: 14px; font-weight: 600; }
+  .acc-more:hover { text-decoration: underline; }
+
+  /* ---------- Latest carousel ---------- */
+  .carousel { position: relative; }
+  .track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 4px 2px 12px; }
+  .track::-webkit-scrollbar { display: none; }
+  .card { position: relative; flex: 0 0 calc((100% - 60px) / 3.5); scroll-snap-align: start; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; transition: border-color 0.15s, background 0.15s; }
+  .card:hover { border-color: rgba(27, 42, 58, 0.4); background: var(--subtle); }
+  .card .photo { position: relative; }
+  .card .ph { width: 100%; aspect-ratio: 4 / 3; border-radius: var(--radius) var(--radius) 0 0; }
+  .card .date { position: absolute; left: 10px; top: 10px; z-index: 1; padding: 5px 9px; border-radius: 6px; background: #fff; border: 1px solid var(--border); text-align: center; line-height: 1; }
+  .card .date b { display: block; font-size: 16px; font-weight: 800; color: var(--navy); }
+  .card .date i { display: block; margin-top: 2px; font-style: normal; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--link); }
+  .card-body { display: flex; flex-direction: column; flex: 1; padding: 14px 16px 16px; }
+  .card .cat { margin-bottom: 6px; }
+  .card h3 { font-size: 14.5px; font-weight: 700; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card:hover h3 a { color: var(--link); }
+  .bar { position: relative; height: 3px; margin-top: 2px; background: var(--border); border-radius: 999px; overflow: hidden; }
+  .bar span { position: absolute; top: 0; bottom: 0; left: 0; width: 25%; background: var(--link); border-radius: 999px; transition: left 0.2s ease, width 0.2s ease; }
+
+  @media (max-width: 1000px) {
+    .band-inner { grid-template-columns: 1fr; padding: 28px; }
+    .card { flex-basis: calc((100% - 40px) / 2.5); }
     .lede { grid-template-columns: 1fr; gap: 6px; }
-    .cats { grid-template-columns: repeat(2, 1fr); }
+    .cat-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 760px) {
-    .tile { flex-basis: calc((100% - 20px) / 1.7); }
-    .c-btn.arrow { display: none; }
+    .card { flex-basis: calc((100% - 20px) / 1.7); }
+    .arrow-btn { display: none; }
   }
-  @media (max-width: 600px) {
-    .hero h1 { font-size: 28px; }
-    .lede p { font-size: 17px; }
-    .band h2 { font-size: 26px; }
-    .cats { grid-template-columns: 1fr; }
-    .tile { flex-basis: 78%; }
+  @media (max-width: 640px) {
+    .page { padding: 20px 16px 40px; gap: 28px; }
+    .page-head h1 { font-size: 26px; }
+    .band h2 { font-size: 22px; }
+    .cat-grid { grid-template-columns: 1fr; }
+    .card { flex-basis: 78%; }
   }
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="hero-inner">
-    <h1>Company + Culture</h1>
-    <p class="lead">Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
-  </div>
-</header>
+<main class="page">
 
-<div class="container">
+  <header class="page-head">
+    <h1>Company + Culture</h1>
+    <p>Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
+  </header>
+
   <section class="lede" aria-label="About Company + Culture">
     <span class="lede-label">About</span>
     <div>
       <p>Company + Culture is where L+M celebrates the people behind the work — the anniversaries, the new faces, the community moments, and the traditions that make every office feel like home.</p>
       <p class="more" id="aboutMore" hidden>Whether you're welcoming a new teammate, congratulating a colleague on a workiversary, or catching up on what's happening in the communities we serve, this is where those moments live. New here? The Company Guide is the best place to start.</p>
-      <button class="link-btn" id="aboutToggle" type="button" aria-expanded="false">Read more</button>
+      <button class="text-btn" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutMore">Read more</button>
     </div>
   </section>
-</div>
 
-<section class="band" aria-label="Featured story">
-  <div class="container band-inner">
-    <div>
-      <span class="kicker" id="fKicker"></span>
-      <h2 id="fTitle"></h2>
-      <p id="fDesc"></p>
-      <span class="byline" id="fDate"></span>
-      <a class="btn-light" id="fRead" href="#">Read the story →</a>
-    </div>
-    <a class="band-photo" id="fPhoto" href="#" tabindex="-1" aria-hidden="true"><div class="placeholder"><span>featured photo</span></div></a>
-  </div>
-</section>
+  <section class="item band" id="featured" aria-label="Featured story"></section>
 
-<main class="container">
-
-  <section class="section" aria-label="Categories">
-    <div class="section-head">
-      <div>
-        <h2>Explore by category</h2>
-        <p>Pick a category to see everything in it.</p>
-      </div>
-    </div>
-    <div class="cats" id="cats"></div>
-  </section>
-
-  <section class="section" aria-label="Latest stories">
-    <div class="section-head">
+  <section aria-label="Latest stories">
+    <div class="sec-head">
       <div>
         <h2>Latest stories</h2>
         <p>Fresh from across every office, newest first.</p>
       </div>
-      <div class="latest-tools">
-        <button class="c-btn arrow" id="latestPrev" type="button" aria-label="Previous stories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <button class="c-btn arrow" id="latestNext" type="button" aria-label="Next stories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <div class="arrows">
+        <button class="arrow-btn" id="latestPrev" type="button" aria-label="Previous stories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="arrow-btn" id="latestNext" type="button" aria-label="Next stories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </div>
     <div class="carousel" id="carousel" role="region" aria-roledescription="carousel" aria-label="Latest stories">
-      <div class="latest" id="latest"></div>
+      <div class="track" id="track"></div>
       <div class="bar" id="latestBar" aria-hidden="true"><span></span></div>
     </div>
   </section>
 
-  <div class="page-end"></div>
+  <section aria-label="Browse by category">
+    <div class="sec-head sec-head-light">
+      <div>
+        <h2>Browse by category</h2>
+        <p>Expand a category to see its latest pages.</p>
+      </div>
+      <a href="listing.html">View all →</a>
+    </div>
+    <div class="accordion" id="accordion"></div>
+  </section>
+
 </main>
 
 <script>
@@ -230,8 +196,7 @@
     cultural: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
     guide: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'
   };
-  var DEFAULT_ICON = ICONS.guide;
-  var PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+  var CHEVRON = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
   var CATEGORIES = [
     { key: "workiversaries", title: "Workiversaries", items: [
@@ -263,7 +228,6 @@
   ];
 
   var FEATURED_SLUG = "river-crossing-family-day";
-  var CAT_TILES = 9;
   var BLURBS = {
     workiversaries: "Celebrating the milestones our team members reach each month.",
     "new-hires": "Meet the newest faces and cheer on personal milestones.",
@@ -276,6 +240,7 @@
   var MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   function esc(s) { return s.replace(/&/g, "&amp;"); }
+  function storyHref(slug) { return "article.html?story=" + slug; }
 
   var ALL = [];
   CATEGORIES.forEach(function (cat) {
@@ -285,79 +250,88 @@
 
   // Featured band
   var feat = ALL.filter(function (e) { return e.story.slug === FEATURED_SLUG; })[0];
-  var featHref = "article.html?story=" + feat.story.slug;
-  document.getElementById("fKicker").textContent = "Featured · " + feat.cat.title;
-  document.getElementById("fTitle").textContent = feat.story.title;
-  document.getElementById("fDesc").textContent = feat.story.desc;
-  document.getElementById("fDate").textContent = feat.story.date;
-  document.getElementById("fRead").href = featHref;
-  document.getElementById("fPhoto").href = featHref;
+  var featHref = storyHref(feat.story.slug);
+  document.getElementById("featured").innerHTML =
+    '<div class="band-inner">' +
+      '<div><span class="kicker">Featured · ' + esc(feat.cat.title) + '</span>' +
+      '<h2><a class="stretch" href="' + featHref + '">' + esc(feat.story.title) + '</a></h2>' +
+      '<p>' + esc(feat.story.desc) + '</p>' +
+      '<span class="byline">' + feat.story.date + '</span>' +
+      '<a class="btn-light" href="' + featHref + '">Read the story →</a></div>' +
+      '<a class="band-photo" href="' + featHref + '" tabindex="-1" aria-hidden="true"><div class="ph"><span>featured photo</span></div></a>' +
+    '</div>';
 
-  // Category cards, most recently active first; the rest sit behind the "All categories" card
-  var newestByCat = {};
-  ALL.forEach(function (e) { if (!newestByCat[e.cat.key]) newestByCat[e.cat.key] = e; });
-  var ranked = CATEGORIES.slice().sort(function (a, b) { return newestByCat[b.key].time - newestByCat[a.key].time; });
-  var ARROW = '<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
-  var catsEl = document.getElementById("cats");
-  ranked.slice(0, CAT_TILES).forEach(function (cat) {
-    var a = document.createElement("a");
-    a.className = "cat";
-    a.href = "listing.html?category=" + cat.key;
-    a.innerHTML =
-      '<div class="top"><span class="disc">' + (ICONS[cat.key] || DEFAULT_ICON) + '</span>' + ARROW + '</div>' +
-      '<h3>' + esc(cat.title) + '</h3><p>' + esc(BLURBS[cat.key] || "") + '</p>' +
-      '<span class="fresh">Latest: <b>' + newestByCat[cat.key].story.date + '</b></span>';
-    catsEl.appendChild(a);
+  // Category accordion: one open at a time, full data for every story in the open panel
+  var accordion = document.getElementById("accordion");
+  CATEGORIES.forEach(function (cat, idx) {
+    var rows = cat.items.map(function (it) {
+      return '<article class="item row"><div class="ph"><span>photo</span></div><div class="row-text">' +
+        '<h4><a class="stretch" href="' + storyHref(it.slug) + '">' + esc(it.title) + '</a></h4>' +
+        '<p class="meta">' + it.date + '</p></div></article>';
+    }).join("");
+    var item = document.createElement("div");
+    item.className = "acc" + (idx === 0 ? " open" : "");
+    item.innerHTML =
+      '<button class="acc-trigger" type="button" aria-expanded="' + (idx === 0) + '" aria-controls="panel-' + cat.key + '">' +
+        '<span class="acc-icon">' + ICONS[cat.key] + '</span>' +
+        '<span class="acc-text"><h3>' + esc(cat.title) + '</h3><p>' + esc(BLURBS[cat.key] || "") + '</p></span>' + CHEVRON +
+      '</button>' +
+      '<div class="acc-panel" id="panel-' + cat.key + '"' + (idx === 0 ? "" : " hidden") + '>' + rows +
+        '<a class="acc-more" href="listing.html?category=' + cat.key + '">View more →</a></div>';
+    item.querySelector(".acc-trigger").addEventListener("click", function () {
+      var wasOpen = item.classList.contains("open");
+      Array.prototype.forEach.call(accordion.children, function (el) {
+        el.classList.remove("open");
+        el.querySelector(".acc-trigger").setAttribute("aria-expanded", "false");
+        el.querySelector(".acc-panel").hidden = true;
+      });
+      if (!wasOpen) {
+        item.classList.add("open");
+        this.setAttribute("aria-expanded", "true");
+        item.querySelector(".acc-panel").hidden = false;
+      }
+    });
+    accordion.appendChild(item);
   });
-  var allTile = document.createElement("a");
-  allTile.className = "cat all";
-  allTile.href = "listing.html?category=" + ranked[0].key;
-  allTile.innerHTML =
-    '<div class="top"><span class="disc">' + PLUS + '</span>' + ARROW + '</div>' +
-    '<h3>All categories</h3><p>Browse every category and every page in one place.</p>' +
-    '<span class="fresh"><b>View all</b></span>';
-  catsEl.appendChild(allTile);
 
   // Latest cards (the featured story is not repeated)
-  var GO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
-  var latest = document.getElementById("latest");
+  var track = document.getElementById("track");
   ALL.filter(function (e) { return e.story.slug !== FEATURED_SLUG; }).slice(0, LATEST_COUNT).forEach(function (e) {
     var d = new Date(e.story.date);
     var a = document.createElement("article");
-    a.className = "tile";
+    a.className = "item card";
     a.innerHTML =
-      '<div class="photo"><div class="placeholder"><span>photo</span></div>' +
+      '<div class="photo"><div class="ph"><span>photo</span></div>' +
         '<span class="date"><b>' + d.getDate() + '</b><i>' + MONTHS_SHORT[d.getMonth()] + '</i></span></div>' +
-      '<div class="tile-body"><a class="meta" href="listing.html?category=' + e.cat.key + '">' + esc(e.cat.title) + '</a>' +
-        '<h3><a class="stretch" href="article.html?story=' + e.story.slug + '">' + esc(e.story.title) + '</a></h3>' +
-        '<p>' + esc(e.story.desc) + '</p><span class="go" aria-hidden="true">' + GO + '</span></div>';
-    latest.appendChild(a);
+      '<div class="card-body"><a class="cat" href="listing.html?category=' + e.cat.key + '">' + esc(e.cat.title) + '</a>' +
+        '<h3><a class="stretch" href="' + storyHref(e.story.slug) + '">' + esc(e.story.title) + '</a></h3></div>';
+    track.appendChild(a);
   });
+
   // Scroll progress bar
   var barFill = document.getElementById("latestBar").firstElementChild;
   function updateBar() {
-    var max = latest.scrollWidth - latest.clientWidth;
-    var width = Math.min(100, (latest.clientWidth / latest.scrollWidth) * 100);
-    var left = max > 0 ? (latest.scrollLeft / max) * (100 - width) : 0;
+    var max = track.scrollWidth - track.clientWidth;
+    var width = Math.min(100, (track.clientWidth / track.scrollWidth) * 100);
+    var left = max > 0 ? (track.scrollLeft / max) * (100 - width) : 0;
     barFill.style.width = width + "%";
     barFill.style.left = left + "%";
   }
-  latest.addEventListener("scroll", updateBar);
+  track.addEventListener("scroll", updateBar);
   window.addEventListener("resize", updateBar);
   updateBar();
 
-  // Auto-scrolling carousel: one card at a time, loops, pauses on hover/focus/hidden tab, and has a pause button
+  // Auto-scrolling carousel: one card at a time, loops, pauses on hover/focus/hidden tab
   var timer = null;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   function slide(dir) {
-    var card = latest.querySelector(".tile");
+    var card = track.querySelector(".card");
     var step = card.getBoundingClientRect().width + 20;
-    var atEnd = latest.scrollLeft + latest.clientWidth >= latest.scrollWidth - 4;
-    var atStart = latest.scrollLeft <= 4;
-    if (dir > 0 && atEnd) latest.scrollTo({ left: 0, behavior: "smooth" });
-    else if (dir < 0 && atStart) latest.scrollTo({ left: latest.scrollWidth, behavior: "smooth" });
-    else latest.scrollBy({ left: dir * step, behavior: "smooth" });
+    var atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    var atStart = track.scrollLeft <= 4;
+    if (dir > 0 && atEnd) track.scrollTo({ left: 0, behavior: "smooth" });
+    else if (dir < 0 && atStart) track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
+    else track.scrollBy({ left: dir * step, behavior: "smooth" });
   }
   function stop() { if (timer) clearInterval(timer); timer = null; }
   function start() { stop(); if (!reduceMotion) timer = setInterval(function () { slide(1); }, AUTOPLAY_MS); }
@@ -372,6 +346,7 @@
   carousel.addEventListener("pointerdown", stop);
   document.addEventListener("visibilitychange", function () { if (document.hidden) stop(); else start(); });
   start();
+
   document.getElementById("aboutToggle").addEventListener("click", function () {
     var more = document.getElementById("aboutMore");
     var expanded = more.hidden;

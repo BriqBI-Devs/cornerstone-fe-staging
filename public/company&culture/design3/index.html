@@ -8,484 +8,279 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* Tokens taken from the Cornerstone app (src/index.css) */
   :root {
-    box-sizing: border-box;
-    --bg: #f8f9fb;
-    --card: #ffffff;
-    --border: #e6e8ec;
-    --heading: #1b2a3a;
-    --text: rgba(27, 42, 58, 0.62);
-    --item: rgba(27, 42, 58, 0.45);
-    --accent: #1d4ed8;
-    --accent-dark: #1e40af;
-    --accent-hover: rgba(29, 78, 216, 0.08);
-    --ph-bg: #e4edf7;
+    --navy: #1b2a3a;
+    --link: #1d4ed8;
+    --yellow: #f5c518;
+    --subtle: #f7f7f5;
+    --border: #e5e5e0;
+    --t75: rgba(27, 42, 58, 0.75);
+    --t60: rgba(27, 42, 58, 0.6);
+    --t55: rgba(27, 42, 58, 0.55);
+    --radius: 8px;
   }
   *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--card);
-    color: var(--text);
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; }
-  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+  body { margin: 0; background: #fff; color: var(--navy); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  h1, h2, h3, h4, p { margin: 0; }
 
-  .placeholder {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--ph-bg);
-    background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px);
-    overflow: hidden;
-  }
-  .placeholder span {
-    font-size: 10.5px;
-    font-weight: 500;
-    color: rgba(27, 42, 58, 0.6);
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 3px 8px;
-  }
+  .page { max-width: 1280px; margin: 0 auto; padding: 36px 32px 64px; }
 
-  /* ---------- Hero ---------- */
-  .hero { background: var(--card); }
-  .hero-inner {
-    padding: 44px 24px 0;
-    text-align: center;
-    max-width: 660px;
-    margin: 0 auto;
-  }
-  .hero h1 {
-    margin: 0 0 12px;
-    font-size: 36px;
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: -0.035em;
-    color: var(--heading);
-  }
-  .hero .lead {
-    margin: 0 auto;
-    max-width: 560px;
-    font-size: 16px;
-    line-height: 1.65;
-    color: var(--text);
-  }
+  .ph { display: flex; align-items: center; justify-content: center; background-color: #e4edf7; background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px); border-radius: var(--radius); overflow: hidden; }
+  .ph span { border: 1px solid var(--border); background: #fff; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--t60); }
 
-  /* ---------- About ---------- */
-  .about-inline {
-    margin-top: 48px;
-    padding: 24px 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    display: grid;
-    grid-template-columns: 180px minmax(0, 1fr);
-    gap: 28px;
-  }
-  .about-inline h2 { margin: 3px 0 0; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
-  .about-inline p { margin: 0 0 8px; max-width: 760px; font-size: 16px; font-weight: 500; line-height: 1.65; color: var(--heading); }
-  .about-inline p.more { font-size: 14.5px; font-weight: 400; color: var(--text); }
-  .about-inline p[hidden] { display: none; }
-  .about-inline .link-btn {
-    font: 600 13px "Inter", sans-serif;
-    color: var(--accent);
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-  }
-  .about-inline .link-btn:hover { text-decoration: underline; }
+  .item { position: relative; }
+  .stretch::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+  .cat { position: relative; z-index: 2; display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--link); }
+  .cat:hover { text-decoration: underline; }
+  .meta { font-size: 12px; color: var(--t55); }
+
+  /* ---------- Page header ---------- */
+  .page-head { margin-bottom: 36px; }
+  .page-head h1 { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .page-head p { max-width: 560px; font-size: 14.5px; line-height: 1.6; color: var(--t60); }
+
+  /* ---------- Featured story: no card box, just a big editorial lead-in ---------- */
+  .featured { display: grid; grid-template-columns: 1.1fr 1fr; gap: 36px; align-items: center; margin-bottom: 28px; }
+  .featured .ph { aspect-ratio: 4 / 3; }
+  .featured .ph span { font-size: 13px; padding: 5px 14px; }
+  .featured-label { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .featured-label .bar { width: 22px; height: 3px; background: var(--yellow); display: inline-block; }
+  .featured-label span { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t55); }
+  .featured h2 { font-size: 27px; font-weight: 800; line-height: 1.22; letter-spacing: -0.01em; margin-bottom: 14px; }
+  .featured h2 a:hover { color: var(--link); }
+  .featured p.desc { font-size: 15px; line-height: 1.65; color: var(--t75); margin-bottom: 14px; }
+  .featured .cat { margin-bottom: 10px; }
+
+  /* ---------- Latest: a flowing horizontal strip, underlined not boxed ---------- */
+  .latest-section { margin-bottom: 44px; padding-top: 22px; border-top: 3px solid var(--yellow); }
+  .list-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+  .list-head h2 { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--navy); }
+  .list-head p { margin-top: 6px; font-size: 13px; color: var(--t60); }
+  .list-head .arrows { display: flex; gap: 6px; flex-shrink: 0; }
+  .list-head button { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: #fff; color: var(--navy); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s; }
+  .list-head button:hover { border-color: var(--link); color: var(--link); background: rgba(29, 78, 216, 0.08); }
+  .list-head svg { width: 14px; height: 14px; }
+
+  .latest-track { display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 2px; }
+  .latest-track::-webkit-scrollbar { display: none; }
+  .latest-card { flex: 0 0 290px; scroll-snap-align: start; }
+  .latest-card .ph { aspect-ratio: 4 / 3; margin-bottom: 10px; }
+  .latest-card .cat { margin-bottom: 6px; }
+  .latest-card h3 { font-size: 14px; font-weight: 700; line-height: 1.35; }
+  .latest-card:hover h3 a { color: var(--link); }
+
+  /* ---------- Everything else: one continuous editorial flow, grouped lightly by category ---------- */
+  .more-head { margin-bottom: 20px; padding-top: 22px; border-top: 3px solid var(--yellow); }
+  .view-all-link { font-size: 13.5px; font-weight: 600; color: var(--link); white-space: nowrap; }
+  .view-all-link:hover { text-decoration: underline; }
+
+  .cat-group + .cat-group { margin-top: 32px; }
+  .cat-group-head { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--t55); margin-bottom: 16px; }
+  .more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .more-card .ph { aspect-ratio: 4 / 3; margin-bottom: 12px; }
+  .more-card .cat { margin-bottom: 8px; }
+  .more-card h3 { font-size: 15.5px; font-weight: 700; line-height: 1.32; margin-bottom: 8px; }
+  .more-card:hover h3 a { color: var(--link); }
+  .more-card p { font-size: 13px; line-height: 1.6; color: var(--t75); margin-bottom: 8px; }
+
+  .load-more-wrap { display: flex; justify-content: center; margin-bottom: 8px; }
+  .load-more-wrap[hidden] { display: none; }
+  .load-more-btn { padding: 10px 22px; background: #fff; color: var(--navy); border: 1px solid var(--border); border-radius: 6px; font: 600 13.5px "Inter", sans-serif; cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s; }
+  .load-more-btn:hover { border-color: var(--link); color: var(--link); background: rgba(29, 78, 216, 0.08); }
+
+  .about-note { margin-top: 48px; padding-top: 28px; border-top: 3px solid var(--yellow); }
+  .about-note h2 { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .about-note p { max-width: 640px; font-size: 13.5px; line-height: 1.65; color: var(--t75); margin-bottom: 10px; }
+  .about-note p.more[hidden] { display: none; }
+  .text-btn { padding: 0; background: none; border: none; cursor: pointer; font: 600 13px "Inter", sans-serif; color: var(--navy); }
+  .text-btn:hover { text-decoration: underline; }
+
   @media (max-width: 760px) {
-    .about-inline { grid-template-columns: 1fr; gap: 6px; }
-  }
-  /* ---------- Latest carousel ---------- */
-  .section { padding: 48px 0 0; }
-  .section-head {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-  .section-head h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--heading); }
-  .section-head p { margin: 5px 0 0; font-size: 14px; color: var(--text); }
-  .section-head a { font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; white-space: nowrap; }
-  .section-head a:hover { text-decoration: underline; }
-
-  .carousel-wrap { position: relative; }
-  .carousel-track {
-    display: flex;
-    gap: 18px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-  .carousel-track::-webkit-scrollbar { display: none; }
-  .carousel-card {
-    flex: 0 0 calc((100% - 36px) / 3);
-    scroll-snap-align: start;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    text-decoration: none;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
-  }
-  .carousel-card:hover { box-shadow: 0 10px 24px rgba(16, 24, 35, 0.09); transform: translateY(-2px); }
-  .carousel-card .placeholder { width: 100%; aspect-ratio: 16 / 9; }
-  .carousel-card .card-body { padding: 16px 18px 18px; }
-  .carousel-card h3 {
-    margin: 0 0 8px;
-    font-size: 14.5px;
-    font-weight: 700;
-    line-height: 1.38;
-    color: var(--heading);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .carousel-card .byline { margin: 0; font-size: 12px; color: var(--item); }
-  .carousel-card .byline .cat-name { color: var(--accent); font-weight: 600; }
-  .carousel-nav {
-    position: absolute;
-    top: 30%;
-    width: 36px;
-    height: 36px;
-    border-radius: 999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--card);
-    color: var(--heading);
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 12px rgba(16, 24, 35, 0.12);
-    cursor: pointer;
-    z-index: 3;
-  }
-  .carousel-nav:hover { border-color: var(--accent); color: var(--accent); }
-  .carousel-nav svg { width: 17px; height: 17px; }
-  .carousel-nav.prev { left: -18px; }
-  .carousel-nav.next { right: -18px; }
-
-  /* ---------- Accordion ---------- */
-  .accordion { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
-  .accordion-item { border-top: 1px solid var(--border); }
-  .accordion-item:first-child { border-top: none; }
-
-  .accordion-trigger {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    width: 100%;
-    padding: 18px 22px;
-    background: var(--card);
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    text-align: left;
-    transition: background 0.12s;
-  }
-  .accordion-trigger:hover { background: var(--bg); }
-  .accordion-trigger .icon-badge {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--accent-hover);
-    color: var(--accent);
-    flex-shrink: 0;
-  }
-  .accordion-trigger .icon-badge svg { width: 17px; height: 17px; }
-  .accordion-trigger .trigger-text { flex: 1; min-width: 0; }
-  .accordion-trigger h3 { margin: 0; font-size: 16px; font-weight: 700; color: var(--heading); }
-  .accordion-trigger .trigger-desc { margin: 3px 0 0; font-size: 13px; color: var(--text); }
-  .accordion-trigger .chevron {
-    width: 20px;
-    height: 20px;
-    color: var(--item);
-    flex-shrink: 0;
-    transition: transform 0.25s ease;
-  }
-  .accordion-item.open .accordion-trigger .chevron { transform: rotate(180deg); }
-  .accordion-item.open .accordion-trigger { background: var(--bg); }
-
-  .accordion-panel {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-  }
-  .accordion-item.open .accordion-panel { max-height: 600px; }
-
-  .accordion-content { padding: 0 22px 8px; background: var(--bg); }
-  .story-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 14px 16px;
-    margin-bottom: 6px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    text-decoration: none;
-    transition: box-shadow 0.15s, border-color 0.15s;
-  }
-  .story-row:first-child { margin-top: 14px; }
-  .story-row:last-child { margin-bottom: 14px; }
-  .story-row:hover { border-color: rgba(29, 78, 216, 0.3); box-shadow: 0 4px 12px rgba(16, 24, 35, 0.06); }
-  .story-row .placeholder { width: 72px; height: 56px; flex-shrink: 0; border-radius: 8px; }
-  .story-row .placeholder span { font-size: 9px; padding: 2px 5px; }
-  .story-row .row-text { min-width: 0; flex: 1; }
-  .story-row h4 { margin: 0 0 4px; font-size: 14px; font-weight: 700; line-height: 1.35; color: var(--heading); }
-  .story-row:hover h4 { color: var(--accent); }
-  .story-row .row-desc {
-    margin: 0 0 4px;
-    font-size: 12.5px;
-    line-height: 1.45;
-    color: var(--text);
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .story-row .row-meta { margin: 0; font-size: 11.5px; color: var(--item); }
-  .view-all-link {
-    display: block;
-    text-align: center;
-    padding: 10px;
-    margin: 0 16px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--accent);
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background 0.12s;
-  }
-  .view-all-link:hover { background: var(--accent-hover); }
-
-  .page-end { height: 80px; }
-
-  @media (max-width: 1000px) {
-    .carousel-card { flex: 0 0 calc((100% - 18px) / 2); }
+    .featured { grid-template-columns: 1fr; gap: 20px; }
+    .featured h2 { font-size: 22px; }
   }
   @media (max-width: 760px) {
-    .carousel-card { flex: 0 0 85%; }
-    .carousel-nav { display: none; }
+    .more-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 600px) {
-    .hero h1 { font-size: 28px; }
-    .hero-inner { padding: 32px 24px 0; }
-    .accordion-trigger { padding: 14px 16px; gap: 10px; }
-    .accordion-trigger h3 { font-size: 14px; }
-    .accordion-content { padding: 0 12px 8px; }
+    .page { padding: 24px 18px 48px; }
+    .page-head h1 { font-size: 26px; }
+    .more-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="hero-inner">
+<main class="page">
+
+  <header class="page-head">
     <h1>Company + Culture</h1>
-    <p class="lead">Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
-  </div>
-</header>
+    <p>Workiversaries, welcomes, team milestones, and the stories that make L+M feel like home — across every office and every team.</p>
+  </header>
 
-<main class="container">
+  <section class="featured item" id="featured" aria-label="Featured story"></section>
 
-  <section class="section">
-    <div class="section-head">
+  <section class="latest-section" aria-label="Latest stories">
+    <div class="list-head">
       <div>
         <h2>Latest stories</h2>
         <p>Fresh from across every office this month.</p>
       </div>
-    </div>
-    <div class="carousel-wrap" id="carouselWrap">
-      <button class="carousel-nav prev" type="button" aria-label="Previous">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <div class="carousel-track" id="carouselTrack"></div>
-      <button class="carousel-nav next" type="button" aria-label="Next">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-    </div>
-  </section>
-
-  <section class="about-inline" aria-label="About Company + Culture">
-    <h2>About</h2>
-    <div>
-      <p>This is where L+M celebrates the people behind the work — anniversaries, new faces, community moments, and the traditions that make every office feel like home.</p>
-      <p class="more" id="aboutMore" hidden>Whether you're welcoming a new teammate, congratulating a colleague on a workiversary, or catching up on what's happening in the communities we serve, this is where those moments live. New here? The Company Guide is the best place to start.</p>
-      <button class="link-btn" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutMore">Read more</button>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <h2>Browse by category</h2>
-        <p>Expand a category to see its latest pages.</p>
+      <div class="arrows">
+        <button id="prevBtn" type="button" aria-label="Scroll left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button id="nextBtn" type="button" aria-label="Scroll right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
-      <a href="listing.html?category=workiversaries">View all →</a>
     </div>
-    <div class="accordion" id="accordion"></div>
+    <div class="latest-track" id="track" role="region" aria-roledescription="carousel" aria-label="Latest stories"></div>
   </section>
 
-  <div class="page-end"></div>
+  <section aria-label="More stories">
+    <div class="list-head more-head">
+      <div>
+        <h2>More stories</h2>
+        <p>Browse every category, a few stories at a time.</p>
+      </div>
+      <a class="view-all-link" href="listing.html">View all categories →</a>
+    </div>
+    <div id="moreGroups"></div>
+    <div class="load-more-wrap" id="loadMoreWrap">
+      <button class="load-more-btn" id="loadMoreBtn" type="button">Load more</button>
+    </div>
+  </section>
+
+  <section class="about-note">
+    <h2>About Company + Culture</h2>
+    <p>Company + Culture is where L+M celebrates the people behind the work — anniversaries, new faces, community moments, and the traditions that make every office feel like home.</p>
+    <p class="more" id="aboutMore" hidden>Whether you're welcoming a new teammate, congratulating a colleague on a workiversary, or catching up on what's happening in the communities we serve, this is where those moments live. New here? The Company Guide is the best place to start.</p>
+    <button class="text-btn" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutMore">Read more</button>
+  </section>
+
 </main>
 
 <script>
-  var ICONS = {
-    workiversaries: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
-    "new-hires": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>',
-    community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
-    cultural: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
-    guide: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'
-  };
-
-  var CHEVRON = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
-
   var CATEGORIES = [
-    { key: "workiversaries", title: "Workiversaries", desc: "Celebrating the milestones our team members reach each month.", items: [
+    { key: "workiversaries", title: "Workiversaries", items: [
       { slug: "workiversaries-sep", title: "This month’s Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)", desc: "Two incredible team members hit major milestones this month — here’s to many more.", date: "Sep 9, 2026" },
       { slug: "workiversaries-5-years", title: "Celebrating 5 Years: Priya Osei & Marcus Field", desc: "Five years of dedication across Property Operations and Asset Management.", date: "Sep 2, 2026" },
       { slug: "workiversaries-full-list", title: "Full September Workiversary List", desc: "See every team member celebrating a work anniversary this month.", date: "Sep 1, 2026" }
     ]},
-    { key: "new-hires", title: "New Hires & Welcomes", desc: "Meet the newest faces and cheer on personal milestones.", items: [
+    { key: "new-hires", title: "New Hires & Welcomes", items: [
       { slug: "welcome-september-new-hires", title: "Welcome Alex Kim, Priya Shah, Tomás Rivera, and Sarah Hunt — our September new hires", desc: "Say hello to the newest additions across Finance, Marketing, and Operations.", date: "Sep 8, 2026" },
       { slug: "laura-reyes-baby-lily", title: "Laura Reyes Welcomes Baby Lily, Making a Family of Four", desc: "Congratulations to Laura and her family on the newest addition.", date: "Sep 28, 2026" },
       { slug: "connor-marsh-baby-jeremiah", title: "Connor Marsh Welcomes Baby Jeremiah", desc: "Big congratulations from the whole L+M family.", date: "Sep 20, 2026" }
     ]},
-    { key: "community", title: "Community + Connection", desc: "Events, giving back, and the stories from our neighborhoods.", items: [
-      { slug: "river-crossing-family-day", title: "Fun, Food, and Family at River Crossing", desc: "We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time.", date: "Sep 6, 2026" },
+    { key: "community", title: "Community + Connection", items: [
       { slug: "september-community-digest", title: "September Community Digest is out", desc: "Saratoga harvest photos, new childcare seats, and the fall volunteer day poll.", date: "Sep 7, 2026" },
-      { slug: "fulton-park-book-bags", title: "Fulton Park Supports Students with Annual Book Bag Giveaway", desc: "Local students received backpacks and supplies ahead of the new school year.", date: "Sep 3, 2026" },
-      { slug: "12-foot-snowman", title: "The 12-Foot Snowman That Stole the Show", desc: "After last winter’s storm, one snowman became the talk of the office.", date: "Sep 5, 2026" }
+      { slug: "river-crossing-family-day", title: "Fun, Food, and Family at River Crossing", desc: "We held our second annual Family Day at River Crossing this past Saturday, and it was nothing short of a great time.", date: "Sep 6, 2026" },
+      { slug: "12-foot-snowman", title: "The 12-Foot Snowman That Stole the Show", desc: "After last winter’s storm, one snowman became the talk of the office.", date: "Sep 5, 2026" },
+      { slug: "fulton-park-book-bags", title: "Fulton Park Supports Students with Annual Book Bag Giveaway", desc: "Local students received backpacks and supplies ahead of the new school year.", date: "Sep 3, 2026" }
     ]},
-    { key: "cultural", title: "Cultural Observances", desc: "Honoring the heritage and traditions of our communities.", items: [
+    { key: "cultural", title: "Cultural Observances", items: [
       { slug: "hispanic-heritage-month", title: "Honoring Hispanic Heritage Month: Stories from Our Team", desc: "Team members share what heritage month means to them and their families.", date: "Sep 15, 2026" },
       { slug: "harlem-heritage-parade", title: "L+M Shows Up and Shines at the Harlem Heritage Parade", desc: "Dozens of team members marched alongside residents and community partners.", date: "Jun 20, 2026" },
       { slug: "juneteenth", title: "Commemorating Juneteenth Across Our Communities", desc: "Teams across every office marked the occasion with events and reflection.", date: "Jun 19, 2026" }
     ]},
-    { key: "guide", title: "Company Guide", desc: "Your starting point for teams, roles, and how we work.", items: [
+    { key: "guide", title: "Company Guide", items: [
       { slug: "company-guide-toc", title: "Company Guide — Table of Contents", desc: "Your starting point for everything you need to know about L+M.", date: "Mar 5, 2026" },
       { slug: "meet-the-teams-comms-marketing", title: "Meet the Teams: Communications & Marketing", desc: "What this team does, who’s on it, and how to reach them.", date: "Aug 12, 2026" },
       { slug: "meet-the-teams-building-envelope", title: "Meet the Teams: Building Envelope & Sustainability", desc: "Roof surveys, parapet reports, and the team behind them.", date: "Jul 30, 2026" }
     ]}
   ];
 
-  var LATEST_SLUGS = [
-    "river-crossing-family-day", "hispanic-heritage-month", "workiversaries-sep",
-    "welcome-september-new-hires", "laura-reyes-baby-lily", "september-community-digest"
-  ];
-
   function esc(s) { return s.replace(/&/g, "&amp;"); }
+  function storyHref(slug) { return "article.html?story=" + slug; }
+  function catLink(cat) { return '<a class="cat" href="listing.html?category=' + cat.key + '">' + esc(cat.title) + '</a>'; }
 
-  function findStoryWithCat(slug) {
-    for (var i = 0; i < CATEGORIES.length; i++) {
-      for (var j = 0; j < CATEGORIES[i].items.length; j++) {
-        if (CATEGORIES[i].items[j].slug === slug) return { story: CATEGORIES[i].items[j], cat: CATEGORIES[i].title };
-      }
-    }
-    return null;
-  }
-
-  // Carousel
-  var track = document.getElementById("carouselTrack");
-  LATEST_SLUGS.forEach(function (slug) {
-    var found = findStoryWithCat(slug);
-    if (!found) return;
-    var a = document.createElement("a");
-    a.className = "carousel-card";
-    a.href = "article.html?story=" + slug;
-    a.innerHTML =
-      '<div class="placeholder"><span>photo</span></div>' +
-      '<div class="card-body">' +
-        '<h3>' + esc(found.story.title) + '</h3>' +
-        '<p class="byline">In <span class="cat-name">' + esc(found.cat) + '</span> · ' + found.story.date + '</p>' +
-      '</div>';
-    track.appendChild(a);
+  var ALL = [];
+  CATEGORIES.forEach(function (cat) {
+    cat.items.forEach(function (it) { ALL.push({ story: it, cat: cat, time: new Date(it.date).getTime() }); });
   });
+  ALL.sort(function (a, b) { return b.time - a.time; });
+
+  // Featured: single newest story, shown in full — no card box, just a large editorial lead-in
+  var lead = ALL[0];
+  document.getElementById("featured").innerHTML =
+    '<div class="ph"><span>photo</span></div>' +
+    '<div class="featured-body">' +
+      '<div class="featured-label"><span class="bar"></span><span>Featured story</span></div>' +
+      catLink(lead.cat) +
+      '<h2><a class="stretch" href="' + storyHref(lead.story.slug) + '">' + esc(lead.story.title) + '</a></h2>' +
+      '<p class="desc">' + esc(lead.story.desc) + '</p>' +
+      '<span class="meta">' + lead.story.date + '</span>' +
+    '</div>';
+
+  // Latest: a flowing, horizontally scrolling strip of the 10 newest (excluding the featured story above)
+  var rest = ALL.slice(1);
+  var LATEST_COUNT = 10;
+  var AUTOPLAY_MS = 2000;
+  var track = document.getElementById("track");
+  var latestHtml = "";
+  rest.slice(0, LATEST_COUNT).forEach(function (e) {
+    latestHtml += '<article class="item latest-card">' +
+      '<div class="ph"><span>photo</span></div>' +
+      catLink(e.cat) +
+      '<h3><a class="stretch" href="' + storyHref(e.story.slug) + '">' + esc(e.story.title) + '</a></h3></article>';
+  });
+  track.innerHTML = latestHtml;
 
   var autoplayTimer = null;
-  function scrollCarousel(direction) {
-    var card = track.querySelector(".carousel-card");
-    var step = card.getBoundingClientRect().width + 18;
+  function scrollCarousel(dir) {
+    var card = track.querySelector(".latest-card");
+    var step = card.getBoundingClientRect().width + 22;
     var atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
     var atStart = track.scrollLeft <= 4;
-    if (direction > 0 && atEnd) {
-      track.scrollTo({ left: 0, behavior: "smooth" });
-    } else if (direction < 0 && atStart) {
-      track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
-    } else {
-      track.scrollBy({ left: direction * step, behavior: "smooth" });
-    }
+    if (dir > 0 && atEnd) track.scrollTo({ left: 0, behavior: "smooth" });
+    else if (dir < 0 && atStart) track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
+    else track.scrollBy({ left: dir * step, behavior: "smooth" });
   }
-  function startAutoplay() { stopAutoplay(); autoplayTimer = setInterval(function () { scrollCarousel(1); }, 4000); }
   function stopAutoplay() { if (autoplayTimer) clearInterval(autoplayTimer); autoplayTimer = null; }
-
-  var wrap = document.getElementById("carouselWrap");
-  wrap.querySelector(".prev").addEventListener("click", function () { scrollCarousel(-1); });
-  wrap.querySelector(".next").addEventListener("click", function () { scrollCarousel(1); });
-  wrap.addEventListener("mouseenter", stopAutoplay);
-  wrap.addEventListener("mouseleave", startAutoplay);
-  wrap.addEventListener("focusin", stopAutoplay);
-  wrap.addEventListener("focusout", startAutoplay);
-  wrap.addEventListener("pointerdown", stopAutoplay);
-  document.addEventListener("visibilitychange", function () {
-    if (document.hidden) stopAutoplay(); else startAutoplay();
+  function startAutoplay() { stopAutoplay(); autoplayTimer = setInterval(function () { scrollCarousel(1); }, AUTOPLAY_MS); }
+  document.getElementById("prevBtn").addEventListener("click", function () { scrollCarousel(-1); });
+  document.getElementById("nextBtn").addEventListener("click", function () { scrollCarousel(1); });
+  track.addEventListener("mouseenter", stopAutoplay);
+  track.addEventListener("mouseleave", startAutoplay);
+  track.addEventListener("focusin", stopAutoplay);
+  track.addEventListener("focusout", startAutoplay);
+  track.addEventListener("pointerdown", function (ev) {
+    stopAutoplay();
+    if (ev.pointerType === "touch") setTimeout(startAutoplay, 5000);
   });
-  startAutoplay();
+  document.addEventListener("visibilitychange", function () { if (document.hidden) stopAutoplay(); else startAutoplay(); });
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) startAutoplay();
 
-  // Accordion
-  var accordionEl = document.getElementById("accordion");
-  CATEGORIES.forEach(function (cat, idx) {
-    var item = document.createElement("div");
-    item.className = "accordion-item" + (idx === 0 ? " open" : "");
+  // More stories: grouped by category, one category row of 3 revealed per "Load more" click
+  var CAT_ROW_SIZE = 3;
+  var catGroups = CATEGORIES.map(function (cat) { return { cat: cat, items: cat.items.slice(0, CAT_ROW_SIZE) }; });
 
-    var rows = cat.items.map(function (it) {
-      return '<a class="story-row" href="article.html?story=' + it.slug + '">' +
-        '<div class="placeholder"><span>photo</span></div>' +
-        '<div class="row-text">' +
-          '<h4>' + esc(it.title) + '</h4>' +
-          '<p class="row-desc">' + esc(it.desc) + '</p>' +
-          '<p class="row-meta">' + it.date + '</p>' +
-        '</div></a>';
-    }).join("");
+  var groupIndex = 0;
+  var moreGroupsEl = document.getElementById("moreGroups");
+  var loadMoreWrap = document.getElementById("loadMoreWrap");
+  var loadMoreBtn = document.getElementById("loadMoreBtn");
 
-    item.innerHTML =
-      '<button class="accordion-trigger" type="button" aria-expanded="' + (idx === 0 ? 'true' : 'false') + '">' +
-        '<span class="icon-badge">' + ICONS[cat.key] + '</span>' +
-        '<div class="trigger-text"><h3>' + esc(cat.title) + '</h3>' +
-        '<span class="trigger-desc">' + esc(cat.desc) + '</span></div>' +
-        CHEVRON +
-      '</button>' +
-      '<div class="accordion-panel"><div class="accordion-content">' +
-        rows +
-        '<a class="view-all-link" href="listing.html?category=' + cat.key + '">View all in ' + esc(cat.title) + ' →</a>' +
-      '</div></div>';
+  function renderMoreCard(cat, it) {
+    return '<article class="item more-card">' +
+      '<div class="ph"><span>photo</span></div>' +
+      catLink(cat) +
+      '<h3><a class="stretch" href="' + storyHref(it.slug) + '">' + esc(it.title) + '</a></h3>' +
+      '<p>' + esc(it.desc) + '</p>' +
+      '<span class="meta">' + it.date + '</span></article>';
+  }
+  function loadNextGroup() {
+    var g = catGroups[groupIndex];
+    var cardsHtml = "";
+    g.items.forEach(function (it) { cardsHtml += renderMoreCard(g.cat, it); });
+    moreGroupsEl.insertAdjacentHTML("beforeend",
+      '<section class="cat-group"><h3 class="cat-group-head">' + esc(g.cat.title) + '</h3>' +
+      '<div class="more-grid">' + cardsHtml + '</div></section>');
+    groupIndex += 1;
+    loadMoreWrap.hidden = groupIndex >= catGroups.length;
+  }
+  loadMoreBtn.addEventListener("click", loadNextGroup);
+  if (catGroups.length) loadNextGroup(); else loadMoreWrap.hidden = true;
 
-    item.querySelector(".accordion-trigger").addEventListener("click", function () {
-      var isOpen = item.classList.contains("open");
-      document.querySelectorAll(".accordion-item.open").forEach(function (el) {
-        el.classList.remove("open");
-        el.querySelector(".accordion-trigger").setAttribute("aria-expanded", "false");
-      });
-      if (!isOpen) {
-        item.classList.add("open");
-        this.setAttribute("aria-expanded", "true");
-      }
-    });
-
-    accordionEl.appendChild(item);
-  });
-
-  // About toggle
   document.getElementById("aboutToggle").addEventListener("click", function () {
     var more = document.getElementById("aboutMore");
     var expanded = more.hidden;
