@@ -34,9 +34,9 @@ const DESIGN_OPTIONS: DesignOption[] = [
     href: "/company&culture/design4/index.html",
   },
   {
-    name: "Design 5 — Featured Band + Category Cards",
+    name: "Design 5 — Featured Band + Category Accordion",
     summary:
-      "An About strip at the top, a full-width navy featured-story band, category cards showing each category's latest date, and an auto-scrolling Latest stories carousel.",
+      "An About strip at the top, a full-width navy featured-story band, an auto-scrolling Latest stories carousel, then a collapsible category accordion (one open at a time) with a View all link per category.",
     href: "/company&culture/design5/index.html",
   },
 ];
