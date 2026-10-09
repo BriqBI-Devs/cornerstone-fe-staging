@@ -22,9 +22,9 @@ const DESIGN_OPTIONS: DesignOption[] = [
     href: "/company&culture/design2/index.html",
   },
   {
-    name: "Design 3 — Carousel + Category Accordion",
+    name: "Design 3 — Editorial Feature + Category Rows",
     summary:
-      "An auto-scrolling Latest stories carousel, an About card with Read more, and collapsible category sections (one open at a time) that each list their pages, with a View all link to the full category listing.",
+      "A large featured story up top (no card box), an auto-scrolling Latest stories strip, then More stories revealed one category at a time via Load more, and an About note at the bottom.",
     href: "/company&culture/design3/index.html",
   },
   {
@@ -34,9 +34,9 @@ const DESIGN_OPTIONS: DesignOption[] = [
     href: "/company&culture/design4/index.html",
   },
   {
-    name: "Design 5 — Featured Band + Category Cards",
+    name: "Design 5 — Featured Band + Category Accordion",
     summary:
-      "An About strip at the top, a full-width navy featured-story band, category cards showing each category's latest date, and an auto-scrolling Latest stories carousel.",
+      "An About strip at the top, a full-width navy featured-story band, an auto-scrolling Latest stories carousel, then a collapsible category accordion (one open at a time) with a View all link per category.",
     href: "/company&culture/design5/index.html",
   },
 ];
