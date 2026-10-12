@@ -290,6 +290,7 @@
       '<span class="meta">' + it.date + '</span></article>';
   }
   function loadNextGroup() {
+    if (groupIndex >= catGroups.length) return;
     var g = catGroups[groupIndex];
     var cardsHtml = "";
     g.items.forEach(function (it) { cardsHtml += renderMoreCard(g.cat, it); });
