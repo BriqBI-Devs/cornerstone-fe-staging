@@ -46,6 +46,9 @@
     overflow: hidden;
   }
   .ph span { border: 1px solid var(--border); background: #fff; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--t60); }
+  .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .featured .ph img { object-position: center 65%; }
+  .ph img[src*="fulton-park-book-bags"] { object-position: left center; }
 
   /* Whole item is clickable; the category label stays its own link */
   .item { position: relative; }
@@ -59,7 +62,7 @@
   .page-head p { max-width: 460px; font-size: 14px; line-height: 1.6; color: var(--t60); }
 
   /* ---------- Featured + About ---------- */
-  .top { display: grid; grid-template-columns: 3fr 2fr; gap: 24px; align-items: start; }
+  .top { display: grid; grid-template-columns: 3fr 2fr; gap: 24px; align-items: start; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
   .featured { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff; transition: border-color 0.15s; }
   .featured:hover { border-color: rgba(27, 42, 58, 0.4); }
   .featured .ph { aspect-ratio: 16 / 10; width: 100%; border-radius: 0; }
@@ -75,13 +78,11 @@
   .featured .meta a:hover { text-decoration: underline; }
 
   .side { display: flex; flex-direction: column; gap: 24px; }
-  .links-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px 10px; }
-  .links-card h2 { margin-bottom: 8px; font-size: 15px; font-weight: 600; }
-  .link-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-weight: 600; transition: border-color 0.15s, background 0.15s; }
+  .links-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px 16px; }
+  .links-card h2 { margin-bottom: 14px; font-size: 15px; font-weight: 600; }
+  .link-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-weight: 600; transition: border-color 0.15s, background 0.15s; }
   .link-row:hover { border-color: rgba(27, 42, 58, 0.4); background: var(--subtle); }
-  .more-cats { display: block; margin: 2px 0 6px auto; }
-  .link-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 6px; background: var(--navy); color: #fff; }
-  .link-icon svg { width: 16px; height: 16px; }
+  .more-cats { display: block; margin: 6px 0; text-align: right; }
   .link-row .name { flex: 1; min-width: 0; }
   .link-row .chev { width: 16px; height: 16px; flex-shrink: 0; color: rgba(27, 42, 58, 0.3); transition: transform 0.15s, color 0.15s; }
   .link-row:hover .chev { transform: translateX(2px); color: rgba(27, 42, 58, 0.6); }
@@ -94,8 +95,9 @@
   .text-btn:hover { text-decoration: underline; }
 
   /* ---------- Section heading ---------- */
-  .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; padding-top: 22px; border-top: 3px solid var(--yellow); }
-  .sec-head h2 { font-size: 15px; font-weight: 600; }
+  .sec-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+  .sec-head h2 { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; }
+  .sec-head:not(.sec-head-quiet) h2::before { content: ""; width: 4px; height: 15px; flex-shrink: 0; border-radius: 2px; background: var(--yellow); }
   .sec-head p { margin-top: 6px; font-size: 13px; color: var(--t60); }
   .sec-link { font-size: 13.5px; font-weight: 600; color: var(--link); white-space: nowrap; }
   .sec-link:hover { text-decoration: underline; }
@@ -116,9 +118,7 @@
   /* ---------- Category panels ---------- */
   .panels { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
   .panel { border: 1px solid var(--border); border-radius: var(--radius); background: #fff; overflow: hidden; }
-  .panel-head { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
-  .panel-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 6px; background: rgba(27, 42, 58, 0.1); color: var(--navy); }
-  .panel-icon svg { width: 16px; height: 16px; }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
   .panel-head h3 { font-size: 15.5px; font-weight: 700; }
   .row { display: flex; align-items: center; gap: 16px; padding: 12px 20px; border-bottom: 1px solid var(--border); transition: background 0.15s; }
   .row:hover { background: var(--subtle); }
@@ -127,7 +127,8 @@
   .row-text { min-width: 0; flex: 1; }
   .row h4 { margin: 0 0 3px; font-size: 14px; font-weight: 600; line-height: 1.35; }
   .row:hover h4 a { color: var(--link); }
-  .panel-more { display: block; padding: 12px 20px; text-align: right; font-size: 14px; font-weight: 600; }
+  .panel .row:last-child { border-bottom: none; }
+  .panel-more { flex-shrink: 0; font-size: 13.5px; font-weight: 600; color: var(--link); white-space: nowrap; }
   .panel-more:hover { text-decoration: underline; }
 
   @media (max-width: 1000px) {
@@ -192,7 +193,7 @@
   </section>
 
   <section aria-label="Pages in every category">
-    <div class="sec-head">
+    <div class="sec-head sec-head-quiet">
       <div>
         <h2>Pages in every category</h2>
         <p>Jump straight into the latest pages, or open a category to see them all.</p>
@@ -205,14 +206,6 @@
 </main>
 
 <script>
-  var ICONS = {
-    workiversaries: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
-    "new-hires": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>',
-    community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
-    cultural: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
-    guide: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'
-  };
-
   var CATEGORIES = [
     { key: "workiversaries", title: "Workiversaries", items: [
       { slug: "workiversaries-sep", title: "This month’s Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)", date: "Sep 9, 2026", short: "Sep 9" },
@@ -254,11 +247,12 @@
   }
   function catLink(cat) { return '<a class="cat" href="listing.html?category=' + cat.key + '">' + esc(cat.title) + '</a>'; }
   function storyHref(slug) { return "article.html?story=" + slug; }
+  function photo(slug, alt) { return '<img src="../assets/images/' + slug + '.jpg" alt="' + esc(alt) + '" loading="lazy">'; }
 
   // Featured story (mirrors the hero story on the Cornerstone home page)
   var f = find(FEATURED.slug);
   document.getElementById("featured").innerHTML =
-    '<div class="ph"><span>hero news photo</span></div><div class="f-body">' +
+    '<div class="ph"><img src="../assets/images/fun-food-family.avif" alt="' + esc(f.story.title) + '" loading="lazy"></div><div class="f-body">' +
     '<div class="f-label"><span class="feat">Featured</span>' + catLink(f.cat) + '</div>' +
     '<h2><a class="stretch" href="' + storyHref(f.story.slug) + '">' + esc(f.story.title) + '</a></h2>' +
     '<p>' + esc(FEATURED.excerpt) + '</p>' +
@@ -271,7 +265,7 @@
     var el = document.createElement("article");
     el.className = "item card";
     el.innerHTML =
-      '<div class="ph"><span>photo</span></div>' +
+      '<div class="ph">' + photo(slug, e.story.title) + '</div>' +
       '<div class="card-body">' + catLink(e.cat) +
       '<h3><a class="stretch" href="' + storyHref(slug) + '">' + esc(e.story.title) + '</a></h3>' +
       '<p class="meta">' + e.story.date + '</p></div>';
@@ -282,15 +276,15 @@
   var panels = document.getElementById("panels");
   CATEGORIES.forEach(function (cat) {
     var rows = cat.items.slice(0, 3).map(function (it) {
-      return '<article class="item row"><div class="ph"><span>photo</span></div><div class="row-text">' +
+      return '<article class="item row"><div class="ph">' + photo(it.slug, it.title) + '</div><div class="row-text">' +
         '<h4><a class="stretch" href="' + storyHref(it.slug) + '">' + esc(it.title) + '</a></h4>' +
         '<p class="meta">' + it.short + '</p></div></article>';
     }).join("");
     var el = document.createElement("section");
     el.className = "panel";
     el.innerHTML =
-      '<div class="panel-head"><span class="panel-icon">' + ICONS[cat.key] + '</span><h3>' + esc(cat.title) + '</h3></div>' +
-      rows + '<a class="panel-more" href="listing.html?category=' + cat.key + '">View more →</a>';
+      '<div class="panel-head"><h3>' + esc(cat.title) + '</h3><a class="panel-more" href="listing.html?category=' + cat.key + '">View more →</a></div>' +
+      rows;
     panels.appendChild(el);
   });
 
@@ -304,7 +298,7 @@
     var a = document.createElement("a");
     a.className = "link-row";
     a.href = "listing.html?category=" + cat.key;
-    a.innerHTML = '<span class="link-icon">' + ICONS[cat.key] + '</span><span class="name">' + esc(cat.title) + '</span>' + CHEV;
+    a.innerHTML = '<span class="name">' + esc(cat.title) + '</span>' + CHEV;
     catLinks.appendChild(a);
   });
   if (catsByActivity.length > VISIBLE_CATS) {

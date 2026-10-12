@@ -32,6 +32,8 @@
 
   .ph { display: flex; align-items: center; justify-content: center; background-color: #e4edf7; background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px); overflow: hidden; }
   .ph span { border: 1px solid var(--border); background: #fff; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--t60); }
+  .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph img[src*="fulton-park-book-bags"] { object-position: left center; }
 
   /* Whole item is clickable; the category label stays its own link */
   .item { position: relative; }
@@ -66,9 +68,10 @@
   .band-photo .ph { width: 100%; aspect-ratio: 4 / 3; }
 
   /* ---------- Section heading ---------- */
-  .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; padding-top: 10px; border-top: 3px solid var(--yellow); }
+  .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; padding-top: 22px; border-top: 1px solid var(--border); }
   .sec-head.sec-head-light { padding-top: 22px; border-top: 1px solid var(--border); }
-  .sec-head h2 { font-size: 15px; font-weight: 600; }
+  .sec-head h2 { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; }
+  .sec-head:not(.sec-head-light) h2::before { content: ""; width: 4px; height: 15px; flex-shrink: 0; border-radius: 2px; background: var(--yellow); }
   .sec-head p { margin-top: 2px; font-size: 13px; color: var(--t60); }
   .sec-head > a { font-size: 14px; font-weight: 600; white-space: nowrap; }
   .sec-head > a:hover { text-decoration: underline; }
@@ -78,18 +81,19 @@
   .arrow-btn svg { width: 16px; height: 16px; }
 
   /* ---------- Category accordion ---------- */
-  .accordion { display: flex; flex-direction: column; gap: 12px; }
+  .accordion { display: flex; flex-direction: column; gap: 10px; }
   .acc { border: 1px solid var(--border); border-radius: var(--radius); background: #fff; overflow: hidden; transition: border-color 0.15s; }
   .acc.open { border-color: rgba(27, 42, 58, 0.4); }
-  .acc-trigger { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 16px; text-align: left; background: none; border: none; cursor: pointer; font-family: inherit; color: var(--navy); transition: background 0.15s; }
+  .acc-head { display: flex; align-items: center; }
+  .acc-trigger { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; padding: 16px 16px; text-align: left; background: none; border: none; cursor: pointer; font-family: inherit; color: var(--navy); transition: background 0.15s; }
   .acc-trigger:hover { background: var(--subtle); }
-  .acc-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 6px; background: var(--navy); color: #fff; }
-  .acc-icon svg { width: 16px; height: 16px; }
   .acc-text { flex: 1; min-width: 0; }
   .acc-text h3 { font-size: 15.5px; font-weight: 700; }
   .acc-text p { margin-top: 2px; font-size: 13px; color: var(--t60); }
   .chevron { width: 18px; height: 18px; flex-shrink: 0; color: rgba(27, 42, 58, 0.45); transition: transform 0.2s ease; }
   .acc.open .chevron { transform: rotate(180deg); }
+  .acc-more-inline { flex-shrink: 0; margin-right: 16px; font-size: 13px; font-weight: 600; color: var(--link); white-space: nowrap; }
+  .acc-more-inline:hover { text-decoration: underline; }
   .acc-panel[hidden] { display: none; }
   .row { display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-top: 1px solid var(--border); transition: background 0.15s; }
   .row:hover { background: var(--subtle); }
@@ -98,26 +102,28 @@
   .row-text { min-width: 0; flex: 1; }
   .row h4 { margin-bottom: 3px; font-size: 14px; font-weight: 600; line-height: 1.35; }
   .row:hover h4 a { color: var(--link); }
-  .acc-more { display: block; padding: 12px 16px; border-top: 1px solid var(--border); text-align: right; font-size: 14px; font-weight: 600; }
-  .acc-more:hover { text-decoration: underline; }
 
   /* ---------- Latest carousel ---------- */
   .carousel { position: relative; }
-  .track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 4px 2px 12px; }
+  .track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 2px; scrollbar-width: none; padding: 4px 2px 14px; }
   .track::-webkit-scrollbar { display: none; }
-  .card { position: relative; flex: 0 0 calc((100% - 60px) / 3.5); scroll-snap-align: start; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; transition: border-color 0.15s, background 0.15s; }
-  .card:hover { border-color: rgba(27, 42, 58, 0.4); background: var(--subtle); }
-  .card .photo { position: relative; }
-  .card .ph { width: 100%; aspect-ratio: 4 / 3; border-radius: var(--radius) var(--radius) 0 0; }
-  .card .date { position: absolute; left: 10px; top: 10px; z-index: 1; padding: 5px 9px; border-radius: 6px; background: #fff; border: 1px solid var(--border); text-align: center; line-height: 1; }
+  .card { position: relative; flex: 0 0 clamp(240px, 28vw, 320px); scroll-snap-align: start; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border); border-radius: 10px; background: #fff; transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease; }
+  .card:hover { transform: translateY(-3px); border-color: rgba(27, 42, 58, 0.28); box-shadow: 0 10px 24px rgba(27, 42, 58, 0.09); }
+  .card .photo { position: relative; overflow: hidden; }
+  .card .ph { width: 100%; aspect-ratio: 16 / 10; }
+  .card .ph img { transition: transform 0.25s ease; }
+  .card:hover .ph img { transform: scale(1.035); }
+  .card .date { position: absolute; left: 12px; top: 12px; z-index: 1; min-width: 46px; padding: 7px 9px; border-radius: 7px; background: #fff; border: 1px solid rgba(229, 229, 224, 0.9); box-shadow: 0 3px 10px rgba(27, 42, 58, 0.1); text-align: center; line-height: 1; }
   .card .date b { display: block; font-size: 16px; font-weight: 800; color: var(--navy); }
-  .card .date i { display: block; margin-top: 2px; font-style: normal; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--link); }
-  .card-body { display: flex; flex-direction: column; flex: 1; padding: 14px 16px 16px; }
-  .card .cat { margin-bottom: 6px; }
-  .card h3 { font-size: 14.5px; font-weight: 700; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card .date i { display: block; margin-top: 4px; font-style: normal; font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--link); }
+  .card-body { display: flex; flex-direction: column; flex: 1; padding: 16px 17px 18px; }
+  .card .cat { margin-bottom: 8px; font-size: 10px; }
+  .card h3 { margin-bottom: 8px; font-size: 15px; font-weight: 700; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .card:hover h3 a { color: var(--link); }
-  .bar { position: relative; height: 3px; margin-top: 2px; background: var(--border); border-radius: 999px; overflow: hidden; }
-  .bar span { position: absolute; top: 0; bottom: 0; left: 0; width: 25%; background: var(--link); border-radius: 999px; transition: left 0.2s ease, width 0.2s ease; }
+  .card .summary { margin: 0; color: var(--t60); font-size: 12.5px; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card .published-date { display: block; margin-top: auto; padding-top: 14px; color: var(--t55); font-size: 11px; font-weight: 500; }
+  .bar { position: relative; height: 4px; margin-top: 2px; background: #ecece8; border-radius: 999px; overflow: hidden; }
+  .bar span { position: absolute; top: 0; bottom: 0; left: 0; width: 25%; background: var(--yellow); border-radius: 999px; transition: left 0.2s ease, width 0.2s ease; }
 
   @media (max-width: 1000px) {
     .band-inner { grid-template-columns: 1fr; padding: 28px; }
@@ -126,8 +132,9 @@
     .cat-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 760px) {
-    .card { flex-basis: calc((100% - 20px) / 1.7); }
-    .arrow-btn { display: none; }
+    .card { flex-basis: min(78vw, 310px); }
+    .arrows { gap: 6px; }
+    .arrow-btn { width: 32px; height: 32px; }
   }
   @media (max-width: 640px) {
     .page { padding: 20px 16px 40px; gap: 28px; }
@@ -135,6 +142,22 @@
     .band h2 { font-size: 22px; }
     .cat-grid { grid-template-columns: 1fr; }
     .card { flex-basis: 78%; }
+  }
+
+  /* Match Design 6's editorial featured-story treatment. */
+  .band { border: 0; border-radius: 10px; background: #f1f2f3; color: var(--navy); }
+  .band-inner { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 36px; padding: clamp(22px, 3.5vw, 44px); }
+  .band .kicker { color: #7b5b00; }
+  .band h2 { max-width: 520px; font-size: clamp(26px, 3.2vw, 40px); line-height: 1.13; letter-spacing: -0.04em; color: var(--navy); }
+  .band p { color: var(--t75); font-size: 15px; }
+  .band .byline { color: var(--t60); }
+  .btn-light { background: var(--yellow); font-weight: 700; }
+  .btn-light:hover { background: #e8b900; }
+  .band-photo { border-radius: 8px; box-shadow: 0 12px 32px rgba(27, 42, 58, 0.12); }
+  .band-photo .ph { aspect-ratio: 16 / 10; }
+  @media (max-width: 640px) {
+    .band-inner { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+    .band-photo { order: -1; }
   }
 </style>
 </head>
@@ -189,13 +212,6 @@
 </main>
 
 <script>
-  var ICONS = {
-    workiversaries: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
-    "new-hires": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>',
-    community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
-    cultural: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
-    guide: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'
-  };
   var CHEVRON = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
   var CATEGORIES = [
@@ -236,11 +252,12 @@
     guide: "Your starting point for teams, roles, and how we work."
   };
   var LATEST_COUNT = 8;
-  var AUTOPLAY_MS = 2000;
+  var AUTOPLAY_MS = 4000;
   var MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   function esc(s) { return s.replace(/&/g, "&amp;"); }
   function storyHref(slug) { return "article.html?story=" + slug; }
+  function photo(slug, alt) { return '<img src="../assets/images/' + slug + '.jpg" alt="' + esc(alt) + '" loading="lazy">'; }
 
   var ALL = [];
   CATEGORIES.forEach(function (cat) {
@@ -258,26 +275,27 @@
       '<p>' + esc(feat.story.desc) + '</p>' +
       '<span class="byline">' + feat.story.date + '</span>' +
       '<a class="btn-light" href="' + featHref + '">Read the story →</a></div>' +
-      '<a class="band-photo" href="' + featHref + '" tabindex="-1" aria-hidden="true"><div class="ph"><span>featured photo</span></div></a>' +
+      '<a class="band-photo" href="' + featHref + '" tabindex="-1" aria-hidden="true"><div class="ph"><img src="../assets/images/fun-food-family.avif" alt="' + esc(feat.story.title) + '" loading="lazy"></div></a>' +
     '</div>';
 
   // Category accordion: one open at a time, full data for every story in the open panel
   var accordion = document.getElementById("accordion");
   CATEGORIES.forEach(function (cat, idx) {
     var rows = cat.items.map(function (it) {
-      return '<article class="item row"><div class="ph"><span>photo</span></div><div class="row-text">' +
+      return '<article class="item row"><div class="ph">' + photo(it.slug, it.title) + '</div><div class="row-text">' +
         '<h4><a class="stretch" href="' + storyHref(it.slug) + '">' + esc(it.title) + '</a></h4>' +
         '<p class="meta">' + it.date + '</p></div></article>';
     }).join("");
     var item = document.createElement("div");
     item.className = "acc" + (idx === 0 ? " open" : "");
     item.innerHTML =
-      '<button class="acc-trigger" type="button" aria-expanded="' + (idx === 0) + '" aria-controls="panel-' + cat.key + '">' +
-        '<span class="acc-icon">' + ICONS[cat.key] + '</span>' +
-        '<span class="acc-text"><h3>' + esc(cat.title) + '</h3><p>' + esc(BLURBS[cat.key] || "") + '</p></span>' + CHEVRON +
-      '</button>' +
-      '<div class="acc-panel" id="panel-' + cat.key + '"' + (idx === 0 ? "" : " hidden") + '>' + rows +
-        '<a class="acc-more" href="listing.html?category=' + cat.key + '">View more →</a></div>';
+      '<div class="acc-head">' +
+        '<button class="acc-trigger" type="button" aria-expanded="' + (idx === 0) + '" aria-controls="panel-' + cat.key + '">' +
+          '<span class="acc-text"><h3>' + esc(cat.title) + '</h3><p>' + esc(BLURBS[cat.key] || "") + '</p></span>' + CHEVRON +
+        '</button>' +
+        '<a class="acc-more-inline" href="listing.html?category=' + cat.key + '">View more →</a>' +
+      '</div>' +
+      '<div class="acc-panel" id="panel-' + cat.key + '"' + (idx === 0 ? "" : " hidden") + '>' + rows + '</div>';
     item.querySelector(".acc-trigger").addEventListener("click", function () {
       var wasOpen = item.classList.contains("open");
       Array.prototype.forEach.call(accordion.children, function (el) {
@@ -301,10 +319,12 @@
     var a = document.createElement("article");
     a.className = "item card";
     a.innerHTML =
-      '<div class="photo"><div class="ph"><span>photo</span></div>' +
+      '<div class="photo"><div class="ph">' + photo(e.story.slug, e.story.title) + '</div>' +
         '<span class="date"><b>' + d.getDate() + '</b><i>' + MONTHS_SHORT[d.getMonth()] + '</i></span></div>' +
       '<div class="card-body"><a class="cat" href="listing.html?category=' + e.cat.key + '">' + esc(e.cat.title) + '</a>' +
-        '<h3><a class="stretch" href="' + storyHref(e.story.slug) + '">' + esc(e.story.title) + '</a></h3></div>';
+        '<h3><a class="stretch" href="' + storyHref(e.story.slug) + '">' + esc(e.story.title) + '</a></h3>' +
+        '<p class="summary">' + esc(e.story.desc) + '</p>' +
+        '<time class="published-date" datetime="' + d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, "0") + '-' + String(d.getDate()).padStart(2, "0") + '">Published ' + esc(e.story.date) + '</time></div>';
     track.appendChild(a);
   });
 
@@ -326,12 +346,14 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   function slide(dir) {
     var card = track.querySelector(".card");
-    var step = card.getBoundingClientRect().width + 20;
+    if (!card) return;
+    var step = card.getBoundingClientRect().width + parseFloat(getComputedStyle(track).gap);
     var atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
     var atStart = track.scrollLeft <= 4;
-    if (dir > 0 && atEnd) track.scrollTo({ left: 0, behavior: "smooth" });
-    else if (dir < 0 && atStart) track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
-    else track.scrollBy({ left: dir * step, behavior: "smooth" });
+    var behavior = reduceMotion ? "auto" : "smooth";
+    if (dir > 0 && atEnd) track.scrollTo({ left: 0, behavior: behavior });
+    else if (dir < 0 && atStart) track.scrollTo({ left: track.scrollWidth, behavior: behavior });
+    else track.scrollBy({ left: dir * step, behavior: behavior });
   }
   function stop() { if (timer) clearInterval(timer); timer = null; }
   function start() { stop(); if (!reduceMotion) timer = setInterval(function () { slide(1); }, AUTOPLAY_MS); }
