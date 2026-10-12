@@ -39,9 +39,9 @@ const DESIGN_OPTIONS: DesignOption[] = [
     href: "/company&culture/design5/index.html",
   },
   {
-    name: "Design 6 — Editorial Story Explorer",
+    name: "Design 6 — Bold Banner + Category Browse",
     summary:
-      "A calm editorial feature with a gray-and-yellow spotlight, followed by a searchable story archive with category filters and a responsive card grid.",
+      "A bold navy page-head banner, an About strip, and a bordered featured story with a yellow CTA, then an 8-card Latest stories grid and a Browse section with a 3-story preview and View all link per category.",
     href: "/company&culture/design6/index.html",
   },
 ];
