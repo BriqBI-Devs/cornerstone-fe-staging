@@ -30,6 +30,8 @@
 
   .ph { display: flex; align-items: center; justify-content: center; background-color: #e4edf7; background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px); border-radius: var(--radius); overflow: hidden; }
   .ph span { border: 1px solid var(--border); background: #fff; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--t60); }
+  .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph img[src*="fulton-park-book-bags"] { object-position: left center; }
 
   .item { position: relative; }
   .stretch::after { content: ""; position: absolute; inset: 0; z-index: 1; }
@@ -55,9 +57,10 @@
   .featured .cat { margin-bottom: 10px; }
 
   /* ---------- Latest: a flowing horizontal strip, underlined not boxed ---------- */
-  .latest-section { margin-bottom: 44px; padding-top: 22px; border-top: 3px solid var(--yellow); }
+  .latest-section { margin-bottom: 44px; padding-top: 22px; border-top: 1px solid var(--border); }
   .list-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
-  .list-head h2 { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--navy); }
+  .list-head h2 { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--navy); }
+  .list-head h2::before { content: ""; width: 4px; height: 13px; flex-shrink: 0; border-radius: 2px; background: var(--yellow); }
   .list-head p { margin-top: 6px; font-size: 13px; color: var(--t60); }
   .list-head .arrows { display: flex; gap: 6px; flex-shrink: 0; }
   .list-head button { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: #fff; color: var(--navy); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s; }
@@ -73,12 +76,14 @@
   .latest-card:hover h3 a { color: var(--link); }
 
   /* ---------- Everything else: one continuous editorial flow, grouped lightly by category ---------- */
-  .more-head { margin-bottom: 20px; padding-top: 22px; border-top: 3px solid var(--yellow); }
+  .more-head { margin-bottom: 20px; padding-top: 22px; border-top: 1px solid var(--border); }
   .view-all-link { font-size: 13.5px; font-weight: 600; color: var(--link); white-space: nowrap; }
   .view-all-link:hover { text-decoration: underline; }
 
   .cat-group + .cat-group { margin-top: 32px; }
-  .cat-group-head { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--t55); margin-bottom: 16px; }
+  .cat-group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--t55); margin-bottom: 16px; }
+  .cat-group-link { font-size: 12.5px; font-weight: 600; letter-spacing: normal; text-transform: none; color: var(--link); white-space: nowrap; }
+  .cat-group-link:hover { text-decoration: underline; }
   .more-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
   .more-card .ph { aspect-ratio: 4 / 3; margin-bottom: 12px; }
   .more-card .cat { margin-bottom: 8px; }
@@ -91,8 +96,9 @@
   .load-more-btn { padding: 10px 22px; background: #fff; color: var(--navy); border: 1px solid var(--border); border-radius: 6px; font: 600 13.5px "Inter", sans-serif; cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s; }
   .load-more-btn:hover { border-color: var(--link); color: var(--link); background: rgba(29, 78, 216, 0.08); }
 
-  .about-note { margin-top: 48px; padding-top: 28px; border-top: 3px solid var(--yellow); }
-  .about-note h2 { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .about-note { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border); }
+  .about-note h2 { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .about-note h2::before { content: ""; width: 4px; height: 13px; flex-shrink: 0; border-radius: 2px; background: var(--yellow); }
   .about-note p { max-width: 640px; font-size: 13.5px; line-height: 1.65; color: var(--t75); margin-bottom: 10px; }
   .about-note p.more[hidden] { display: none; }
   .text-btn { padding: 0; background: none; border: none; cursor: pointer; font: 600 13px "Inter", sans-serif; color: var(--navy); }
@@ -193,6 +199,7 @@
   function esc(s) { return s.replace(/&/g, "&amp;"); }
   function storyHref(slug) { return "article.html?story=" + slug; }
   function catLink(cat) { return '<a class="cat" href="listing.html?category=' + cat.key + '">' + esc(cat.title) + '</a>'; }
+  function photo(slug, alt) { return '<img src="../assets/images/' + slug + '.jpg" alt="' + esc(alt) + '" loading="lazy">'; }
 
   var ALL = [];
   CATEGORIES.forEach(function (cat) {
@@ -200,10 +207,11 @@
   });
   ALL.sort(function (a, b) { return b.time - a.time; });
 
-  // Featured: single newest story, shown in full — no card box, just a large editorial lead-in
-  var lead = ALL[0];
+  // Featured: a fixed story, shown in full — no card box, just a large editorial lead-in
+  var FEATURED_SLUG = "river-crossing-family-day";
+  var lead = ALL.filter(function (e) { return e.story.slug === FEATURED_SLUG; })[0] || ALL[0];
   document.getElementById("featured").innerHTML =
-    '<div class="ph"><span>photo</span></div>' +
+    '<div class="ph"><img src="../assets/images/fun-food-family.avif" alt="' + esc(lead.story.title) + '" loading="lazy"></div>' +
     '<div class="featured-body">' +
       '<div class="featured-label"><span class="bar"></span><span>Featured story</span></div>' +
       catLink(lead.cat) +
@@ -213,14 +221,14 @@
     '</div>';
 
   // Latest: a flowing, horizontally scrolling strip of the 10 newest (excluding the featured story above)
-  var rest = ALL.slice(1);
+  var rest = ALL.filter(function (e) { return e.story.slug !== lead.story.slug; });
   var LATEST_COUNT = 10;
   var AUTOPLAY_MS = 2000;
   var track = document.getElementById("track");
   var latestHtml = "";
   rest.slice(0, LATEST_COUNT).forEach(function (e) {
     latestHtml += '<article class="item latest-card">' +
-      '<div class="ph"><span>photo</span></div>' +
+      '<div class="ph">' + photo(e.story.slug, e.story.title) + '</div>' +
       catLink(e.cat) +
       '<h3><a class="stretch" href="' + storyHref(e.story.slug) + '">' + esc(e.story.title) + '</a></h3></article>';
   });
@@ -262,7 +270,7 @@
 
   function renderMoreCard(cat, it) {
     return '<article class="item more-card">' +
-      '<div class="ph"><span>photo</span></div>' +
+      '<div class="ph">' + photo(it.slug, it.title) + '</div>' +
       catLink(cat) +
       '<h3><a class="stretch" href="' + storyHref(it.slug) + '">' + esc(it.title) + '</a></h3>' +
       '<p>' + esc(it.desc) + '</p>' +
@@ -273,7 +281,8 @@
     var cardsHtml = "";
     g.items.forEach(function (it) { cardsHtml += renderMoreCard(g.cat, it); });
     moreGroupsEl.insertAdjacentHTML("beforeend",
-      '<section class="cat-group"><h3 class="cat-group-head">' + esc(g.cat.title) + '</h3>' +
+      '<section class="cat-group"><div class="cat-group-head"><h3>' + esc(g.cat.title) + '</h3>' +
+      '<a class="cat-group-link" href="listing.html?category=' + g.cat.key + '">View more →</a></div>' +
       '<div class="more-grid">' + cardsHtml + '</div></section>');
     groupIndex += 1;
     loadMoreWrap.hidden = groupIndex >= catGroups.length;

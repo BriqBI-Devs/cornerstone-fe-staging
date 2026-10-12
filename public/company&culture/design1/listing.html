@@ -37,6 +37,8 @@
 
   .placeholder { display: flex; align-items: center; justify-content: center; background-color: #e4edf7; background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px); border-radius: var(--radius); overflow: hidden; }
   .placeholder span { border: 1px solid var(--border); background: #fff; border-radius: 6px; padding: 2px 8px; font-size: 10.5px; font-weight: 500; color: var(--t60); }
+  .placeholder img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .placeholder img[src*="fulton-park-book-bags"] { object-position: left center; }
 
   .list-card { display: flex; flex-direction: column; gap: 12px; }
   .list-row { display: flex; align-items: center; gap: 18px; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; transition: border-color 0.15s, background 0.15s; }
@@ -58,8 +60,6 @@
   .aside h2 { margin-bottom: 8px; font-size: 15px; font-weight: 600; }
   .aside-link { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-weight: 600; transition: border-color 0.15s, background 0.15s; }
   .aside-link:hover { border-color: rgba(27, 42, 58, 0.4); background: var(--subtle); }
-  .aside-link .ai { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 6px; background: var(--navy); color: #fff; }
-  .aside-link .ai svg { width: 16px; height: 16px; }
   .aside-link .an { flex: 1; min-width: 0; line-height: 1.3; }
   .aside-link .ac { font-size: 12px; font-weight: 500; color: var(--t45); }
   .aside-link.current { border-color: var(--navy); background: var(--subtle); font-weight: 700; }
@@ -101,13 +101,6 @@
 </main>
 
 <script>
-  var ICONS = {
-    people: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
-    community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
-    events: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
-    newsletters: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'
-  };
-
   var STORY_SLUGS = {
     "This month's Workiversaries: Denise Ramirez (10 years) and Margaret Carestia (12 years)": "workiversaries-sep",
     "Celebrating 5 Years: Priya Osei & Marcus Field": "workiversaries-5-years",
@@ -214,7 +207,7 @@
     var a = document.createElement("a");
     a.href = "listing.html?category=" + key;
     a.className = "aside-link" + (key === slug ? " current" : "");
-    a.innerHTML = '<span class="ai">' + (ICONS[c.icon] || "") + '</span><span class="an">' + c.title.replace("&", "&amp;") + '</span><span class="ac">' + c.items.length + '</span>';
+    a.innerHTML = '<span class="an">' + c.title.replace("&", "&amp;") + '</span><span class="ac">' + c.items.length + '</span>';
     catLinks.appendChild(a);
   });
 
@@ -222,10 +215,11 @@
   category.items.forEach(function (item) {
     var row = document.createElement("a");
     row.className = "list-row";
-    row.href = STORY_SLUGS[item.title] ? "article.html?story=" + STORY_SLUGS[item.title] : "#";
+    var itemSlug = STORY_SLUGS[item.title];
+    row.href = itemSlug ? "article.html?story=" + itemSlug : "#";
     if (item.hidden) row.hidden = true;
     row.innerHTML =
-      '<div class="placeholder"><span>photo</span></div>' +
+      '<div class="placeholder">' + (itemSlug ? '<img src="../assets/images/' + itemSlug + '.jpg" alt="' + item.title.replace(/&/g, "&amp;") + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<span>photo</span>\'">' : '<span>photo</span>') + '</div>' +
       '<div class="row-text">' +
         '<h3>' + item.title + '</h3>' +
         '<p class="desc">' + item.desc + '</p>' +

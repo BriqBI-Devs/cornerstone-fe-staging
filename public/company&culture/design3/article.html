@@ -108,6 +108,21 @@
     padding: 0 48px;
   }
 
+  .crumb-row { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .back-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    padding: 0;
+    color: rgba(27, 42, 58, 0.45);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .back-arrow:hover { color: var(--accent); }
+  .back-arrow svg { width: 11px; height: 11px; }
   .crumb {
     font-size: 11px;
     font-weight: 700;
@@ -167,6 +182,8 @@
     border-radius: 6px;
     padding: 4px 10px;
   }
+  .placeholder img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .placeholder img[src*="fulton-park-book-bags"] { object-position: left center; }
   .hero-image { width: 100%; aspect-ratio: 16 / 9; }
   .hero-caption {
     margin: 10px 0 32px;
@@ -314,7 +331,10 @@
 <body>
 <main class="wrap">
   <div class="top-row">
-    <nav class="crumb" aria-label="Breadcrumb"><a href="/">Cornerstone</a> / <a href="index.html">Company + Culture</a> / <a class="current" id="crumbCategory" href="listing.html?category=guide">Company Guide</a></nav>
+    <div class="crumb-row">
+      <button class="back-arrow" type="button" onclick="history.back()" aria-label="Go back"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 6h-9M5 2.5 1.5 6 5 9.5"/></svg></button>
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/">Cornerstone</a> / <a href="index.html">Company + Culture</a> / <a class="current" id="crumbCategory" href="listing.html?category=guide">Company Guide</a></nav>
+    </div>
     <div class="lang-dropdown">
       <button class="lang-select" type="button" onclick="toggleLangPanel(event)">
         <span class="lang-text">English (US)</span>
@@ -671,6 +691,8 @@
   document.getElementById("authorName").textContent = story.author;
   document.getElementById("publishMeta").textContent = "Published " + story.date + " · " + story.readTime;
   document.getElementById("heroCaption").textContent = story.title;
+  document.querySelector(".placeholder.hero-image").innerHTML =
+    '<img src="../assets/images/' + slug + '.jpg" alt="' + story.title.replace(/&/g, "&amp;") + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<span>hero illustration</span>\'">';
 
   var bodyEl = document.getElementById("articleBody");
   var lede = document.createElement("p");
@@ -715,7 +737,7 @@
     a.className = "related-card";
     a.href = "article.html?story=" + relSlug;
     a.innerHTML =
-      '<div class="placeholder"><span>article</span></div>' +
+      '<div class="placeholder"><img src="../assets/images/' + relSlug + '.jpg" alt="' + relStory.title.replace(/&/g, "&amp;") + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<span>article</span>\'"></div>' +
       '<p class="title">' + relStory.title + '</p>' +
       '<p class="sub">In <span class="section">' + (CATEGORY_LABELS[relStory.category] || "") + '</span> on ' + relStory.date + '</p>';
     relatedGrid.appendChild(a);

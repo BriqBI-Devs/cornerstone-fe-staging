@@ -32,6 +32,8 @@
 
   .ph { display: flex; align-items: center; justify-content: center; background-color: #e4edf7; background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px); overflow: hidden; }
   .ph span { border: 1px solid var(--border); background: #fff; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--t60); }
+  .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph img[src*="fulton-park-book-bags"] { object-position: left center; }
 
   /* Whole item is clickable; the category label stays its own link */
   .item { position: relative; }
@@ -66,9 +68,10 @@
   .band-photo .ph { width: 100%; aspect-ratio: 4 / 3; }
 
   /* ---------- Section heading ---------- */
-  .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; padding-top: 10px; border-top: 3px solid var(--yellow); }
+  .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; padding-top: 22px; border-top: 1px solid var(--border); }
   .sec-head.sec-head-light { padding-top: 22px; border-top: 1px solid var(--border); }
-  .sec-head h2 { font-size: 15px; font-weight: 600; }
+  .sec-head h2 { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; }
+  .sec-head:not(.sec-head-light) h2::before { content: ""; width: 4px; height: 15px; flex-shrink: 0; border-radius: 2px; background: var(--yellow); }
   .sec-head p { margin-top: 2px; font-size: 13px; color: var(--t60); }
   .sec-head > a { font-size: 14px; font-weight: 600; white-space: nowrap; }
   .sec-head > a:hover { text-decoration: underline; }
@@ -78,18 +81,19 @@
   .arrow-btn svg { width: 16px; height: 16px; }
 
   /* ---------- Category accordion ---------- */
-  .accordion { display: flex; flex-direction: column; gap: 12px; }
+  .accordion { display: flex; flex-direction: column; gap: 10px; }
   .acc { border: 1px solid var(--border); border-radius: var(--radius); background: #fff; overflow: hidden; transition: border-color 0.15s; }
   .acc.open { border-color: rgba(27, 42, 58, 0.4); }
-  .acc-trigger { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 16px; text-align: left; background: none; border: none; cursor: pointer; font-family: inherit; color: var(--navy); transition: background 0.15s; }
+  .acc-head { display: flex; align-items: center; }
+  .acc-trigger { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; padding: 16px 16px; text-align: left; background: none; border: none; cursor: pointer; font-family: inherit; color: var(--navy); transition: background 0.15s; }
   .acc-trigger:hover { background: var(--subtle); }
-  .acc-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 6px; background: var(--navy); color: #fff; }
-  .acc-icon svg { width: 16px; height: 16px; }
   .acc-text { flex: 1; min-width: 0; }
   .acc-text h3 { font-size: 15.5px; font-weight: 700; }
   .acc-text p { margin-top: 2px; font-size: 13px; color: var(--t60); }
   .chevron { width: 18px; height: 18px; flex-shrink: 0; color: rgba(27, 42, 58, 0.45); transition: transform 0.2s ease; }
   .acc.open .chevron { transform: rotate(180deg); }
+  .acc-more-inline { flex-shrink: 0; margin-right: 16px; font-size: 13px; font-weight: 600; color: var(--link); white-space: nowrap; }
+  .acc-more-inline:hover { text-decoration: underline; }
   .acc-panel[hidden] { display: none; }
   .row { display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-top: 1px solid var(--border); transition: background 0.15s; }
   .row:hover { background: var(--subtle); }
@@ -98,8 +102,6 @@
   .row-text { min-width: 0; flex: 1; }
   .row h4 { margin-bottom: 3px; font-size: 14px; font-weight: 600; line-height: 1.35; }
   .row:hover h4 a { color: var(--link); }
-  .acc-more { display: block; padding: 12px 16px; border-top: 1px solid var(--border); text-align: right; font-size: 14px; font-weight: 600; }
-  .acc-more:hover { text-decoration: underline; }
 
   /* ---------- Latest carousel ---------- */
   .carousel { position: relative; }
@@ -189,13 +191,6 @@
 </main>
 
 <script>
-  var ICONS = {
-    workiversaries: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
-    "new-hires": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>',
-    community: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
-    cultural: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
-    guide: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'
-  };
   var CHEVRON = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
   var CATEGORIES = [
@@ -241,6 +236,7 @@
 
   function esc(s) { return s.replace(/&/g, "&amp;"); }
   function storyHref(slug) { return "article.html?story=" + slug; }
+  function photo(slug, alt) { return '<img src="../assets/images/' + slug + '.jpg" alt="' + esc(alt) + '" loading="lazy">'; }
 
   var ALL = [];
   CATEGORIES.forEach(function (cat) {
@@ -258,26 +254,27 @@
       '<p>' + esc(feat.story.desc) + '</p>' +
       '<span class="byline">' + feat.story.date + '</span>' +
       '<a class="btn-light" href="' + featHref + '">Read the story →</a></div>' +
-      '<a class="band-photo" href="' + featHref + '" tabindex="-1" aria-hidden="true"><div class="ph"><span>featured photo</span></div></a>' +
+      '<a class="band-photo" href="' + featHref + '" tabindex="-1" aria-hidden="true"><div class="ph"><img src="../assets/images/fun-food-family.avif" alt="' + esc(feat.story.title) + '" loading="lazy"></div></a>' +
     '</div>';
 
   // Category accordion: one open at a time, full data for every story in the open panel
   var accordion = document.getElementById("accordion");
   CATEGORIES.forEach(function (cat, idx) {
     var rows = cat.items.map(function (it) {
-      return '<article class="item row"><div class="ph"><span>photo</span></div><div class="row-text">' +
+      return '<article class="item row"><div class="ph">' + photo(it.slug, it.title) + '</div><div class="row-text">' +
         '<h4><a class="stretch" href="' + storyHref(it.slug) + '">' + esc(it.title) + '</a></h4>' +
         '<p class="meta">' + it.date + '</p></div></article>';
     }).join("");
     var item = document.createElement("div");
     item.className = "acc" + (idx === 0 ? " open" : "");
     item.innerHTML =
-      '<button class="acc-trigger" type="button" aria-expanded="' + (idx === 0) + '" aria-controls="panel-' + cat.key + '">' +
-        '<span class="acc-icon">' + ICONS[cat.key] + '</span>' +
-        '<span class="acc-text"><h3>' + esc(cat.title) + '</h3><p>' + esc(BLURBS[cat.key] || "") + '</p></span>' + CHEVRON +
-      '</button>' +
-      '<div class="acc-panel" id="panel-' + cat.key + '"' + (idx === 0 ? "" : " hidden") + '>' + rows +
-        '<a class="acc-more" href="listing.html?category=' + cat.key + '">View more →</a></div>';
+      '<div class="acc-head">' +
+        '<button class="acc-trigger" type="button" aria-expanded="' + (idx === 0) + '" aria-controls="panel-' + cat.key + '">' +
+          '<span class="acc-text"><h3>' + esc(cat.title) + '</h3><p>' + esc(BLURBS[cat.key] || "") + '</p></span>' + CHEVRON +
+        '</button>' +
+        '<a class="acc-more-inline" href="listing.html?category=' + cat.key + '">View more →</a>' +
+      '</div>' +
+      '<div class="acc-panel" id="panel-' + cat.key + '"' + (idx === 0 ? "" : " hidden") + '>' + rows + '</div>';
     item.querySelector(".acc-trigger").addEventListener("click", function () {
       var wasOpen = item.classList.contains("open");
       Array.prototype.forEach.call(accordion.children, function (el) {
@@ -301,7 +298,7 @@
     var a = document.createElement("article");
     a.className = "item card";
     a.innerHTML =
-      '<div class="photo"><div class="ph"><span>photo</span></div>' +
+      '<div class="photo"><div class="ph">' + photo(e.story.slug, e.story.title) + '</div>' +
         '<span class="date"><b>' + d.getDate() + '</b><i>' + MONTHS_SHORT[d.getMonth()] + '</i></span></div>' +
       '<div class="card-body"><a class="cat" href="listing.html?category=' + e.cat.key + '">' + esc(e.cat.title) + '</a>' +
         '<h3><a class="stretch" href="' + storyHref(e.story.slug) + '">' + esc(e.story.title) + '</a></h3></div>';

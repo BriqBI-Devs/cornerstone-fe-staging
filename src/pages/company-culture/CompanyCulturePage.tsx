@@ -1,5 +1,4 @@
 import { ArrowUpRight } from "lucide-react";
-import { Badge } from "../../components/ui/Badge";
 import { Card } from "../../components/ui/Card";
 
 interface DesignOption {
@@ -39,22 +38,17 @@ const DESIGN_OPTIONS: DesignOption[] = [
       "An About strip at the top, a full-width navy featured-story band, an auto-scrolling Latest stories carousel, then a collapsible category accordion (one open at a time) with a View all link per category.",
     href: "/company&culture/design5/index.html",
   },
+  {
+    name: "Design 6 — Editorial Story Explorer",
+    summary:
+      "A calm editorial feature with a gray-and-yellow spotlight, followed by a searchable story archive with category filters and a responsive card grid.",
+    href: "/company&culture/design6/index.html",
+  },
 ];
 
 export function CompanyCulturePage() {
   return (
     <div className="flex flex-col gap-6">
-      <Card className="border-l-4 border-l-brand-accent bg-brand-accent/10">
-        <div className="flex items-center gap-2">
-          <Badge variant="accent">Temporary</Badge>
-          <span className="text-sm font-semibold text-brand-navy">For client review — not final</span>
-        </div>
-        <p className="mt-2 text-sm text-brand-navy/75">
-          We're exploring a couple of directions for the Company + Culture page. Open each option
-          below and let us know which one to move forward with — or which pieces to mix together.
-        </p>
-      </Card>
-
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {DESIGN_OPTIONS.map((option) => (
           <Card key={option.name} className="flex flex-col">

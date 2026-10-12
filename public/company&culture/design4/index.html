@@ -31,6 +31,8 @@
 
   .ph { display: flex; align-items: center; justify-content: center; background-color: #e4edf7; background-image: repeating-linear-gradient(45deg, rgba(27,42,58,0.08) 0, rgba(27,42,58,0.08) 1px, transparent 1px, transparent 14px); border-radius: var(--radius); overflow: hidden; }
   .ph span { border: 1px solid var(--border); background: #fff; border-radius: 6px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: var(--t60); }
+  .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ph img[src*="fulton-park-book-bags"] { object-position: left center; }
 
   /* Whole item is clickable; the category label stays its own link */
   .item { position: relative; }
@@ -70,8 +72,9 @@
 
   /* ---------- Headline cards ---------- */
   .section { padding-top: 12px; }
-  .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; padding-top: 10px; border-top: 3px solid var(--yellow); }
-  .sec-head h2 { font-size: 15px; font-weight: 600; }
+  .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; padding-top: 22px; border-top: 1px solid var(--border); }
+  .sec-head h2 { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; }
+  .sec-head h2::before { content: ""; width: 4px; height: 15px; flex-shrink: 0; border-radius: 2px; background: var(--yellow); }
   .sec-head p { margin-top: 4px; font-size: 13px; color: var(--t60); }
   .sec-head > a { font-size: 14px; font-weight: 600; white-space: nowrap; }
   .sec-head > a:hover { text-decoration: underline; }
@@ -205,6 +208,7 @@
   function esc(s) { return s.replace(/&/g, "&amp;"); }
   function catLink(cat) { return '<a class="cat" href="listing.html?category=' + cat.key + '">' + esc(cat.title) + '</a>'; }
   function storyHref(slug) { return "article.html?story=" + slug; }
+  function photo(slug, alt) { return '<img src="../assets/images/' + slug + '.jpg" alt="' + esc(alt) + '" loading="lazy">'; }
 
   var ALL = [];
   CATEGORIES.forEach(function (cat) {
@@ -217,6 +221,7 @@
   // Lead is featured on its own; headline cards are the newest after it; the feed continues from there
   var lead = find(LEAD_SLUG);
   document.getElementById("leadStory").href = storyHref(lead.story.slug);
+  document.querySelector("#leadStory .ph").innerHTML = '<img src="../assets/images/fun-food-family.avif" alt="' + esc(lead.story.title) + '" loading="lazy">';
   document.getElementById("leadBody").innerHTML =
     catLink(lead.cat) +
     '<h2><a class="stretch" href="' + storyHref(lead.story.slug) + '">' + esc(lead.story.title) + '</a></h2>' +
@@ -232,7 +237,7 @@
     var a = document.createElement("article");
     a.className = "item hcard";
     a.innerHTML =
-      '<div class="ph"><span>photo</span></div>' +
+      '<div class="ph">' + photo(e.story.slug, e.story.title) + '</div>' +
       '<div class="hcard-body">' + catLink(e.cat) +
       '<h3><a class="stretch" href="' + storyHref(e.story.slug) + '">' + esc(e.story.title) + '</a></h3>' +
       '<span class="meta">' + e.story.date + '</span></div>';
@@ -249,7 +254,7 @@
     a.className = "item frow";
     a.hidden = true;
     a.innerHTML =
-      '<div class="ph"><span>photo</span></div>' +
+      '<div class="ph">' + photo(e.story.slug, e.story.title) + '</div>' +
       '<div class="frow-text">' + catLink(e.cat) +
       '<h3><a class="stretch" href="' + storyHref(e.story.slug) + '">' + esc(e.story.title) + '</a></h3>' +
       '<p>' + esc(e.story.desc) + '</p>' +
