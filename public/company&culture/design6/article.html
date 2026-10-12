@@ -182,6 +182,8 @@
     border-radius: 6px;
     padding: 4px 10px;
   }
+  .placeholder img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .placeholder img[src*="fulton-park-book-bags"] { object-position: left center; }
   .hero-image { width: 100%; aspect-ratio: 16 / 9; }
   .hero-caption {
     margin: 10px 0 32px;
@@ -689,6 +691,8 @@
   document.getElementById("authorName").textContent = story.author;
   document.getElementById("publishMeta").textContent = "Published " + story.date + " · " + story.readTime;
   document.getElementById("heroCaption").textContent = story.title;
+  document.querySelector(".placeholder.hero-image").innerHTML =
+    '<img src="../assets/images/' + slug + '.jpg" alt="' + story.title.replace(/&/g, "&amp;") + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<span>hero illustration</span>\'">';
 
   var bodyEl = document.getElementById("articleBody");
   var lede = document.createElement("p");
@@ -733,7 +737,7 @@
     a.className = "related-card";
     a.href = "article.html?story=" + relSlug;
     a.innerHTML =
-      '<div class="placeholder"><span>article</span></div>' +
+      '<div class="placeholder"><img src="../assets/images/' + relSlug + '.jpg" alt="' + relStory.title.replace(/&/g, "&amp;") + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<span>article</span>\'"></div>' +
       '<p class="title">' + relStory.title + '</p>' +
       '<p class="sub">In <span class="section">' + (CATEGORY_LABELS[relStory.category] || "") + '</span> on ' + relStory.date + '</p>';
     relatedGrid.appendChild(a);
