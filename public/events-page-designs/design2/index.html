@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f5">
+  <title>Events | Cornerstone</title>
+  <style>
+:root {
+  color-scheme: light;
+  --ink: #1b2a3a;
+  --muted: #697586;
+  --muted-light: #8993a0;
+  --line: #e3e7eb;
+  --surface: #fff;
+  --canvas: #f7f8fa;
+  --blue: #1d4ed8;
+  --blue-soft: #eff5ff;
+  --yellow: #f5c518;
+  --green: #087443;
+  --green-soft: #eaf7f0;
+  --radius: 10px;
+  font-family: "Inter", system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--canvas);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; }
+body { min-width: 320px; margin: 0; background: var(--canvas); }
+a { color: inherit; }
+button, input, select { font: inherit; }
+button { color: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+.app-shell { min-height: 100vh; }
+.site-header { position: sticky; top: 0; z-index: 20; background: var(--surface); box-shadow: 0 1px 0 var(--line); }
+.wordmark { display: flex; min-height: 58px; align-items: center; justify-content: center; color: var(--ink); font-family: Georgia, serif; font-size: 22px; font-weight: 700; letter-spacing: .16em; text-decoration: none; }
+.primary-nav { display: flex; min-height: 43px; align-items: stretch; justify-content: center; gap: 30px; overflow-x: auto; padding: 0 22px; border-top: 1px solid var(--line); }
+.primary-nav a { position: relative; display: flex; align-items: center; flex: 0 0 auto; color: #465264; font-size: 11px; font-weight: 600; text-decoration: none; }
+.primary-nav a:hover { color: var(--blue); }
+.primary-nav a.active { color: var(--ink); }
+.primary-nav a.active::after { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: var(--yellow); content: ""; }
+
+.main-content { width: min(100% - 40px, 1120px); margin: 34px auto 52px; }
+.page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+.eyebrow { margin: 0 0 8px; color: var(--muted); font-size: 11px; font-weight: 500; }
+.page-heading h1 { margin: 0; font-size: clamp(26px, 3vw, 34px); font-weight: 700; letter-spacing: -.04em; }
+.intro { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+.calendar-shortcut { color: var(--blue); font-size: 12px; font-weight: 600; text-decoration: none; }
+.events-panel { overflow: visible; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 2px 8px #1b2a3a08; }
+.toolbar { display: flex; min-height: 68px; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.search-field { display: flex; width: min(380px, 100%); height: 38px; align-items: center; gap: 9px; padding: 0 11px; border: 1px solid #d8dee5; border-radius: 6px; background: #fff; }
+.search-field:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px #1d4ed81a; }
+.search-field svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--muted); }
+.search-field input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--ink); font-size: 12px; }
+.search-field input::placeholder { color: var(--muted-light); }
+kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); font-family: inherit; font-size: 9px; }
+.filter-wrap { position: relative; }
+.button { display: inline-flex; height: 38px; align-items: center; justify-content: center; gap: 7px; padding: 0 12px; border: 1px solid #d8dee5; border-radius: 6px; background: #fff; cursor: pointer; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.button:hover { background: #f8f9fb; }
+.button svg { width: 15px; height: 15px; }
+.filter-count { display: inline-grid; min-width: 17px; height: 17px; place-items: center; border-radius: 50%; background: var(--ink); color: #fff; font-size: 9px; }
+.filter-panel { position: absolute; top: calc(100% + 8px); right: 0; z-index: 10; width: 260px; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; box-shadow: 0 12px 32px #17283b1a; }
+.filter-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 12px; }
+.text-button { padding: 4px 5px; border: 0; background: transparent; color: var(--blue); cursor: pointer; font-size: 11px; font-weight: 600; }
+.filter-panel fieldset { display: grid; gap: 9px; margin: 0; padding: 11px 0; border: 0; border-top: 1px solid var(--line); }
+.filter-panel legend { margin-bottom: 8px; padding: 0; font-size: 10px; font-weight: 700; }
+.filter-panel label { display: flex; align-items: center; gap: 8px; color: #465264; font-size: 11px; cursor: pointer; }
+.filter-panel input { accent-color: var(--blue); }
+.view-switch { display: inline-flex; height: 38px; overflow: hidden; margin-left: auto; border: 1px solid #d8dee5; border-radius: 6px; }
+.view-button { display: inline-flex; min-width: 86px; align-items: center; justify-content: center; gap: 7px; padding: 0 11px; border: 0; background: #fff; color: #536071; cursor: pointer; font-size: 11px; font-weight: 600; }
+.view-button + .view-button { border-left: 1px solid #d8dee5; }
+.view-button svg { width: 15px; height: 15px; }
+.view-button.active { background: var(--blue-soft); color: var(--blue); box-shadow: inset 0 0 0 1px var(--blue); }
+
+.events-content { min-height: 280px; }
+.event-list { padding: 0 20px 12px; }
+.event-row { display: grid; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
+.date-tile { overflow: hidden; width: 46px; border: 1px solid #e0e5ea; border-radius: 6px; text-align: center; }
+.date-month { display: block; padding: 4px 3px; background: var(--blue); color: #fff; font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.date-day { display: block; padding: 4px 0 5px; font-size: 19px; font-weight: 600; line-height: 1; }
+.event-copy { min-width: 0; }
+.event-title { margin: 0; font-size: 13px; font-weight: 600; line-height: 1.4; }
+.event-title a { text-decoration: none; }
+.event-title a:hover { color: var(--blue); text-decoration: underline; }
+.event-details { display: flex; flex-wrap: wrap; gap: 5px 13px; margin-top: 6px; color: var(--muted); font-size: 10px; }
+.event-details span { display: inline-flex; align-items: center; gap: 5px; }
+.event-details svg { width: 12px; height: 12px; }
+.event-details a, .event-preview-meta-row a { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; }
+.event-details a:hover, .event-preview-meta-row a:hover { color: #173da8; }
+.event-people { display: grid; gap: 7px; margin-top: 8px; color: var(--muted); font-size: 10px; }
+.event-person { display: flex; align-items: center; gap: 7px; }
+.event-authors { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.author-avatar { display: grid; width: 23px; height: 23px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--blue-soft); color: var(--blue); font-size: 8px; font-weight: 700; }
+.author-label { display: block; margin-bottom: 2px; color: var(--muted-light); font-size: 8px; }
+.empty-state { padding: 50px 20px; color: var(--muted); text-align: center; font-size: 12px; }
+.empty-state strong { display: block; margin-bottom: 5px; color: var(--ink); font-size: 14px; }
+
+.calendar-toolbar { display: flex; min-height: 58px; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px; border-bottom: 1px solid var(--line); }
+.period-controls, .calendar-options { display: flex; align-items: center; gap: 8px; }
+.period-controls h2 { min-width: 142px; margin: 0 4px; font-size: 13px; font-weight: 600; }
+.icon-control { display: grid; width: 29px; height: 29px; place-items: center; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; cursor: pointer; font-size: 18px; line-height: 1; }
+.icon-control:hover { color: var(--blue); }
+.calendar-options select { height: 30px; padding: 0 24px 0 8px; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; font-size: 10px; }
+.month-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.month-week { position: relative; display: grid; grid-column: 1 / -1; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.weekday { padding: 10px 8px; border-bottom: 1px solid var(--line); background: #fafbfc; color: var(--muted); text-align: center; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+.month-week .day-cell { position: relative; min-height: 116px; padding: calc(35px + var(--multi-day-lanes, 0) * 20px) 7px 7px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.month-week .day-cell:nth-child(7n) { border-right: 0; }
+.day-cell.outside { background: #fafbfc; }
+.day-cell.outside .day-number { color: #aeb6c0; }
+.day-number { position: absolute; top: 6px; left: 7px; display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; font-size: 10px; }
+.day-cell.today .day-number { background: var(--blue); color: #fff; font-weight: 700; }
+.multi-day-event { position: absolute; z-index: 2; height: 18px; overflow: hidden; padding: 2px 6px; border-radius: 4px; background: #dceaff; color: #1745a4; font-size: 8px; line-height: 14px; text-overflow: ellipsis; text-decoration: none; white-space: nowrap; }
+.multi-day-event:hover { background: #c8dcff; text-decoration: underline; }
+.calendar-event { display: block; overflow: hidden; margin-top: 5px; padding: 4px 5px; border-radius: 4px; background: var(--blue-soft); color: #1745a4; font-size: 9px; line-height: 1.35; text-decoration: none; }
+.calendar-event-title { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.calendar-event:hover { background: #dceaff; text-decoration: underline; }
+.event-preview { position: fixed; z-index: 20; display: flex; width: min(360px, calc(100vw - 24px)); max-height: min(70vh, 480px); flex-direction: column; overflow: hidden; border: 1px solid #d9dfe6; border-radius: 9px; background: #fff; box-shadow: 0 12px 34px #17283b30; }
+.event-preview-body { overflow-y: auto; padding: 17px 16px 13px; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #c3cad3 transparent; }
+.event-preview-body::-webkit-scrollbar { width: 5px; }
+.event-preview-body::-webkit-scrollbar-thumb { border-radius: 5px; background: #c3cad3; }
+.event-preview-body::-webkit-scrollbar-track { background: transparent; }
+.event-preview-close { position: absolute; top: 9px; right: 9px; z-index: 1; display: grid; width: 26px; height: 26px; place-items: center; padding: 0; border: 0; border-radius: 50%; background: #f0f2f5; color: var(--muted); cursor: pointer; }
+.event-preview-close svg { display: block; width: 12px; height: 12px; }
+.event-preview-heading { display: grid; grid-template-columns: 38px minmax(0, 1fr); align-items: start; gap: 10px; margin: 0 25px 14px 0; }
+.event-preview-date { overflow: hidden; align-self: start; border: 1px solid var(--line); border-radius: 5px; text-align: center; }
+.event-preview-date span { display: block; padding: 3px 2px; background: var(--blue); color: #fff; font-size: 8px; font-weight: 700; text-transform: uppercase; }
+.event-preview-date strong { display: block; padding: 3px 0; font-size: 16px; line-height: 1; }
+.event-preview-title { display: block; margin: 1px 0 0; padding-right: 3px; color: var(--ink); font-size: 13px; font-weight: 700; line-height: 1.4; text-decoration: none; }
+.event-preview-title:hover { color: var(--blue); text-decoration: underline; }
+.event-preview-meta { display: grid; gap: 11px; margin-bottom: 14px; color: #465264; font-size: 10px; line-height: 1.45; }
+.event-preview-meta-row { display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: start; gap: 8px; }
+.event-preview-meta-row svg { width: 15px; height: 15px; color: #707b88; }
+.event-preview-description { margin: 0 0 14px; color: #465264; font-size: 10px; line-height: 1.55; }
+.event-preview-description p { margin: 0 0 10px; }
+.event-preview-description p:last-child { margin-bottom: 0; }
+.event-preview-registration { margin: 12px 0; text-align: center; font-size: 10px; line-height: 1.45; }
+.event-preview-registration a { overflow-wrap: anywhere; color: var(--blue); }
+.event-preview-people { display: grid; gap: 9px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--ink); font-size: 10px; }
+.event-preview-person-row { display: grid; grid-template-columns: 16px 25px minmax(0, 1fr); align-items: center; gap: 8px; }
+.event-preview-person-icon { width: 15px; height: 15px; color: #707b88; }
+.event-preview-person-avatar { position: relative; display: grid; width: 25px; height: 25px; overflow: hidden; place-items: center; border-radius: 50%; background: var(--blue-soft); color: var(--blue); font-size: 8px; font-weight: 700; }
+.event-preview-person-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.event-preview-person-row small { display: block; margin-bottom: 2px; color: var(--muted); font-size: 8px; }
+.event-preview-person-row strong { font-weight: 500; }
+.event-preview-footer { flex: 0 0 auto; padding: 11px 16px; border-top: 1px solid var(--line); background: #fff; text-align: center; }
+.event-preview-footer a { color: var(--blue); font-size: 10px; font-weight: 600; text-decoration: none; }
+.event-preview-footer a:hover { text-decoration: underline; }
+.calendar-more { display: block; margin: 5px 0 0; color: var(--blue); font-size: 9px; font-weight: 600; text-decoration: none; }
+.calendar-more:hover { text-decoration: underline; }
+.week-grid { display: grid; width: 100%; grid-template-columns: 52px repeat(7, minmax(80px, 1fr)); min-width: 660px; }
+.week-scroll { max-height: min(70vh, 680px); overflow: auto; overscroll-behavior: contain; scroll-padding-top: 54px; }
+.week-head { position: sticky; top: 0; z-index: 5; background: #fafbfc; }
+.week-head > div { padding: 9px 4px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--muted); text-align: center; font-size: 9px; }
+.week-head > div:first-child { position: sticky; left: 0; z-index: 3; background: #fafbfc; }
+.week-head strong { display: block; margin-top: 4px; color: var(--ink); font-size: 11px; }
+.week-more { display: block; margin-top: 4px; color: var(--blue); font-size: 8px; font-weight: 600; text-decoration: none; }
+.week-more:hover { text-decoration: underline; }
+.week-time, .week-cell { min-height: 42px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.week-time { position: sticky; left: 0; z-index: 1; padding: 4px 5px 0 0; background: #fff; color: var(--muted); text-align: right; font-size: 8px; }
+.week-cell { position: relative; z-index: 0; }
+.week-cell-has-multi-day { z-index: 2; }
+.week-multi-day-timed-event { position: absolute; z-index: 1; top: 3px; left: 3px; right: 3px; margin: 0; }
+.week-all-day-time, .week-all-day-cell { min-height: 30px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.week-all-day-time { position: sticky; left: 0; z-index: 1; padding: 4px 5px 0 0; background: #fff; color: var(--muted); text-align: right; font-size: 8px; }
+.week-all-day-row { position: relative; grid-column: 1 / -1; }
+.week-all-day-row .week-all-day-time, .week-all-day-row .week-all-day-cell { min-height: calc(30px + var(--multi-day-lanes, 0) * 20px); }
+.week-all-day-row .week-all-day-cell { display: grid; align-content: start; gap: 2px; padding: calc(22px + var(--multi-day-lanes, 0) * 20px) 2px 2px; }
+.week-all-day-row .week-all-day-event { position: absolute; z-index: 2; height: 18px; overflow: hidden; margin: 0; padding: 2px 6px; border-radius: 4px; background: #dceaff; color: #1745a4; font-size: 8px; line-height: 14px; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; }
+.week-all-day-row .week-all-day-event:hover { background: #c8dcff; text-decoration: underline; }
+.week-event { display: block; overflow: hidden; margin: 3px; padding: 4px; border-radius: 4px; background: var(--blue-soft); color: #1745a4; font-size: 8px; line-height: 1.3; text-decoration: none; }
+.prototype-note { margin: 11px 0 0; color: var(--muted-light); text-align: right; font-size: 9px; }
+
+@media (max-width: 720px) {
+  .primary-nav { justify-content: flex-start; gap: 22px; }
+  .main-content { width: min(100% - 28px, 1120px); margin-top: 24px; }
+  .toolbar { flex-wrap: wrap; padding: 12px; }
+  .search-field { flex: 1 1 220px; width: auto; }
+  .view-switch { margin-left: auto; }
+  .event-list { padding-right: 14px; padding-left: 14px; }
+  .event-row { grid-template-columns: 45px minmax(0, 1fr); gap: 10px; }
+}
+@media (max-width: 480px) {
+  .wordmark { min-height: 50px; font-size: 19px; }
+  .primary-nav { min-height: 40px; }
+  .main-content { width: calc(100% - 20px); margin-top: 20px; }
+  .page-heading { align-items: flex-start; margin-bottom: 16px; }
+  .intro { max-width: 260px; line-height: 1.5; }
+  .toolbar { gap: 8px; }
+  .search-field { flex-basis: calc(100% - 1px); }
+  .search-field kbd { display: none; }
+  .view-button { min-width: 72px; }
+  .button { padding-right: 9px; padding-left: 9px; }
+  .filter-panel { right: auto; left: 0; }
+  .calendar-toolbar { padding-right: 12px; padding-left: 12px; }
+  .period-controls { gap: 5px; }
+  .period-controls h2 { min-width: auto; font-size: 11px; }
+  .calendar-options { gap: 3px; }
+  .calendar-options .text-button { font-size: 10px; }
+  .calendar-options select { padding-right: 16px; }
+  .day-cell { min-height: 70px; padding: 4px; }
+  .calendar-event { padding: 3px; font-size: 8px; }
+  .weekday { padding: 8px 2px; font-size: 8px; }
+}
+
+.detail-main { width: min(100% - 40px, 1120px); margin: 28px auto 52px; }
+.back-link { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 20px; color: var(--muted); font-size: 11px; font-weight: 600; text-decoration: none; }
+.back-link:hover { color: var(--blue); }
+.back-link span { font-size: 16px; }
+.detail-layout { display: grid; grid-template-columns: minmax(0, 1fr) 290px; align-items: start; gap: 24px; }
+.detail-primary, .action-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 2px 8px #1b2a3a08; }
+.detail-primary { position: relative; overflow: hidden; padding: 26px; }
+.detail-date { position: absolute; top: 25px; right: 25px; display: grid; width: 48px; height: 48px; place-items: center; border-radius: 9px; background: var(--blue-soft); color: var(--blue); font-size: 13px; font-weight: 700; }
+.detail-primary > .eyebrow { margin: 2px 60px 9px 0; color: var(--blue); font-size: 9px; font-weight: 700; letter-spacing: .11em; }
+.detail-primary h1 { max-width: 680px; margin: 0 60px 14px 0; font-size: clamp(24px, 3vw, 34px); line-height: 1.2; letter-spacing: -.04em; }
+.detail-meta { display: flex; flex-wrap: wrap; gap: 7px 16px; margin-bottom: 20px; color: var(--muted); font-size: 11px; }
+.detail-meta span + span::before { margin-right: 12px; color: #c1c8d0; content: "•"; }
+.detail-image { display: block; width: 100%; max-height: 360px; aspect-ratio: 16 / 8; border-radius: 8px; background: var(--canvas); object-fit: cover; }
+.detail-description { max-width: 720px; margin-top: 20px; color: #465264; font-size: 13px; line-height: 1.7; }
+.topic-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 20px; }
+.topic-list span { padding: 5px 9px; border-radius: 20px; background: #f0f2f5; color: #536071; font-size: 9px; font-weight: 600; }
+.detail-aside { display: grid; gap: 12px; }
+.action-card { padding: 17px; }
+.card-eyebrow { margin: 0 0 6px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .08em; }
+.action-card h2 { margin: 0 0 14px; font-size: 14px; }
+.rsvp-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.rsvp-actions button { min-height: 35px; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; cursor: pointer; font-size: 10px; font-weight: 600; }
+.rsvp-actions button:hover, .rsvp-actions button.selected { border-color: var(--blue); background: var(--blue-soft); color: var(--blue); }
+.rsvp-message { min-height: 15px; margin: 8px 0 0; color: var(--muted); font-size: 10px; }
+.calendar-action { width: 100%; min-height: 36px; margin-top: 5px; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; cursor: pointer; font-size: 10px; font-weight: 600; }
+.calendar-action:hover { background: #f8f9fb; }
+.attendee-summary { display: flex; gap: 5px; margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+.attendee-summary strong { color: var(--ink); }
+.event-facts h2 { margin-bottom: 10px; }
+.event-facts p { display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 8px; margin: 0; padding: 9px 0; border-top: 1px solid var(--line); font-size: 10px; line-height: 1.5; }
+.event-facts p span { color: var(--muted); }
+.event-facts p strong { font-weight: 500; overflow-wrap: anywhere; }
+.suggested-section { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line); }
+.suggested-section h2 { margin: 0 0 12px; font-size: 14px; }
+.suggested-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.suggested-card { overflow: hidden; border: 1px solid var(--line); border-radius: 7px; background: #fff; text-decoration: none; }
+.suggested-card:hover { border-color: #b9c9e8; box-shadow: 0 4px 12px #1b2a3a0d; }
+.suggested-card img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.suggested-card strong { display: block; padding: 0 9px 10px; font-size: 10px; line-height: 1.45; }
+.suggested-date { display: block; padding: 9px 9px 4px; color: var(--muted); font-size: 9px; }
+@media (max-width: 760px) { .detail-layout { grid-template-columns: 1fr; } .detail-aside { grid-row: 1; grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .detail-main { width: calc(100% - 20px); margin-top: 20px; } .detail-primary { padding: 18px; } .detail-date { top: 18px; right: 18px; width: 40px; height: 40px; font-size: 11px; } .detail-primary h1 { margin-right: 38px; font-size: 23px; } .detail-primary > .eyebrow { margin-right: 40px; } .detail-aside { grid-template-columns: 1fr; } .suggested-list { grid-template-columns: 1fr; } .suggested-card { display: grid; grid-template-columns: 105px minmax(0, 1fr); grid-template-rows: auto 1fr; } .suggested-card img { grid-row: 1 / 3; height: 100%; aspect-ratio: auto; } .suggested-date { align-self: end; padding-top: 9px; } .suggested-card strong { padding-bottom: 9px; } }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+      <nav class="primary-nav" aria-label="Main navigation">
+        <a href="/news">News</a>
+        <a href="/company-culture">Company + Culture</a>
+        <a class="active" href="index.html" aria-current="page">Events</a>
+        <a href="/people">People</a>
+        <a href="/departments">Departments</a>
+        <a href="/policies-resources">Policies + Resources</a>
+      </nav>
+    </header>
+
+    <main class="main-content">
+      <div class="page-heading">
+        <div>
+          <h1>Events</h1>
+          <p class="intro">Find a gathering, learning session, or opportunity to connect.</p>
+        </div>
+        <a class="calendar-shortcut" href="#eventsContent" id="calendarShortcut" hidden>
+          <span aria-hidden="true">▦</span> View calendar
+        </a>
+      </div>
+
+      <section class="events-panel" aria-label="Events">
+        <div class="toolbar">
+          <label class="search-field">
+            <span class="sr-only">Search events</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <input id="searchInput" type="search" placeholder="Search events" autocomplete="off">
+            <kbd>⌘ K</kbd>
+          </label>
+          <div class="filter-wrap">
+            <button class="button button-secondary" id="filterToggle" type="button" aria-expanded="false" aria-controls="filterPanel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 5h16l-6.5 7.5v5l-3 1.5v-6.5L4 5Z"/></svg>
+              Filters <span class="filter-count" id="filterCount" hidden>0</span>
+            </button>
+            <div class="filter-panel" id="filterPanel" hidden>
+              <div class="filter-heading"><strong>Filter events</strong><button class="text-button" id="clearFilters" type="button">Clear all</button></div>
+              <fieldset>
+                <legend>Date</legend>
+                <label><input type="radio" name="dateFilter" value="all" checked> All dates</label>
+                <label><input type="radio" name="dateFilter" value="future"> Upcoming</label>
+                <label><input type="radio" name="dateFilter" value="past"> Past</label>
+              </fieldset>
+              <fieldset>
+                <legend>My RSVP</legend>
+                <label><input type="checkbox" name="rsvpFilter" value="Yes"> Yes</label>
+                <label><input type="checkbox" name="rsvpFilter" value="No"> No</label>
+                <label><input type="checkbox" name="rsvpFilter" value="Maybe"> Maybe</label>
+                <label><input type="checkbox" name="rsvpFilter" value="Pending"> Pending</label>
+              </fieldset>
+            </div>
+          </div>
+          <div class="view-switch" role="group" aria-label="Event view">
+            <button class="view-button active" type="button" data-view="calendar" aria-pressed="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+              <span>Calendar</span>
+            </button>
+            <button class="view-button" type="button" data-view="list" aria-pressed="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r=".8" fill="currentColor"/><circle cx="4" cy="12" r=".8" fill="currentColor"/><circle cx="4" cy="18" r=".8" fill="currentColor"/></svg>
+              <span>List</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="calendar-toolbar" id="calendarToolbar" hidden>
+          <div class="period-controls">
+            <button class="icon-control" id="previousPeriod" type="button" aria-label="Previous month">‹</button>
+            <button class="icon-control" id="nextPeriod" type="button" aria-label="Next month">›</button>
+            <h2 id="periodTitle"></h2>
+          </div>
+          <div class="calendar-options">
+            <button class="text-button" id="todayButton" type="button">Today</button>
+            <select id="calendarMode" aria-label="Calendar view">
+              <option value="month">Month</option>
+              <option value="week">Week</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="eventsContent" class="events-content" aria-live="polite"></div>
+      </section>
+      <p class="prototype-note">Design concept · Sample event information</p>
+    </main>
+  </div>
+  <script>
+    const events = [
+      { id: "linkedin-learning-reset", title: "LinkedIn Learning Champion: Tips to Reset an Overwhelming Day", date: "2026-10-30", start: "12:00", end: "13:00", location: "Online (Zoom)", attendees: 10, rsvp: "Pending", image: "../../company&culture/assets/images/team-meeting.jpg", imageAlt: "Colleagues collaborating at a team meeting", description: "Join our next LinkedIn Learning Champion session and explore practical ways to reset when a day feels overwhelming. Review the short course before the event, then bring one strategy or question to discuss with the group. You'll leave with ideas you can try in your own workday.", organizer: "Learning & Development", topics: ["Learning", "Wellbeing", "Professional development"] },
+      { id: "feedingnyc-volunteer", title: "FeedingNYC Is Back! Help Pack Thanksgiving Meals", date: "2026-11-23", start: "08:30", end: "11:30", location: "New York, NY", attendees: 18, rsvp: "Yes", image: "../../company&culture/assets/images/fall-volunteer-day.jpg", imageAlt: "Colleagues volunteering together outdoors", description: "Join colleagues to pack Thanksgiving meals with FeedingNYC. Volunteers will organize supplies, prepare meal boxes, and work together to support local families ahead of the holiday. All volunteers are welcome; please arrive ready to take part in hands-on activities.", organizer: "Community Investment", topics: ["Community", "Volunteer"] },
+      { id: "cornerstone-leadership-summit", title: "Cornerstone Leadership Summit", date: "2026-11-09", endDate: "2026-11-11", dailySchedule: true, start: "09:00", end: "17:00", location: "Main Office", attendees: 36, rsvp: "Pending", image: "../../company&culture/assets/images/team-meeting.jpg", imageAlt: "Colleagues collaborating at a team meeting", description: "Join colleagues for a three-day leadership summit focused on collaboration, shared priorities, and planning for the year ahead.\n\nThe summit runs Monday, November 9 through Wednesday, November 11, with sessions scheduled from 9:00 AM to 5:00 PM each day. Join us at the Main Office for workshops, team discussions, and planning sessions.", organizer: "Corporate Functions", topics: ["Leadership", "Planning", "Team meeting"] },
+      { id: "september-town-hall", title: "September Town Hall", date: "2026-09-29", start: "16:30", end: "17:00", location: "Online", attendees: 42, rsvp: "Yes", image: "../../company&culture/assets/images/team-meeting.jpg", imageAlt: "Colleagues collaborating at a team meeting", description: "Catch up on company updates and hear brief highlights from teams across L+M. The town hall will also include time for questions, so bring a topic you'd like leaders to address. Join online a few minutes early to get settled.", organizer: "Corporate Functions", topics: ["Company updates", "Community"] },
+      { id: "employee-inclusion-survey", title: "Employee Inclusion Survey | All Employees – Respond by Oct 14 – Deadline Extended", date: "2026-10-05", endDate: "2026-10-14", allDay: true, rsvpRequired: false, start: "00:00", end: "23:59", location: "Online", attendees: 0, rsvp: "Pending", image: "../../company&culture/assets/images/company-guide-toc.jpg", imageAlt: "Company guide and resources", description: "Share your perspective in the company-wide Employee Inclusion Survey. All employees are encouraged to participate during the response window.\n\nThe survey is open from Monday, October 5 through Wednesday, October 14. It is available online and should take only a few minutes to complete.", organizer: "People Team", topics: ["Company updates", "People"] },
+      { id: "weekly-connect", title: "Cornerstone Weekly Connect", date: "2026-10-13", start: "09:30", end: "10:00", location: "Online", attendees: 8, rsvp: "Maybe", image: "../../company&culture/assets/images/office-team.jpg", imageAlt: "Colleagues meeting together at the office", description: "Take a short break to connect with colleagues and hear what's happening across Cornerstone this week. Share a quick update, celebrate a team win, or bring up something others should know. Everyone is welcome to join the conversation.", organizer: "Cornerstone Events", topics: ["Community", "Company updates"] },
+      { id: "benefits-open-enrollment", title: "Benefits Open Enrollment Q&A", date: "2026-10-13", start: "10:00", end: "10:45", location: "Online", attendees: 16, rsvp: "Pending", image: "../../company&culture/assets/images/company-guide-toc.jpg", imageAlt: "Company guide and resources", description: "Get answers to your benefits questions and learn what to consider during open enrollment. The People Team will walk through available resources and common decision points, then leave time for questions.\n\nBring any topics you'd like clarified. Review the benefits guide before the session so you can make the most of the Q&A.\n\nWe'll also discuss where to find plan comparisons, how to review coverage for the year ahead, and which support resources are available after the session. Please avoid sharing personal health or benefits details in the group Q&A.", registrationUrl: "https://example.com/events/benefits-open-enrollment", organizer: "People Team", topics: ["Benefits", "Q&A"] },
+      { id: "wellbeing-checkin", title: "Midweek Wellbeing Check-In", date: "2026-10-13", start: "11:00", end: "11:30", location: "Online", attendees: 11, rsvp: "Pending", image: "../../company&culture/assets/images/team-meeting.jpg", imageAlt: "Colleagues collaborating at a team meeting", description: "Pause with colleagues for a supportive midweek check-in about wellbeing at work. We'll share practical habits, discuss ways to make busy weeks more manageable, and exchange ideas that have worked for our teams. Participation is informal and sharing is optional.", organizer: "People Team", topics: ["Wellbeing", "Community"] },
+      { id: "lunch-learn", title: "Lunch & Learn: Building Better Habits", date: "2026-10-13", start: "12:00", end: "13:00", location: "Main Office", attendees: 22, rsvp: "Yes", image: "../../company&culture/assets/images/meet-the-teams-comms-marketing.jpg", imageAlt: "Colleagues sharing ideas in a workshop", description: "Bring your lunch for an informal learning session about small habits that can make work easier and more focused. We'll look at simple ways to build routines, share examples, and leave time to discuss ideas with colleagues. No preparation is required.", organizer: "Learning & Development", topics: ["Learning", "Professional development"] },
+      { id: "people-team-office-hours", title: "People Team Office Hours", date: "2026-10-13", start: "14:00", end: "14:30", location: "Online", attendees: 6, rsvp: "Maybe", image: "../../company&culture/assets/images/office-team.jpg", imageAlt: "Colleagues meeting together at the office", description: "Drop in for an informal conversation with the People Team. Ask a question, get pointed to a useful policy or resource, or raise a topic you'd like help navigating. You can join for the full session or just the time you need.", organizer: "People Team", topics: ["People", "Q&A"] },
+      { id: "property-operations-standup", title: "Property Operations Team Stand-Up", date: "2026-10-14", start: "09:00", end: "09:30", location: "Conference Room 4A", attendees: 12, rsvp: "Yes", image: "../../company&culture/assets/images/meet-the-teams-building-envelope.jpg", imageAlt: "Property operations team", description: "Start the day with a focused operations check-in. Share site updates, coordinate priorities, flag issues that need support, and confirm next steps for the week. Team members can bring brief updates or questions for the group.", organizer: "Property Operations", topics: ["Operations", "Team meeting"] },
+      { id: "community-investment-briefing", title: "Community Investment Volunteer Briefing", date: "2026-10-15", start: "13:00", end: "14:00", location: "Online", attendees: 9, rsvp: "Maybe", image: "../../company&culture/assets/images/fulton-park-book-bags.jpg", imageAlt: "Community volunteers preparing supplies", description: "Meet the Community Investment team and learn about upcoming volunteer opportunities. We'll share the goals of each activity, explain how to get involved, and answer questions about scheduling and participation. Join to find a project that interests you.", organizer: "Community Investment", topics: ["Community", "Volunteer"] },
+      { id: "new-hire-welcome", title: "New Hire Welcome and Orientation", date: "2026-10-16", start: "11:00", end: "12:00", location: "Main Office", attendees: 7, rsvp: "Pending", image: "../../company&culture/assets/images/welcome-september-new-hires.jpg", imageAlt: "New colleagues being welcomed to the team", description: "Help welcome our newest colleagues to L+M. This session introduces the people, teams, and resources that can help new hires get started, with time to meet coworkers and ask questions. All colleagues are welcome to join and say hello.", organizer: "People Team", topics: ["New hires", "Welcome"] },
+      { id: "site-family-day", title: "Saturday Site Family Day", date: "2026-10-17", start: "10:30", end: "12:30", location: "River Crossing", attendees: 24, rsvp: "Yes", image: "../../company&culture/assets/images/river-crossing-family-day.jpg", imageAlt: "Colleagues and families at a community event", description: "Bring family and friends for a relaxed day at River Crossing. Enjoy activities, spend time with colleagues outside the workday, and connect with the local community. More event-day information will be shared with attendees closer to the date.", organizer: "Site Team", topics: ["Community", "Families"] },
+      { id: "community-garden-day", title: "Sunday Community Garden Volunteer Day", date: "2026-10-18", start: "09:00", end: "11:00", location: "Saratoga", attendees: 14, rsvp: "No", image: "../../company&culture/assets/images/outdoor-event.jpg", imageAlt: "Colleagues volunteering outdoors", description: "Spend the morning helping care for the community garden and connecting with fellow volunteers. The group will work together on seasonal garden tasks and help keep the space welcoming for the neighborhood. Wear comfortable clothes suitable for outdoor work.", organizer: "Community Investment", topics: ["Community", "Volunteer"] },
+    ];
+    events.forEach((event) => {
+      event.rsvp = localStorage.getItem(`event-rsvp-${event.id}`) || event.rsvp;
+      event.authors = event.id === "benefits-open-enrollment"
+        ? ["Destiny Tucker", "Belinda Apprey", "Jordan Lee"]
+        : ["Destiny Tucker", "Belinda Apprey"];
+      event.published = "Published Jun 18, 2025";
+      event.edited = "Edited Jun 20, 2025";
+    });
+    const searchInput = document.getElementById("searchInput");
+    const content = document.getElementById("eventsContent");
+    const filterToggle = document.getElementById("filterToggle");
+    const filterPanel = document.getElementById("filterPanel");
+    const calendarToolbar = document.getElementById("calendarToolbar");
+    const calendarMode = document.getElementById("calendarMode");
+    const periodTitle = document.getElementById("periodTitle");
+    const state = {
+      view: new URLSearchParams(location.search).get("view") === "list" ? "list" : "calendar",
+      dateFilter: new URLSearchParams(location.search).get("date") || "all",
+      day: new URLSearchParams(location.search).get("day") || "",
+      query: new URLSearchParams(location.search).get("q") || "",
+      rsvps: new URLSearchParams(location.search).getAll("rsvp"),
+      month: new Date(2026, 9, 13),
+      calendarMode: new URLSearchParams(location.search).get("calendar") === "week" ? "week" : "month",
+    };
+    const today = new Date(2026, 9, 13);
+    const dateOf = (value) => new Date(`${value}T12:00:00`);
+    const pad = (value) => String(value).padStart(2, "0");
+    const formatTime = (value) => {
+      const [hours, minutes] = value.split(":").map(Number);
+      return new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(new Date(2026, 0, 1, hours, minutes));
+    };
+    const formatDate = (value, options = { weekday: "short", month: "short", day: "numeric", year: "numeric" }) =>
+      new Intl.DateTimeFormat("en-US", options).format(dateOf(value));
+    const formatEventDateTime = (event, options = { weekday: "long", month: "long", day: "numeric", year: "numeric" }) => {
+      const endDate = event.endDate || event.date;
+      if (event.allDay) {
+        const dates = event.date === endDate
+          ? formatDate(event.date, options)
+          : `${formatDate(event.date, options)} – ${formatDate(endDate, options)}`;
+        return `${dates} · All day`;
+      }
+      const start = `${formatDate(event.date, options)} ${formatTime(event.start)}`;
+      const end = `${formatDate(endDate, options)} ${formatTime(event.end)}`;
+      if (event.dailySchedule) {
+        return `${formatDate(event.date, options)} – ${formatDate(endDate, options)} · Daily, ${formatTime(event.start)}–${formatTime(event.end)}`;
+      }
+      return event.date === endDate
+        ? `${formatDate(event.date, options)} · ${formatTime(event.start)}–${formatTime(event.end)}`
+        : `${start} – ${end}`;
+    };
+    const maxVisibleEventsPerDay = 2;
+    const eventCoversDate = (event, date) => event.date <= date && (event.endDate || event.date) >= date;
+    const isMultiDayEvent = (event) => Boolean(event.endDate && event.endDate > event.date);
+    const organizerInitials = (organizer) => organizer.split(/[\s&]+/).filter(Boolean).map((part) => part[0]).slice(0, 2).join("").toUpperCase();
+    const locationMarkup = (location) => {
+      const escapedLocation = location.replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      })[character]);
+      if (!/\bonline\b/i.test(location)) return escapedLocation;
+      const zoomLink = '<a href="https://zoom.us/" target="_blank" rel="noopener noreferrer" aria-label="Visit the official Zoom website">https://zoom.us/</a>';
+      return /\bzoom\b/i.test(location)
+        ? escapedLocation.replace(/\bzoom\b/i, zoomLink)
+        : `${escapedLocation} · ${zoomLink}`;
+    };
+    const authorPictureRequests = new Map();
+    const loadAuthorPictures = (event) => {
+      if (!authorPictureRequests.has(event.id)) {
+        const request = (async () => {
+          const url = new URL("https://randomuser.me/api/");
+          url.searchParams.set("results", String(event.authors.length));
+          url.searchParams.set("inc", "picture");
+          url.searchParams.set("noinfo", "");
+          url.searchParams.set("seed", `cornerstone-authors-${event.id}`);
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`Random User API returned HTTP ${response.status}`);
+          const payload = await response.json();
+          if (!Array.isArray(payload.results) || payload.results.length < event.authors.length) {
+            throw new Error("Random User API returned an incomplete author profile list");
+          }
+          return payload.results.map((profile) => {
+            const picture = profile.picture?.thumbnail;
+            if (typeof picture !== "string") throw new Error("Random User API returned an invalid author photo");
+            return picture;
+          });
+        })();
+        authorPictureRequests.set(event.id, request);
+      }
+      return authorPictureRequests.get(event.id);
+    };
+    const renderEventDescription = (container, event) => {
+      container.replaceChildren(...event.description.split(/\n\n+/).map((paragraph) => {
+        const element = document.createElement("p");
+        element.textContent = paragraph;
+        return element;
+      }));
+      if (!event.registrationUrl) return;
+      const registration = document.createElement("div");
+      registration.className = "event-preview-registration";
+      const prompt = document.createElement("strong");
+      prompt.textContent = "Register in advance for the meeting here:";
+      const link = document.createElement("a");
+      link.href = event.registrationUrl;
+      link.textContent = event.registrationUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      registration.append(prompt, document.createElement("br"), link);
+      container.after(registration);
+    };
+    const sortedEvents = [...events].sort((a, b) => `${a.date}T${a.start}`.localeCompare(`${b.date}T${b.start}`));
+    const eventHref = (event) => `event-detail.html?id=${encodeURIComponent(event.id)}&from=${encodeURIComponent(`index.html${location.search}`)}`;
+    const dayListHref = (date) => `index.html?view=list&day=${encodeURIComponent(date)}`;
+    let activePreviewTrigger = null;
+    const closeEventPreview = () => {
+      document.querySelector(".event-preview")?.remove();
+      if (activePreviewTrigger?.isConnected) activePreviewTrigger.focus({ preventScroll: true });
+      activePreviewTrigger = null;
+    };
+    const openEventPreview = (event, trigger) => {
+      closeEventPreview();
+      activePreviewTrigger = trigger;
+      const preview = document.createElement("section");
+      preview.className = "event-preview";
+      preview.setAttribute("role", "dialog");
+      preview.setAttribute("aria-label", `${event.title} preview`);
+      preview.innerHTML = `
+        <button class="event-preview-close" type="button" aria-label="Close event preview"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="m3 3 6 6M9 3 3 9"/></svg></button>
+        <div class="event-preview-body">
+          <div class="event-preview-heading">
+            <div class="event-preview-date"><span></span><strong></strong></div>
+            <a class="event-preview-title"></a>
+          </div>
+          <div class="event-preview-meta">
+            <div class="event-preview-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              <span class="event-preview-date-time"></span>
+            </div>
+            <div class="event-preview-meta-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              <span class="event-preview-location"></span>
+            </div>
+            <div class="event-preview-meta-row event-preview-attendance-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19v-1.5a5.5 5.5 0 0 1 11 0V19ZM16 5.5a3 3 0 0 1 0 5.8M17 14a4.5 4.5 0 0 1 3.5 4.4V19"/></svg>
+              <span class="event-preview-attendees"></span>
+            </div>
+          </div>
+          <div class="event-preview-description"></div>
+          <div class="event-preview-people">
+            <div class="event-preview-authors"></div>
+          </div>
+        </div>
+        <div class="event-preview-footer"><a href="${eventHref(event)}">View details</a></div>`;
+      document.body.append(preview);
+      preview.querySelector(".event-preview-date span").textContent = formatDate(event.date, { month: "short" });
+      preview.querySelector(".event-preview-date strong").textContent = dateOf(event.date).getDate();
+      const titleLink = preview.querySelector(".event-preview-title");
+      titleLink.href = eventHref(event);
+      titleLink.textContent = event.title;
+      preview.querySelector(".event-preview-date-time").textContent = formatEventDateTime(event);
+      preview.querySelector(".event-preview-location").innerHTML = locationMarkup(event.location);
+      preview.querySelector(".event-preview-attendees").textContent = `${event.attendees} attending`;
+      preview.querySelector(".event-preview-attendance-row").hidden = Boolean(event.allDay);
+      renderEventDescription(preview.querySelector(".event-preview-description"), event);
+      const authors = preview.querySelector(".event-preview-authors");
+      event.authors.forEach((author, index) => {
+        const person = document.createElement("div");
+        person.className = "event-preview-person-row";
+        const userIcon = index === 0
+          ? '<svg class="event-preview-person-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>'
+          : '<span aria-hidden="true"></span>';
+        person.innerHTML = `${userIcon}<span class="event-preview-person-avatar" aria-hidden="true"></span><div><small>Author</small><strong></strong></div>`;
+        person.querySelector(".event-preview-person-avatar").textContent = organizerInitials(author);
+        person.querySelector("strong").textContent = author;
+        authors.append(person);
+      });
+      loadAuthorPictures(event).then((pictures) => {
+        if (!preview.isConnected) return;
+        preview.querySelectorAll(".event-preview-person-avatar").forEach((avatar, index) => {
+          const image = document.createElement("img");
+          image.src = pictures[index];
+          image.alt = "";
+          image.addEventListener("error", () => image.remove(), { once: true });
+          avatar.append(image);
+        });
+      }).catch((error) => {
+        console.error("Unable to load sample author photos.", error);
+      });
+      preview.querySelector(".event-preview-registration")?.remove();
+      const triggerRect = trigger.getBoundingClientRect();
+      const previewRect = preview.getBoundingClientRect();
+      const left = Math.max(12, Math.min(triggerRect.left, window.innerWidth - previewRect.width - 12));
+      const below = triggerRect.bottom + 8;
+      const top = below + previewRect.height <= window.innerHeight - 12
+        ? below
+        : Math.max(12, triggerRect.top - previewRect.height - 8);
+      preview.style.left = `${left}px`;
+      preview.style.top = `${top}px`;
+      preview.querySelector(".event-preview-close").addEventListener("click", closeEventPreview);
+      preview.querySelector(".event-preview-close").focus();
+    };
+    content.addEventListener("click", (clickEvent) => {
+      const trigger = clickEvent.target.closest(".calendar-event, .multi-day-event, .week-event");
+      if (!trigger) return;
+      clickEvent.preventDefault();
+      const eventId = new URL(trigger.href).searchParams.get("id");
+      const selectedEvent = events.find((event) => event.id === eventId);
+      if (!selectedEvent) return;
+      openEventPreview(selectedEvent, trigger);
+    });
+    document.addEventListener("click", (clickEvent) => {
+      if (!document.querySelector(".event-preview")) return;
+      if (clickEvent.target.closest(".event-preview, .calendar-event, .multi-day-event, .week-event")) return;
+      closeEventPreview();
+    });
+    document.addEventListener("keydown", (keyEvent) => {
+      if (keyEvent.key === "Escape" && document.querySelector(".event-preview")) closeEventPreview();
+    });
+    const syncUrl = () => {
+      const params = new URLSearchParams();
+      if (state.view !== "list" || state.day) params.set("view", state.view);
+      if (state.dateFilter !== "all") params.set("date", state.dateFilter);
+      if (state.day && state.view === "list") params.set("day", state.day);
+      if (state.query) params.set("q", state.query);
+      state.rsvps.forEach((rsvp) => params.append("rsvp", rsvp));
+      if (state.view === "calendar") {
+        params.set("calendar", state.calendarMode);
+        if (state.calendarMode === "week") {
+          params.set("week", `${state.month.getFullYear()}-${pad(state.month.getMonth() + 1)}-${pad(state.month.getDate())}`);
+        } else {
+          params.set("month", `${state.month.getFullYear()}-${pad(state.month.getMonth() + 1)}`);
+        }
+      }
+      history.replaceState(null, "", `${location.pathname}${params.size ? `?${params}` : ""}`);
+    };
+    const filteredEvents = () => sortedEvents.filter((event) => {
+      const matchesQuery = `${event.title} ${event.location} ${event.topics.join(" ")}`.toLowerCase().includes(state.query.toLowerCase());
+      const matchesDate = state.dateFilter === "all" || (state.dateFilter === "future" ? dateOf(event.endDate || event.date) >= today : dateOf(event.endDate || event.date) < today);
+      const matchesDay = !state.day || eventCoversDate(event, state.day);
+      const matchesRsvp = !state.rsvps.length || state.rsvps.includes(event.rsvp);
+      return matchesQuery && matchesDate && matchesDay && matchesRsvp;
+    });
+    const dateTile = (event) => `<div class="date-tile" aria-label="${formatDate(event.date)}"><span class="date-month">${formatDate(event.date, { month: "short" })}</span><span class="date-day">${dateOf(event.date).getDate()}</span></div>`;
+    const renderList = () => {
+      const items = filteredEvents();
+      if (!items.length) {
+        content.innerHTML = `<div class="empty-state"><strong>No events found</strong>Try another search or clear your filters.</div>`;
+        return;
+      }
+      content.innerHTML = `<div class="event-list">${items.map((event) => `
+        <article class="event-row">
+          ${dateTile(event)}
+          <div class="event-copy">
+            <h3 class="event-title"><a href="${eventHref(event)}">${event.title}</a></h3>
+            <div class="event-details"><span>${formatEventDateTime(event, { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span><span>${locationMarkup(event.location)}</span>${event.allDay ? "" : `<span>${event.attendees} attending</span>`}</div>
+          </div>
+        </article>`).join("")}</div>`;
+    };
+    const renderMonth = () => {
+      const year = state.month.getFullYear();
+      const month = state.month.getMonth();
+      periodTitle.textContent = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(state.month);
+      const first = new Date(year, month, 1);
+      const start = new Date(year, month, 1 - ((first.getDay() + 6) % 7));
+      const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      const weeks = [];
+      const visibleEvents = filteredEvents();
+      for (let week = 0; week < 6; week += 1) {
+        const days = Array.from({ length: 7 }, (_, dayIndex) => {
+          const day = new Date(start);
+          day.setDate(start.getDate() + week * 7 + dayIndex);
+          return day;
+        });
+        const dates = days.map((day) => `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`);
+        const multiDayEvents = visibleEvents.filter((event) => isMultiDayEvent(event) && dates.some((date) => eventCoversDate(event, date)));
+        const lanes = [];
+        const bars = multiDayEvents.map((event) => {
+          const firstDay = Math.max(0, dates.findIndex((date) => eventCoversDate(event, date)));
+          let lastDay = firstDay;
+          for (let index = firstDay; index < dates.length && eventCoversDate(event, dates[index]); index += 1) lastDay = index;
+          let lane = lanes.findIndex((laneEnd) => laneEnd < firstDay);
+          if (lane === -1) lane = lanes.length;
+          lanes[lane] = lastDay;
+          const left = (firstDay / 7) * 100;
+          const width = ((lastDay - firstDay + 1) / 7) * 100;
+          const label = event.allDay
+            ? `All day · ${event.title}`
+            : `${formatTime(event.start)}–${formatTime(event.end)}${event.dailySchedule ? " daily" : ""} · ${event.title}`;
+          return `<a class="multi-day-event" href="${eventHref(event)}" title="${formatEventDateTime(event)} · ${event.title}" style="left:${left}%;width:${width}%;top:${31 + lane * 20}px">${label}</a>`;
+        }).join("");
+        const cells = days.map((day, dayIndex) => {
+          const dateString = dates[dayIndex];
+          const dayEvents = visibleEvents.filter((event) => !isMultiDayEvent(event) && eventCoversDate(event, dateString));
+          const shownEvents = dayEvents.slice(0, maxVisibleEventsPerDay);
+          const moreLink = dayEvents.length > shownEvents.length ? `<a class="calendar-more" href="${dayListHref(dateString)}">+${dayEvents.length - shownEvents.length} more</a>` : "";
+          return `<div class="day-cell${day.getMonth() !== month ? " outside" : ""}${dateString === "2026-10-13" ? " today" : ""}"><span class="day-number">${day.getDate()}</span>${shownEvents.map((event) => `<a class="calendar-event" href="${eventHref(event)}" title="${formatEventDateTime(event)} · ${event.title}">${event.allDay ? "All day" : `${formatTime(event.start)}–${formatTime(event.end)}`} ${event.title}</a>`).join("")}${moreLink}</div>`;
+        }).join("");
+        weeks.push(`<div class="month-week" style="--multi-day-lanes:${lanes.length}">${cells}${bars}</div>`);
+      }
+      content.innerHTML = `<div class="month-grid">${weekdays.map((day) => `<div class="weekday">${day}</div>`).join("")}${weeks.join("")}</div>`;
+    };
+    const renderWeek = () => {
+      const dayOfWeek = (state.month.getDay() + 6) % 7;
+      const monday = new Date(state.month);
+      monday.setDate(state.month.getDate() - dayOfWeek);
+      const weekDays = Array.from({ length: 7 }, (_, index) => {
+        const day = new Date(monday);
+        day.setDate(monday.getDate() + index);
+        return day;
+      });
+      periodTitle.textContent = `${formatDate(`${weekDays[0].getFullYear()}-${pad(weekDays[0].getMonth() + 1)}-${pad(weekDays[0].getDate())}`, { month: "short", day: "numeric" })} – ${formatDate(`${weekDays[6].getFullYear()}-${pad(weekDays[6].getMonth() + 1)}-${pad(weekDays[6].getDate())}`, { month: "short", day: "numeric", year: "numeric" })}`;
+      const rows = [];
+      const eventsByDay = weekDays.map((day) => {
+        const date = `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
+        return { date, events: filteredEvents().filter((event) => eventCoversDate(event, date)) };
+      });
+      const weekDates = eventsByDay.map(({ date }) => date);
+      const multiDayEvents = filteredEvents().filter((event) => event.allDay && isMultiDayEvent(event) && weekDates.some((date) => eventCoversDate(event, date)));
+      const allDayLanes = [];
+      const multiDayBars = multiDayEvents.map((event) => {
+        const firstDay = Math.max(0, weekDates.findIndex((date) => eventCoversDate(event, date)));
+        let lastDay = firstDay;
+        for (let index = firstDay; index < weekDates.length && eventCoversDate(event, weekDates[index]); index += 1) lastDay = index;
+        let lane = allDayLanes.findIndex((laneEnd) => laneEnd < firstDay);
+        if (lane === -1) lane = allDayLanes.length;
+        allDayLanes[lane] = lastDay;
+        const daySpan = lastDay - firstDay + 1;
+        const left = `calc(52px + (100% - 52px) * ${firstDay / 7})`;
+        const width = `calc((100% - 52px) * ${daySpan / 7})`;
+        return `<a class="week-all-day-event week-event" href="${eventHref(event)}" title="${formatEventDateTime(event)} · ${event.title}" style="left:${left};width:${width};top:${2 + lane * 20}px">${event.title}</a>`;
+      });
+      const allDayCells = eventsByDay.map(({ date, events: dayEvents }) => {
+        const singleDayEvents = dayEvents.filter((event) => event.allDay && !isMultiDayEvent(event));
+        const shownAllDayEvents = singleDayEvents.slice(0, maxVisibleEventsPerDay);
+        const moreAllDay = singleDayEvents.length > shownAllDayEvents.length
+          ? `<a class="week-more" href="${dayListHref(date)}">+${singleDayEvents.length - shownAllDayEvents.length} more</a>`
+          : "";
+        return `<div class="week-all-day-cell">${shownAllDayEvents.map((event) => `<a class="week-all-day-event week-event" href="${eventHref(event)}" title="${formatEventDateTime(event)} · ${event.title}">${event.title}</a>`).join("")}${moreAllDay}</div>`;
+      }).join("");
+      rows.push(`<div class="week-grid week-all-day-row" style="--multi-day-lanes:${allDayLanes.length}"><div class="week-all-day-time">All day</div>${allDayCells}${multiDayBars}</div>`);
+      for (let hour = 0; hour < 24; hour += 1) {
+        rows.push(`<div class="week-time">${new Intl.DateTimeFormat("en-US", { hour: "numeric" }).format(new Date(2026, 0, 1, hour))}</div>`);
+        eventsByDay.forEach(({ date, events: dayEvents }) => {
+          const timedEvents = dayEvents.filter((event) => !event.allDay);
+          const visibleEvents = timedEvents.slice(0, maxVisibleEventsPerDay);
+          const eventsAtHour = visibleEvents.filter((event) => Number(event.start.slice(0, 2)) === hour);
+          const showMore = timedEvents.length > maxVisibleEventsPerDay && visibleEvents.length && Number(visibleEvents[visibleEvents.length - 1].start.slice(0, 2)) === hour;
+          const more = showMore ? `<a class="week-more" href="${dayListHref(date)}">+${timedEvents.length - visibleEvents.length} more</a>` : "";
+          rows.push(`<div class="week-cell${eventsAtHour.some(isMultiDayEvent) ? " week-cell-has-multi-day" : ""}">${eventsAtHour.map((event) => {
+            const durationMinutes = Number(event.end.slice(0, 2)) * 60 + Number(event.end.slice(3)) - (Number(event.start.slice(0, 2)) * 60 + Number(event.start.slice(3)));
+            const durationHeight = Math.max(18, (durationMinutes / 60) * 42 - 6);
+            const multiDayStyle = isMultiDayEvent(event) ? ` week-multi-day-timed-event" style="height:${durationHeight}px` : "";
+            return `<a class="week-event${multiDayStyle}" href="${eventHref(event)}" title="${formatEventDateTime(event)}">${formatTime(event.start)}–${formatTime(event.end)} ${event.title}</a>`;
+          }).join("")}${more}</div>`);
+        });
+      }
+      content.innerHTML = `<div class="week-scroll"><div class="week-grid week-head"><div></div>${weekDays.map((day) => `<div>${new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(day)}<strong>${day.getDate()}</strong></div>`).join("")}</div><div class="week-grid">${rows.join("")}</div></div>`;
+    };
+    const render = () => {
+      syncUrl();
+      document.querySelectorAll("[data-view]").forEach((button) => {
+        const selected = button.dataset.view === state.view;
+        button.classList.toggle("active", selected);
+        button.setAttribute("aria-pressed", String(selected));
+      });
+      calendarToolbar.hidden = state.view !== "calendar";
+      document.getElementById("calendarShortcut").hidden = state.view === "calendar";
+      if (state.view === "list") renderList();
+      else if (state.calendarMode === "week") renderWeek();
+      else renderMonth();
+      const count = state.rsvps.length + (state.dateFilter !== "all" ? 1 : 0);
+      document.getElementById("filterCount").hidden = count === 0;
+      document.getElementById("filterCount").textContent = count;
+    };
+    const initialParams = new URLSearchParams(location.search);
+    const monthParam = initialParams.get("month");
+    const weekParam = initialParams.get("week");
+    if (monthParam && /^\d{4}-\d{2}$/.test(monthParam)) {
+      const [year, month] = monthParam.split("-").map(Number);
+      state.month = new Date(year, month - 1, 13);
+    }
+    if (weekParam && /^\d{4}-\d{2}-\d{2}$/.test(weekParam)) {
+      const [year, month, day] = weekParam.split("-").map(Number);
+      state.month = new Date(year, month - 1, day);
+    }
+    searchInput.value = state.query;
+    document.querySelectorAll('input[name="dateFilter"]').forEach((radio) => { radio.checked = radio.value === state.dateFilter; });
+    document.querySelectorAll('input[name="rsvpFilter"]').forEach((checkbox) => { checkbox.checked = state.rsvps.includes(checkbox.value); });
+    calendarMode.value = state.calendarMode;
+    document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => { state.view = button.dataset.view; render(); }));
+    document.getElementById("calendarShortcut").addEventListener("click", (event) => {
+      event.preventDefault();
+      state.view = "calendar";
+      render();
+    });
+    searchInput.addEventListener("input", () => { state.query = searchInput.value.trim(); render(); });
+    filterToggle.addEventListener("click", () => {
+      const open = filterPanel.hidden;
+      filterPanel.hidden = !open;
+      filterToggle.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".filter-wrap")) {
+        filterPanel.hidden = true;
+        filterToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+    document.querySelectorAll('input[name="dateFilter"]').forEach((radio) => radio.addEventListener("change", () => { state.dateFilter = radio.value; render(); }));
+    document.querySelectorAll('input[name="rsvpFilter"]').forEach((checkbox) => checkbox.addEventListener("change", () => {
+      state.rsvps = [...document.querySelectorAll('input[name="rsvpFilter"]:checked')].map((item) => item.value);
+      render();
+    }));
+    document.getElementById("clearFilters").addEventListener("click", () => {
+      state.dateFilter = "all";
+      state.rsvps = [];
+      document.querySelector('input[name="dateFilter"][value="all"]').checked = true;
+      document.querySelectorAll('input[name="rsvpFilter"]').forEach((checkbox) => { checkbox.checked = false; });
+      render();
+    });
+    calendarMode.addEventListener("change", () => { state.calendarMode = calendarMode.value; render(); });
+    document.getElementById("previousPeriod").addEventListener("click", () => {
+      state.month = new Date(state.month.getFullYear(), state.month.getMonth() - (state.calendarMode === "week" ? 0 : 1), state.month.getDate() - (state.calendarMode === "week" ? 7 : 0));
+      render();
+    });
+    document.getElementById("nextPeriod").addEventListener("click", () => {
+      state.month = new Date(state.month.getFullYear(), state.month.getMonth() + (state.calendarMode === "week" ? 0 : 1), state.month.getDate() + (state.calendarMode === "week" ? 7 : 0));
+      render();
+    });
+    document.getElementById("todayButton").addEventListener("click", () => { state.month = new Date(2026, 9, 13); render(); });
+    document.addEventListener("keydown", (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        searchInput.focus();
+      }
+    });
+    render();
+  </script>
+</body>
+</html>

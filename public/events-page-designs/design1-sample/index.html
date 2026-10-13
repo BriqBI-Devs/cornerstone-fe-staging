@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Events | Cornerstone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1b2a3a;
+      --link: #1d4ed8;
+      --accent: #f5c518;
+      --muted: #657181;
+      --border: #e5e5e0;
+      --surface-subtle: #f7f7f5;
+      --radius: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #fff;
+      color: var(--navy);
+      font-family: "Inter", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select { font: inherit; }
+    button, select { color: inherit; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--link);
+      outline-offset: 2px;
+    }
+    [hidden] { display: none !important; }
+
+    .page { width: min(100% - 48px, 1140px); margin: 28px auto 64px; }
+    .events-shell { border: 1px solid var(--border); border-radius: var(--radius); background: #fff; }
+    .topbar { display: flex; min-height: 58px; align-items: center; justify-content: space-between; gap: 20px; padding: 0 22px; border-bottom: 1px solid var(--border); }
+    .topbar h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.025em; }
+    .view-tools { display: flex; align-items: center; gap: 8px; }
+    .view-switch { display: inline-flex; overflow: hidden; border: 1px solid #cfd4da; border-radius: 5px; }
+    .icon-button {
+      display: inline-flex;
+      width: 38px;
+      height: 34px;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      background: #fff;
+      cursor: pointer;
+    }
+    .icon-button + .icon-button { border-left: 1px solid #cfd4da; }
+    .icon-button[aria-pressed="true"] { color: var(--link); background: #f7faff; box-shadow: inset 0 0 0 1px var(--link); }
+    .icon-button svg, .filter-button svg, .search-wrap svg { width: 16px; height: 16px; }
+
+    .controls { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 22px; }
+    .search-and-filter { display: flex; flex: 1; align-items: center; gap: 10px; }
+    .search-wrap { display: flex; width: min(280px, 52vw); height: 36px; align-items: center; border: 1px solid #aeb6bf; border-radius: 5px; background: #fff; }
+    .search-wrap input { width: 100%; min-width: 0; height: 100%; padding: 0 10px; border: 0; border-radius: inherit; outline: 0; font-size: 12px; }
+    .search-wrap:focus-within { outline: 2px solid var(--link); outline-offset: 2px; }
+    .search-wrap svg { margin: 0 10px; flex: 0 0 auto; color: var(--muted); }
+    .filter-area { position: relative; }
+    .filter-button, .plain-button, .select-button {
+      display: inline-flex;
+      min-height: 34px;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 11px;
+      border: 1px solid #aeb6bf;
+      border-radius: 5px;
+      background: #fff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .filter-button:hover, .plain-button:hover, .select-button:hover { background: var(--surface-subtle); }
+    .filter-button.is-active { border-color: var(--navy); background: var(--navy); color: #fff; }
+    .count { display: inline-grid; min-width: 18px; height: 18px; place-items: center; padding: 0 5px; border-radius: 999px; background: #fff; color: var(--navy); font-size: 10px; font-weight: 700; }
+
+    .calendar-toolbar { display: flex; min-height: 48px; align-items: center; gap: 10px; padding: 0 22px 12px; }
+    .date-nav { display: flex; align-items: center; gap: 8px; }
+    .round-button { display: inline-grid; width: 30px; height: 30px; place-items: center; border: 1px solid #aeb6bf; border-radius: 50%; background: #fff; cursor: pointer; }
+    .round-button:hover { border-color: var(--link); color: var(--link); }
+    .round-button svg { width: 14px; height: 14px; }
+    .date-title { margin: 0 0 0 2px; font-size: 15px; font-weight: 600; }
+    .toolbar-spacer { flex: 1; }
+    .select-button { min-width: 92px; justify-content: space-between; }
+
+    .list-view { padding: 0 22px 22px; }
+    .crumb { display: inline-block; margin: 0 0 10px; padding-bottom: 9px; border-bottom: 1px solid var(--border); color: var(--link); font-size: 12px; font-weight: 600; }
+    .event-list { border-top: 1px solid var(--border); }
+    .event-row { display: flex; align-items: center; gap: 14px; padding: 14px 6px; border-bottom: 1px solid var(--border); }
+    .date-tile { overflow: hidden; width: 44px; border: 1px solid #dce2e8; border-radius: 4px; text-align: center; }
+    .date-tile .month { display: block; padding: 3px 2px; background: var(--link); color: #fff; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .date-tile .day { display: block; padding: 2px 0 3px; font-size: 20px; font-weight: 500; line-height: 1.1; }
+    .event-content { min-width: 0; }
+    .event-title { margin: 0; color: var(--navy); font-size: 14px; font-weight: 600; line-height: 1.4; }
+    .event-title a, .search-result-title a { color: inherit; text-decoration: none; }
+    .event-title a:hover, .search-result-title a:hover { color: var(--link); text-decoration: underline; }
+    .event-meta { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; margin-top: 5px; color: var(--muted); font-size: 12px; }
+    .event-meta span { display: inline-flex; align-items: center; gap: 5px; }
+    .event-meta svg { width: 13px; height: 13px; }
+    .search-results { min-height: 276px; padding: 12px 22px 22px; }
+    .search-results-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0 16px; border-top: 1px solid var(--border); }
+    .search-results-title { margin: 0; color: var(--muted); font-size: 16px; font-weight: 400; }
+    .search-results-title strong { color: var(--navy); font-weight: 600; }
+    .date-filter { display: inline-flex; flex-shrink: 0; overflow: hidden; border: 1px solid #aeb6bf; border-radius: 5px; }
+    .date-filter button { min-width: 112px; height: 34px; padding: 0 12px; border: 0; background: #fff; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .date-filter button + button { border-left: 1px solid #aeb6bf; }
+    .date-filter button[aria-pressed="true"] { color: var(--navy); box-shadow: inset 0 0 0 1px var(--link); }
+    .search-result { display: flex; align-items: center; gap: 16px; padding: 0 0 12px; }
+    .search-date { width: 56px; flex: 0 0 56px; overflow: hidden; border: 1px solid var(--border); border-radius: 4px; text-align: center; }
+    .search-date .month { display: block; padding: 3px 2px; background: var(--link); color: #fff; font-size: 9px; font-weight: 700; text-transform: uppercase; }
+    .search-date .day { display: block; padding: 3px 0 5px; color: var(--muted); font-size: 27px; font-weight: 400; line-height: 1; }
+    .search-result-copy { min-width: 0; }
+    .search-result-title { margin: 0 0 5px; font-size: 14px; font-weight: 600; line-height: 1.4; }
+    .search-result-meta { color: var(--muted); font-size: 12px; }
+    .search-empty { padding: 18px 0; color: var(--muted); font-size: 13px; }
+    .empty-state { padding: 36px 12px; color: var(--muted); text-align: center; font-size: 13px; }
+
+    .filter-popover {
+      position: absolute;
+      z-index: 5;
+      top: calc(100% + 9px);
+      right: 0;
+      width: min(310px, calc(100vw - 40px));
+      padding: 16px;
+      border: 1px solid #d5dbe1;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(27, 42, 58, 0.16);
+    }
+    .popover-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
+    .popover-head h2 { margin: 0; font-size: 14px; font-weight: 700; }
+    .text-button { padding: 2px; border: 0; background: transparent; color: var(--link); font-size: 11px; cursor: pointer; }
+    .filter-group + .filter-group { margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--border); }
+    .filter-group h3 { margin: 0 0 8px; font-size: 11px; font-weight: 700; }
+    .filter-option { display: flex; min-height: 34px; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid #aeb6bf; border-radius: 5px; font-size: 12px; cursor: pointer; }
+    .filter-option + .filter-option { margin-top: 5px; }
+    .filter-option input { width: 14px; height: 14px; margin: 0; accent-color: var(--link); }
+
+    .month-view { padding: 0 22px 22px; }
+    .month-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-top: 1px solid var(--border); border-left: 1px solid var(--border); }
+    .weekday, .day-cell { min-width: 0; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .weekday { padding: 9px 4px; background: var(--surface-subtle); text-align: center; font-size: 11px; font-weight: 600; }
+    .day-cell { min-height: 112px; padding: 8px; background: #fff; }
+    .day-cell.outside { background: #fafafa; color: #9099a4; }
+    .day-number { display: inline-grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; font-size: 12px; }
+    .day-cell.today .day-number { background: var(--link); color: #fff; font-weight: 700; }
+    .day-event { display: block; overflow: hidden; margin-top: 5px; padding: 5px; border-radius: 4px; background: var(--link); color: #fff; font-size: 10px; line-height: 1.35; text-overflow: ellipsis; }
+    .day-event, .week-event { text-decoration: none; }
+    .day-event:hover, .week-event:hover { text-decoration: underline; }
+
+    .week-view { padding: 0 22px 18px; }
+    .week-schedule { overflow: hidden; border: 1px solid var(--border); }
+    .week-header, .week-allday, .week-hours {
+      display: grid;
+      grid-template-columns: 48px repeat(7, minmax(72px, 1fr));
+      min-width: 552px;
+    }
+    .week-header { position: sticky; top: 0; z-index: 3; background: var(--surface-subtle); }
+    .week-header > div { min-height: 36px; display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .week-header > div:last-child, .week-allday > div:last-child, .week-hour-cell:nth-child(8) { border-right: 0; }
+    .week-day-label { flex-direction: column; gap: 2px; font-size: 10px; color: var(--navy); }
+    .week-day-label strong { font-size: 12px; font-weight: 500; }
+    .week-day-label.today strong { display: grid; width: 22px; height: 22px; place-items: center; border-radius: 50%; background: var(--link); color: #fff; font-weight: 700; }
+    .week-allday { position: sticky; top: 36px; z-index: 2; background: #fff; }
+    .week-allday > div { min-height: 54px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .week-scroll { max-height: min(62vh, 520px); overflow: auto; overscroll-behavior: contain; }
+    .week-hours { position: relative; grid-template-rows: repeat(24, 46px); }
+    .week-hour-label { position: relative; padding: 3px 4px 0 0; border-right: 1px solid var(--border); color: var(--muted); text-align: right; font-size: 9px; }
+    .week-hour-cell { position: relative; min-width: 0; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); background: #fff; }
+    .week-hour-cell.today { background: #fbfdff; }
+    .week-event {
+      position: absolute;
+      z-index: 1;
+      right: 3px;
+      left: 3px;
+      display: flex;
+      min-height: 26px;
+      flex-direction: column;
+      gap: 2px;
+      overflow: hidden;
+      padding: 4px 5px;
+      border: 1px solid #9dc2fa;
+      border-radius: 3px;
+      background: #fff;
+      color: var(--navy);
+      font-size: 8px;
+      line-height: 1.2;
+    }
+    .week-event strong, .week-event span { overflow: hidden; text-overflow: ellipsis; }
+    .week-event strong { color: var(--link); font-weight: 600; }
+    .week-event span { color: var(--muted); white-space: nowrap; }
+
+    @media (max-width: 640px) {
+      .page { width: min(100% - 24px, 1140px); margin: 12px auto 36px; }
+      .topbar { min-height: 54px; padding: 0 14px; }
+      .topbar h1 { font-size: 18px; }
+      .icon-button { width: 34px; }
+      .controls { align-items: center; padding: 10px 14px; }
+      .search-and-filter { width: 100%; }
+      .search-wrap { flex: 1; width: auto; }
+      .filter-button { padding: 0 9px; }
+      .search-results { padding-right: 14px; padding-left: 14px; }
+      .search-results-head { align-items: flex-start; flex-direction: column; }
+      .date-filter { width: 100%; }
+      .date-filter button { min-width: 0; flex: 1; }
+      .calendar-toolbar { gap: 7px; padding: 0 14px 10px; }
+      .date-title { font-size: 13px; }
+      .plain-button, .select-button { min-height: 32px; padding: 0 8px; font-size: 11px; }
+      .select-button { min-width: 76px; }
+      .list-view, .month-view { padding-right: 14px; padding-left: 14px; }
+      .event-row { gap: 10px; padding: 13px 2px; }
+      .date-tile { width: 40px; }
+      .event-title { font-size: 13px; }
+      .event-meta { font-size: 11px; }
+      .day-cell { min-height: 72px; padding: 4px; }
+      .weekday { font-size: 10px; }
+      .day-event { padding: 4px; font-size: 9px; }
+      .day-number { width: 21px; height: 21px; font-size: 11px; }
+      .week-view { padding-right: 12px; padding-left: 12px; }
+      .week-scroll { max-height: min(58vh, 460px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="events-shell" aria-labelledby="pageTitle">
+      <header class="topbar">
+        <h1 id="pageTitle">Events</h1>
+        <div class="view-tools">
+          <div class="view-switch" role="group" aria-label="Event view">
+            <button class="icon-button" id="calendarTab" type="button" aria-label="Calendar view" aria-pressed="false" title="Calendar view">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+            </button>
+            <button class="icon-button" id="listTab" type="button" aria-label="List view" aria-pressed="true" title="List view">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div class="controls">
+        <div class="search-and-filter">
+          <label class="search-wrap">
+            <input id="eventSearch" type="search" placeholder="Search for any event" aria-label="Search events">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          </label>
+        </div>
+        <div class="filter-area">
+          <button class="filter-button" id="filterButton" type="button" aria-expanded="false" aria-controls="filterPopover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16l-6.5 7.5v5l-3 1.5v-6.5L4 5Z"/></svg>
+            Filters <span class="count" id="filterCount" hidden></span>
+          </button>
+          <div class="filter-popover" id="filterPopover" hidden>
+            <div class="popover-head">
+              <h2>Filters</h2>
+              <button class="text-button" id="resetFilters" type="button">Reset all</button>
+            </div>
+            <fieldset class="filter-group" id="calendarRsvpFilters" style="border:0;padding:0;margin:0" hidden>
+              <legend style="margin-bottom:8px;font-size:11px;font-weight:700">RSVP Type</legend>
+              <label class="filter-option"><input type="checkbox" name="rsvpType" value="Yes"> Yes</label>
+              <label class="filter-option"><input type="checkbox" name="rsvpType" value="No"> No</label>
+              <label class="filter-option"><input type="checkbox" name="rsvpType" value="Maybe"> Maybe</label>
+              <label class="filter-option"><input type="checkbox" name="rsvpType" value="Pending"> Pending</label>
+              <label class="filter-option"><input type="checkbox" name="rsvpType" value="Not required"> Not required</label>
+            </fieldset>
+            <fieldset class="filter-group" id="listDateFilters" style="border:0;padding:0;margin:0" hidden>
+              <legend style="margin-bottom:8px;font-size:11px;font-weight:700">Event type</legend>
+              <label class="filter-option"><input type="radio" name="eventType" value="future" checked> Future events</label>
+              <label class="filter-option"><input type="radio" name="eventType" value="past"> Past events</label>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-toolbar">
+        <div class="date-nav">
+          <button class="round-button" id="previousPeriod" type="button" aria-label="Previous period">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button class="round-button" id="nextPeriod" type="button" aria-label="Next period">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+        <h2 class="date-title" id="periodTitle">October 2026</h2>
+        <span class="toolbar-spacer"></span>
+        <select class="select-button" id="calendarMode" aria-label="Calendar period" hidden>
+          <option value="month">Month</option>
+          <option value="week">Week</option>
+        </select>
+        <button class="plain-button" id="todayButton" type="button">Today</button>
+      </div>
+
+      <section class="list-view" id="listView" aria-label="Events list">
+        <div class="crumb">Cornerstone</div>
+        <div class="event-list" id="eventList" aria-live="polite"></div>
+      </section>
+      <section class="search-results" id="searchResults" aria-label="Event search results" hidden>
+        <div class="search-results-head">
+          <h2 class="search-results-title">Searching for <strong id="searchTerm"></strong></h2>
+          <div class="date-filter" role="group" aria-label="Search event dates">
+            <button type="button" data-search-period="future" aria-pressed="true">Future events</button>
+            <button type="button" data-search-period="past" aria-pressed="false">Past events</button>
+          </div>
+        </div>
+        <div id="searchResultList" aria-live="polite"></div>
+      </section>
+      <section class="month-view" id="calendarView" aria-label="Events calendar" hidden>
+        <div class="month-grid" id="monthGrid"></div>
+      </section>
+
+    </section>
+  </main>
+
+  <script>
+    const events = [
+      {
+        title: "LinkedIn Learning Champion: Tips to Reset an Overwhelming Day",
+        date: "2026-10-30",
+        start: "12:00",
+        end: "13:00",
+        timezone: "EDT",
+        location: "Online",
+        attendees: 10,
+        rsvpStatus: "No",
+      },
+      {
+        title: "VOLUNTEER OPPORTUNITY: FeedingNYC is Back! Help Pack Thanksgiving Meals with FeedingNYC",
+        date: "2026-11-23",
+        start: "08:30",
+        end: "11:30",
+        timezone: "EST",
+        location: "New York, NY",
+        attendees: 18,
+        rsvpStatus: "Yes",
+      },
+      {
+        title: "September Town Hall",
+        date: "2026-09-29",
+        start: "16:30",
+        end: "17:00",
+        timezone: "EDT",
+        location: "Online",
+        attendees: 42,
+        rsvpStatus: "No",
+      },
+      {
+        title: "Cornerstone Weekly Connect",
+        date: "2026-10-13",
+        start: "09:30",
+        end: "10:00",
+        timezone: "EDT",
+        location: "Online",
+        attendees: 8,
+        rsvpStatus: "Pending",
+      },
+      {
+        title: "Benefits Open Enrollment Q&A",
+        date: "2026-10-13",
+        start: "10:00",
+        end: "10:45",
+        timezone: "EDT",
+        location: "Online",
+        attendees: 16,
+        rsvpStatus: "Maybe",
+      },
+      {
+        title: "Property Operations Team Stand-Up",
+        date: "2026-10-14",
+        start: "09:00",
+        end: "09:30",
+        timezone: "EDT",
+        location: "Conference Room 4A",
+        attendees: 12,
+        rsvpStatus: "Yes",
+      },
+      {
+        title: "Community Investment Volunteer Briefing",
+        date: "2026-10-15",
+        start: "13:00",
+        end: "14:00",
+        timezone: "EDT",
+        location: "Online",
+        attendees: 9,
+        rsvpStatus: "Not required",
+      },
+      {
+        title: "New Hire Welcome and Orientation",
+        date: "2026-10-16",
+        start: "11:00",
+        end: "12:00",
+        timezone: "EDT",
+        location: "Main Office",
+        attendees: 7,
+        rsvpStatus: "Pending",
+      },
+      {
+        title: "Saturday Site Family Day",
+        date: "2026-10-17",
+        start: "10:30",
+        end: "12:30",
+        timezone: "EDT",
+        location: "River Crossing",
+        attendees: 24,
+        rsvpStatus: "Maybe",
+      },
+      {
+        title: "Sunday Community Garden Volunteer Day",
+        date: "2026-10-18",
+        start: "09:00",
+        end: "11:00",
+        timezone: "EDT",
+        location: "Saratoga",
+        attendees: 14,
+        rsvpStatus: "No",
+      },
+    ];
+
+    const state = { mode: "calendar", period: new Date(2026, 9, 13), calendarMode: "week", dateType: "future", searchPeriod: "future", rsvpTypes: [], query: "" };
+    const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
+    const dateFormatter = new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+    const eventSlug = (event) => event.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const formatTime = (time) => {
+      const [hours, minutes] = time.split(":").map(Number);
+      const date = new Date(2026, 0, 1, hours, minutes);
+      return new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(date);
+    };
+
+    const icon = (path) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
+    const filteredEvents = () => events.filter((event) => {
+      const matchesSearch = `${event.title} ${event.location}`.toLowerCase().includes(state.query.toLowerCase());
+      return matchesSearch;
+    }).sort((a, b) => {
+      return new Date(`${a.date}T${a.start}`) - new Date(`${b.date}T${b.start}`);
+    });
+
+    function renderList() {
+      const list = document.getElementById("eventList");
+      const items = filteredEvents().filter((event) => {
+        const isPast = event.date < "2026-10-13";
+        return state.dateType === "past" ? isPast : !isPast;
+      });
+      if (!items.length) {
+        list.innerHTML = '<p class="empty-state">No events match your search and filters.</p>';
+        return;
+      }
+      list.innerHTML = items.map((event) => {
+        const date = new Date(`${event.date}T12:00:00`);
+        const month = new Intl.DateTimeFormat("en-US", { month: "short" }).format(date);
+        const day = new Intl.DateTimeFormat("en-US", { day: "2-digit" }).format(date);
+        const readableDate = dateFormatter.format(date);
+        return `<article class="event-row">
+          <div class="date-tile" aria-label="${readableDate}"><span class="month">${month}</span><span class="day">${day}</span></div>
+          <div class="event-content">
+            <h3 class="event-title"><a href="event-detail.html?event=${encodeURIComponent(eventSlug(event))}">${event.title}</a></h3>
+            <div class="event-meta">
+              <span>${readableDate} at ${formatTime(event.start)} - ${formatTime(event.end)} (${event.timezone})</span>
+              <span>${icon('<path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>')}Attending (${event.attendees})</span>
+            </div>
+          </div>
+        </article>`;
+      }).join("");
+    }
+
+    function renderSearchResults() {
+      const query = state.query;
+      const section = document.getElementById("searchResults");
+      const searching = Boolean(query);
+      section.hidden = !searching;
+      document.getElementById("searchTerm").textContent = query;
+      document.querySelectorAll("[data-search-period]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.searchPeriod === state.searchPeriod));
+      });
+      if (!searching) return;
+
+      const results = filteredEvents().filter((event) => {
+        const isPast = event.date < "2026-10-13";
+        return state.searchPeriod === "past" ? isPast : !isPast;
+      });
+      const resultList = document.getElementById("searchResultList");
+      if (!results.length) {
+        resultList.innerHTML = '<p class="search-empty">No matching events found.</p>';
+        return;
+      }
+      resultList.innerHTML = results.map((event) => {
+        const date = new Date(`${event.date}T12:00:00`);
+        const month = new Intl.DateTimeFormat("en-US", { month: "short" }).format(date);
+        const day = new Intl.DateTimeFormat("en-US", { day: "numeric" }).format(date);
+        const weekdayDate = new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric" }).format(date);
+        return `<article class="search-result">
+          <div class="search-date" aria-label="${dateFormatter.format(date)}"><span class="month">${month}</span><span class="day">${day}</span></div>
+          <div class="search-result-copy">
+            <h3 class="search-result-title"><a href="event-detail.html?event=${encodeURIComponent(eventSlug(event))}">${event.title}</a></h3>
+            <p class="search-result-meta">${weekdayDate} &nbsp;·&nbsp; ${formatTime(event.start)} - ${formatTime(event.end)} (${event.timezone})</p>
+          </div>
+        </article>`;
+      }).join("");
+    }
+
+    function renderMonth() {
+      const calendarView = document.getElementById("calendarView");
+      let grid = document.getElementById("monthGrid");
+      const year = state.period.getFullYear();
+      const month = state.period.getMonth();
+      const names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      if (state.calendarMode === "week") {
+        const start = new Date(year, month, state.period.getDate() - ((state.period.getDay() + 6) % 7));
+        const dates = Array.from({ length: 7 }, (_, index) => {
+          const date = new Date(start);
+          date.setDate(start.getDate() + index);
+          return date;
+        });
+        const dateKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+        const currentEvents = filteredEvents()
+          .filter((event) => state.rsvpTypes.length === 0 || state.rsvpTypes.includes(event.rsvpStatus))
+          .filter((event) => dates.some((date) => dateKey(date) === event.date));
+        const header = `<div class="week-schedule">
+          <div class="week-scroll" aria-label="Hourly schedule, scroll for more times">
+          <div class="week-header"><div aria-hidden="true"></div>${dates.map((date, index) => {
+            const isToday = date.getFullYear() === 2026 && date.getMonth() === 9 && date.getDate() === 13;
+            return `<div class="week-day-label${isToday ? " today" : ""}"><span>${names[index]}</span><strong>${date.getDate()}</strong></div>`;
+          }).join("")}</div>
+          <div class="week-allday">${Array.from({ length: 8 }, () => "<div></div>").join("")}</div>
+            <div class="week-hours">${Array.from({ length: 24 }, (_, hourIndex) => {
+              const hour = hourIndex;
+              const label = new Intl.DateTimeFormat("en-US", { hour: "numeric" }).format(new Date(2026, 0, 1, hour));
+              const row = [`<div class="week-hour-label">${label}</div>`];
+              dates.forEach((date) => {
+                const dayEvents = currentEvents.filter((event) => event.date === dateKey(date) && Number(event.start.slice(0, 2)) === hour);
+                row.push(`<div class="week-hour-cell${date.getFullYear() === 2026 && date.getMonth() === 9 && date.getDate() === 13 ? " today" : ""}">${dayEvents.map((event) => {
+                  const minutes = Number(event.start.slice(3, 5));
+                  const top = (minutes / 60) * 46;
+                  const startMinutes = Number(event.start.slice(0, 2)) * 60 + minutes;
+                  const endMinutes = Number(event.end.slice(0, 2)) * 60 + Number(event.end.slice(3, 5));
+                  const height = Math.max(26, ((endMinutes - startMinutes) / 60) * 46);
+                  return `<a class="week-event" href="event-detail.html?event=${encodeURIComponent(eventSlug(event))}" title="${event.title}" aria-label="${event.title}, ${formatTime(event.start)} to ${formatTime(event.end)}" style="top:${top}px;height:${height}px"><strong>${event.title}</strong><span>${formatTime(event.start)} - ${formatTime(event.end)}</span></a>`;
+                }).join("")}</div>`);
+              });
+              return row.join("");
+            }).join("")}</div>
+          </div>
+        </div>`;
+        calendarView.innerHTML = header;
+        return;
+      }
+      if (!grid || !grid.classList.contains("month-grid")) {
+        calendarView.innerHTML = '<div class="month-grid" id="monthGrid"></div>';
+        grid = document.getElementById("monthGrid");
+      }
+      if (!grid) {
+        return renderMonth();
+      }
+      const cells = names.map((name) => `<div class="weekday">${name}</div>`);
+      const start = state.calendarMode === "week"
+        ? new Date(year, month, state.period.getDate() - ((state.period.getDay() + 6) % 7))
+        : new Date(year, month, 1 - ((new Date(year, month, 1).getDay() + 6) % 7));
+      const daysToRender = state.calendarMode === "week" ? 7 : 42;
+      for (let i = 0; i < daysToRender; i += 1) {
+        const date = new Date(start);
+        date.setDate(start.getDate() + i);
+        const isCurrentMonth = date.getMonth() === month;
+        const dayEvents = filteredEvents()
+          .filter((event) => state.rsvpTypes.length === 0 || state.rsvpTypes.includes(event.rsvpStatus))
+          .filter((item) => item.date === `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`);
+        const isToday = date.getFullYear() === 2026 && date.getMonth() === 9 && date.getDate() === 13;
+        cells.push(`<div class="day-cell${isCurrentMonth ? "" : " outside"}${isToday ? " today" : ""}">
+          <span class="day-number">${date.getDate()}</span>
+          ${dayEvents.map((event) => `<a class="day-event" href="event-detail.html?event=${encodeURIComponent(eventSlug(event))}" title="${event.title}">${formatTime(event.start)} ${event.title}</a>`).join("")}
+        </div>`);
+      }
+      grid.innerHTML = cells.join("");
+    }
+
+    function render() {
+      const isList = state.mode === "list";
+      const isSearching = Boolean(state.query);
+      document.getElementById("listView").hidden = !isList || isSearching;
+      document.getElementById("calendarView").hidden = isList || isSearching;
+      document.querySelector(".calendar-toolbar").hidden = isList || isSearching;
+      document.getElementById("todayButton").hidden = isList || isSearching;
+      document.getElementById("calendarTab").setAttribute("aria-pressed", String(!isList));
+      document.getElementById("listTab").setAttribute("aria-pressed", String(isList));
+      document.getElementById("periodTitle").textContent = state.calendarMode === "week" && !isList
+        ? (() => {
+          const start = new Date(state.period);
+          start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
+          const end = new Date(start);
+          end.setDate(start.getDate() + 6);
+          if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+            const monthName = new Intl.DateTimeFormat("en-US", { month: "long" }).format(start);
+            return `${monthName} ${start.getDate()}-${end.getDate()}, ${end.getFullYear()}`;
+          }
+          const startLabel = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(start);
+          const endLabel = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(end);
+          return `${startLabel} - ${endLabel}`;
+        })()
+        : monthFormatter.format(state.period);
+      document.getElementById("calendarMode").hidden = isList;
+      document.getElementById("calendarMode").value = state.calendarMode;
+      document.getElementById("calendarRsvpFilters").hidden = isList;
+      document.getElementById("listDateFilters").hidden = !isList;
+      const activeFilters = isList ? Number(state.dateType === "past") : state.rsvpTypes.length;
+      document.getElementById("filterCount").textContent = String(activeFilters);
+      document.getElementById("filterCount").hidden = activeFilters === 0;
+      renderList();
+      renderMonth();
+      renderSearchResults();
+    }
+
+    document.getElementById("listTab").addEventListener("click", () => { state.mode = "list"; render(); });
+    document.getElementById("calendarTab").addEventListener("click", () => { state.mode = "calendar"; render(); });
+    document.getElementById("filterButton").addEventListener("click", (event) => {
+      const button = event.currentTarget;
+      const popover = document.getElementById("filterPopover");
+      const opening = popover.hidden;
+      popover.hidden = !opening;
+      button.setAttribute("aria-expanded", String(opening));
+    });
+    document.getElementById("eventSearch").addEventListener("input", (event) => {
+      state.query = event.target.value.trim();
+      render();
+    });
+    document.querySelectorAll("[data-search-period]").forEach((button) => button.addEventListener("click", () => {
+      state.searchPeriod = button.dataset.searchPeriod;
+      state.dateType = state.searchPeriod;
+      document.querySelector(`input[name="eventType"][value="${state.searchPeriod}"]`).checked = true;
+      render();
+    }));
+    document.querySelectorAll('input[name="eventType"]').forEach((input) => input.addEventListener("change", (event) => {
+      state.dateType = event.target.value;
+      state.searchPeriod = event.target.value;
+      render();
+    }));
+    document.querySelectorAll('input[name="rsvpType"]').forEach((input) => input.addEventListener("change", () => {
+      state.rsvpTypes = Array.from(document.querySelectorAll('input[name="rsvpType"]:checked'), (checkbox) => checkbox.value);
+      render();
+    }));
+    document.getElementById("resetFilters").addEventListener("click", () => {
+      state.dateType = "future";
+      state.searchPeriod = "future";
+      state.rsvpTypes = [];
+      document.querySelectorAll('input[name="rsvpType"]').forEach((checkbox) => { checkbox.checked = false; });
+      document.querySelector('input[name="eventType"][value="future"]').checked = true;
+      render();
+    });
+    document.getElementById("previousPeriod").addEventListener("click", () => {
+      state.period = state.calendarMode === "week"
+        ? new Date(state.period.getFullYear(), state.period.getMonth(), state.period.getDate() - 7)
+        : new Date(state.period.getFullYear(), state.period.getMonth() - 1, state.period.getDate());
+      render();
+    });
+    document.getElementById("nextPeriod").addEventListener("click", () => {
+      state.period = state.calendarMode === "week"
+        ? new Date(state.period.getFullYear(), state.period.getMonth(), state.period.getDate() + 7)
+        : new Date(state.period.getFullYear(), state.period.getMonth() + 1, state.period.getDate());
+      render();
+    });
+    document.getElementById("todayButton").addEventListener("click", () => {
+      state.period = new Date(2026, 9, 13);
+      render();
+    });
+    document.getElementById("calendarMode").addEventListener("change", (event) => {
+      state.calendarMode = event.target.value;
+      render();
+    });
+    document.addEventListener("pointerdown", (event) => {
+      if (!event.target.closest(".filter-area")) {
+        document.getElementById("filterPopover").hidden = true;
+        document.getElementById("filterButton").setAttribute("aria-expanded", "false");
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        document.getElementById("filterPopover").hidden = true;
+        document.getElementById("filterButton").setAttribute("aria-expanded", "false");
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>

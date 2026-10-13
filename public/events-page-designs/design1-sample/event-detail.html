@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Event details | Cornerstone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1b2a3a;
+      --link: #1d4ed8;
+      --accent: #f5c518;
+      --muted: #657181;
+      --border: #e5e5e0;
+      --surface-subtle: #f7f7f5;
+      --radius: 8px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: #f7f7f5; color: var(--navy); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    button { font: inherit; color: inherit; }
+    a { color: var(--link); }
+    a:focus-visible, button:focus-visible, textarea:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+    [hidden] { display: none !important; }
+
+    .page { width: min(100% - 32px, 1080px); margin: 24px auto 52px; }
+    .detail-shell { overflow: hidden; border: 1px solid #dfe3e7; border-radius: var(--radius); background: #fff; }
+    .detail-top { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px 22px 10px; }
+    .breadcrumb-row { display: flex; min-width: 0; align-items: center; gap: 12px; }
+    .back-arrow { display: grid; width: 22px; height: 22px; flex: 0 0 auto; place-items: center; padding: 0; border: 0; background: transparent; color: #657181; cursor: pointer; }
+    .back-arrow:hover { color: var(--link); }
+    .back-arrow svg { width: 14px; height: 14px; }
+    .breadcrumbs { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .breadcrumbs a { color: var(--muted); text-decoration: none; }
+    .breadcrumbs a:hover { color: var(--link); text-decoration: underline; }
+    .lang-dropdown { position: relative; flex-shrink: 0; }
+    .lang-select { display: inline-flex; width: 128px; align-items: center; gap: 6px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; background: #fff; font-size: 11px; cursor: pointer; }
+    .lang-select:hover, .lang-select.open { border-color: #c0a000; }
+    .lang-select .lang-text { flex: 1; min-width: 0; overflow: hidden; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
+    .lang-select svg { width: 13px; height: 13px; flex-shrink: 0; color: var(--muted); }
+    .lang-panel { position: absolute; top: calc(100% + 6px); right: 0; z-index: 10; display: none; width: 220px; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: #fff; box-shadow: 0 8px 24px #1018231f; }
+    .lang-panel.open { display: block; }
+    .lang-panel .group-label { padding: 6px 8px 4px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+    .lang-panel .group + .group-label { margin-top: 4px; }
+    .lang-option { display: block; width: 100%; padding: 8px; border: 0; border-radius: 6px; background: transparent; text-align: left; font-size: 12px; font-weight: 500; cursor: pointer; }
+    .lang-option:hover { background: var(--surface-subtle); }
+    .lang-option.selected { background: #fff9d9; color: #6e5b00; font-weight: 600; }
+    .event-heading { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 14px; margin: 0 22px; padding: 12px 0 20px; border-bottom: 1px solid var(--border); }
+    .date-tile { overflow: hidden; width: 48px; align-self: start; border: 1px solid #dce2e8; border-radius: 4px; text-align: center; }
+    .date-tile .month { display: block; padding: 3px; background: var(--link); color: #fff; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .date-tile .day { display: block; padding: 4px 0; color: var(--muted); font-size: 22px; line-height: 1; }
+    .event-heading h1 { margin: -4px 0 7px; font-size: clamp(21px, 3vw, 30px); line-height: 1.2; letter-spacing: -0.03em; }
+    .event-heading p { margin: 2px 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .event-heading a { overflow-wrap: anywhere; }
+    .hero-figure { width: min(100% - 44px, 660px); margin: 22px auto 28px; text-align: center; }
+    .hero-figure img { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; border-radius: 6px; background: #e6edf1; }
+    .hero-figure figcaption { margin-top: 6px; color: var(--muted); font-family: Georgia, serif; font-size: 11px; font-style: italic; }
+    .detail-content { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 26px; padding: 0 22px 24px; }
+    .description { min-width: 0; color: #263547; font-size: 13px; line-height: 1.65; }
+    .description p { margin: 0 0 12px; }
+    .description ul { margin: 6px 0 14px; padding-left: 19px; }
+    .description ul ul { margin: 3px 0; }
+    .description a { color: var(--link); }
+    .sidebar { display: flex; flex-direction: column; gap: 12px; }
+    .rsvp-card, .event-info { overflow: hidden; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
+    .card-label { display: block; margin: 0 0 8px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 0.045em; text-transform: uppercase; }
+    .rsvp-card { padding: 12px; }
+    .rsvp-options { display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border: 1px solid #aeb6bf; border-radius: 4px; }
+    .rsvp-option { display: flex; min-height: 48px; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; background: #fff; cursor: pointer; font-size: 11px; }
+    .rsvp-option + .rsvp-option { border-left: 1px solid #aeb6bf; }
+    .rsvp-option:hover, .rsvp-option[aria-pressed="true"] { background: #f2f7ff; color: var(--link); }
+    .rsvp-option svg { width: 15px; height: 15px; color: #8c96a1; }
+    .calendar-link { display: flex; align-items: center; gap: 6px; width: 100%; margin-top: 10px; padding: 8px 0 0; border: 0; border-top: 1px solid var(--border); background: #fff; color: var(--navy); text-align: left; font-size: 11px; cursor: pointer; }
+    .calendar-link svg, .info-item svg { width: 14px; height: 14px; flex: 0 0 auto; }
+    .attendees { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+    .avatar-list { display: flex; align-items: center; padding-left: 2px; }
+    .avatar { display: grid; width: 29px; height: 29px; place-items: center; margin-left: -2px; border: 2px solid #fff; border-radius: 50%; background: #d9e7f0; color: #24374c; font-size: 8px; font-weight: 700; }
+    .avatar:nth-child(2n) { background: #f3dfc9; }
+    .avatar:nth-child(3n) { background: #dbe9dc; }
+    .avatar.more { background: var(--navy); color: #fff; }
+    .event-info { padding: 12px; }
+    .info-item + .info-item { margin-top: 12px; }
+    .info-item .card-label { margin-bottom: 5px; }
+    .info-item p, .info-item a { display: flex; align-items: flex-start; gap: 6px; margin: 0; overflow-wrap: anywhere; font-size: 11px; line-height: 1.45; }
+    .info-item p { color: var(--muted); }
+    .modified { margin: 8px 0 0; color: var(--muted); font-size: 10px; }
+    .author-row { display: flex; align-items: center; gap: 9px; margin: 22px 0 18px; }
+    .author-avatar { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; background: #d9e7f0; color: var(--navy); font-size: 11px; font-weight: 700; }
+    .author-name { color: var(--navy); font-size: 11px; font-weight: 600; }
+    .author-date { margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .topics { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .topics-label { width: 100%; margin-bottom: 2px; color: var(--muted); font-size: 10px; }
+    .topic { padding: 4px 7px; border-radius: 4px; background: #f0f2f4; color: #334155; font-size: 9px; }
+    .feedback { margin-left: auto; padding: 5px 8px; border: 1px solid var(--border); border-radius: 6px; background: #fff; color: var(--navy); font-size: 10px; cursor: pointer; }
+    .feedback:hover { background: var(--surface-subtle); }
+    .feedback svg { width: 14px; height: 14px; vertical-align: middle; }
+    .fb-overlay { position: fixed; inset: 0; z-index: 90; background: #1b2a3a73; opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility 0s .2s; }
+    .fb-overlay.open { opacity: 1; visibility: visible; transition-delay: 0s; }
+    .fb-drawer { position: fixed; top: 50%; left: 50%; z-index: 100; width: 460px; max-width: calc(100vw - 32px); padding: 20px 24px 22px; border: 1px solid var(--border); border-radius: 8px; background: #fff; box-shadow: 0 16px 40px #1b2a3a33; opacity: 0; visibility: hidden; transform: translate(-50%, -48%); transition: opacity .2s ease, transform .2s ease, visibility 0s .2s; }
+    .fb-drawer.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%); transition-delay: 0s; }
+    .fb-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .fb-head h2 { margin: 0; font-size: 17px; }
+    .fb-close { display: grid; width: 30px; height: 30px; place-items: center; border: 0; border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer; }
+    .fb-close:hover { background: var(--surface-subtle); color: var(--navy); }
+    .fb-close svg { width: 16px; height: 16px; }
+    .fb-help { margin: 0 0 16px; color: #263547; font-size: 12px; line-height: 1.55; }
+    .fb-label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; }
+    .fb-label .req, .fb-error { color: #b42318; }
+    .fb-drawer textarea { display: block; width: 100%; min-height: 120px; resize: vertical; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; outline: none; font: 400 13px/1.55 "Inter", sans-serif; }
+    .fb-drawer textarea:focus { border-color: var(--link); box-shadow: 0 0 0 3px #1d4ed81f; }
+    .fb-drawer textarea.invalid { border-color: #b42318; }
+    .fb-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 6px; color: var(--muted); font-size: 11px; }
+    .fb-error[hidden], .fb-done[hidden] { display: none; }
+    .fb-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+    .fb-cancel, .fb-send { padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; background: #fff; font-size: 12px; cursor: pointer; }
+    .fb-cancel:hover { background: var(--surface-subtle); }
+    .fb-send { padding-right: 16px; padding-left: 16px; border-color: var(--navy); background: var(--navy); color: #fff; }
+    .fb-send:hover { background: #263b52; }
+    .fb-done { padding: 12px 4px 2px; text-align: center; }
+    .fb-done h3 { margin: 0 0 6px; font-size: 16px; }
+    .fb-done p { margin: 0 0 18px; color: #263547; font-size: 12px; line-height: 1.55; }
+    .related { padding: 15px 22px 22px; border-top: 1px solid var(--border); }
+    .related h2 { margin: 0 0 11px; font-size: 13px; }
+    .related-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .related-card { min-width: 0; color: var(--navy); text-decoration: none; }
+    .related-card img { display: block; width: 100%; aspect-ratio: 16 / 9; margin-bottom: 7px; border-radius: 4px; object-fit: cover; background: var(--surface-subtle); }
+    .related-title { margin: 0; font-size: 10px; font-weight: 600; line-height: 1.4; }
+    .related-meta { margin-top: 3px; color: var(--muted); font-size: 9px; }
+    .related-card:hover .related-title { color: var(--link); text-decoration: underline; }
+    .toast { position: fixed; right: 20px; bottom: 20px; z-index: 5; padding: 10px 14px; border-radius: 5px; background: var(--navy); color: #fff; font-size: 12px; box-shadow: 0 4px 14px #0002; }
+
+    @media (max-width: 760px) {
+      .detail-content { grid-template-columns: 1fr; }
+      .sidebar { grid-row: 1; }
+      .hero-figure { margin-top: 18px; }
+      .related-grid { grid-template-columns: 1fr 1fr; }
+      .related-card:last-child { display: none; }
+    }
+    @media (max-width: 480px) {
+      .page { width: min(100% - 16px, 1080px); margin: 8px auto 24px; }
+      .detail-top { padding-right: 13px; padding-left: 13px; }
+      .event-heading { grid-template-columns: 44px minmax(0, 1fr); gap: 10px; margin: 0 13px; }
+      .date-tile { width: 42px; }
+      .event-heading h1 { font-size: 20px; }
+      .hero-figure { width: calc(100% - 26px); }
+      .detail-content { padding-right: 13px; padding-left: 13px; }
+      .related { padding-right: 13px; padding-left: 13px; }
+      .lang-select { width: 116px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <article class="detail-shell">
+      <header class="detail-top">
+        <div class="breadcrumb-row">
+          <button class="back-arrow" id="backButton" type="button" aria-label="Go back">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 6h-9M5 2.5 1.5 6 5 9.5"/></svg>
+          </button>
+          <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Cornerstone</a> &nbsp;›&nbsp; <a href="index.html">Events</a></nav>
+        </div>
+        <div class="lang-dropdown">
+          <button class="lang-select" id="langSelect" type="button" aria-haspopup="true" aria-expanded="false">
+            <span class="lang-text" id="langText">English (US)</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-panel" id="langPanel">
+            <div class="group-label">Suggested for you</div>
+            <div class="group"><button class="lang-option selected" type="button" data-language="English (US)">English (US) (main)</button></div>
+            <div class="group-label">Other languages</div>
+            <div class="group"><button class="lang-option" type="button" data-language="Español">Español - Spanish</button></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="event-heading" aria-labelledby="eventTitle">
+        <div class="date-tile"><span class="month" id="eventMonth"></span><span class="day" id="eventDay"></span></div>
+        <div>
+          <h1 id="eventTitle"></h1>
+          <p id="eventStart"></p>
+          <p id="eventEnd"></p>
+          <p>Location: <a id="eventLocation" href="#"></a></p>
+        </div>
+      </section>
+
+      <figure class="hero-figure">
+        <img src="../../company&amp;culture/assets/images/team-meeting.jpg" alt="Colleagues collaborating at a team meeting">
+        <figcaption id="imageCaption"></figcaption>
+      </figure>
+
+      <div class="detail-content">
+        <div>
+          <div class="description" id="eventDescription"></div>
+          <section class="author-row" aria-label="Event author">
+            <div class="author-avatar" aria-hidden="true">BA</div>
+            <div><div class="author-name">Belinda Apprey</div><div class="author-date">Published Oct 8, 2026</div></div>
+          </section>
+          <div class="topics">
+            <span class="topics-label">Topics</span>
+            <span class="topic">professional development</span>
+            <span class="topic">learning</span>
+            <span class="topic">wellbeing</span>
+            <span class="topic">team resources</span>
+            <button class="feedback" id="feedbackButton" type="button" aria-haspopup="dialog" aria-controls="fbDrawer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>
+              Send feedback
+            </button>
+          </div>
+        </div>
+
+        <aside class="sidebar" aria-label="Event actions and information">
+          <section class="rsvp-card">
+            <span class="card-label">RSVP</span>
+            <div class="rsvp-options" role="group" aria-label="RSVP response">
+              <button class="rsvp-option" type="button" data-rsvp="Yes" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Yes
+              </button>
+              <button class="rsvp-option" type="button" data-rsvp="No" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>No
+              </button>
+              <button class="rsvp-option" type="button" data-rsvp="Maybe" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.3 1.7c-1.2 1.1-1.9 1.4-1.9 3.3M12 17.5v.1"/></svg>Maybe
+              </button>
+            </div>
+            <button class="calendar-link" id="addCalendar" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M12 13v5m-2.5-2.5h5"/></svg>
+              Add to calendar
+            </button>
+            <div class="attendees">
+              <span class="card-label">Attending (<span id="attendeeCount">10</span>)</span>
+              <div class="avatar-list" aria-label="Attendees">
+                <span class="avatar">BA</span><span class="avatar">JS</span><span class="avatar">MR</span><span class="avatar">AL</span><span class="avatar">TK</span><span class="avatar">+5</span>
+              </div>
+            </div>
+          </section>
+          <section class="event-info">
+            <div class="info-item">
+              <span class="card-label">Location</span>
+              <a id="locationLink" href="#" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2"/></svg>
+                <span id="locationText"></span>
+              </a>
+            </div>
+            <p class="modified">Last modified: Oct 8, 2026</p>
+          </section>
+        </aside>
+      </div>
+
+      <section class="related">
+        <h2>Related content</h2>
+        <div class="related-grid" id="relatedGrid"></div>
+      </section>
+    </article>
+  </main>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <div class="fb-overlay" id="fbOverlay"></div>
+  <div class="fb-drawer" id="fbDrawer" role="dialog" aria-modal="true" aria-labelledby="fbTitle" aria-hidden="true">
+    <form id="fbForm" novalidate>
+      <div class="fb-head">
+        <h2 id="fbTitle">Send feedback</h2>
+        <button class="fb-close" id="fbClose" type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 6-12 12M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <p class="fb-help">Help make this page more useful. Feedback is visible only to the admins and the author.</p>
+      <label class="fb-label" for="fbText">Feedback <span class="req">*</span></label>
+      <textarea id="fbText" maxlength="255" placeholder="For example, ‘content needs to be updated’ or ‘there is a spelling mistake’"></textarea>
+      <div class="fb-meta"><span class="fb-error" id="fbError" role="alert" hidden>Please add a few words.</span><span id="fbCount">255 characters remaining</span></div>
+      <div class="fb-foot">
+        <button class="fb-cancel" id="fbCancel" type="button">Cancel</button>
+        <button class="fb-send" type="submit">Send</button>
+      </div>
+    </form>
+    <div class="fb-done" id="fbDone" hidden>
+      <h3>Thanks for your feedback</h3>
+      <p>It is visible only to the admins and the author of this page.</p>
+      <button class="fb-send" id="fbDoneClose" type="button">Done</button>
+    </div>
+  </div>
+  <script>
+    const events = [
+      { title: "LinkedIn Learning Champion: Tips to Reset an Overwhelming Day", date: "2026-10-30", start: "12:00", end: "13:00", timezone: "EDT", location: "Online (Zoom)", attendees: 10 },
+      { title: "VOLUNTEER OPPORTUNITY: FeedingNYC is Back! Help Pack Thanksgiving Meals with FeedingNYC", date: "2026-11-23", start: "08:30", end: "11:30", timezone: "EST", location: "New York, NY", attendees: 18 },
+      { title: "September Town Hall", date: "2026-09-29", start: "16:30", end: "17:00", timezone: "EDT", location: "Online", attendees: 42 },
+      { title: "Cornerstone Weekly Connect", date: "2026-10-13", start: "09:30", end: "10:00", timezone: "EDT", location: "Online", attendees: 8 },
+      { title: "Benefits Open Enrollment Q&A", date: "2026-10-13", start: "10:00", end: "10:45", timezone: "EDT", location: "Online", attendees: 16 },
+      { title: "Property Operations Team Stand-Up", date: "2026-10-14", start: "09:00", end: "09:30", timezone: "EDT", location: "Conference Room 4A", attendees: 12 },
+      { title: "Community Investment Volunteer Briefing", date: "2026-10-15", start: "13:00", end: "14:00", timezone: "EDT", location: "Online", attendees: 9 },
+      { title: "New Hire Welcome and Orientation", date: "2026-10-16", start: "11:00", end: "12:00", timezone: "EDT", location: "Main Office", attendees: 7 },
+      { title: "Saturday Site Family Day", date: "2026-10-17", start: "10:30", end: "12:30", timezone: "EDT", location: "River Crossing", attendees: 24 },
+      { title: "Sunday Community Garden Volunteer Day", date: "2026-10-18", start: "09:00", end: "11:00", timezone: "EDT", location: "Saratoga", attendees: 14 },
+    ];
+    const slug = (title) => title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const params = new URLSearchParams(location.search);
+    document.getElementById("backButton").addEventListener("click", () => {
+      if (history.length > 1 && document.referrer) history.back();
+      else location.href = "index.html";
+    });
+    const event = events.find((item) => slug(item.title) === params.get("event")) || events[0];
+    const date = new Date(`${event.date}T12:00:00`);
+    const dateLong = new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" }).format(date);
+    const time = (value) => {
+      const [hours, minutes] = value.split(":").map(Number);
+      return new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(new Date(2026, 0, 1, hours, minutes));
+    };
+    const isLinkedIn = event.title.startsWith("LinkedIn Learning Champion");
+    document.title = `${event.title} | Cornerstone Events`;
+    document.getElementById("eventTitle").textContent = event.title;
+    document.getElementById("eventMonth").textContent = new Intl.DateTimeFormat("en-US", { month: "short" }).format(date);
+    document.getElementById("eventDay").textContent = new Intl.DateTimeFormat("en-US", { day: "numeric" }).format(date);
+    document.getElementById("eventStart").textContent = `Starts: ${dateLong} at ${time(event.start)}`;
+    document.getElementById("eventEnd").textContent = `Ends: ${dateLong} at ${time(event.end)}`;
+    const locationLink = document.getElementById("eventLocation");
+    locationLink.textContent = event.location;
+    locationLink.href = event.location.startsWith("http") ? event.location : "#event-location";
+    if (event.location.startsWith("http")) locationLink.target = "_blank";
+    document.getElementById("locationText").textContent = event.location;
+    const locationInfo = document.getElementById("locationLink");
+    locationInfo.href = event.location.startsWith("http") ? event.location : "#event-location";
+    if (event.location.startsWith("http")) locationInfo.target = "_blank";
+    document.getElementById("imageCaption").textContent = isLinkedIn ? "Tips to Reset on an Overwhelming Day" : event.title;
+    document.getElementById("attendeeCount").textContent = event.attendees;
+    document.getElementById("eventDescription").innerHTML = isLinkedIn
+      ? `<p>Join us on our next LinkedIn Learning Champion session, which will take place on <strong>Friday, October 30th from 12:00 p.m. - 1:00 p.m. HR Specialist @Belinda Apprey</strong> has selected the topic entitled <em>“Tips to Reset on an Overwhelming Day”</em> for our discussion. Please take some time over the next 3 weeks to review the course through your LinkedIn Learning account.</p>
+         <p>Overwhelming days are part of work and life, but how we respond can make a meaningful difference. In this 18-minute course, organizational psychologist Erin Shrimpton shares practical strategies to help you reset when challenges feel difficult to manage. You’ll learn how to navigate overwhelming moments, process thoughts and emotions, shift your mindset, and refocus on what matters most.</p>
+         <p>The course does not have to be completed in one sitting. You can log off at any time and resume where you left off when you log back in. It is important, however, that you complete the course before October 30th in order to fully participate in the discussion.</p>
+         <p>You can find the full course by following the steps below:</p>
+         <ul><li>Login to your LinkedIn Learning account</li><li>Go to search bar<ul><li>Type in the full title “Tips to Reset on an Overwhelming Day” by Erin Shrimpton</li></ul></li><li>Click on the course</li><li>You can begin!</li></ul>
+         <p>We hope you can join us for some good conversation and interaction on October 30th.</p>`
+      : `<p>You are invited to join us for <strong>${event.title}</strong> on ${dateLong} from ${time(event.start)} to ${time(event.end)}.</p><p>This event is an opportunity to connect with colleagues, share updates, and take part in activities across L+M. Please use the RSVP options to let the organizers know whether you can attend.</p><p>We look forward to seeing you there.</p>`;
+    const relatedImages = {
+      "VOLUNTEER OPPORTUNITY: FeedingNYC is Back! Help Pack Thanksgiving Meals with FeedingNYC": ["fall-volunteer-day.jpg", "Colleagues volunteering together outdoors"],
+      "New Hire Welcome and Orientation": ["welcome-september-new-hires.jpg", "New colleagues being welcomed to the team"],
+      "September Town Hall": ["team-meeting.jpg", "Colleagues collaborating at a team meeting"],
+      "Cornerstone Weekly Connect": ["office-team.jpg", "Colleagues meeting together at the office"],
+      "Benefits Open Enrollment Q&A": ["company-guide-toc.jpg", "Company benefits guide"],
+      "Community Investment Volunteer Briefing": ["fulton-park-book-bags.jpg", "Community volunteers preparing supplies"],
+      "Property Operations Team Stand-Up": ["meet-the-teams-building-envelope.jpg", "Property operations team"],
+      "Saturday Site Family Day": ["river-crossing-family-day.jpg", "Colleagues and families at a community event"],
+      "Sunday Community Garden Volunteer Day": ["outdoor-event.jpg", "Colleagues volunteering outdoors"],
+    };
+    const relatedGrid = document.getElementById("relatedGrid");
+    const [heroImage, heroAlt] = relatedImages[event.title] || ["team-meeting.jpg", "Colleagues at a team event"];
+    document.querySelector(".hero-figure img").src = `../../company&culture/assets/images/${heroImage}`;
+    document.querySelector(".hero-figure img").alt = heroAlt;
+    const relatedOrder = [
+      "VOLUNTEER OPPORTUNITY: FeedingNYC is Back! Help Pack Thanksgiving Meals with FeedingNYC",
+      "New Hire Welcome and Orientation",
+      "September Town Hall",
+      "Cornerstone Weekly Connect",
+      "Benefits Open Enrollment Q&A",
+      "Community Investment Volunteer Briefing",
+      "Property Operations Team Stand-Up",
+      "Saturday Site Family Day",
+      "Sunday Community Garden Volunteer Day",
+    ];
+    relatedOrder.map((title) => events.find((relatedEvent) => relatedEvent.title === title))
+      .filter((relatedEvent) => relatedEvent && relatedEvent !== event).slice(0, 3).forEach((relatedEvent) => {
+      const card = document.createElement("a");
+      const [image, imageAlt] = relatedImages[relatedEvent.title] || ["team-meeting.jpg", "Colleagues at a team event"];
+      const relatedDate = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(`${relatedEvent.date}T12:00:00`));
+      card.className = "related-card";
+      card.href = `event-detail.html?event=${encodeURIComponent(slug(relatedEvent.title))}`;
+      const cardImage = document.createElement("img");
+      cardImage.src = `../../company&culture/assets/images/${image}`;
+      cardImage.alt = imageAlt;
+      const cardTitle = document.createElement("p");
+      cardTitle.className = "related-title";
+      cardTitle.textContent = relatedEvent.title;
+      const cardMeta = document.createElement("p");
+      cardMeta.className = "related-meta";
+      cardMeta.textContent = `In HR Central · ${relatedDate}`;
+      card.append(cardImage, cardTitle, cardMeta);
+      relatedGrid.appendChild(card);
+    });
+    const toast = (message) => {
+      const element = document.getElementById("toast");
+      element.textContent = message;
+      element.hidden = false;
+      window.clearTimeout(toast.timer);
+      toast.timer = window.setTimeout(() => { element.hidden = true; }, 2600);
+    };
+    const langSelect = document.getElementById("langSelect");
+    const langPanel = document.getElementById("langPanel");
+    langSelect.addEventListener("click", (clickEvent) => {
+      clickEvent.stopPropagation();
+      const isOpen = langPanel.classList.toggle("open");
+      langSelect.classList.toggle("open", isOpen);
+      langSelect.setAttribute("aria-expanded", String(isOpen));
+    });
+    document.addEventListener("click", (clickEvent) => {
+      if (!clickEvent.target.closest(".lang-dropdown")) {
+        langPanel.classList.remove("open");
+        langSelect.classList.remove("open");
+        langSelect.setAttribute("aria-expanded", "false");
+      }
+    });
+    document.querySelectorAll(".lang-option").forEach((option) => option.addEventListener("click", () => {
+      document.querySelectorAll(".lang-option").forEach((item) => item.classList.toggle("selected", item === option));
+      document.getElementById("langText").textContent = option.dataset.language;
+      langPanel.classList.remove("open");
+      langSelect.classList.remove("open");
+      langSelect.setAttribute("aria-expanded", "false");
+    }));
+    (() => {
+      const MAX = 255;
+      const overlay = document.getElementById("fbOverlay");
+      const drawer = document.getElementById("fbDrawer");
+      const form = document.getElementById("fbForm");
+      const done = document.getElementById("fbDone");
+      const text = document.getElementById("fbText");
+      const count = document.getElementById("fbCount");
+      const error = document.getElementById("fbError");
+      const trigger = document.getElementById("feedbackButton");
+      const updateCount = () => {
+        const left = MAX - text.value.length;
+        count.textContent = `${left} ${left === 1 ? "character" : "characters"} remaining`;
+      };
+      const openPanel = () => {
+        form.hidden = false;
+        done.hidden = true;
+        overlay.classList.add("open");
+        drawer.classList.add("open");
+        drawer.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        window.setTimeout(() => text.focus(), 220);
+      };
+      const closePanel = () => {
+        overlay.classList.remove("open");
+        drawer.classList.remove("open");
+        drawer.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        trigger.focus();
+        window.setTimeout(() => {
+          form.reset();
+          text.classList.remove("invalid");
+          error.hidden = true;
+          updateCount();
+          form.hidden = false;
+          done.hidden = true;
+        }, 220);
+      };
+      trigger.addEventListener("click", openPanel);
+      overlay.addEventListener("click", closePanel);
+      document.getElementById("fbClose").addEventListener("click", closePanel);
+      document.getElementById("fbCancel").addEventListener("click", closePanel);
+      document.getElementById("fbDoneClose").addEventListener("click", closePanel);
+      document.addEventListener("keydown", (keyEvent) => {
+        if (keyEvent.key === "Escape" && drawer.classList.contains("open")) closePanel();
+      });
+      text.addEventListener("input", () => {
+        updateCount();
+        if (text.value.trim()) {
+          text.classList.remove("invalid");
+          error.hidden = true;
+        }
+      });
+      form.addEventListener("submit", (submitEvent) => {
+        submitEvent.preventDefault();
+        if (!text.value.trim()) {
+          text.classList.add("invalid");
+          error.hidden = false;
+          text.focus();
+          return;
+        }
+        form.hidden = true;
+        done.hidden = false;
+      });
+      updateCount();
+    })();
+    document.querySelectorAll("[data-rsvp]").forEach((button) => button.addEventListener("click", () => {
+      document.querySelectorAll("[data-rsvp]").forEach((option) => option.setAttribute("aria-pressed", String(option === button)));
+      toast(`Your response “${button.dataset.rsvp}” has been saved.`);
+    }));
+    document.getElementById("addCalendar").addEventListener("click", () => {
+      const dateStamp = event.date.replaceAll("-", "");
+      const startStamp = `${dateStamp}T${event.start.replace(":", "")}00`;
+      const endStamp = `${dateStamp}T${event.end.replace(":", "")}00`;
+      const calendar = ["BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT", `DTSTART:${startStamp}`, `DTEND:${endStamp}`, `SUMMARY:${event.title}`, `LOCATION:${event.location}`, "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(new Blob([calendar], { type: "text/calendar" }));
+      link.download = `${slug(event.title)}.ics`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+  </script>
+</body>
+</html>
