@@ -6,7 +6,7 @@ import { SectionHeading } from "../../components/ui/SectionHeading";
 const LINKS: { label: string; icon: LucideIcon }[] = [
   { label: "Deal Data + Construction", icon: Building2 },
   { label: "Building List", icon: Building2 },
-  { label: "Offices, Space & Parking", icon: MapPin },
+  { label: "Offices, Space + Parking", icon: MapPin },
 ];
 
 export function PopularLinks() {

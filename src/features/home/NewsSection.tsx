@@ -22,7 +22,7 @@ const FEATURED_ARTICLES = [
   {
     title: "Q3 Town Hall: what to expect this Friday",
     excerpt:
-      "All staff are invited to join leadership for a look back at Q2 and what's ahead for Q3 — plus live Q&A.",
+      "All staff are invited to join leadership for a look back at Q2 and what's ahead for Q3 — plus live Q+A.",
     meta: "Sep 15 · 2 min read",
   },
   {
