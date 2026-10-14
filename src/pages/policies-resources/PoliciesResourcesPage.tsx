@@ -6,6 +6,7 @@ import { SearchInput } from "../../components/ui/SearchInput";
 import { RESOURCE_CATEGORIES } from "../../features/policies-resources/data";
 
 const INITIAL_VISIBLE_COUNT = 8;
+const HELP_CENTER_SLUG = "help-centers";
 
 export function PoliciesResourcesPage() {
   const [query, setQuery] = useState("");
@@ -21,9 +22,19 @@ export function PoliciesResourcesPage() {
     );
   }, [query]);
 
+  const helpCenter = filteredCategories.find((category) => category.slug === HELP_CENTER_SLUG);
+  const otherCategories = useMemo(
+    () =>
+      filteredCategories
+        .filter((category) => category.slug !== HELP_CENTER_SLUG)
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    [filteredCategories],
+  );
+
   const isSearching = query.trim().length > 0;
-  const visibleCategories = isSearching ? filteredCategories : filteredCategories.slice(0, visibleCount);
-  const hasMore = !isSearching && visibleCount < filteredCategories.length;
+  const visibleCategories = isSearching ? otherCategories : otherCategories.slice(0, visibleCount);
+  const hasMore = !isSearching && visibleCount < otherCategories.length;
+  const hasResults = Boolean(helpCenter) || visibleCategories.length > 0;
 
   return (
     <div className="flex flex-col gap-8 py-6">
@@ -45,6 +56,21 @@ export function PoliciesResourcesPage() {
       />
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {helpCenter && (
+          <Card className="flex flex-col border-l-4 border-l-brand-accent bg-surface-subtle p-6 md:col-span-2">
+            <h2 className="mb-4 text-[17px] font-bold text-brand-navy">{helpCenter.name}</h2>
+            <p className="mb-5 flex-1 text-[13.5px] leading-[1.55] text-brand-navy/60">
+              {helpCenter.description}
+            </p>
+            <Link
+              to={`/policies-resources/${helpCenter.slug}`}
+              className="inline-flex w-fit items-center gap-2 self-start rounded-md border border-border bg-surface px-5 py-[9px] text-[12.5px] font-semibold text-brand-link transition-colors hover:border-brand-link hover:bg-brand-link/[0.08]"
+            >
+              View All
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </Card>
+        )}
         {visibleCategories.map((category) => (
           <Card key={category.slug} className="flex flex-col p-6">
             <h2 className="mb-4 text-[15.5px] font-bold text-brand-navy">{category.name}</h2>
@@ -62,7 +88,7 @@ export function PoliciesResourcesPage() {
         ))}
       </div>
 
-      {visibleCategories.length === 0 && (
+      {!hasResults && (
         <p className="text-sm text-brand-navy/55">No categories match "{query}".</p>
       )}
 

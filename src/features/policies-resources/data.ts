@@ -1,4 +1,4 @@
-export type ResourceKind = "pdf" | "doc" | "xls" | "zip" | "link";
+export type ResourceKind = "pdf" | "doc" | "xls" | "zip" | "link" | "folder";
 
 export interface ResourceItem {
   title: string;
@@ -6,6 +6,8 @@ export interface ResourceItem {
   href: string;
   updated?: string;
   size?: string;
+  /** Only for kind "folder": the resources shown when the folder is opened. */
+  items?: ResourceItem[];
 }
 
 export interface ResourceCategory {
@@ -21,10 +23,22 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
     name: "Help Centers",
     description: "IT Help Desk, HR Help Center, and live IT systems status.",
     items: [
-      { title: "IT Help Desk", kind: "link", href: "#" },
-      { title: "HR Help Center", kind: "link", href: "#" },
-      { title: "IT Systems Status", kind: "link", href: "#" },
-      { title: "IT Help Desk — Contact Guide.pdf", kind: "pdf", href: "#", updated: "Jul 2", size: "180 KB" },
+      {
+        title: "HR",
+        kind: "folder",
+        href: "#",
+        items: [{ title: "HR Help Center", kind: "link", href: "#" }],
+      },
+      {
+        title: "IT",
+        kind: "folder",
+        href: "#",
+        items: [
+          { title: "IT Help Desk", kind: "link", href: "#" },
+          { title: "IT Systems Status", kind: "link", href: "#" },
+          { title: "IT Help Desk — Contact Guide.pdf", kind: "pdf", href: "#", updated: "Jul 2", size: "180 KB" },
+        ],
+      },
     ],
   },
   {
@@ -39,7 +53,7 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   },
   {
     slug: "safety-compliance",
-    name: "Safety & Compliance",
+    name: "Safety + Compliance",
     description: "Site safety protocols and emergency procedures.",
     items: [
       { title: "Site Safety Protocols.pdf", kind: "pdf", href: "#", updated: "Aug 2", size: "2.1 MB" },
@@ -59,20 +73,20 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   },
   {
     slug: "operations-it",
-    name: "Operations & IT",
-    description: "Expense & travel policy, IT acceptable use, and password & MFA guidance.",
+    name: "Operations + IT",
+    description: "Expense + travel policy, IT acceptable use, and password + MFA guidance.",
     items: [
-      { title: "Expense & Travel Policy.pdf", kind: "pdf", href: "#", updated: "Jul 22", size: "300 KB" },
+      { title: "Expense + Travel Policy.pdf", kind: "pdf", href: "#", updated: "Jul 22", size: "300 KB" },
       { title: "IT Acceptable Use Policy.docx", kind: "doc", href: "#", updated: "Jul 18", size: "220 KB" },
-      { title: "Password & MFA Guidance.pdf", kind: "pdf", href: "#", updated: "Jul 10", size: "260 KB" },
+      { title: "Password + MFA Guidance.pdf", kind: "pdf", href: "#", updated: "Jul 10", size: "260 KB" },
     ],
   },
   {
     slug: "facilities-forms",
-    name: "Facilities & Forms",
-    description: "Parking & badge access, common forms, and the org directory.",
+    name: "Facilities + Forms",
+    description: "Parking + badge access, common forms, and the org directory.",
     items: [
-      { title: "Parking & Badge Access", kind: "link", href: "#" },
+      { title: "Parking + Badge Access", kind: "link", href: "#" },
       { title: "Org Directory", kind: "link", href: "#" },
       { title: "Common Forms Library.pdf", kind: "pdf", href: "#", updated: "Jul 10", size: "1.4 MB" },
       { title: "Org Directory.xlsx", kind: "xls", href: "#", updated: "Jun 15", size: "410 KB" },
@@ -80,7 +94,7 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   },
   {
     slug: "training-onboarding",
-    name: "Training & Onboarding",
+    name: "Training + Onboarding",
     description: "New hire checklists, LMS access, and role-specific training paths.",
     items: [
       { title: "New Hire Checklist.pdf", kind: "pdf", href: "#", updated: "Jun 12", size: "210 KB" },
@@ -90,7 +104,7 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   },
   {
     slug: "vendor-contracts",
-    name: "Vendor & Contracts",
+    name: "Vendor + Contracts",
     description: "Vendor agreements, procurement forms, and contract templates.",
     items: [
       { title: "Vendor Agreement Template.doc", kind: "doc", href: "#", updated: "May 20", size: "230 KB" },
@@ -99,7 +113,7 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   },
   {
     slug: "building-envelope-sustainability",
-    name: "Building Envelope & Sustainability",
+    name: "Building Envelope + Sustainability",
     description: "Roof surveys, parapet reports, and site inspection procedures.",
     items: [
       { title: "Roof Survey Template.pdf", kind: "pdf", href: "#", updated: "Jun 18", size: "1.2 MB" },
@@ -110,7 +124,7 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   },
   {
     slug: "risk-insurance",
-    name: "Risk & Insurance",
+    name: "Risk + Insurance",
     description: "Vendor insurance requirements, incident reporting, and claims procedures.",
     items: [
       { title: "Vendor Insurance Requirements.pdf", kind: "pdf", href: "#", updated: "May 22", size: "340 KB" },
@@ -120,7 +134,7 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
   },
   {
     slug: "accounting-finance",
-    name: "Accounting & Finance",
+    name: "Accounting + Finance",
     description: "Expense approvals, vendor payment procedures, and wire transfer protocols.",
     items: [
       { title: "Expense Approval Policy.pdf", kind: "pdf", href: "#", updated: "Apr 18", size: "220 KB" },

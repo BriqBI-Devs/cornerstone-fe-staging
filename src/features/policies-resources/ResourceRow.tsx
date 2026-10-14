@@ -1,21 +1,22 @@
-import { Download, ExternalLink } from "lucide-react";
+import { ChevronRight, Download, ExternalLink, Folder } from "lucide-react";
 import type { ResourceItem } from "./data";
 
-const FILE_BADGE_CLASSES: Record<Exclude<ResourceItem["kind"], "link">, string> = {
+const FILE_BADGE_CLASSES: Record<Exclude<ResourceItem["kind"], "link" | "folder">, string> = {
   pdf: "bg-brand-navy",
   xls: "bg-[#92670a]",
   doc: "bg-brand-link",
   zip: "bg-gray-600",
 };
 
-export function ResourceRow({ item }: { item: ResourceItem }) {
+export function ResourceRow({ item, onOpen }: { item: ResourceItem; onOpen?: () => void }) {
   const isLink = item.kind === "link";
+  const isFolder = item.kind === "folder";
 
   return (
     <div className="flex items-center gap-[18px] border-b border-border py-4 last:border-b-0">
-      {item.kind === "link" ? (
+      {item.kind === "link" || item.kind === "folder" ? (
         <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-brand-link/[0.08] text-brand-link">
-          <ExternalLink className="h-[15px] w-[15px]" />
+          {isFolder ? <Folder className="h-[15px] w-[15px]" /> : <ExternalLink className="h-[15px] w-[15px]" />}
         </span>
       ) : (
         <span
@@ -40,10 +41,23 @@ export function ResourceRow({ item }: { item: ResourceItem }) {
 
       <a
         href={item.href}
-        aria-label={isLink ? `Open ${item.title}` : `Download ${item.title}`}
+        onClick={
+          onOpen &&
+          ((event) => {
+            event.preventDefault();
+            onOpen();
+          })
+        }
+        aria-label={isLink || isFolder ? `Open ${item.title}` : `Download ${item.title}`}
         className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-md border border-border bg-surface text-brand-link transition-colors hover:border-brand-link hover:bg-brand-link/[0.08]"
       >
-        {isLink ? <ExternalLink className="h-3.5 w-3.5" /> : <Download className="h-3.5 w-3.5" />}
+        {isFolder ? (
+          <ChevronRight className="h-3.5 w-3.5" />
+        ) : isLink ? (
+          <ExternalLink className="h-3.5 w-3.5" />
+        ) : (
+          <Download className="h-3.5 w-3.5" />
+        )}
       </a>
     </div>
   );
