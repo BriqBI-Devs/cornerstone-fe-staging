@@ -173,6 +173,7 @@ attendeeDialog.querySelector(".attendee-dialog-close").addEventListener("click",
 attendeeDialog.addEventListener("click", (clickEvent) => { if (clickEvent.target === attendeeDialog) attendeeDialog.close(); });
 
 document.getElementById("factDate").textContent = dateText;
+document.getElementById("outlookSync").href = OutlookSync.eventUrl(event);
 document.getElementById("factTime").textContent = timeSummary;
 document.getElementById("factLocation").innerHTML = locationMarkup(event.location);
 document.getElementById("rsvpMessage").textContent = currentResponse === "Pending" ? "You haven't responded yet." : `Your response: ${currentResponse}`;

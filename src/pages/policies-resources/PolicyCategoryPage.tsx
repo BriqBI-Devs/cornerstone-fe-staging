@@ -1,8 +1,10 @@
 import { ArrowUpDown } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Button } from "../../components/ui/Button";
 import { Card } from "../../components/ui/Card";
 import { SearchInput } from "../../components/ui/SearchInput";
+import { AddContentDialog } from "../../features/policies-resources/AddContentDialog";
 import { RESOURCE_CATEGORIES, type ResourceItem } from "../../features/policies-resources/data";
 import { ResourceRow } from "../../features/policies-resources/ResourceRow";
 
@@ -11,6 +13,7 @@ export function PolicyCategoryPage() {
   const [query, setQuery] = useState("");
   const [sortAscending, setSortAscending] = useState(true);
   const [folder, setFolder] = useState<ResourceItem | null>(null);
+  const [adding, setAdding] = useState(false);
 
   const category = RESOURCE_CATEGORIES.find((c) => c.slug === categorySlug);
   const listing = folder?.items ?? category?.items ?? [];
@@ -44,8 +47,10 @@ export function PolicyCategoryPage() {
 
   return (
     <div className="flex flex-col py-6">
-      <h1 className="text-[28px] font-extrabold tracking-[-0.02em] text-brand-navy">{category.name}</h1>
-      <p className="mt-2 max-w-[460px] text-sm leading-[1.6] text-brand-navy/60">{category.description}</p>
+      <div>
+        <h1 className="text-[28px] font-extrabold tracking-[-0.02em] text-brand-navy">{category.name}</h1>
+        <p className="mt-2 max-w-[460px] text-sm leading-[1.6] text-brand-navy/60">{category.description}</p>
+      </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-4">
         <SearchInput value={query} onChange={setQuery} placeholder="Search files…" className="max-w-md flex-1" />
@@ -57,6 +62,9 @@ export function PolicyCategoryPage() {
           <ArrowUpDown className="h-3.5 w-3.5" />
           Sort {sortAscending ? "A–Z" : "Z–A"}
         </button>
+        <Button onClick={() => setAdding(true)} className="ml-auto shrink-0">
+          + New
+        </Button>
       </div>
 
       <nav aria-label="Folder path" className="mt-5 text-[13px] font-semibold text-brand-navy/60">
@@ -92,6 +100,8 @@ export function PolicyCategoryPage() {
           ))
         )}
       </Card>
+
+      <AddContentDialog open={adding} location={folder?.title ?? category.name} onClose={() => setAdding(false)} />
     </div>
   );
 }

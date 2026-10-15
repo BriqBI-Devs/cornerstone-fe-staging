@@ -1,9 +1,9 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "../../components/ui/Card";
 import { SearchInput } from "../../components/ui/SearchInput";
-import { RESOURCE_CATEGORIES } from "../../features/policies-resources/data";
+import { RESOURCE_CATEGORIES, SUBMIT_CASE_URL } from "../../features/policies-resources/data";
 
 const INITIAL_VISIBLE_COUNT = 8;
 const HELP_CENTER_SLUG = "help-centers";
@@ -51,24 +51,35 @@ export function PoliciesResourcesPage() {
       <SearchInput
         value={query}
         onChange={setQuery}
-        placeholder="Search policies and resources…"
+        placeholder="Search categories"
         className="max-w-md"
       />
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
         {helpCenter && (
-          <Card className="flex flex-col border-l-4 border-l-brand-accent bg-surface-subtle p-6 md:col-span-2">
+          <Card className="flex flex-col border-l-4 border-l-brand-accent bg-surface-subtle p-6 md:col-span-2 lg:col-span-3">
             <h2 className="mb-4 text-[17px] font-bold text-brand-navy">{helpCenter.name}</h2>
             <p className="mb-5 flex-1 text-[13.5px] leading-[1.55] text-brand-navy/60">
               {helpCenter.description}
             </p>
-            <Link
-              to={`/policies-resources/${helpCenter.slug}`}
-              className="inline-flex w-fit items-center gap-2 self-start rounded-md border border-border bg-surface px-5 py-[9px] text-[12.5px] font-semibold text-brand-link transition-colors hover:border-brand-link hover:bg-brand-link/[0.08]"
-            >
-              View All
-              <ArrowRight className="h-3 w-3" />
-            </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href={SUBMIT_CASE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md bg-brand-navy px-5 py-[9px] text-[12.5px] font-semibold text-white transition-colors hover:bg-brand-navy/90"
+              >
+                Raise a ticket
+                <ExternalLink className="h-3 w-3" />
+              </a>
+              <Link
+                to={`/policies-resources/${helpCenter.slug}`}
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-5 py-[9px] text-[12.5px] font-semibold text-brand-link transition-colors hover:border-brand-link hover:bg-brand-link/[0.08]"
+              >
+                Resources
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
           </Card>
         )}
         {visibleCategories.map((category) => (

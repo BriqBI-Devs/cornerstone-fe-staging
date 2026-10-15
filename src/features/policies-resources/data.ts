@@ -12,6 +12,9 @@ export interface ResourceItem {
   items?: ResourceItem[];
 }
 
+/** EXAMPLE address only — replace with the real SysAid "Submit a case" form link (the ?form= part selects the form). */
+export const SUBMIT_CASE_URL = "https://lmdevpartners.sysaidit.com/sysai/ui/#/ui/";
+
 export interface ResourceCategory {
   slug: string;
   name: string;

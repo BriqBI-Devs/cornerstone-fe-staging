@@ -45,6 +45,7 @@ function FilePreview({ item, onClose }: { item: ResourceItem; onClose: () => voi
 export function ResourceRow({ item, onOpen }: { item: ResourceItem; onOpen?: () => void }) {
   const isLink = item.kind === "link";
   const isFolder = item.kind === "folder";
+  const isFile = !isLink && !isFolder;
   const [menuOpen, setMenuOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const menuRef = useRef<HTMLDetailsElement>(null);
@@ -102,7 +103,11 @@ export function ResourceRow({ item, onOpen }: { item: ResourceItem; onOpen?: () 
             {item.title}
           </a>
         </h2>
-        {item.created && <p className="text-xs text-brand-navy/75">Created {formatDate(item.created)}</p>}
+        {item.created && (
+          <p className="text-xs text-brand-navy/75 md:hidden">
+            {isFile ? "Uploaded" : "Created"} {formatDate(item.created)}
+          </p>
+        )}
       </div>
 
       {item.owner && (
@@ -111,6 +116,10 @@ export function ResourceRow({ item, onOpen }: { item: ResourceItem; onOpen?: () 
           <span className="truncate">{item.owner}</span>
         </span>
       )}
+
+      <span className="hidden w-[112px] shrink-0 text-right text-[13px] text-brand-navy/80 md:block">
+        {item.created && formatDate(item.created)}
+      </span>
 
       <span className="min-w-[56px] shrink-0 text-right text-[12.5px] font-medium text-brand-navy/75">{item.size}</span>
 
@@ -133,7 +142,23 @@ export function ResourceRow({ item, onOpen }: { item: ResourceItem; onOpen?: () 
           <EllipsisVertical className="h-4 w-4" />
         </summary>
         <div className="absolute right-0 top-full z-10 w-40 rounded-md border border-border bg-surface py-1 shadow-lg">
-          {isLink || isFolder ? (
+          {isFile ? (
+            <>
+              <button
+                type="button"
+                onClick={(event) => {
+                  closeMenu(event);
+                  setPreviewOpen(true);
+                }}
+                className={menuItemClass}
+              >
+                Preview
+              </button>
+              <a href={item.href} download onClick={closeMenu} className={menuItemClass}>
+                Download
+              </a>
+            </>
+          ) : (
             <a
               href={item.href}
               target={isLink ? "_blank" : undefined}
@@ -148,10 +173,6 @@ export function ResourceRow({ item, onOpen }: { item: ResourceItem; onOpen?: () 
               className={menuItemClass}
             >
               Open
-            </a>
-          ) : (
-            <a href={item.href} download onClick={closeMenu} className={menuItemClass}>
-              Download
             </a>
           )}
           <button type="button" onClick={closeMenu} className={menuItemClass}>

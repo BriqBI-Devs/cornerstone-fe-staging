@@ -1,3 +1,4 @@
+document.getElementById("outlookCalendar").href = OutlookSync.calendarUrl();
 // Calendar page: month and week grids that only load the visible range.
 const { api, todayString, toDateString, formatTime, formatDate, formatEventDateTime, eventCoversDate, isMultiDayEvent, locationMarkup, eventHref, listHref, emptyState } = EventsKit;
 const content = document.getElementById("eventsContent");
@@ -65,7 +66,7 @@ const openPreview = (event, trigger) => {
       <div class="event-preview-meta"><span class="pv-when"></span><span class="pv-where"></span><span class="pv-count"></span></div>
       <p class="event-preview-description"></p>
     </div>
-    <div class="event-preview-footer"><a href="${eventHref(event, fromHere())}">View details →</a></div>`;
+    <div class="event-preview-footer"><a href="${eventHref(event, fromHere())}">View details →</a><span aria-hidden="true"> · </span>${OutlookSync.eventLink(event)}</div>`;
   document.body.append(preview);
   const title = preview.querySelector(".event-preview-title");
   title.href = eventHref(event, fromHere());

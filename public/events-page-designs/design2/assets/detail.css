@@ -45,6 +45,7 @@
 .rsvp-actions button:hover { border-color: var(--navy); }
 .rsvp-actions button.selected { background: var(--navy); border-color: var(--navy); color: var(--accent); }
 .rsvp-message { min-height: 18px; margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+a.calendar-action { display: flex; align-items: center; justify-content: center; color: inherit; text-decoration: none; }
 .calendar-action { width: 100%; height: 40px; margin-top: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--pill); font-size: 13px; font-weight: 600; }
 .attendee-summary { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
 .attendee-avatars { display: flex; align-items: center; }

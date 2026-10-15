@@ -49,6 +49,8 @@
 .event-facts p { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; margin: 0; padding: 12px 0; border-top: 1px solid var(--line); font-size: 13px; line-height: 1.5; }
 .event-facts p span { color: var(--muted); }
 .event-facts p strong { font-weight: 600; overflow-wrap: anywhere; }
+.event-facts a.calendar-action { display: flex; align-items: center; justify-content: center; height: 40px; margin-top: 10px; border: 1px solid var(--line); border-radius: var(--pill); color: var(--ink); font-size: 13px; font-weight: 600; text-decoration: none; }
+.event-facts a.calendar-action:hover { border-color: var(--navy); }
 .event-facts a { color: var(--link); text-underline-offset: 2px; }
 
 /* ---- Related events ---- */

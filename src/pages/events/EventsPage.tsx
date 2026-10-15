@@ -15,18 +15,18 @@ const DESIGN_OPTIONS: DesignOption[] = [
       "A month and week calendar by default with a list view toggle. Search, date and RSVP filters, a quick-preview popover on each event, and a detail page with RSVP, attendees and related events.",
     folder: "design1",
   },
-  {
-    name: "Design 2 — Calendar Hub with Dark Intro",
-    summary:
-      "The same calendar and list as Design 1 in a new look: a dark intro band, a floating panel, a bordered calendar grid, a simple divided list and boxy controls.",
-    folder: "design2",
-  },
-  {
-    name: "Design 3 — Table List + Calendar",
-    summary:
-      "A navy title band with a List / Calendar switch. The list is a table (date, event, time, location, attending) with search, a date filter and paging; the calendar shows month and week.",
-    folder: "design3",
-  },
+  // {
+  //   name: "Design 2 — Calendar Hub with Dark Intro",
+  //   summary:
+  //     "The same calendar and list as Design 1 in a new look: a dark intro band, a floating panel, a bordered calendar grid, a simple divided list and boxy controls.",
+  //   folder: "design2",
+  // },
+  // {
+  //   name: "Design 3 — Table List + Calendar",
+  //   summary:
+  //     "A navy title band with a List / Calendar switch. The list is a table (date, event, time, location, attending) with search, a date filter and paging; the calendar shows month and week.",
+  //   folder: "design3",
+  // },
 ];
 
 export function EventsPage() {

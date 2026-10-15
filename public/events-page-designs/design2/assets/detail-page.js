@@ -202,6 +202,7 @@ attendeeDialog.addEventListener("click", (clickEvent) => {
   if (clickEvent.target === attendeeDialog) attendeeDialog.close();
 });
 document.getElementById("factDate").textContent = dateText;
+document.getElementById("outlookSync").href = OutlookSync.eventUrl(event);
 document.getElementById("factTime").textContent = event.allDay
   ? "All day"
   : event.dailySchedule

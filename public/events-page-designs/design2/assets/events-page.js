@@ -1,3 +1,4 @@
+document.getElementById("outlookCalendar").href = OutlookSync.calendarUrl();
 // Events landing page: calendar (month/week) and list views, search, filters, quick preview.
 const searchInput = document.getElementById("searchInput");
 const content = document.getElementById("eventsContent");
@@ -141,7 +142,7 @@ const openEventPreview = (event, trigger) => {
         <div class="event-preview-authors"></div>
       </div>
     </div>
-    <div class="event-preview-footer"><a href="${eventHref(event)}">View details</a></div>`;
+    <div class="event-preview-footer"><a href="${eventHref(event)}">View details</a><span aria-hidden="true"> · </span>${OutlookSync.eventLink(event)}</div>`;
   document.body.append(preview);
   preview.querySelector(".event-preview-date span").textContent = formatDate(event.date, { month: "short" });
   preview.querySelector(".event-preview-date strong").textContent = dateOf(event.date).getDate();
