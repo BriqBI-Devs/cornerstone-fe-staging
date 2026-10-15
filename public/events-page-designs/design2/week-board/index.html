@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Events | Cornerstone</title>
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header id="siteHeader"></header>
+
+  <main class="page">
+    <div class="page-head">
+      <h1>Events</h1>
+      <p>Your week at a glance. Select an event to read it and respond.</p>
+    </div>
+
+    <section class="card toolbar" aria-label="Week controls">
+      <div class="week-nav">
+        <button type="button" class="icon-btn" id="prevWeek" aria-label="Previous week"></button>
+        <h2 class="week-title" id="weekTitle"></h2>
+        <button type="button" class="icon-btn" id="nextWeek" aria-label="Next week"></button>
+        <button type="button" class="btn" id="thisWeek">This week</button>
+      </div>
+      <label class="search">
+        <span id="searchIcon"></span>
+        <span class="sr-only">Search events this week</span>
+        <input id="search" type="search" placeholder="Search this week" autocomplete="off">
+      </label>
+      <div class="segment" id="rsvpFilter" role="group" aria-label="Filter by your response"></div>
+    </section>
+
+    <div class="board" id="board" aria-live="polite"></div>
+    <p class="prototype-note">Design concept · Sample event information</p>
+  </main>
+
+  <dialog class="drawer" id="drawer" aria-labelledby="drawerTitle"></dialog>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/api.js"></script>
+  <script src="assets/ui.js"></script>
+  <script src="assets/board.js"></script>
+</body>
+</html>

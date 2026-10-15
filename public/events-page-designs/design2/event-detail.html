@@ -3,306 +3,87 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f7f5">
   <title>Event details | Cornerstone</title>
-  <style>
-:root {
-  color-scheme: light;
-  --ink: #1b2a3a;
-  --muted: #697586;
-  --muted-light: #8993a0;
-  --line: #e3e7eb;
-  --surface: #fff;
-  --canvas: #f7f8fa;
-  --blue: #1d4ed8;
-  --blue-soft: #eff5ff;
-  --yellow: #f5c518;
-  --green: #087443;
-  --green-soft: #eaf7f0;
-  --radius: 10px;
-  font-family: "Inter", system-ui, sans-serif;
-  color: var(--ink);
-  background: var(--canvas);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
-* { box-sizing: border-box; }
-body { min-width: 320px; margin: 0; background: var(--canvas); }
-a { color: inherit; }
-button, input, select { font: inherit; }
-button { color: inherit; }
-button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-[hidden] { display: none !important; }
-.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-
-.app-shell { min-height: 100vh; }
-.site-header { position: sticky; top: 0; z-index: 20; background: var(--surface); box-shadow: 0 1px 0 var(--line); }
-.wordmark { display: flex; min-height: 58px; align-items: center; justify-content: center; color: var(--ink); font-family: Georgia, serif; font-size: 22px; font-weight: 700; letter-spacing: .16em; text-decoration: none; }
-.primary-nav { display: flex; min-height: 43px; align-items: stretch; justify-content: center; gap: 30px; overflow-x: auto; padding: 0 22px; border-top: 1px solid var(--line); }
-.primary-nav a { position: relative; display: flex; align-items: center; flex: 0 0 auto; color: #465264; font-size: 11px; font-weight: 600; text-decoration: none; }
-.primary-nav a:hover { color: var(--blue); }
-.primary-nav a.active { color: var(--ink); }
-.primary-nav a.active::after { position: absolute; right: 0; bottom: 0; left: 0; height: 2px; background: var(--yellow); content: ""; }
-
-.main-content { width: min(100% - 40px, 1120px); margin: 34px auto 52px; }
-.page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
-.eyebrow { margin: 0 0 8px; color: var(--muted); font-size: 11px; font-weight: 500; }
-.page-heading h1 { margin: 0; font-size: clamp(26px, 3vw, 34px); font-weight: 700; letter-spacing: -.04em; }
-.intro { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
-.calendar-shortcut { color: var(--blue); font-size: 12px; font-weight: 600; text-decoration: none; }
-.events-panel { overflow: visible; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 2px 8px #1b2a3a08; }
-.toolbar { display: flex; min-height: 68px; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
-.search-field { display: flex; width: min(380px, 100%); height: 38px; align-items: center; gap: 9px; padding: 0 11px; border: 1px solid #d8dee5; border-radius: 6px; background: #fff; }
-.search-field:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px #1d4ed81a; }
-.search-field svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--muted); }
-.search-field input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--ink); font-size: 12px; }
-.search-field input::placeholder { color: var(--muted-light); }
-kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); font-family: inherit; font-size: 9px; }
-.filter-wrap { position: relative; }
-.button { display: inline-flex; height: 38px; align-items: center; justify-content: center; gap: 7px; padding: 0 12px; border: 1px solid #d8dee5; border-radius: 6px; background: #fff; cursor: pointer; font-size: 11px; font-weight: 600; white-space: nowrap; }
-.button:hover { background: #f8f9fb; }
-.button svg { width: 15px; height: 15px; }
-.filter-count { display: inline-grid; min-width: 17px; height: 17px; place-items: center; border-radius: 50%; background: var(--ink); color: #fff; font-size: 9px; }
-.filter-panel { position: absolute; top: calc(100% + 8px); right: 0; z-index: 10; width: 260px; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; box-shadow: 0 12px 32px #17283b1a; }
-.filter-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 12px; }
-.text-button { padding: 4px 5px; border: 0; background: transparent; color: var(--blue); cursor: pointer; font-size: 11px; font-weight: 600; }
-.filter-panel fieldset { display: grid; gap: 9px; margin: 0; padding: 11px 0; border: 0; border-top: 1px solid var(--line); }
-.filter-panel legend { margin-bottom: 8px; padding: 0; font-size: 10px; font-weight: 700; }
-.filter-panel label { display: flex; align-items: center; gap: 8px; color: #465264; font-size: 11px; cursor: pointer; }
-.filter-panel input { accent-color: var(--blue); }
-.view-switch { display: inline-flex; height: 38px; overflow: hidden; margin-left: auto; border: 1px solid #d8dee5; border-radius: 6px; }
-.view-button { display: inline-flex; min-width: 86px; align-items: center; justify-content: center; gap: 7px; padding: 0 11px; border: 0; background: #fff; color: #536071; cursor: pointer; font-size: 11px; font-weight: 600; }
-.view-button + .view-button { border-left: 1px solid #d8dee5; }
-.view-button svg { width: 15px; height: 15px; }
-.view-button.active { background: var(--blue-soft); color: var(--blue); box-shadow: inset 0 0 0 1px var(--blue); }
-
-.events-content { min-height: 280px; }
-.list-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 20px 12px; }
-.list-heading h2 { margin: 0; font-size: 12px; font-weight: 600; }
-.list-heading p { margin: 0; color: var(--muted); font-size: 10px; }
-.event-list { padding: 0 20px 8px; }
-.event-row { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); }
-.date-tile { overflow: hidden; width: 46px; border: 1px solid #e0e5ea; border-radius: 6px; text-align: center; }
-.date-month { display: block; padding: 4px 3px; background: var(--blue); color: #fff; font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
-.date-day { display: block; padding: 4px 0 5px; font-size: 19px; font-weight: 600; line-height: 1; }
-.event-copy { min-width: 0; }
-.event-title { margin: 0; font-size: 13px; font-weight: 600; line-height: 1.4; }
-.event-title a { text-decoration: none; }
-.event-title a:hover { color: var(--blue); text-decoration: underline; }
-.event-details { display: flex; flex-wrap: wrap; gap: 5px 13px; margin-top: 6px; color: var(--muted); font-size: 10px; }
-.event-details span { display: inline-flex; align-items: center; gap: 5px; }
-.event-details svg { width: 12px; height: 12px; }
-.event-rsvp { min-width: 68px; padding: 5px 8px; border: 1px solid transparent; border-radius: 20px; background: #f1f3f5; color: #536071; text-align: center; font-size: 9px; font-weight: 600; }
-.event-rsvp.yes { background: var(--green-soft); color: var(--green); }
-.event-rsvp.maybe { background: #fff6e6; color: #955500; }
-.event-rsvp.pending { border-color: #e6eaf0; background: #fff; }
-.empty-state { padding: 50px 20px; color: var(--muted); text-align: center; font-size: 12px; }
-.empty-state strong { display: block; margin-bottom: 5px; color: var(--ink); font-size: 14px; }
-
-.calendar-toolbar { display: flex; min-height: 58px; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px; border-bottom: 1px solid var(--line); }
-.period-controls, .calendar-options { display: flex; align-items: center; gap: 8px; }
-.period-controls h2 { min-width: 142px; margin: 0 4px; font-size: 13px; font-weight: 600; }
-.icon-control { display: grid; width: 29px; height: 29px; place-items: center; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; cursor: pointer; font-size: 18px; line-height: 1; }
-.icon-control:hover { color: var(--blue); }
-.calendar-options select { height: 30px; padding: 0 24px 0 8px; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; font-size: 10px; }
-.month-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
-.weekday { padding: 10px 8px; border-bottom: 1px solid var(--line); background: #fafbfc; color: var(--muted); text-align: center; font-size: 9px; font-weight: 600; text-transform: uppercase; }
-.day-cell { min-height: 104px; padding: 7px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.day-cell:nth-child(7n) { border-right: 0; }
-.day-cell.outside { background: #fafbfc; }
-.day-cell.outside .day-number { color: #aeb6c0; }
-.day-number { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; font-size: 10px; }
-.day-cell.today .day-number { background: var(--blue); color: #fff; font-weight: 700; }
-.calendar-event { display: block; overflow: hidden; margin-top: 5px; padding: 4px 5px; border-radius: 4px; background: var(--blue-soft); color: #1745a4; font-size: 9px; line-height: 1.35; text-decoration: none; text-overflow: ellipsis; }
-.calendar-event:hover { background: #dceaff; text-decoration: underline; }
-.week-grid { display: grid; grid-template-columns: 52px repeat(7, minmax(80px, 1fr)); min-width: 660px; }
-.week-scroll { overflow: auto; }
-.week-head { position: sticky; top: 0; z-index: 2; background: #fafbfc; }
-.week-head > div { padding: 9px 4px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--muted); text-align: center; font-size: 9px; }
-.week-head strong { display: block; margin-top: 4px; color: var(--ink); font-size: 11px; }
-.week-time, .week-cell { position: relative; min-height: 42px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.week-time { padding: 4px 5px 0 0; color: var(--muted); text-align: right; font-size: 8px; }
-.week-event { display: block; overflow: hidden; margin: 3px; padding: 4px; border-radius: 4px; background: var(--blue-soft); color: #1745a4; font-size: 8px; line-height: 1.3; text-decoration: none; }
-.prototype-note { margin: 11px 0 0; color: var(--muted-light); text-align: right; font-size: 9px; }
-
-@media (max-width: 720px) {
-  .primary-nav { justify-content: flex-start; gap: 22px; }
-  .main-content { width: min(100% - 28px, 1120px); margin-top: 24px; }
-  .toolbar { flex-wrap: wrap; padding: 12px; }
-  .search-field { flex: 1 1 220px; width: auto; }
-  .view-switch { margin-left: auto; }
-  .event-list { padding-right: 14px; padding-left: 14px; }
-  .list-heading { padding-right: 14px; padding-left: 14px; }
-  .event-row { grid-template-columns: 45px minmax(0, 1fr); gap: 10px; }
-  .event-rsvp { grid-column: 2; justify-self: start; margin-top: -3px; }
-}
-@media (max-width: 480px) {
-  .wordmark { min-height: 50px; font-size: 19px; }
-  .primary-nav { min-height: 40px; }
-  .main-content { width: calc(100% - 20px); margin-top: 20px; }
-  .page-heading { align-items: flex-start; margin-bottom: 16px; }
-  .intro { max-width: 260px; line-height: 1.5; }
-  .toolbar { gap: 8px; }
-  .search-field { flex-basis: calc(100% - 1px); }
-  .search-field kbd { display: none; }
-  .view-button { min-width: 72px; }
-  .button { padding-right: 9px; padding-left: 9px; }
-  .filter-panel { right: auto; left: 0; }
-  .calendar-toolbar { padding-right: 12px; padding-left: 12px; }
-  .period-controls { gap: 5px; }
-  .period-controls h2 { min-width: auto; font-size: 11px; }
-  .calendar-options { gap: 3px; }
-  .calendar-options .text-button { font-size: 10px; }
-  .calendar-options select { padding-right: 16px; }
-  .day-cell { min-height: 70px; padding: 4px; }
-  .calendar-event { padding: 3px; font-size: 8px; }
-  .weekday { padding: 8px 2px; font-size: 8px; }
-}
-
-.detail-main { width: min(100% - 40px, 1120px); margin: 28px auto 52px; }
-.back-link { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 20px; color: var(--muted); font-size: 11px; font-weight: 600; text-decoration: none; }
-.back-link:hover { color: var(--blue); }
-.back-link span { font-size: 16px; }
-.detail-layout { display: grid; grid-template-columns: minmax(0, 1fr) 290px; align-items: start; gap: 24px; }
-.detail-primary, .action-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 2px 8px #1b2a3a08; }
-.detail-primary { position: relative; overflow: hidden; padding: 26px; }
-.detail-date { position: absolute; top: 25px; right: 25px; display: grid; width: 48px; height: 48px; place-items: center; border-radius: 9px; background: var(--blue-soft); color: var(--blue); font-size: 13px; font-weight: 700; }
-.detail-primary > .eyebrow { margin: 2px 60px 9px 0; color: var(--blue); font-size: 9px; font-weight: 700; letter-spacing: .11em; }
-.detail-primary h1 { max-width: 680px; margin: 0 60px 14px 0; font-size: clamp(24px, 3vw, 34px); line-height: 1.2; letter-spacing: -.04em; }
-.detail-meta { display: flex; flex-wrap: wrap; gap: 7px 16px; margin-bottom: 20px; color: var(--muted); font-size: 11px; }
-.detail-meta span + span::before { margin-right: 12px; color: #c1c8d0; content: "•"; }
-.detail-meta a, .event-facts p strong a { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; }
-.detail-meta a:hover, .event-facts p strong a:hover { color: #173da8; }
-.detail-image { display: block; width: 100%; max-height: 360px; aspect-ratio: 16 / 8; border-radius: 8px; background: var(--canvas); object-fit: cover; }
-.detail-description { max-width: 720px; margin-top: 20px; color: #465264; font-size: 13px; line-height: 1.7; }
-.detail-description p { margin: 0 0 14px; }
-.detail-description p:last-child { margin-bottom: 0; }
-.detail-registration { margin: 18px 0; text-align: center; font-size: 13px; line-height: 1.5; }
-.detail-registration a { overflow-wrap: anywhere; color: var(--blue); }
-.detail-author { display: grid; gap: 11px; margin-top: 22px; padding-top: 15px; border-top: 1px solid var(--line); }
-.detail-author-label { margin-bottom: 3px; color: var(--muted); font-size: 9px; }
-.detail-author-summary { display: flex; align-items: center; }
-.detail-author-avatar { position: relative; display: grid; width: 30px; height: 30px; flex: 0 0 auto; overflow: hidden; place-items: center; margin-left: -7px; border: 2px solid var(--surface); border-radius: 50%; background: var(--blue-soft); color: var(--blue); font-size: 9px; font-weight: 700; }
-.detail-author-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-.detail-author-avatar:first-child { margin-left: 0; }
-.detail-author-overflow { display: grid; width: 30px; height: 30px; flex: 0 0 auto; place-items: center; margin-left: -7px; border: 2px solid var(--surface); border-radius: 50%; background: #eef0f3; color: #536071; font-size: 9px; font-weight: 700; }
-.detail-author-date { margin-top: 3px; color: var(--muted); font-size: 9px; }
-.topic-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 20px; }
-.topic-list span { padding: 5px 9px; border-radius: 20px; background: #f0f2f5; color: #536071; font-size: 9px; font-weight: 600; }
-.detail-aside { display: grid; gap: 12px; }
-.action-card { padding: 17px; }
-.card-eyebrow { margin: 0 0 6px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .08em; }
-.action-card h2 { margin: 0 0 14px; font-size: 14px; }
-.rsvp-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.rsvp-actions button { min-height: 35px; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; cursor: pointer; font-size: 10px; font-weight: 600; }
-.rsvp-actions button:hover, .rsvp-actions button.selected { border-color: var(--blue); background: var(--blue-soft); color: var(--blue); }
-.rsvp-message { min-height: 15px; margin: 8px 0 0; color: var(--muted); font-size: 10px; }
-.calendar-action { width: 100%; min-height: 36px; margin-top: 5px; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; cursor: pointer; font-size: 10px; font-weight: 600; }
-.calendar-action:hover { background: #f8f9fb; }
-.attendee-summary { display: flex; align-items: center; gap: 9px; margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
-.attendee-summary[hidden] { display: none; }
-.attendee-avatars { display: flex; align-items: center; padding-left: 2px; }
-.attendee-avatar { display: grid; width: 25px; height: 25px; flex: 0 0 auto; place-items: center; margin-left: -4px; border: 2px solid var(--surface); border-radius: 50%; background: var(--blue-soft); color: var(--blue); font-size: 7px; font-weight: 700; }
-.attendee-avatar { position: relative; }
-.attendee-avatar:first-child { margin-left: 0; }
-.attendee-avatar img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-.attendee-overflow { padding: 4px 7px; border: 0; border-radius: 20px; background: var(--blue-soft); color: var(--blue); cursor: pointer; font-size: 9px; font-weight: 700; }
-.attendee-overflow:hover { background: #dceaff; }
-.attendee-summary > span { white-space: nowrap; }
-.attendee-dialog { width: min(380px, calc(100% - 32px)); max-height: min(520px, calc(100% - 32px)); padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); box-shadow: 0 18px 48px #17283b30; }
-.attendee-dialog::backdrop { background: #17283b66; }
-.attendee-dialog-content { display: flex; max-height: inherit; flex-direction: column; }
-.attendee-dialog-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 18px 18px 13px; border-bottom: 1px solid var(--line); }
-.attendee-dialog-header h2 { margin: 0; font-size: 15px; }
-.attendee-dialog-header p { margin: 4px 0 0; color: var(--muted); font-size: 10px; }
-.attendee-load-status { margin: 0; padding: 8px 18px 0; color: var(--muted); font-size: 10px; }
-.attendee-load-status:empty { display: none; }
-.attendee-dialog-close { display: grid; width: 28px; height: 28px; flex: 0 0 auto; place-items: center; border: 0; border-radius: 50%; background: #f0f2f5; color: var(--muted); cursor: pointer; font-size: 17px; line-height: 1; }
-.attendee-list { display: grid; gap: 2px; overflow-y: auto; margin: 0; padding: 8px 12px 12px; list-style: none; }
-.attendee-list li { display: flex; align-items: center; gap: 10px; padding: 7px 6px; border-radius: 6px; font-size: 11px; }
-.attendee-list li:hover { background: #f7f8fa; }
-.attendee-list .attendee-avatar { width: 30px; height: 30px; margin: 0; font-size: 8px; }
-.event-facts h2 { margin-bottom: 10px; }
-.event-facts p { display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 8px; margin: 0; padding: 9px 0; border-top: 1px solid var(--line); font-size: 10px; line-height: 1.5; }
-.event-facts p span { color: var(--muted); }
-.event-facts p strong { font-weight: 500; overflow-wrap: anywhere; }
-.suggested-section { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line); }
-.suggested-section h2 { margin: 0 0 12px; font-size: 14px; }
-.suggested-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.suggested-card { overflow: hidden; border: 1px solid var(--line); border-radius: 7px; background: #fff; text-decoration: none; }
-.suggested-card:hover { border-color: #b9c9e8; box-shadow: 0 4px 12px #1b2a3a0d; }
-.suggested-card img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
-.suggested-card strong { display: block; padding: 0 9px 10px; font-size: 10px; line-height: 1.45; }
-.suggested-date { display: block; padding: 9px 9px 4px; color: var(--muted); font-size: 9px; }
-@media (max-width: 760px) { .detail-layout { grid-template-columns: 1fr; } .detail-aside { grid-row: 1; grid-template-columns: 1fr 1fr; } }
-@media (max-width: 560px) { .detail-main { width: calc(100% - 20px); margin-top: 20px; } .detail-primary { padding: 18px; } .detail-date { top: 18px; right: 18px; width: 40px; height: 40px; font-size: 11px; } .detail-primary h1 { margin-right: 38px; font-size: 23px; } .detail-primary > .eyebrow { margin-right: 40px; } .detail-aside { grid-template-columns: 1fr; } .suggested-list { grid-template-columns: 1fr; } .suggested-card { display: grid; grid-template-columns: 105px minmax(0, 1fr); grid-template-rows: auto 1fr; } .suggested-card img { grid-row: 1 / 3; height: 100%; aspect-ratio: auto; } .suggested-date { align-self: end; padding-top: 9px; } .suggested-card strong { padding-bottom: 9px; } }
-  </style>
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/detail.css">
 </head>
 <body>
-  <div class="app-shell">
-    <header class="site-header">
-      <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
-      <nav class="primary-nav" aria-label="Main navigation">
-        <a href="/news">News</a>
-        <a href="/company-culture">Company + Culture</a>
-        <a class="active" href="index.html" aria-current="page">Events</a>
-        <a href="/people">People</a>
-        <a href="/departments">Departments</a>
-        <a href="/policies-resources">Policies + Resources</a>
-      </nav>
-    </header>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="/news">News</a>
+      <a href="/company-culture">Company + Culture</a>
+      <a class="active" href="index.html" aria-current="page">Events</a>
+      <a href="/people">People</a>
+      <a href="/departments">Departments</a>
+      <a href="/policies-resources">Policies + Resources</a>
+    </nav>
+  </header>
 
-    <main class="detail-main">
+  <section class="hero hero-compact">
+    <div class="hero-inner">
       <a class="back-link" id="backLink" href="index.html"><span aria-hidden="true">←</span> Back to events</a>
-      <article class="detail-layout">
-        <div class="detail-primary">
-          <div class="detail-date" id="detailDate"></div>
-          <p class="eyebrow">EVENT DETAILS</p>
-          <h1 id="eventTitle"></h1>
-          <div class="detail-meta" id="eventMeta"></div>
-          <img class="detail-image" id="eventImage" alt="">
-          <div class="detail-description" id="eventDescription"></div>
-          <div class="detail-registration" id="eventRegistration" hidden></div>
-          <section class="detail-author" aria-label="Event authors">
-            <div class="detail-author-label">Authors</div>
-            <div class="detail-author-summary" id="eventAuthors"></div>
-            <div class="detail-author-date" id="authorDate"></div>
-          </section>
-          <div class="topic-list" id="eventTopics"></div>
-          <section class="suggested-section">
-            <h2>Related events</h2>
-            <div class="suggested-list" id="relatedEvents"></div>
-          </section>
-        </div>
-        <aside class="detail-aside">
-          <section class="action-card">
-            <p class="card-eyebrow">YOUR RESPONSE</p>
-            <h2>Will you attend?</h2>
-            <div class="rsvp-actions" role="group" aria-label="Choose your RSVP">
-              <button type="button" data-rsvp="Yes">Yes</button>
-              <button type="button" data-rsvp="Maybe">Maybe</button>
-              <button type="button" data-rsvp="No">No</button>
-            </div>
-            <p class="rsvp-message" id="rsvpMessage" role="status"></p>
-            <button class="calendar-action" id="calendarAction" type="button" hidden>＋ &nbsp; Add to calendar</button>
-            <div class="attendee-summary" id="attendeeSummary">
-              <div class="attendee-avatars" id="attendeeAvatars" aria-hidden="true"></div>
-              <button class="attendee-overflow" id="attendeeOverflow" type="button"></button>
-              <span><strong id="attendeeCount"></strong> people attending</span>
-            </div>
-          </section>
-          <section class="action-card event-facts">
-            <h2>Event information</h2>
-            <p><span>Date</span><strong id="factDate"></strong></p>
-            <p><span>Time</span><strong id="factTime"></strong></p>
-            <p><span>Location</span><strong id="factLocation"></strong></p>
-          </section>
-        </aside>
-      </article>
-      <p class="prototype-note">Design concept · Sample event information</p>
-    </main>
-  </div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <section class="card detail-hero">
+      <img class="detail-image" id="eventImage" alt="">
+      <div class="detail-summary">
+        <div class="detail-date" id="detailDate"></div>
+        <p class="eyebrow">Event details</p>
+        <h1 id="eventTitle"></h1>
+        <div class="detail-meta" id="eventMeta"></div>
+      </div>
+    </section>
+
+    <article class="detail-layout">
+      <div class="card detail-primary">
+        <p class="section-label">About this event</p>
+        <div class="detail-description" id="eventDescription"></div>
+        <div class="detail-registration" id="eventRegistration" hidden></div>
+        <div class="topic-list" id="eventTopics"></div>
+        <section class="detail-author" aria-label="Event authors">
+          <div class="detail-author-label">Posted by</div>
+          <div class="detail-author-summary" id="eventAuthors"></div>
+          <div class="detail-author-date" id="authorDate"></div>
+        </section>
+      </div>
+
+      <aside class="detail-aside">
+        <section class="card action-card">
+          <p class="card-eyebrow">Your response</p>
+          <h2>Will you attend?</h2>
+          <div class="rsvp-actions" role="group" aria-label="Choose your RSVP">
+            <button type="button" data-rsvp="Yes">Yes</button>
+            <button type="button" data-rsvp="Maybe">Maybe</button>
+            <button type="button" data-rsvp="No">No</button>
+          </div>
+          <p class="rsvp-message" id="rsvpMessage" role="status"></p>
+          <button class="calendar-action" id="calendarAction" type="button" hidden>＋ &nbsp; Add to calendar</button>
+          <div class="attendee-summary" id="attendeeSummary">
+            <div class="attendee-avatars" id="attendeeAvatars" aria-hidden="true"></div>
+            <button class="attendee-overflow" id="attendeeOverflow" type="button"></button>
+            <span><strong id="attendeeCount"></strong> people attending</span>
+          </div>
+        </section>
+        <section class="card action-card event-facts">
+          <h2>Event information</h2>
+          <p><span>Date</span><strong id="factDate"></strong></p>
+          <p><span>Time</span><strong id="factTime"></strong></p>
+          <p><span>Location</span><strong id="factLocation"></strong></p>
+        </section>
+      </aside>
+    </article>
+
+    <section class="suggested-section">
+      <h2>Related events</h2>
+      <div class="suggested-list" id="relatedEvents"></div>
+    </section>
+    <p class="prototype-note">Design concept · Sample event information</p>
+  </main>
+
   <dialog class="attendee-dialog" id="attendeeDialog" aria-labelledby="attendeeDialogTitle">
     <div class="attendee-dialog-content">
       <header class="attendee-dialog-header">
@@ -317,291 +98,7 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
     </div>
   </dialog>
 
-  <script>
-    const events = [
-      { id: "linkedin-learning-reset", title: "LinkedIn Learning Champion: Tips to Reset an Overwhelming Day", date: "2026-10-30", start: "12:00", end: "13:00", location: "Online (Zoom)", attendees: 10, rsvp: "Pending", image: "../../company&culture/assets/images/team-meeting.jpg", imageAlt: "Colleagues collaborating at a team meeting", description: "Join our next LinkedIn Learning Champion session and explore practical ways to reset when a day feels overwhelming. Review the short course before the event, then bring one strategy or question to discuss with the group. You'll leave with ideas you can try in your own workday.", topics: ["Learning", "Wellbeing", "Professional development"] },
-      { id: "feedingnyc-volunteer", title: "FeedingNYC Is Back! Help Pack Thanksgiving Meals", date: "2026-11-23", start: "08:30", end: "11:30", location: "New York, NY", attendees: 18, rsvp: "Yes", image: "../../company&culture/assets/images/fall-volunteer-day.jpg", imageAlt: "Colleagues volunteering together outdoors", description: "Join colleagues to pack Thanksgiving meals with FeedingNYC. Volunteers will organize supplies, prepare meal boxes, and work together to support local families ahead of the holiday. All volunteers are welcome; please arrive ready to take part in hands-on activities.", topics: ["Community", "Volunteer"] },
-      { id: "cornerstone-leadership-summit", title: "Cornerstone Leadership Summit", date: "2026-11-09", endDate: "2026-11-11", dailySchedule: true, start: "09:00", end: "17:00", location: "Main Office", attendees: 36, rsvp: "Pending", image: "../../company&culture/assets/images/team-meeting.jpg", imageAlt: "Colleagues collaborating at a team meeting", description: "Join colleagues for a three-day leadership summit focused on collaboration, shared priorities, and planning for the year ahead.\n\nThe summit runs Monday, November 9 through Wednesday, November 11, with sessions scheduled from 9:00 AM to 5:00 PM each day. Join us at the Main Office for workshops, team discussions, and planning sessions.", topics: ["Leadership", "Planning", "Team meeting"] },
-      { id: "september-town-hall", title: "September Town Hall", date: "2026-09-29", start: "16:30", end: "17:00", location: "Online", attendees: 42, rsvp: "Yes", image: "../../company&culture/assets/images/team-meeting.jpg", imageAlt: "Colleagues collaborating at a team meeting", description: "Catch up on company updates and hear brief highlights from teams across L+M. The town hall will also include time for questions, so bring a topic you'd like leaders to address. Join online a few minutes early to get settled.", topics: ["Company updates", "Community"] },
-      { id: "employee-inclusion-survey", title: "Employee Inclusion Survey | All Employees – Respond by Oct 14 – Deadline Extended", date: "2026-10-05", endDate: "2026-10-14", allDay: true, rsvpRequired: false, start: "00:00", end: "23:59", location: "Online", attendees: 0, rsvp: "Pending", image: "../../company&culture/assets/images/company-guide-toc.jpg", imageAlt: "Company guide and resources", description: "Share your perspective in the company-wide Employee Inclusion Survey. All employees are encouraged to participate during the response window.\n\nThe survey is open from Monday, October 5 through Wednesday, October 14. It is available online and should take only a few minutes to complete.", topics: ["Company updates", "People"] },
-      { id: "weekly-connect", title: "Cornerstone Weekly Connect", date: "2026-10-13", start: "09:30", end: "10:00", location: "Online", attendees: 8, rsvp: "Maybe", image: "../../company&culture/assets/images/office-team.jpg", imageAlt: "Colleagues meeting together at the office", description: "Take a short break to connect with colleagues and hear what's happening across Cornerstone this week. Share a quick update, celebrate a team win, or bring up something others should know. Everyone is welcome to join the conversation.", topics: ["Community", "Company updates"] },
-      { id: "benefits-open-enrollment", title: "Benefits Open Enrollment Q&A", date: "2026-10-13", start: "10:00", end: "10:45", location: "Online", attendees: 16, rsvp: "Pending", image: "../../company&culture/assets/images/company-guide-toc.jpg", imageAlt: "Company guide and resources", description: "Get answers to your benefits questions and learn what to consider during open enrollment. The People Team will walk through available resources and common decision points, then leave time for questions.\n\nBring any topics you'd like clarified. Review the benefits guide before the session so you can make the most of the Q&A.\n\nWe'll also discuss where to find plan comparisons, how to review coverage for the year ahead, and which support resources are available after the session. Please avoid sharing personal health or benefits details in the group Q&A.", registrationUrl: "https://example.com/events/benefits-open-enrollment", topics: ["Benefits", "Q&A"] },
-      { id: "wellbeing-checkin", title: "Midweek Wellbeing Check-In", date: "2026-10-13", start: "11:00", end: "11:30", location: "Online", attendees: 11, rsvp: "Pending", image: "../../company&culture/assets/images/team-meeting.jpg", imageAlt: "Colleagues collaborating at a team meeting", description: "Pause with colleagues for a supportive midweek check-in about wellbeing at work. We'll share practical habits, discuss ways to make busy weeks more manageable, and exchange ideas that have worked for our teams. Participation is informal and sharing is optional.", topics: ["Wellbeing", "Community"] },
-      { id: "lunch-learn", title: "Lunch & Learn: Building Better Habits", date: "2026-10-13", start: "12:00", end: "13:00", location: "Main Office", attendees: 22, rsvp: "Yes", image: "../../company&culture/assets/images/meet-the-teams-comms-marketing.jpg", imageAlt: "Colleagues sharing ideas in a workshop", description: "Bring your lunch for an informal learning session about small habits that can make work easier and more focused. We'll look at simple ways to build routines, share examples, and leave time to discuss ideas with colleagues. No preparation is required.", topics: ["Learning", "Professional development"] },
-      { id: "people-team-office-hours", title: "People Team Office Hours", date: "2026-10-13", start: "14:00", end: "14:30", location: "Online", attendees: 6, rsvp: "Maybe", image: "../../company&culture/assets/images/office-team.jpg", imageAlt: "Colleagues meeting together at the office", description: "Drop in for an informal conversation with the People Team. Ask a question, get pointed to a useful policy or resource, or raise a topic you'd like help navigating. You can join for the full session or just the time you need.", topics: ["People", "Q&A"] },
-      { id: "property-operations-standup", title: "Property Operations Team Stand-Up", date: "2026-10-14", start: "09:00", end: "09:30", location: "Conference Room 4A", attendees: 12, rsvp: "Yes", image: "../../company&culture/assets/images/meet-the-teams-building-envelope.jpg", imageAlt: "Property operations team", description: "Start the day with a focused operations check-in. Share site updates, coordinate priorities, flag issues that need support, and confirm next steps for the week. Team members can bring brief updates or questions for the group.", topics: ["Operations", "Team meeting"] },
-      { id: "community-investment-briefing", title: "Community Investment Volunteer Briefing", date: "2026-10-15", start: "13:00", end: "14:00", location: "Online", attendees: 9, rsvp: "Maybe", image: "../../company&culture/assets/images/fulton-park-book-bags.jpg", imageAlt: "Community volunteers preparing supplies", description: "Meet the Community Investment team and learn about upcoming volunteer opportunities. We'll share the goals of each activity, explain how to get involved, and answer questions about scheduling and participation. Join to find a project that interests you.", topics: ["Community", "Volunteer"] },
-      { id: "new-hire-welcome", title: "New Hire Welcome and Orientation", date: "2026-10-16", start: "11:00", end: "12:00", location: "Main Office", attendees: 7, rsvp: "Pending", image: "../../company&culture/assets/images/welcome-september-new-hires.jpg", imageAlt: "New colleagues being welcomed to the team", description: "Help welcome our newest colleagues to L+M. This session introduces the people, teams, and resources that can help new hires get started, with time to meet coworkers and ask questions. All colleagues are welcome to join and say hello.", topics: ["New hires", "Welcome"] },
-      { id: "site-family-day", title: "Saturday Site Family Day", date: "2026-10-17", start: "10:30", end: "12:30", location: "River Crossing", attendees: 24, rsvp: "Yes", image: "../../company&culture/assets/images/river-crossing-family-day.jpg", imageAlt: "Colleagues and families at a community event", description: "Bring family and friends for a relaxed day at River Crossing. Enjoy activities, spend time with colleagues outside the workday, and connect with the local community. More event-day information will be shared with attendees closer to the date.", topics: ["Community", "Families"] },
-      { id: "community-garden-day", title: "Sunday Community Garden Volunteer Day", date: "2026-10-18", start: "09:00", end: "11:00", location: "Saratoga", attendees: 14, rsvp: "No", image: "../../company&culture/assets/images/outdoor-event.jpg", imageAlt: "Colleagues volunteering outdoors", description: "Spend the morning helping care for the community garden and connecting with fellow volunteers. The group will work together on seasonal garden tasks and help keep the space welcoming for the neighborhood. Wear comfortable clothes suitable for outdoor work.", topics: ["Community", "Volunteer"] },
-    ];
-    events.forEach((item) => {
-      item.rsvp = localStorage.getItem(`event-rsvp-${item.id}`) || item.rsvp;
-      item.authors = item.id === "benefits-open-enrollment"
-        ? ["Destiny Tucker", "Belinda Apprey", "Jordan Lee"]
-        : ["Destiny Tucker", "Belinda Apprey"];
-      item.published = "Published Jun 18, 2025";
-      item.edited = "Edited Jun 20, 2025";
-    });
-    const params = new URLSearchParams(location.search);
-    const event = events.find((item) => item.id === params.get("id")) || events[0];
-    const demoAttendeeDirectory = [
-      "Avery Morgan", "Jordan Ellis", "Riley Bennett", "Taylor Brooks", "Casey Parker", "Morgan Reed",
-      "Jamie Foster", "Cameron Hayes", "Quinn Bailey", "Drew Sullivan", "Skyler Price", "Reese Coleman",
-      "Rowan Murphy", "Emerson Hughes", "Finley Ward", "Dakota James", "Peyton Russell", "Kendall Griffin",
-      "Charlie Barnes", "Alexandra Ross", "Sage Peterson", "Blake Cooper", "Elliot Richardson", "Remy Cox",
-      "Harper Howard", "Noah Flores", "Milan Rogers", "Ari Simmons", "Robin Bell", "Micah Cook",
-      "Shiloh Kelly", "Logan Sanders", "Cory Bennett", "Samira Brooks", "Devon Murphy", "Lee Parker",
-      "Amari Watson", "Ellis Turner", "Dana Mitchell", "Jules Ramirez", "Frankie Bailey", "Terry Morgan",
-    ];
-    const attendeeStartIndex = Array.from(event.id).reduce((total, character) => total + character.charCodeAt(0), 0) % demoAttendeeDirectory.length;
-    const eventAttendees = Array.from({ length: Math.min(event.attendees, demoAttendeeDirectory.length) }, (_, index) => ({
-      name: demoAttendeeDirectory[(attendeeStartIndex + index) % demoAttendeeDirectory.length],
-      picture: "",
-    }));
-    const initialsFor = (name) => name.split(/\s+/).map((part) => part[0]).slice(0, 2).join("").toUpperCase();
-    const locationMarkup = (location) => {
-      const escapedLocation = location.replace(/[&<>"']/g, (character) => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
-      })[character]);
-      if (!/\bonline\b/i.test(location)) return escapedLocation;
-      const zoomLink = '<a href="https://zoom.us/" target="_blank" rel="noopener noreferrer" aria-label="Visit the official Zoom website">https://zoom.us/</a>';
-      return /\bzoom\b/i.test(location)
-        ? escapedLocation.replace(/\bzoom\b/i, zoomLink)
-        : `${escapedLocation} · ${zoomLink}`;
-    };
-    const date = new Date(`${event.date}T12:00:00`);
-    const dateOptions = { weekday: "long", month: "long", day: "numeric", year: "numeric" };
-    const endDate = event.endDate || event.date;
-    const formatDate = (value, options = dateOptions) => new Intl.DateTimeFormat("en-US", options).format(new Date(`${value}T12:00:00`));
-    const dateText = event.date === endDate
-      ? formatDate(event.date)
-      : `${formatDate(event.date)} – ${formatDate(endDate)}`;
-    const timeText = (value) => {
-      const [hours, minutes] = value.split(":").map(Number);
-      return new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(new Date(2026, 0, 1, hours, minutes));
-    };
-    const eventDateTimeText = event.allDay
-      ? `${dateText} · All day`
-      : event.dailySchedule
-        ? `${dateText} · Daily, ${timeText(event.start)}–${timeText(event.end)}`
-      : event.date === endDate
-        ? `${dateText} · ${timeText(event.start)}–${timeText(event.end)}`
-        : `${formatDate(event.date)} ${timeText(event.start)} – ${formatDate(endDate)} ${timeText(event.end)}`;
-    const currentResponse = localStorage.getItem(`event-rsvp-${event.id}`) || event.rsvp;
-    const eventUrl = (item) => `event-detail.html?id=${encodeURIComponent(item.id)}&from=${encodeURIComponent(params.get("from") || "index.html")}`;
-    document.title = `${event.title} | Cornerstone Events`;
-    if (event.rsvpRequired === false) {
-      document.querySelector(".detail-aside > .action-card").hidden = true;
-      document.querySelector(".event-facts").append(document.getElementById("calendarAction"));
-    }
-    document.getElementById("eventTitle").textContent = event.title;
-    document.getElementById("detailDate").textContent = `${new Intl.DateTimeFormat("en-US", { month: "short" }).format(date)} ${date.getDate()}`;
-    document.getElementById("eventMeta").innerHTML = `<span>${eventDateTimeText}</span><span>${locationMarkup(event.location)}</span>`;
-    const image = document.getElementById("eventImage");
-    image.src = event.image;
-    image.alt = event.imageAlt;
-    const description = document.getElementById("eventDescription");
-    description.replaceChildren(...event.description.split(/\n\n+/).map((paragraph) => {
-      const element = document.createElement("p");
-      element.textContent = paragraph;
-      return element;
-    }));
-    if (event.registrationUrl) {
-      const registration = document.getElementById("eventRegistration");
-      registration.hidden = false;
-      const prompt = document.createElement("strong");
-      prompt.textContent = "Register in advance for the meeting here:";
-      const link = document.createElement("a");
-      link.href = event.registrationUrl;
-      link.textContent = event.registrationUrl;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      registration.append(prompt, document.createElement("br"), link);
-    }
-    const authorsSummary = document.getElementById("eventAuthors");
-    authorsSummary.setAttribute("aria-label", `${event.authors.length} authors: ${event.authors.join(", ")}`);
-    authorsSummary.replaceChildren();
-    const authorAvatars = event.authors.slice(0, 4).map((author) => {
-      const avatar = document.createElement("span");
-      avatar.className = "detail-author-avatar";
-      avatar.setAttribute("aria-hidden", "true");
-      avatar.textContent = initialsFor(author);
-      authorsSummary.append(avatar);
-      return avatar;
-    });
-    if (event.authors.length > 4) {
-      const overflow = document.createElement("span");
-      overflow.className = "detail-author-overflow";
-      overflow.setAttribute("aria-hidden", "true");
-      overflow.textContent = `+${event.authors.length - 4}`;
-      authorsSummary.append(overflow);
-    }
-    const loadAuthorPictures = async () => {
-      const url = new URL("https://randomuser.me/api/");
-      url.searchParams.set("results", String(authorAvatars.length));
-      url.searchParams.set("inc", "picture");
-      url.searchParams.set("noinfo", "");
-      url.searchParams.set("seed", `cornerstone-authors-${event.id}`);
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`Random User API returned HTTP ${response.status}`);
-      const payload = await response.json();
-      if (!Array.isArray(payload.results) || payload.results.length < authorAvatars.length) {
-        throw new Error("Random User API returned an incomplete author profile list");
-      }
-      payload.results.slice(0, authorAvatars.length).forEach((profile, index) => {
-        const picture = profile.picture?.thumbnail;
-        if (typeof picture !== "string") throw new Error("Random User API returned an invalid author photo");
-        const image = document.createElement("img");
-        image.src = picture;
-        image.alt = "";
-        image.addEventListener("error", () => image.remove(), { once: true });
-        authorAvatars[index].append(image);
-      });
-    };
-    void loadAuthorPictures().catch((error) => {
-      console.error("Unable to load sample author photos.", error);
-    });
-    document.getElementById("authorDate").textContent = `${event.published} (${event.edited})`;
-    document.getElementById("eventTopics").innerHTML = event.topics.map((topic) => `<span>${topic}</span>`).join("");
-    document.getElementById("attendeeCount").textContent = event.attendees;
-    const attendeeSummary = document.getElementById("attendeeSummary");
-    attendeeSummary.hidden = event.attendees === 0;
-    const attendeeAvatars = document.getElementById("attendeeAvatars");
-    const attendeeOverflow = document.getElementById("attendeeOverflow");
-    const attendeeOverflowCount = Math.max(0, event.attendees - 3);
-    attendeeOverflow.hidden = attendeeOverflowCount === 0;
-    if (attendeeOverflowCount > 0) {
-      attendeeOverflow.textContent = `+${attendeeOverflowCount}`;
-      attendeeOverflow.setAttribute("aria-label", `Show ${event.attendees} people attending`);
-    }
-    const attendeeDialog = document.getElementById("attendeeDialog");
-    document.getElementById("attendeeDialogCount").textContent = `${event.attendees} people attending`;
-    const attendeeList = document.getElementById("attendeeList");
-    const attendeeLoadStatus = document.getElementById("attendeeLoadStatus");
-    const makeAttendeeAvatar = (attendee, eager = false) => {
-      const avatar = document.createElement("span");
-      avatar.className = "attendee-avatar";
-      avatar.textContent = initialsFor(attendee.name);
-      avatar.setAttribute("aria-hidden", "true");
-      if (attendee.picture) {
-        const image = document.createElement("img");
-        image.src = attendee.picture;
-        image.alt = "";
-        image.loading = eager ? "eager" : "lazy";
-        image.addEventListener("error", () => image.remove(), { once: true });
-        avatar.append(image);
-      }
-      return avatar;
-    };
-    const renderAttendeeList = () => {
-      attendeeAvatars.replaceChildren(...eventAttendees.slice(0, 3).map((attendee) => makeAttendeeAvatar(attendee, true)));
-      attendeeList.replaceChildren(...eventAttendees.map((attendee) => {
-        const item = document.createElement("li");
-        const label = document.createElement("span");
-        label.textContent = attendee.name;
-        item.append(makeAttendeeAvatar(attendee), label);
-        return item;
-      }));
-    };
-    renderAttendeeList();
-    const loadAttendeeProfiles = async () => {
-      if (!event.attendees) {
-        attendeeLoadStatus.textContent = "";
-        return;
-      }
-      try {
-        const url = new URL("https://randomuser.me/api/");
-        url.searchParams.set("results", String(event.attendees));
-        url.searchParams.set("inc", "name,picture");
-        url.searchParams.set("noinfo", "");
-        url.searchParams.set("seed", `cornerstone-${event.id}`);
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Random User API returned HTTP ${response.status}`);
-        const payload = await response.json();
-        if (!Array.isArray(payload.results) || payload.results.length < eventAttendees.length) {
-          throw new Error("Random User API returned an incomplete attendee list");
-        }
-        const profiles = payload.results.slice(0, eventAttendees.length).map((profile) => {
-          const firstName = profile.name?.first;
-          const lastName = profile.name?.last;
-          const picture = profile.picture?.thumbnail;
-          if (typeof firstName !== "string" || typeof lastName !== "string" || typeof picture !== "string") {
-            throw new Error("Random User API returned an invalid profile");
-          }
-          return { name: `${firstName} ${lastName}`, picture };
-        });
-        eventAttendees.splice(0, eventAttendees.length, ...profiles);
-        attendeeLoadStatus.textContent = "";
-        renderAttendeeList();
-      } catch (error) {
-        console.error("Unable to load sample attendee profiles.", error);
-        attendeeLoadStatus.textContent = "Sample profile photos could not be loaded. Showing initials instead.";
-      }
-    };
-    void loadAttendeeProfiles();
-    attendeeOverflow.addEventListener("click", () => attendeeDialog.showModal());
-    attendeeDialog.querySelector(".attendee-dialog-close").addEventListener("click", () => attendeeDialog.close());
-    attendeeDialog.addEventListener("click", (clickEvent) => {
-      if (clickEvent.target === attendeeDialog) attendeeDialog.close();
-    });
-    document.getElementById("factDate").textContent = dateText;
-    document.getElementById("factTime").textContent = event.allDay
-      ? "All day"
-      : event.dailySchedule
-        ? `Daily, ${timeText(event.start)}–${timeText(event.end)}`
-      : event.date === endDate
-        ? `${timeText(event.start)}–${timeText(event.end)}`
-        : `${timeText(event.start)} ${formatDate(event.date, { month: "short", day: "numeric" })} – ${timeText(event.end)} ${formatDate(endDate, { month: "short", day: "numeric" })}`;
-    document.getElementById("factLocation").innerHTML = locationMarkup(event.location);
-    document.getElementById("rsvpMessage").textContent = currentResponse === "Pending" ? "You haven't responded yet." : `Your response: ${currentResponse}`;
-    document.querySelectorAll("[data-rsvp]").forEach((button) => {
-      button.classList.toggle("selected", button.dataset.rsvp === currentResponse);
-      button.addEventListener("click", () => {
-        localStorage.setItem(`event-rsvp-${event.id}`, button.dataset.rsvp);
-        document.querySelectorAll("[data-rsvp]").forEach((choice) => choice.classList.toggle("selected", choice === button));
-        document.getElementById("rsvpMessage").textContent = `Your response: ${button.dataset.rsvp}`;
-      });
-    });
-    document.getElementById("calendarAction").addEventListener("click", () => {
-      const startDateStamp = event.date.replaceAll("-", "");
-      const endDateStamp = endDate.replaceAll("-", "");
-      const toStamp = (dateStamp, time) => `${dateStamp}T${time.replace(":", "")}00`;
-      const endExclusiveDate = new Date(`${endDate}T12:00:00`);
-      if (event.allDay) endExclusiveDate.setDate(endExclusiveDate.getDate() + 1);
-      const endDateValue = `${endExclusiveDate.getFullYear()}${String(endExclusiveDate.getMonth() + 1).padStart(2, "0")}${String(endExclusiveDate.getDate()).padStart(2, "0")}`;
-      const calendar = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "BEGIN:VEVENT",
-        event.allDay ? `DTSTART;VALUE=DATE:${startDateStamp}` : `DTSTART:${toStamp(startDateStamp, event.start)}`,
-        event.allDay ? `DTEND;VALUE=DATE:${endDateValue}` : `DTEND:${toStamp(event.dailySchedule ? startDateStamp : endDateStamp, event.end)}`,
-        ...(event.dailySchedule ? [`RRULE:FREQ=DAILY;COUNT:${Math.floor((new Date(`${endDate}T12:00:00`) - new Date(`${event.date}T12:00:00`)) / 86400000) + 1}`] : []),
-        `SUMMARY:${event.title}`,
-        `LOCATION:${event.location}`,
-        "END:VEVENT",
-        "END:VCALENDAR",
-      ].join("\r\n");
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(new Blob([calendar], { type: "text/calendar" }));
-      link.download = `${event.id}.ics`;
-      link.click();
-      URL.revokeObjectURL(link.href);
-    });
-    const requestedReturn = params.get("from");
-    if (requestedReturn && requestedReturn.startsWith("index.html")) document.getElementById("backLink").href = requestedReturn;
-    document.getElementById("relatedEvents").innerHTML = events.filter((item) => item.id !== event.id).slice(0, 3).map((item) => `
-      <a class="suggested-card" href="${eventUrl(item)}">
-        <img src="${item.image}" alt="${item.imageAlt}">
-        <span class="suggested-date">${item.allDay
-          ? `${formatDate(item.date, { month: "short", day: "numeric" })} – ${formatDate(item.endDate || item.date, { month: "short", day: "numeric" })} · All day`
-          : item.dailySchedule
-            ? `${formatDate(item.date, { month: "short", day: "numeric" })} – ${formatDate(item.endDate, { month: "short", day: "numeric" })} · Daily, ${timeText(item.start)}–${timeText(item.end)}`
-          : item.date === (item.endDate || item.date)
-            ? `${formatDate(item.date, { month: "short", day: "numeric" })} · ${timeText(item.start)}–${timeText(item.end)}`
-            : `${formatDate(item.date, { month: "short", day: "numeric" })} ${timeText(item.start)} – ${formatDate(item.endDate, { month: "short", day: "numeric" })} ${timeText(item.end)}`}</span>
-        <strong>${item.title}</strong>
-      </a>`).join("");
-  </script>
+  <script src="assets/data.js"></script>
+  <script src="assets/detail-page.js"></script>
 </body>
 </html>
