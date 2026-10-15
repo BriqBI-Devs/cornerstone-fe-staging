@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Event details | Cornerstone</title>
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/detail.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="/news">News</a>
+      <a href="/company-culture">Company + Culture</a>
+      <a class="active" href="index.html" aria-current="page">Events</a>
+      <a href="/people">People</a>
+      <a href="/departments">Departments</a>
+      <a href="/policies-resources">Policies + Resources</a>
+    </nav>
+  </header>
+
+  <main class="page detail-main">
+    <a class="back-link" id="backLink" href="index.html"><span aria-hidden="true">←</span> Back to events</a>
+
+    <header class="detail-head">
+      <div class="detail-date" id="detailDate"></div>
+      <div>
+        <h1 id="eventTitle"></h1>
+        <div class="detail-meta" id="eventMeta"></div>
+      </div>
+    </header>
+    <img class="detail-banner" id="eventImage" alt="">
+
+    <article class="detail-layout">
+      <div class="card detail-primary">
+        <p class="section-label">About this event</p>
+        <div class="detail-description" id="eventDescription"></div>
+        <div class="detail-registration" id="eventRegistration" hidden></div>
+        <section class="detail-author" aria-label="Event authors">
+          <p class="section-label">Posted by</p>
+          <div class="author-list" id="eventAuthors"></div>
+        </section>
+      </div>
+
+      <aside class="detail-aside">
+        <section class="action-card" id="rsvpCard">
+          <p class="card-eyebrow">Your response</p>
+          <h2>Will you attend?</h2>
+          <div class="rsvp-actions" role="group" aria-label="Choose your RSVP">
+            <button type="button" data-rsvp="Yes">Yes</button>
+            <button type="button" data-rsvp="Maybe">Maybe</button>
+            <button type="button" data-rsvp="No">No</button>
+          </div>
+          <p class="rsvp-message" id="rsvpMessage" role="status"></p>
+          <div class="attendee-summary" id="attendeeSummary">
+            <div class="attendee-avatars" id="attendeeAvatars" aria-hidden="true"></div>
+            <button class="attendee-overflow" id="attendeeOverflow" type="button"></button>
+            <span><strong id="attendeeCount"></strong> attending</span>
+          </div>
+        </section>
+        <section class="action-card event-facts" id="factsCard">
+          <h2>Details</h2>
+          <p><span>Date</span><strong id="factDate"></strong></p>
+          <p><span>Time</span><strong id="factTime"></strong></p>
+          <p><span>Where</span><strong id="factLocation"></strong></p>
+          <a class="calendar-action" id="outlookSync" target="_blank" rel="noopener noreferrer">Sync to Outlook</a>
+        </section>
+      </aside>
+    </article>
+
+    <section class="related">
+      <h2>More events you might like</h2>
+      <div class="related-list" id="relatedEvents"></div>
+    </section>
+    <p class="prototype-note">Design concept · Sample event information</p>
+  </main>
+
+  <dialog class="attendee-dialog" id="attendeeDialog" aria-labelledby="attendeeDialogTitle">
+    <div class="attendee-dialog-content">
+      <header class="attendee-dialog-header">
+        <div>
+          <h2 id="attendeeDialogTitle">People attending</h2>
+          <p id="attendeeDialogCount"></p>
+        </div>
+        <button class="attendee-dialog-close" type="button" aria-label="Close attendee list">×</button>
+      </header>
+      <p class="attendee-load-status" id="attendeeLoadStatus" role="status">Loading sample attendee profiles…</p>
+      <ul class="attendee-list" id="attendeeList"></ul>
+    </div>
+  </dialog>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/outlook-sync.js"></script>
+  <script src="assets/core.js"></script>
+  <script src="assets/detail.js"></script>
+</body>
+</html>

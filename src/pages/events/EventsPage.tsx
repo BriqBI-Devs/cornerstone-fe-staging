@@ -4,15 +4,28 @@ import { Card } from "../../components/ui/Card";
 interface DesignOption {
   name: string;
   summary: string;
-  href: string;
+  /** Folder under public/events-page-designs; the design opens at its index.html. */
+  folder: string;
 }
 
 const DESIGN_OPTIONS: DesignOption[] = [
   {
     name: "Design 1 — Calendar-First Events Hub",
     summary:
-      "A month and week calendar by default with a list view toggle. Search, date and RSVP filters, a quick-preview popover on each event, and a detail page with RSVP, add to calendar, attendees and related events.",
-    href: "/events-page-designs/design2/index.html",
+      "A month and week calendar by default with a list view toggle. Search, date and RSVP filters, a quick-preview popover on each event, and a detail page with RSVP, attendees and related events.",
+    folder: "design1",
+  },
+  {
+    name: "Design 2 — Calendar Hub with Dark Intro",
+    summary:
+      "The same calendar and list as Design 1 in a new look: a dark intro band, a floating panel, a bordered calendar grid, a simple divided list and boxy controls.",
+    folder: "design02",
+  },
+  {
+    name: "Design 3 — Table List + Calendar",
+    summary:
+      "A navy title band with a List / Calendar switch. The list is a table (date, event, time, location, attending) with search, a date filter and paging; the calendar shows month and week.",
+    folder: "design3",
   },
 ];
 
@@ -25,7 +38,7 @@ export function EventsPage() {
             <h2 className="text-base font-semibold text-brand-navy">{option.name}</h2>
             <p className="mt-2 flex-1 text-sm text-brand-navy/70">{option.summary}</p>
             <a
-              href={option.href}
+              href={`/events-page-designs/${option.folder}/index.html`}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm font-medium text-brand-navy transition-colors hover:border-brand-navy/40 hover:bg-surface-subtle"

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendar | Cornerstone Events</title>
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/calendar.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="/news">News</a>
+      <a href="/company-culture">Company + Culture</a>
+      <a class="active" href="index.html" aria-current="page">Events</a>
+      <a href="/people">People</a>
+      <a href="/departments">Departments</a>
+      <a href="/policies-resources">Policies + Resources</a>
+    </nav>
+  </header>
+
+  <section class="band">
+    <div class="band-inner">
+      <div>
+        <h1>Events</h1>
+        <p>Browse by month or week. Search opens the full list.</p>
+      </div>
+      <nav class="view-switch" aria-label="Event view"><a class="active" href="index.html" aria-current="page">Calendar</a><a href="list.html">List</a></nav>
+    </div>
+  </section>
+
+  <main class="page">
+
+    <section class="panel" aria-label="Calendar">
+      <div class="toolbar">
+        <div role="search" style="display:contents">
+          <label class="search-field">
+            <span class="sr-only">Search all events</span>
+            <button type="button" class="search-icon-btn" id="searchButton" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+            <input id="searchInput" type="search" placeholder="Search events" autocomplete="off">
+          </label>
+        </div>
+        <div class="filter-wrap">
+          <button class="button" id="filterToggle" type="button" aria-expanded="false" aria-controls="filterPanel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 5h16l-6.5 7.5v5l-3 1.5v-6.5L4 5Z"/></svg>
+            My RSVP <span class="filter-count" id="filterCount" hidden>0</span>
+          </button>
+          <div class="filter-panel" id="filterPanel" hidden>
+            <div class="filter-heading"><strong>Show events I answered</strong><button class="text-button" id="clearFilters" type="button">Clear</button></div>
+            <fieldset>
+              <legend class="sr-only">RSVP status</legend>
+              <label><input type="checkbox" name="rsvpFilter" value="Yes"> Going</label>
+              <label><input type="checkbox" name="rsvpFilter" value="No"> Not going</label>
+              <label><input type="checkbox" name="rsvpFilter" value="Maybe"> Maybe</label>
+              <label><input type="checkbox" name="rsvpFilter" value="Pending"> Needs response</label>
+            </fieldset>
+          </div>
+        </div>
+        <a class="button" id="outlookCalendar" target="_blank" rel="noopener noreferrer">Sync to Outlook</a>
+        <div class="period-controls">
+          <button class="text-button" id="todayButton" type="button">Today</button>
+          <button class="icon-control" id="previousPeriod" type="button" aria-label="Previous">‹</button>
+          <h2 id="periodTitle"></h2>
+          <button class="icon-control" id="nextPeriod" type="button" aria-label="Next">›</button>
+          <div class="mode-switch" role="group" aria-label="Calendar view">
+            <button type="button" data-mode="month" class="active">Month</button>
+            <button type="button" data-mode="week">Week</button>
+          </div>
+        </div>
+      </div>
+      <div id="eventsContent" class="events-content" aria-live="polite"></div>
+    </section>
+    <p class="prototype-note">Design concept · Sample event information</p>
+  </main>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/outlook-sync.js"></script>
+  <script src="assets/core.js"></script>
+  <script src="assets/calendar.js"></script>
+</body>
+</html>

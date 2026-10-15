@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Events | Cornerstone</title>
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/events.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="/news">News</a>
+      <a href="/company-culture">Company + Culture</a>
+      <a class="active" href="index.html" aria-current="page">Events</a>
+      <a href="/people">People</a>
+      <a href="/departments">Departments</a>
+      <a href="/policies-resources">Policies + Resources</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow">Cornerstone Events</p>
+        <h1>Find something to join</h1>
+        <p class="intro">Gatherings, learning sessions and chances to connect. Switch between the calendar and a simple list.</p>
+      </div>
+      <a class="hero-link" href="#eventsContent" id="calendarShortcut" hidden>View calendar →</a>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <section class="events-panel" aria-label="Events">
+      <div class="toolbar">
+        <label class="search-field">
+          <span class="sr-only">Search events</span>
+          <button type="button" class="search-icon-btn" id="searchButton" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+          <input id="searchInput" type="search" placeholder="Search events" autocomplete="off">
+          <kbd>⌘ K</kbd>
+        </label>
+        <div class="filter-wrap">
+          <button class="button" id="filterToggle" type="button" aria-expanded="false" aria-controls="filterPanel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 5h16l-6.5 7.5v5l-3 1.5v-6.5L4 5Z"/></svg>
+            Filters <span class="filter-count" id="filterCount" hidden>0</span>
+          </button>
+          <div class="filter-panel" id="filterPanel" hidden>
+            <div class="filter-heading"><strong>Filter events</strong><button class="text-button" id="clearFilters" type="button">Clear all</button></div>
+            <fieldset>
+              <legend>Date</legend>
+              <label><input type="radio" name="dateFilter" value="all" checked> All dates</label>
+              <label><input type="radio" name="dateFilter" value="future"> Upcoming</label>
+              <label><input type="radio" name="dateFilter" value="past"> Past</label>
+            </fieldset>
+            <fieldset>
+              <legend>My RSVP</legend>
+              <label><input type="checkbox" name="rsvpFilter" value="Yes"> Yes</label>
+              <label><input type="checkbox" name="rsvpFilter" value="No"> No</label>
+              <label><input type="checkbox" name="rsvpFilter" value="Maybe"> Maybe</label>
+              <label><input type="checkbox" name="rsvpFilter" value="Pending"> Pending</label>
+            </fieldset>
+          </div>
+        </div>
+        <a class="button sync-button" id="outlookCalendar" target="_blank" rel="noopener noreferrer" title="Add all events to your Outlook calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M12 13v5M9.5 15.5 12 18l2.5-2.5"/></svg><span>Sync to Outlook</span></a>
+        <div class="view-switch" role="group" aria-label="Event view">
+          <button class="view-button active" type="button" data-view="calendar" aria-pressed="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+            <span>Calendar</span>
+          </button>
+          <button class="view-button" type="button" data-view="list" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r=".8" fill="currentColor"/><circle cx="4" cy="12" r=".8" fill="currentColor"/><circle cx="4" cy="18" r=".8" fill="currentColor"/></svg>
+            <span>List</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="calendar-toolbar" id="calendarToolbar" hidden>
+        <div class="period-controls">
+          <button class="icon-control" id="previousPeriod" type="button" aria-label="Previous month">‹</button>
+          <h2 id="periodTitle"></h2>
+          <button class="icon-control" id="nextPeriod" type="button" aria-label="Next month">›</button>
+        </div>
+        <div class="calendar-options">
+          <button class="text-button" id="todayButton" type="button">Today</button>
+          <select id="calendarMode" aria-label="Calendar view">
+            <option value="month">Month</option>
+            <option value="week">Week</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="eventsContent" class="events-content" aria-live="polite"></div>
+    </section>
+    <p class="prototype-note">Design concept · Sample event information</p>
+  </main>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/outlook-sync.js"></script>
+  <script src="assets/events-page.js"></script>
+</body>
+</html>

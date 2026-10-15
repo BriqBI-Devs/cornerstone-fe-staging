@@ -1,0 +1,42 @@
+/* Design tokens. Change a value here and every page follows. */
+:root {
+  color-scheme: light;
+
+  /* Brand */
+  --navy: #15273c;
+  --navy-2: #223a57;
+  --ink: #14202e;
+  --ink-soft: #44546a;
+  --muted: #6b7a8d;
+  --accent: #f5c518;
+  --accent-soft: #fff4c9;
+  --link: #2757d6;
+  --link-soft: #e8eefc;
+
+  /* Surfaces */
+  --paper: #eef1f5;
+  --panel: #ffffff;
+  --tile: #f4f6f9;
+  --line: #dde2e9;
+
+  /* Status */
+  --green: #0a7a4b;
+  --green-soft: #e3f4ec;
+  --amber: #8a5200;
+  --amber-soft: #fff1d6;
+
+  /* Shape and depth */
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-lg: 10px;
+  --pill: 6px; /* controls, toggles and chips: boxy, not fully round */
+  --shadow-card: 0 1px 2px rgb(21 39 60 / 6%);
+  --shadow-panel: 0 12px 32px rgb(21 39 60 / 10%);
+  --shadow-pop: 0 18px 44px rgb(21 39 60 / 24%);
+
+  /* Type */
+  --font-ui: "Inter", system-ui, sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
+
+  --page-width: 1240px;
+}

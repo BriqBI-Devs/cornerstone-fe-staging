@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Event details | Cornerstone</title>
+  <link rel="stylesheet" href="shared/events.css">
+  <style>
+.sp { display: grid; grid-template-columns: 400px minmax(0, 1fr); min-height: calc(100vh - 102px); }
+.sp-side { position: sticky; top: 102px; align-self: start; display: flex; flex-direction: column; gap: 22px; min-height: calc(100vh - 102px); padding: 32px 34px 40px; background: #15273c radial-gradient(circle at 100% 0, #223a57, transparent 60%); color: #fff; }
+.sp-back { color: rgb(255 255 255 / 72%); font-size: 12px; font-weight: 600; text-decoration: none; }
+.sp-back:hover { color: #fff; }
+.sp-date { display: inline-flex; flex-direction: column; align-items: center; width: 68px; padding: 8px 0 10px; border-radius: 8px; background: var(--yellow); color: var(--ink); }
+.sp-date span { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.sp-date strong { font-family: Georgia, serif; font-size: 30px; line-height: 1.05; }
+.sp-eyebrow { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--yellow); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.sp-badge { padding: 2px 8px; border-radius: 4px; background: rgb(255 255 255 / 14%); color: #fff; font-size: 10px; letter-spacing: .05em; }
+.sp-title { margin: 0; font-family: Georgia, serif; font-size: clamp(26px, 2.6vw, 34px); line-height: 1.18; letter-spacing: -.01em; }
+.sp-facts { display: grid; gap: 14px; margin: 0; padding: 18px 0; border-top: 1px solid rgb(255 255 255 / 16%); border-bottom: 1px solid rgb(255 255 255 / 16%); }
+.sp-facts div { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 10px; font-size: 14px; line-height: 1.45; }
+.sp-facts dt { color: rgb(255 255 255 / 60%); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding-top: 2px; }
+.sp-facts dd { margin: 0; overflow-wrap: anywhere; }
+.sp-facts a { color: var(--yellow); text-underline-offset: 2px; }
+.sp-respond p.label { margin: 0 0 10px; color: rgb(255 255 255 / 60%); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.sp-seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.sp-seg button { height: 42px; border: 1px solid rgb(255 255 255 / 30%); border-radius: 6px; background: transparent; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; }
+.sp-seg button:hover { border-color: #fff; background: rgb(255 255 255 / 8%); }
+.sp-seg button[aria-pressed="true"] { border-color: var(--yellow); background: var(--yellow); color: var(--ink); }
+.sp-status { margin: 10px 0 0; color: rgb(255 255 255 / 70%); font-size: 13px; }
+.sp-cal { margin-top: auto; height: 42px; border: 1px solid rgb(255 255 255 / 30%); border-radius: 6px; background: transparent; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
+.sp-cal:hover { border-color: #fff; background: rgb(255 255 255 / 8%); }
+
+.sp-main { min-width: 0; padding: 40px clamp(24px, 5vw, 64px) 56px; }
+.sp-inner { max-width: 760px; margin: 0 auto; }
+.sp-image { display: block; width: 100%; max-height: 340px; aspect-ratio: 16 / 8; margin-bottom: 30px; border-radius: 10px; object-fit: cover; background: var(--canvas); }
+.sp-label { margin: 0 0 10px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.sp-prose { color: #34414f; font-size: 16px; line-height: 1.8; }
+.sp-prose p { margin: 0 0 18px; }
+.sp-reg { margin: 22px 0; padding: 16px 18px; border-radius: 8px; background: var(--blue-soft); font-size: 14px; }
+.sp-reg a { color: var(--blue); overflow-wrap: anywhere; }
+.sp-block { margin-top: 34px; padding-top: 24px; border-top: 1px solid var(--line); }
+.sp-avatars { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.sp-avatar { display: grid; place-items: center; width: 34px; height: 34px; margin-left: -8px; border: 2px solid #fff; border-radius: 50%; background: #fff4c9; font-size: 10px; font-weight: 800; }
+.sp-avatar:first-child { margin-left: 0; }
+.sp-avatars button { padding: 6px 12px; border: 1px solid #d8dee5; border-radius: 6px; background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+.sp-avatars button:hover { border-color: var(--ink); }
+.sp-names { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px 16px; margin: 14px 0 0; padding: 0; list-style: none; color: #34414f; font-size: 13px; }
+.sp-note { margin: 0; color: var(--muted); font-size: 13px; }
+.sp-authors { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 13px; font-weight: 600; }
+.sp-authors small { display: block; color: var(--muted); font-weight: 400; font-size: 11px; }
+.sp-related { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.sp-related a { display: block; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: inherit; text-decoration: none; transition: border-color .12s; }
+.sp-related a:hover { border-color: var(--ink); }
+.sp-related img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.sp-related span { display: block; padding: 10px 12px 14px; }
+.sp-related small { display: block; margin-bottom: 4px; color: var(--blue); font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.sp-related strong { font-size: 13px; line-height: 1.4; }
+.sp-skeleton { height: 360px; margin: 24px; border-radius: 10px; background: linear-gradient(90deg, #eee9df 25%, #f6f3ec 50%, #eee9df 75%); background-size: 200% 100%; animation: sp-shimmer 1.2s linear infinite; }
+@keyframes sp-shimmer { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .sp-skeleton { animation: none; } .sp-related a { transition: none; } }
+
+@media (max-width: 960px) {
+  .sp { grid-template-columns: 1fr; }
+  .sp-side { position: static; min-height: 0; padding: 24px; }
+  .sp-cal { margin-top: 0; }
+  .sp-main { padding: 28px 20px 48px; }
+  .sp-related { grid-template-columns: 1fr; }
+}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="/news">News</a>
+      <a href="/company-culture">Company + Culture</a>
+      <a class="active" href="index.html" aria-current="page">Events</a>
+      <a href="/people">People</a>
+      <a href="/departments">Departments</a>
+      <a href="/policies-resources">Policies + Resources</a>
+    </nav>
+  </header>
+  <main id="detail" aria-live="polite"></main>
+  <script src="shared/events-data.js"></script>
+  <script src="shared/events-core.js"></script>
+  <script>
+(async () => {
+  const { api, today, dateOf, formatDate, formatTime, initialsFor, locationMarkup, downloadIcs, eventHref } = EventsKit;
+  const root = document.getElementById("detail");
+  const params = new URLSearchParams(location.search);
+  const rawFrom = params.get("from") || "index.html";
+  const from = /^(index|calendar|events)\.html/.test(rawFrom) ? rawFrom : "index.html";
+  const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  const backText = from.startsWith("calendar") ? "Back to calendar" : from.includes("?") ? "Back to results" : "Back to events";
+  const back = `<a class="sp-back" href="${esc(from)}">← ${backText}</a>`;
+
+  root.innerHTML = '<div class="sp-skeleton" aria-hidden="true"></div>';
+  let event;
+  try { event = await api.getEvent(params.get("id")); } catch (error) { console.error(error); }
+  if (!event) { root.innerHTML = `<div style="padding:32px 40px">${back.replace("sp-back", "")}<p class="sp-note" style="margin-top:16px">We couldn't find that event. <a href="index.html">Browse all events</a></p></div>`; return; }
+  document.title = `${event.title} | Cornerstone Events`;
+
+  const endDate = event.endDate || event.date;
+  const ended = dateOf(endDate) < today;
+  const days = Math.round((dateOf(event.date) - today) / 86400000);
+  const badge = ended ? "Ended" : days <= 0 ? (days === 0 ? "Today" : "Happening now") : days === 1 ? "Tomorrow" : days <= 7 ? `In ${days} days` : "";
+  const dateText = event.date === endDate
+    ? formatDate(event.date, { weekday: "long", month: "long", day: "numeric", year: "numeric" })
+    : `${formatDate(event.date, { month: "short", day: "numeric" })} – ${formatDate(endDate, { month: "short", day: "numeric", year: "numeric" })}`;
+  const timeText = event.allDay ? "All day" : event.dailySchedule ? `Daily, ${formatTime(event.start)} – ${formatTime(event.end)}` : `${formatTime(event.start)} – ${formatTime(event.end)}`;
+  const related = await api.related(event, 3).catch(() => []);
+
+  const CHOICES = [["Yes", "Going"], ["Maybe", "Maybe"], ["No", "Not going"]];
+  const key = `event-rsvp-${event.id}`;
+  let response = localStorage.getItem(key) || event.rsvp;
+  const status = () => (response === "Pending" ? "You haven't responded yet." : `Your response: ${CHOICES.find(([v]) => v === response)[1]}`);
+  const respond = event.rsvpRequired === false
+    ? `<p class="label">Response</p><p class="sp-status" style="margin:0">No RSVP needed. Open to everyone.</p>`
+    : ended
+      ? `<p class="label">Response</p><p class="sp-status" style="margin:0">This event has ended.${response !== "Pending" ? " " + status() : ""}</p>`
+      : `<p class="label">Your response</p><div class="sp-seg" role="group" aria-label="Choose your response">${CHOICES.map(([v, l]) => `<button type="button" data-rsvp="${v}" aria-pressed="${response === v}">${l}</button>`).join("")}</div><p class="sp-status" id="status" role="status">${status()}</p>`;
+
+  const directory = ["Avery Morgan", "Jordan Ellis", "Riley Bennett", "Taylor Brooks", "Casey Parker", "Morgan Reed", "Jamie Foster", "Cameron Hayes", "Quinn Bailey", "Drew Sullivan", "Skyler Price", "Reese Coleman", "Rowan Murphy", "Emerson Hughes", "Finley Ward", "Dakota James", "Peyton Russell", "Kendall Griffin", "Charlie Barnes", "Alexandra Ross", "Sage Peterson", "Blake Cooper", "Elliot Richardson", "Remy Cox"];
+  const offset = Array.from(event.id).reduce((total, c) => total + c.charCodeAt(0), 0) % directory.length;
+  const names = Array.from({ length: Math.min(event.attendees, directory.length) }, (_, i) => directory[(offset + i) % directory.length]);
+  const month = formatDate(event.date, { month: "short" });
+
+  root.innerHTML = `
+    <div class="sp">
+      <aside class="sp-side">
+        ${back}
+        <span class="sp-date" aria-hidden="true"><span>${month}</span><strong>${dateOf(event.date).getDate()}</strong></span>
+        <p class="sp-eyebrow">${esc(event.organizer || "Event")}${badge ? `<span class="sp-badge">${badge}</span>` : ""}</p>
+        <h1 class="sp-title">${esc(event.title)}</h1>
+        <dl class="sp-facts">
+          <div><dt>When</dt><dd>${dateText}<br>${timeText}</dd></div>
+          <div><dt>Where</dt><dd>${locationMarkup(event.location)}</dd></div>
+          ${event.allDay ? "" : `<div><dt>Going</dt><dd>${event.attendees} attending</dd></div>`}
+        </dl>
+        <div class="sp-respond" id="respond">${respond}</div>
+        <button type="button" class="sp-cal" id="addCal">＋ Add to calendar</button>
+      </aside>
+
+      <article class="sp-main">
+        <div class="sp-inner">
+          <img class="sp-image" src="${esc(event.image)}" alt="${esc(event.imageAlt)}">
+          <p class="sp-label">About this event</p>
+          <div class="sp-prose">${event.description.split(/\n\n+/).map((p) => `<p>${esc(p)}</p>`).join("")}</div>
+          ${event.registrationUrl ? `<p class="sp-reg"><strong>Register in advance:</strong><br><a href="${esc(event.registrationUrl)}" target="_blank" rel="noopener noreferrer">${esc(event.registrationUrl)}</a></p>` : ""}
+          ${names.length ? `<div class="sp-block">
+            <p class="sp-label">Who's going</p>
+            <div class="sp-avatars">${names.slice(0, 6).map((n) => `<span class="sp-avatar" title="${esc(n)}">${initialsFor(n)}</span>`).join("")}<button type="button" id="toggleNames" aria-expanded="false">Show all ${event.attendees}</button></div>
+            <ul class="sp-names" id="names" hidden>${names.map((n) => `<li>${esc(n)}</li>`).join("")}${event.attendees > names.length ? `<li class="sp-note">…and ${event.attendees - names.length} more</li>` : ""}</ul>
+          </div>` : ""}
+          <div class="sp-block"><p class="sp-label">Posted by</p><div class="sp-authors">${event.authors.map((a) => `<span>${esc(a)}<small>Posted Jun 18, 2025</small></span>`).join("")}</div></div>
+          ${related.length ? `<div class="sp-block"><p class="sp-label">More events you might like</p><div class="sp-related">${related.map((item) => `<a href="${eventHref(item, from)}"><img src="${esc(item.image)}" alt="" loading="lazy"><span><small>${formatDate(item.date, { month: "short", day: "numeric" })}</small><strong>${esc(item.title)}</strong></span></a>`).join("")}</div></div>` : ""}
+          <p class="prototype-note">Design concept · Sample event information</p>
+        </div>
+      </article>
+    </div>`;
+
+  document.getElementById("respond").addEventListener("click", (e) => {
+    const button = e.target.closest("[data-rsvp]");
+    if (!button) return;
+    response = button.dataset.rsvp;
+    localStorage.setItem(key, response);
+    document.querySelectorAll("#respond [data-rsvp]").forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+    document.getElementById("status").textContent = status();
+  });
+  document.getElementById("addCal").addEventListener("click", () => downloadIcs([event], `${event.id}.ics`));
+  const toggle = document.getElementById("toggleNames");
+  if (toggle) toggle.addEventListener("click", () => {
+    const list = document.getElementById("names");
+    list.hidden = !list.hidden;
+    toggle.setAttribute("aria-expanded", String(!list.hidden));
+    toggle.textContent = list.hidden ? `Show all ${event.attendees}` : "Hide list";
+  });
+})();
+  </script>
+</body>
+</html>
