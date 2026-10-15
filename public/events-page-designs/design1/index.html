@@ -55,6 +55,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .toolbar { display: flex; min-height: 68px; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
 .search-field { display: flex; width: min(380px, 100%); height: 38px; align-items: center; gap: 9px; padding: 0 11px; border: 1px solid #d8dee5; border-radius: 6px; background: #fff; }
 .search-field:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px #1d4ed81a; }
+.search-icon-btn { display: grid; place-items: center; flex: none; padding: 0; border: 0; border-radius: 4px; background: none; color: inherit; cursor: pointer; }
+.search-icon-btn:hover { color: var(--blue, var(--link)); }
 .search-field svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--muted); }
 .search-field input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--ink); font-size: 12px; }
 .search-field input::placeholder { color: var(--muted-light); }
@@ -284,7 +286,7 @@ a.button { color: inherit; text-decoration: none; }
         <div class="toolbar">
           <label class="search-field">
             <span class="sr-only">Search events</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <button type="button" class="search-icon-btn" id="searchButton" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
             <input id="searchInput" type="search" placeholder="Search events" autocomplete="off">
             <kbd>⌘ K</kbd>
           </label>
@@ -748,17 +750,33 @@ a.button { color: inherit; text-decoration: none; }
       const [year, month, day] = weekParam.split("-").map(Number);
       state.month = new Date(year, month - 1, day);
     }
+    // A search always lives in the list view; the calendar shows every event.
+    if (state.query) state.view = "list";
     searchInput.value = state.query;
     calendarMode.value = state.calendarMode;
     document.querySelectorAll('input[name="dateFilter"]').forEach((radio) => { radio.checked = radio.value === state.dateFilter; });
     document.querySelectorAll('input[name="rsvpFilter"]').forEach((checkbox) => { checkbox.checked = state.rsvps.includes(checkbox.value); });
-    document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => { state.view = button.dataset.view; render(); }));
+    const showCalendar = () => {
+      state.view = "calendar";
+      state.query = "";
+      searchInput.value = "";
+      render();
+    };
+    document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => {
+      if (button.dataset.view === "calendar") showCalendar();
+      else { state.view = "list"; render(); }
+    }));
     document.getElementById("calendarShortcut").addEventListener("click", (event) => {
       event.preventDefault();
-      state.view = "calendar";
-      render();
+      showCalendar();
     });
-    searchInput.addEventListener("input", () => { state.query = searchInput.value.trim(); render(); });
+    const runSearch = () => {
+      state.query = searchInput.value.trim();
+      if (state.query) state.view = "list";
+      render();
+    };
+    searchInput.addEventListener("input", runSearch);
+    document.getElementById("searchButton").addEventListener("click", () => { runSearch(); searchInput.focus(); });
     filterToggle.addEventListener("click", () => {
       const open = filterPanel.hidden;
       filterPanel.hidden = !open;

@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Event details | Cornerstone</title>
+  <link rel="stylesheet" href="shared/events.css">
+  <style>
+:root { --paper: #f5f3ee; --line: #e1ddd3; }
+.dc-page { width: min(100% - 40px, 1180px); margin: 24px auto 56px; }
+.dc-back { display: inline-flex; gap: 8px; margin-bottom: 14px; color: var(--muted); font-size: 12px; font-weight: 600; text-decoration: none; }
+.dc-back:hover { color: var(--blue); }
+.dc-eyebrow { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; color: var(--blue); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.dc-badge { padding: 2px 8px; border-radius: 4px; font-size: 10px; letter-spacing: .05em; }
+.dc-badge.soon { background: var(--blue-soft); color: var(--blue); }
+.dc-badge.live { background: var(--yellow); color: var(--ink); }
+.dc-badge.ended { background: #eceef1; color: var(--muted); }
+.dc-title { margin: 0 0 20px; font-family: Georgia, serif; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.15; letter-spacing: -.02em; }
+
+/* fact strip: three tiles + the response control */
+.dc-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(280px, 1.1fr); border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 2px 8px #1b2a3a08; }
+.dc-tile { padding: 16px 18px; border-right: 1px solid var(--line); min-width: 0; }
+.dc-tile span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.dc-tile strong { display: block; font-size: 15px; line-height: 1.4; font-weight: 600; overflow-wrap: anywhere; }
+.dc-tile small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+.dc-tile a { color: var(--blue); text-underline-offset: 2px; }
+.dc-respond { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 16px 18px; background: #fbfaf7; border-radius: 0 10px 10px 0; }
+.dc-respond span { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.dc-seg { display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border: 1px solid #d8dee5; border-radius: 7px; background: #fff; }
+.dc-seg button { height: 38px; border: 0; background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+.dc-seg button + button { border-left: 1px solid #d8dee5; }
+.dc-seg button:hover { background: var(--canvas); }
+.dc-seg button[aria-pressed="true"] { background: var(--ink); color: var(--yellow); }
+.dc-status { margin: 0; color: var(--muted); font-size: 12px; }
+.dc-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+
+/* body */
+.dc-body { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 24px; align-items: start; margin-top: 24px; }
+.dc-main, .dc-rail section { border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 2px 8px #1b2a3a08; }
+.dc-main { padding: 28px 32px; }
+.dc-image { display: block; width: 100%; max-height: 300px; aspect-ratio: 16 / 7; margin-bottom: 24px; border-radius: 8px; object-fit: cover; background: var(--canvas); }
+.dc-label { margin: 0 0 10px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.dc-prose { max-width: 680px; color: #34414f; font-size: 15px; line-height: 1.75; }
+.dc-prose p { margin: 0 0 16px; }
+.dc-reg { margin: 18px 0; padding: 14px 16px; border-radius: 8px; background: var(--blue-soft); font-size: 14px; }
+.dc-reg a { color: var(--blue); overflow-wrap: anywhere; }
+.dc-people { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line); }
+.dc-avatars { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.dc-avatar { display: grid; place-items: center; width: 32px; height: 32px; margin-left: -8px; border: 2px solid #fff; border-radius: 50%; background: #fff4c9; color: var(--ink); font-size: 10px; font-weight: 800; }
+.dc-avatar:first-child { margin-left: 0; }
+.dc-avatars button { padding: 5px 12px; border: 1px solid #d8dee5; border-radius: 6px; background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+.dc-avatars button:hover { border-color: var(--ink); }
+.dc-names { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px 16px; margin: 14px 0 0; padding: 0; list-style: none; font-size: 13px; color: #34414f; }
+.dc-authors { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 24px; font-size: 13px; font-weight: 600; }
+.dc-authors small { display: block; color: var(--muted); font-weight: 400; font-size: 11px; }
+
+/* rail: same-day events and related */
+.dc-rail { position: sticky; top: 114px; display: grid; gap: 16px; }
+.dc-rail section { padding: 18px; }
+.dc-rail h2 { margin: 0 0 12px; font-family: Georgia, serif; font-size: 17px; }
+.dc-day { margin: 0; padding: 0; list-style: none; }
+.dc-day li + li { border-top: 1px solid var(--line); }
+.dc-day a { display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 10px; padding: 10px 6px; border-radius: 6px; color: inherit; text-decoration: none; font-size: 13px; line-height: 1.35; }
+.dc-day a:hover { background: var(--canvas); }
+.dc-day time { color: var(--muted); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dc-day strong { font-weight: 600; }
+.dc-day .here { background: #fff4c9; box-shadow: inset 3px 0 0 var(--yellow); }
+.dc-day .here strong::after { content: " (this event)"; color: var(--muted); font-weight: 500; }
+.dc-note { margin: 0; color: var(--muted); font-size: 13px; }
+.dc-related { display: grid; gap: 12px; }
+.dc-related a { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; color: inherit; text-decoration: none; }
+.dc-related img { width: 72px; height: 54px; border-radius: 6px; object-fit: cover; }
+.dc-related small { display: block; color: var(--blue); font-size: 10px; font-weight: 800; text-transform: uppercase; }
+.dc-related strong { font-size: 13px; line-height: 1.35; }
+.dc-related a:hover strong { color: var(--blue); }
+.dc-skeleton { height: 180px; border-radius: 10px; background: linear-gradient(90deg, #eee9df 25%, #f6f3ec 50%, #eee9df 75%); background-size: 200% 100%; animation: dc-shimmer 1.2s linear infinite; }
+@keyframes dc-shimmer { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .dc-skeleton { animation: none; } }
+
+@media (max-width: 1000px) {
+  .dc-strip { grid-template-columns: 1fr 1fr; }
+  .dc-tile:nth-child(2) { border-right: 0; }
+  .dc-tile { border-bottom: 1px solid var(--line); }
+  .dc-respond { grid-column: 1 / -1; border-radius: 0 0 10px 10px; }
+  .dc-body { grid-template-columns: 1fr; }
+  .dc-rail { position: static; }
+}
+@media (max-width: 600px) {
+  .dc-page { width: calc(100% - 24px); }
+  .dc-strip { grid-template-columns: 1fr; }
+  .dc-tile { border-right: 0; }
+  .dc-main { padding: 20px; }
+}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="/news">News</a>
+      <a href="/company-culture">Company + Culture</a>
+      <a class="active" href="index.html" aria-current="page">Events</a>
+      <a href="/people">People</a>
+      <a href="/departments">Departments</a>
+      <a href="/policies-resources">Policies + Resources</a>
+    </nav>
+  </header>
+  <main class="dc-page" id="detail" aria-live="polite"></main>
+  <script src="shared/events-data.js"></script>
+  <script src="shared/events-core.js"></script>
+  <script>
+(async () => {
+  const { api, today, dateOf, formatDate, formatTime, initialsFor, locationMarkup, downloadIcs, eventHref } = EventsKit;
+  const root = document.getElementById("detail");
+  const params = new URLSearchParams(location.search);
+  const rawFrom = params.get("from") || "index.html";
+  const from = /^(index|calendar|events)\.html/.test(rawFrom) ? rawFrom : "index.html";
+  const esc = (value) => String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  const backText = from.startsWith("calendar") ? "Back to calendar" : from.includes("?") ? "Back to results" : "Back to events";
+  const back = `<a class="dc-back" href="${esc(from)}"><span aria-hidden="true">←</span> ${backText}</a>`;
+
+  root.innerHTML = `${back}<div class="dc-skeleton" aria-hidden="true"></div>`;
+  let event;
+  try { event = await api.getEvent(params.get("id")); } catch (error) { console.error(error); }
+  if (!event) { root.innerHTML = `${back}<p class="dc-note">We couldn't find that event. <a href="index.html">Browse all events</a></p>`; return; }
+  document.title = `${event.title} | Cornerstone Events`;
+
+  const endDate = event.endDate || event.date;
+  const ended = dateOf(endDate) < today;
+  const days = Math.round((dateOf(event.date) - today) / 86400000);
+  const badge = ended ? ["ended", "Ended"] : days <= 0 ? ["live", days === 0 ? "Today" : "Happening now"] : days === 1 ? ["soon", "Tomorrow"] : days <= 7 ? ["soon", `In ${days} days`] : null;
+  const dateText = event.date === endDate
+    ? formatDate(event.date, { weekday: "long", month: "long", day: "numeric", year: "numeric" })
+    : `${formatDate(event.date, { month: "short", day: "numeric" })} – ${formatDate(endDate, { month: "short", day: "numeric", year: "numeric" })}`;
+  const timeText = event.allDay ? "All day" : event.dailySchedule ? `Daily, ${formatTime(event.start)} – ${formatTime(event.end)}` : `${formatTime(event.start)} – ${formatTime(event.end)}`;
+
+  // Same-day context and related events (loaded alongside, never blocking the page).
+  const [sameDay, related] = await Promise.all([
+    api.listRange({ from: event.date, to: event.date }).catch(() => []),
+    api.related(event, 3).catch(() => []),
+  ]);
+
+  const CHOICES = [["Yes", "Going"], ["Maybe", "Maybe"], ["No", "Not going"]];
+  const key = `event-rsvp-${event.id}`;
+  let response = localStorage.getItem(key) || event.rsvp;
+  const status = () => (response === "Pending" ? "You haven't responded yet." : `Your response: ${CHOICES.find(([v]) => v === response)[1]}`);
+  const respond = event.rsvpRequired === false
+    ? `<span>Response</span><p class="dc-status">No RSVP needed. Open to everyone.</p>`
+    : ended
+      ? `<span>Response</span><p class="dc-status">This event has ended.${response !== "Pending" ? " " + status() : ""}</p>`
+      : `<span>Your response</span><div class="dc-seg" role="group" aria-label="Choose your response">${CHOICES.map(([v, l]) => `<button type="button" data-rsvp="${v}" aria-pressed="${response === v}">${l}</button>`).join("")}</div><p class="dc-status" id="status" role="status">${status()}</p>`;
+
+  const directory = ["Avery Morgan", "Jordan Ellis", "Riley Bennett", "Taylor Brooks", "Casey Parker", "Morgan Reed", "Jamie Foster", "Cameron Hayes", "Quinn Bailey", "Drew Sullivan", "Skyler Price", "Reese Coleman", "Rowan Murphy", "Emerson Hughes", "Finley Ward", "Dakota James", "Peyton Russell", "Kendall Griffin", "Charlie Barnes", "Alexandra Ross", "Sage Peterson", "Blake Cooper", "Elliot Richardson", "Remy Cox"];
+  const offset = Array.from(event.id).reduce((total, c) => total + c.charCodeAt(0), 0) % directory.length;
+  const names = Array.from({ length: Math.min(event.attendees, directory.length) }, (_, i) => directory[(offset + i) % directory.length]);
+
+  const dayLabel = formatDate(event.date, { weekday: "long", month: "short", day: "numeric" });
+  const timeOf = (item) => (item.allDay ? "All day" : formatTime(item.start));
+
+  root.innerHTML = `
+    ${back}
+    <p class="dc-eyebrow">${esc(event.organizer || "Event")}${badge ? `<span class="dc-badge ${badge[0]}">${badge[1]}</span>` : ""}</p>
+    <h1 class="dc-title">${esc(event.title)}</h1>
+    <div class="dc-strip">
+      <div class="dc-tile"><span>When</span><strong>${dateText}</strong><small>${timeText}</small></div>
+      <div class="dc-tile"><span>Where</span><strong>${locationMarkup(event.location)}</strong></div>
+      <div class="dc-tile"><span>Attending</span><strong>${event.allDay ? "Open to all" : `${event.attendees} people`}</strong></div>
+      <div class="dc-respond" id="respond">${respond}</div>
+    </div>
+    <div class="dc-actions"><button type="button" class="btn" id="addCal">＋ Add to calendar</button></div>
+
+    <div class="dc-body">
+      <article class="dc-main">
+        <img class="dc-image" src="${esc(event.image)}" alt="${esc(event.imageAlt)}">
+        <p class="dc-label">About this event</p>
+        <div class="dc-prose">${event.description.split(/\n\n+/).map((p) => `<p>${esc(p)}</p>`).join("")}</div>
+        ${event.registrationUrl ? `<p class="dc-reg"><strong>Register in advance:</strong><br><a href="${esc(event.registrationUrl)}" target="_blank" rel="noopener noreferrer">${esc(event.registrationUrl)}</a></p>` : ""}
+        ${names.length ? `<div class="dc-people">
+          <p class="dc-label">Who's going</p>
+          <div class="dc-avatars">${names.slice(0, 5).map((n) => `<span class="dc-avatar" title="${esc(n)}">${initialsFor(n)}</span>`).join("")}<button type="button" id="toggleNames" aria-expanded="false">Show all ${event.attendees}</button></div>
+          <ul class="dc-names" id="names" hidden>${names.map((n) => `<li>${esc(n)}</li>`).join("")}${event.attendees > names.length ? `<li class="dc-note">…and ${event.attendees - names.length} more</li>` : ""}</ul>
+        </div>` : ""}
+        <div class="dc-authors">${event.authors.map((a) => `<span>${esc(a)}<small>Posted Jun 18, 2025</small></span>`).join("")}</div>
+      </article>
+
+      <aside class="dc-rail">
+        <section aria-labelledby="dayHead">
+          <h2 id="dayHead">Also on ${dayLabel}</h2>
+          ${sameDay.length > 1
+            ? `<ul class="dc-day">${sameDay.map((item) => `<li><a href="${eventHref(item, from)}" class="${item.id === event.id ? "here" : ""}"${item.id === event.id ? ' aria-current="page"' : ""}><time>${timeOf(item)}</time><strong>${esc(item.title)}</strong></a></li>`).join("")}</ul>`
+            : `<p class="dc-note">Nothing else is scheduled that day.</p>`}
+        </section>
+        ${related.length ? `<section><h2>You might also like</h2><div class="dc-related">${related.map((item) => `<a href="${eventHref(item, from)}"><img src="${esc(item.image)}" alt="" loading="lazy"><span><small>${formatDate(item.date, { month: "short", day: "numeric" })}</small><strong>${esc(item.title)}</strong></span></a>`).join("")}</div></section>` : ""}
+      </aside>
+    </div>
+    <p class="prototype-note">Design concept · Sample event information</p>`;
+
+  document.getElementById("respond").addEventListener("click", (e) => {
+    const button = e.target.closest("[data-rsvp]");
+    if (!button) return;
+    response = button.dataset.rsvp;
+    localStorage.setItem(key, response);
+    document.querySelectorAll("#respond [data-rsvp]").forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+    document.getElementById("status").textContent = status();
+  });
+  document.getElementById("addCal").addEventListener("click", () => downloadIcs([event], `${event.id}.ics`));
+  const toggle = document.getElementById("toggleNames");
+  if (toggle) toggle.addEventListener("click", () => {
+    const list = document.getElementById("names");
+    list.hidden = !list.hidden;
+    toggle.setAttribute("aria-expanded", String(!list.hidden));
+    toggle.textContent = list.hidden ? `Show all ${event.attendees}` : "Hide list";
+  });
+})();
+  </script>
+</body>
+</html>

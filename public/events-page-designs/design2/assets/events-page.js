@@ -377,17 +377,33 @@ if (weekParam && /^\d{4}-\d{2}-\d{2}$/.test(weekParam)) {
   const [year, month, day] = weekParam.split("-").map(Number);
   state.month = new Date(year, month - 1, day);
 }
+// A search always lives in the list view; the calendar shows every event.
+if (state.query) state.view = "list";
 searchInput.value = state.query;
 document.querySelectorAll('input[name="dateFilter"]').forEach((radio) => { radio.checked = radio.value === state.dateFilter; });
 document.querySelectorAll('input[name="rsvpFilter"]').forEach((checkbox) => { checkbox.checked = state.rsvps.includes(checkbox.value); });
 calendarMode.value = state.calendarMode;
-document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => { state.view = button.dataset.view; render(); }));
+const showCalendar = () => {
+  state.view = "calendar";
+  state.query = "";
+  searchInput.value = "";
+  render();
+};
+document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => {
+  if (button.dataset.view === "calendar") showCalendar();
+  else { state.view = "list"; render(); }
+}));
 document.getElementById("calendarShortcut").addEventListener("click", (event) => {
   event.preventDefault();
-  state.view = "calendar";
-  render();
+  showCalendar();
 });
-searchInput.addEventListener("input", () => { state.query = searchInput.value.trim(); render(); });
+const runSearch = () => {
+  state.query = searchInput.value.trim();
+  if (state.query) state.view = "list";
+  render();
+};
+searchInput.addEventListener("input", runSearch);
+document.getElementById("searchButton").addEventListener("click", () => { runSearch(); searchInput.focus(); });
 filterToggle.addEventListener("click", () => {
   const open = filterPanel.hidden;
   filterPanel.hidden = !open;

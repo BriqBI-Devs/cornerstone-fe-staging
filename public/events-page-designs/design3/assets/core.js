@@ -45,7 +45,7 @@ window.EventsKit = (() => {
     if (filters.date && filters.date !== "future") params.set("date", filters.date);
     if (filters.day) params.set("day", filters.day);
     (filters.rsvps || []).forEach((rsvp) => params.append("rsvp", rsvp));
-    return `index.html${params.size ? `?${params}` : ""}`;
+    return `list.html${params.size ? `?${params}` : ""}`;
   };
 
   // ---- Data (mock backend) ----

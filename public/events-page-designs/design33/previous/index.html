@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Events | Cornerstone</title>
+  <link rel="stylesheet" href="shared/events.css">
+  <style>
+.hero { display: grid; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: 0 2px 8px #1b2a3a08; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+.hero-media { position: relative; min-height: 220px; background: var(--canvas); }
+.hero-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hero-content { display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 30px 34px; background: var(--cream); }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; margin: 0; color: var(--blue); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.hero-eyebrow::before { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); content: ""; }
+.hero-content h1 { margin: 0; font-family: var(--serif); font-size: clamp(24px, 3vw, 32px); font-weight: 700; line-height: 1.2; letter-spacing: -.02em; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; color: var(--muted); font-size: 11px; }
+.hero-excerpt { max-width: 46ch; margin: 2px 0 0; color: #465264; font-size: 13px; line-height: 1.6; }
+.hero-actions { margin-top: 6px; }
+.hero-skeleton { min-height: 240px; }
+
+.find-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 22px; padding: 14px 16px; }
+.find-bar .search-field { flex: 1 1 260px; width: auto; max-width: 420px; }
+.find-bar .spacer { flex: 1 1 auto; }
+
+.hub-layout { display: grid; align-items: start; gap: 22px; grid-template-columns: minmax(0, 1fr) 280px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.section-head h2 { margin: 0; font-family: var(--serif); font-size: 19px; }
+.view-all { display: flex; justify-content: center; margin-top: 8px; }
+
+.rail { display: grid; gap: 14px; }
+.rail-card { padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 2px 8px #1b2a3a08; }
+.rail-card h2 { margin: 0 0 12px; color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; }
+.stat-row { display: flex; gap: 8px; }
+.stat-chip { flex: 1 1 0; padding: 10px 8px; border: 1px solid var(--line); border-radius: 8px; text-align: center; }
+.stat-chip strong { display: block; font-size: 18px; font-weight: 700; line-height: 1.2; }
+.stat-chip span { display: block; margin-top: 2px; color: var(--muted); font-size: 8.5px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.stat-chip.loading strong { width: 28px; height: 20px; margin: 0 auto; }
+.calendar-promo p { margin: 0 0 12px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-media { min-height: 180px; }
+  .hub-layout { grid-template-columns: 1fr; }
+  .rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .hero-content { padding: 22px; }
+  .rail { grid-template-columns: 1fr; }
+}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="/news">News</a>
+      <a href="/company-culture">Company + Culture</a>
+      <a class="active" href="index.html" aria-current="page">Events</a>
+      <a href="/people">People</a>
+      <a href="/departments">Departments</a>
+      <a href="/policies-resources">Policies + Resources</a>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <section class="hero" id="hero" aria-label="Next event"><div class="skeleton hero-skeleton" style="grid-column:1/-1;border-radius:0"></div></section>
+
+    <form class="panel find-bar" action="events.html" role="search">
+      <label class="search-field">
+        <span class="sr-only">Search events</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input name="q" type="search" placeholder="Search all events" autocomplete="off">
+      </label>
+      <input type="hidden" name="date" value="all">
+      <button class="btn btn-primary" type="submit">Search</button>
+      <div class="spacer"></div>
+      <a class="btn" href="events.html">Browse all events</a>
+      <a class="btn" href="calendar.html">Calendar view</a>
+    </form>
+
+    <div class="hub-layout">
+      <section aria-labelledby="upcomingHeading">
+        <div class="section-head">
+          <h2 id="upcomingHeading">Coming up</h2>
+          <a class="text-button" href="events.html">View all →</a>
+        </div>
+        <div id="upcomingContent" aria-live="polite"></div>
+        <div class="view-all" id="viewAll" hidden><a class="btn" id="viewAllLink" href="events.html">View all upcoming events</a></div>
+      </section>
+
+      <aside class="rail">
+        <section class="rail-card">
+          <h2>At a glance</h2>
+          <div class="stat-row" id="statsStrip">
+            <div class="stat-chip loading"><strong class="skeleton"></strong><span>Today</span></div>
+            <div class="stat-chip loading"><strong class="skeleton"></strong><span>This week</span></div>
+            <div class="stat-chip loading"><strong class="skeleton"></strong><span>Going</span></div>
+          </div>
+        </section>
+        <section class="rail-card calendar-promo">
+          <h2>Prefer a grid?</h2>
+          <p>See every event laid out by month or week.</p>
+          <a class="btn" href="calendar.html">Open calendar →</a>
+        </section>
+      </aside>
+    </div>
+    <p class="prototype-note">Design concept · Sample event information</p>
+  </main>
+
+  <script src="shared/events-data.js"></script>
+  <script src="shared/events-core.js"></script>
+  <script>
+    const { api, formatDate, formatTime, dateOf, today, eventHref, locationMarkup, agendaGroups, skeletonRows, emptyState } = EventsKit;
+    const UPCOMING_LIMIT = 5;
+    const FROM = "index.html";
+
+    // Hero: next upcoming event
+    const relativeLabel = (event) => {
+      const diffDays = Math.round((dateOf(event.date) - today) / 86400000);
+      if (diffDays === 0) return "Today";
+      if (diffDays === 1) return "Tomorrow";
+      if (diffDays > 1 && diffDays <= 6) return `In ${diffDays} days`;
+      if (diffDays < 0) return "Happening now";
+      return formatDate(event.date, { month: "short", day: "numeric" });
+    };
+    const excerptOf = (text) => {
+      const first = text.split(/\n\n+/)[0];
+      return first.length > 150 ? `${first.slice(0, 150).trim()}…` : first;
+    };
+    const renderHero = (featured) => {
+      const hero = document.getElementById("hero");
+      hero.hidden = !featured;
+      if (!featured) return;
+      hero.innerHTML = `
+        <div class="hero-media"><img src="${featured.image}" alt="${featured.imageAlt}"></div>
+        <div class="hero-content">
+          <p class="hero-eyebrow">Next up · ${relativeLabel(featured)}</p>
+          <h1>${featured.title}</h1>
+          <div class="hero-meta">
+            <span>${formatDate(featured.date, { weekday: "long", month: "long", day: "numeric" })}${featured.allDay ? "" : ` · ${formatTime(featured.start)}–${formatTime(featured.end)}`}</span>
+            <span>${locationMarkup(featured.location)}</span>
+          </div>
+          <p class="hero-excerpt">${excerptOf(featured.description)}</p>
+          <div class="hero-actions"><a class="btn btn-primary" href="${eventHref(featured, FROM)}">View details</a></div>
+        </div>`;
+    };
+
+    // Limited upcoming list (excludes the hero event). Full list lives on events.html.
+    const loadUpcoming = async (excludeId) => {
+      const content = document.getElementById("upcomingContent");
+      content.innerHTML = skeletonRows(UPCOMING_LIMIT);
+      try {
+        const result = await api.listEvents({ page: 1, pageSize: UPCOMING_LIMIT, date: "future", excludeId });
+        content.innerHTML = result.items.length ? agendaGroups(result.items, FROM, { grouped: false }) : emptyState("Nothing else coming up", "Check back soon.");
+        const remaining = result.total - result.items.length;
+        document.getElementById("viewAll").hidden = remaining <= 0;
+        document.getElementById("viewAllLink").textContent = `View ${remaining} more upcoming event${remaining === 1 ? "" : "s"}`;
+      } catch (error) {
+        console.error("Unable to load upcoming events.", error);
+        content.innerHTML = emptyState("We couldn't load events", `<button type="button" class="btn" id="retryUpcoming" style="margin-top:14px">Retry</button>`);
+        document.getElementById("retryUpcoming").addEventListener("click", () => loadUpcoming(excludeId));
+      }
+    };
+
+    api.featured()
+      .then((featured) => { renderHero(featured); return loadUpcoming(featured?.id); })
+      .catch((error) => { console.error("Unable to load featured event.", error); document.getElementById("hero").hidden = true; loadUpcoming(); });
+
+    api.summary().then((summary) => {
+      document.getElementById("statsStrip").innerHTML = `
+        <div class="stat-chip"><strong>${summary.today}</strong><span>Today</span></div>
+        <div class="stat-chip"><strong>${summary.week}</strong><span>This week</span></div>
+        <div class="stat-chip"><strong>${summary.going}</strong><span>Going</span></div>`;
+    }).catch((error) => console.error("Unable to load summary.", error));
+
+  </script>
+</body>
+</html>

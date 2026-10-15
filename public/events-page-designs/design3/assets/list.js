@@ -65,7 +65,7 @@ const load = async ({ scroll = false } = {}) => {
     state.page = result.page;
     syncUrl();
     listContent.innerHTML = result.items.length
-      ? eventList(result.items, `index.html${location.search}`)
+      ? eventList(result.items, `list.html${location.search}`)
       : emptyState("No events found", "Try another search or clear your filters.");
     renderPager(result);
     if (scroll) document.getElementById("searchForm").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -109,4 +109,6 @@ document.addEventListener("keydown", (keyEvent) => {
 });
 
 searchInput.value = state.query;
+// Arriving from a calendar search: keep typing in the box.
+if (state.query) { searchInput.focus(); searchInput.setSelectionRange(state.query.length, state.query.length); }
 load();

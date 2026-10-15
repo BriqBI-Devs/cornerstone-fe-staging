@@ -12,7 +12,7 @@ const state = {
   mode: urlParams.get("calendar") === "week" ? "week" : "month",
 };
 const maxVisibleEventsPerDay = 2;
-const fromHere = () => `calendar.html${location.search}`;
+const fromHere = () => `index.html${location.search}`;
 const dayListHref = (date) => listHref({ date: "all", day: date });
 const syncUrl = () => {
   const params = new URLSearchParams();
@@ -235,3 +235,19 @@ document.getElementById("previousPeriod").addEventListener("click", () => shift(
 document.getElementById("nextPeriod").addEventListener("click", () => shift(1));
 document.getElementById("todayButton").addEventListener("click", () => { state.anchor = new Date(2026, 9, 13); render(); });
 render();
+
+// The calendar always shows every event. A search opens the list with the results.
+const searchInput = document.getElementById("searchInput");
+const openResults = () => {
+  const query = searchInput.value.trim();
+  if (query) location.href = listHref({ q: query, date: "all" });
+};
+let searchTimer;
+searchInput.addEventListener("input", () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(openResults, 600);
+});
+searchInput.addEventListener("keydown", (keyEvent) => {
+  if (keyEvent.key === "Enter") { clearTimeout(searchTimer); openResults(); }
+});
+document.getElementById("searchButton").addEventListener("click", () => { clearTimeout(searchTimer); openResults(); });

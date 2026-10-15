@@ -4,7 +4,7 @@ const { api, initialsFor, locationMarkup } = EventsKit;
 const params = new URLSearchParams(location.search);
 const event = await api.getEvent(params.get("id"));
 if (!event) {
-  document.querySelector(".detail-main").innerHTML = `<p>We could not find that event. <a href="index.html">Browse all events</a></p>`;
+  document.querySelector(".detail-main").innerHTML = `<p>We could not find that event. <a href="list.html">Browse all events</a></p>`;
   return;
 }
 const demoAttendeeDirectory = [
@@ -187,10 +187,10 @@ document.querySelectorAll("[data-rsvp]").forEach((button) => {
 });
 
 const requestedReturn = params.get("from");
-if (requestedReturn && /^(index|calendar|events)\.html/.test(requestedReturn)) {
+if (requestedReturn && /^(index|list)\.html/.test(requestedReturn)) {
   const back = document.getElementById("backLink");
   back.href = requestedReturn;
-  back.lastChild.textContent = requestedReturn.startsWith("calendar") ? " Back to calendar" : requestedReturn.includes("?") ? " Back to results" : " Back to events";
+  back.lastChild.textContent = requestedReturn.startsWith("list") ? (requestedReturn.includes("?") ? " Back to results" : " Back to list") : " Back to calendar";
 }
 const shortDate = (item) => item.date === (item.endDate || item.date)
   ? formatDate(item.date, { weekday: "short", month: "short", day: "numeric" })
