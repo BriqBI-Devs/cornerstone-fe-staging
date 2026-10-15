@@ -55,6 +55,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .toolbar { display: flex; min-height: 68px; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
 .search-field { display: flex; width: min(380px, 100%); height: 38px; align-items: center; gap: 9px; padding: 0 11px; border: 1px solid #d8dee5; border-radius: 6px; background: #fff; }
 .search-field:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px #1d4ed81a; }
+.search-icon-btn { display: grid; place-items: center; flex: none; padding: 0; border: 0; border-radius: 4px; background: none; color: inherit; cursor: pointer; }
+.search-icon-btn:hover { color: var(--blue, var(--link)); }
 .search-field svg { width: 16px; height: 16px; flex: 0 0 auto; color: var(--muted); }
 .search-field input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--ink); font-size: 12px; }
 .search-field input::placeholder { color: var(--muted-light); }
@@ -66,6 +68,9 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
 .filter-count { display: inline-grid; min-width: 17px; height: 17px; place-items: center; border-radius: 50%; background: var(--ink); color: #fff; font-size: 9px; }
 .filter-panel { position: absolute; top: calc(100% + 8px); right: 0; z-index: 10; width: 260px; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; box-shadow: 0 12px 32px #17283b1a; }
 .filter-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 12px; }
+a.button { color: inherit; text-decoration: none; }
+#outlookCalendar { height: 32px; border-color: #bcd0f7; background: var(--blue-soft); color: var(--blue); font-size: 11px; font-weight: 600; }
+#outlookCalendar:hover { border-color: var(--blue); background: var(--blue-soft); }
 .text-button { padding: 4px 5px; border: 0; background: transparent; color: var(--blue); cursor: pointer; font-size: 11px; font-weight: 600; }
 .filter-panel fieldset { display: grid; gap: 9px; margin: 0; padding: 11px 0; border: 0; border-top: 1px solid var(--line); }
 .filter-panel legend { margin-bottom: 8px; padding: 0; font-size: 10px; font-weight: 700; }
@@ -105,19 +110,20 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
 .period-controls h2 { min-width: 142px; margin: 0 4px; font-size: 13px; font-weight: 600; }
 .icon-control { display: grid; width: 29px; height: 29px; place-items: center; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; cursor: pointer; font-size: 18px; line-height: 1; }
 .icon-control:hover { color: var(--blue); }
-.calendar-options select { height: 30px; padding: 0 24px 0 8px; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; font-size: 10px; }
+.calendar-options select { height: 32px; padding: 0 30px 0 12px; appearance: none; border: 1px solid #d8dee5; border-radius: 6px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%231b2a3a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 4.5 3 3 3-3'/%3E%3C/svg%3E") no-repeat right 10px center / 12px; color: var(--ink); cursor: pointer; font-size: 11px; font-weight: 600; }
+.calendar-options select:hover { border-color: var(--blue); }
 .month-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
 .month-week { position: relative; display: grid; grid-column: 1 / -1; grid-template-columns: repeat(7, minmax(0, 1fr)); }
-.weekday { padding: 10px 8px; border-bottom: 1px solid var(--line); background: #fafbfc; color: var(--muted); text-align: center; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+.weekday { padding: 10px 8px; border-bottom: 1px solid var(--line); background: #fafbfc; color: #3a4656; text-align: center; font-size: 10.5px; font-weight: 700; text-transform: uppercase; }
 .month-week .day-cell { position: relative; min-height: 116px; padding: calc(35px + var(--multi-day-lanes, 0) * 20px) 7px 7px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .month-week .day-cell:nth-child(7n) { border-right: 0; }
 .day-cell.outside { background: #fafbfc; }
-.day-cell.outside .day-number { color: #aeb6c0; }
-.day-number { position: absolute; top: 6px; left: 7px; display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; font-size: 10px; }
+.day-cell.outside .day-number { color: #8a94a1; }
+.day-number { position: absolute; top: 6px; left: 7px; display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; color: var(--ink); font-size: 12px; font-weight: 600; }
 .day-cell.today .day-number { background: var(--blue); color: #fff; font-weight: 700; }
-.multi-day-event { position: absolute; z-index: 2; height: 18px; overflow: hidden; padding: 2px 6px; border-radius: 4px; background: #dceaff; color: #1745a4; font-size: 8px; line-height: 14px; text-overflow: ellipsis; text-decoration: none; white-space: nowrap; }
+.multi-day-event { position: absolute; z-index: 2; height: 18px; overflow: hidden; padding: 2px 6px; border-radius: 4px; background: #dceaff; color: #0f2f78; font-weight: 600; font-size: 9.5px; line-height: 14px; text-overflow: ellipsis; text-decoration: none; white-space: nowrap; }
 .multi-day-event:hover { background: #c8dcff; text-decoration: underline; }
-.calendar-event { display: block; overflow: hidden; margin-top: 5px; padding: 4px 5px; border-radius: 4px; background: var(--blue-soft); color: #1745a4; font-size: 9px; line-height: 1.35; text-decoration: none; }
+.calendar-event { display: block; overflow: hidden; margin-top: 5px; padding: 4px 5px; border-radius: 4px; background: var(--blue-soft); color: #0f2f78; font-weight: 600; font-size: 10.5px; line-height: 1.35; text-decoration: none; }
 .calendar-event-title { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .calendar-event:hover { background: #dceaff; text-decoration: underline; }
 .event-preview { position: fixed; z-index: 20; display: flex; width: min(360px, calc(100vw - 24px)); max-height: min(70vh, 480px); flex-direction: column; overflow: hidden; border: 1px solid #d9dfe6; border-radius: 9px; background: #fff; box-shadow: 0 12px 34px #17283b30; }
@@ -156,24 +162,24 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
 .week-grid { display: grid; width: 100%; grid-template-columns: 52px repeat(7, minmax(80px, 1fr)); min-width: 660px; }
 .week-scroll { max-height: min(70vh, 680px); overflow: auto; overscroll-behavior: contain; scroll-padding-top: 54px; }
 .week-head { position: sticky; top: 0; z-index: 5; background: #fafbfc; }
-.week-head > div { padding: 9px 4px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--muted); text-align: center; font-size: 9px; }
+.week-head > div { padding: 9px 4px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); color: #3a4656; font-weight: 600; text-align: center; font-size: 10.5px; }
 .week-head > div:first-child { position: sticky; left: 0; z-index: 3; background: #fafbfc; }
-.week-head strong { display: block; margin-top: 4px; color: var(--ink); font-size: 11px; }
-.week-more { display: block; margin-top: 4px; color: var(--blue); font-size: 8px; font-weight: 600; text-decoration: none; }
+.week-head strong { display: block; margin-top: 4px; color: var(--ink); font-size: 13px; }
+.week-more { display: block; margin-top: 4px; color: var(--blue); font-size: 9.5px; font-weight: 600; text-decoration: none; }
 .week-more:hover { text-decoration: underline; }
 .week-time, .week-cell { min-height: 42px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.week-time { position: sticky; left: 0; z-index: 1; padding: 4px 5px 0 0; background: #fff; color: var(--muted); text-align: right; font-size: 8px; }
+.week-time { position: sticky; left: 0; z-index: 1; padding: 4px 5px 0 0; background: #fff; color: #3a4656; text-align: right; font-size: 10px; font-weight: 600; }
 .week-cell { position: relative; z-index: 0; }
 .week-cell-has-multi-day { z-index: 2; }
 .week-multi-day-timed-event { position: absolute; z-index: 1; top: 3px; left: 3px; right: 3px; margin: 0; }
 .week-all-day-time, .week-all-day-cell { min-height: 30px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.week-all-day-time { position: sticky; left: 0; z-index: 1; padding: 4px 5px 0 0; background: #fff; color: var(--muted); text-align: right; font-size: 8px; }
+.week-all-day-time { position: sticky; left: 0; z-index: 1; padding: 4px 5px 0 0; background: #fff; color: #3a4656; text-align: right; font-size: 10px; font-weight: 600; }
 .week-all-day-row { position: relative; grid-column: 1 / -1; }
 .week-all-day-row .week-all-day-time, .week-all-day-row .week-all-day-cell { min-height: calc(30px + var(--multi-day-lanes, 0) * 20px); }
 .week-all-day-row .week-all-day-cell { display: grid; align-content: start; gap: 2px; padding: calc(22px + var(--multi-day-lanes, 0) * 20px) 2px 2px; }
-.week-all-day-row .week-all-day-event { position: absolute; z-index: 2; height: 18px; overflow: hidden; margin: 0; padding: 2px 6px; border-radius: 4px; background: #dceaff; color: #1745a4; font-size: 8px; line-height: 14px; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; }
+.week-all-day-row .week-all-day-event { position: absolute; z-index: 2; height: 18px; overflow: hidden; margin: 0; padding: 2px 6px; border-radius: 4px; background: #dceaff; color: #0f2f78; font-weight: 600; font-size: 9.5px; line-height: 14px; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; }
 .week-all-day-row .week-all-day-event:hover { background: #c8dcff; text-decoration: underline; }
-.week-event { display: block; overflow: hidden; margin: 3px; padding: 4px; border-radius: 4px; background: var(--blue-soft); color: #1745a4; font-size: 8px; line-height: 1.3; text-decoration: none; }
+.week-event { display: block; overflow: hidden; margin: 3px; padding: 4px; border-radius: 4px; background: var(--blue-soft); color: #0f2f78; font-weight: 600; font-size: 9.5px; line-height: 1.3; text-decoration: none; }
 .prototype-note { margin: 11px 0 0; color: var(--muted-light); text-align: right; font-size: 9px; }
 
 @media (max-width: 720px) {
@@ -202,10 +208,9 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
   .period-controls h2 { min-width: auto; font-size: 11px; }
   .calendar-options { gap: 3px; }
   .calendar-options .text-button { font-size: 10px; }
-  .calendar-options select { padding-right: 16px; }
-  .day-cell { min-height: 70px; padding: 4px; }
-  .calendar-event { padding: 3px; font-size: 8px; }
-  .weekday { padding: 8px 2px; font-size: 8px; }
+    .day-cell { min-height: 70px; padding: 4px; }
+  .calendar-event { padding: 3px; font-size: 9px; }
+  .weekday { padding: 8px 2px; font-size: 9px; }
 }
 
 .detail-main { width: min(100% - 40px, 1120px); margin: 28px auto 52px; }
@@ -281,7 +286,7 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
         <div class="toolbar">
           <label class="search-field">
             <span class="sr-only">Search events</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <button type="button" class="search-icon-btn" id="searchButton" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
             <input id="searchInput" type="search" placeholder="Search events" autocomplete="off">
             <kbd>⌘ K</kbd>
           </label>
@@ -331,6 +336,7 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
               <option value="month">Month</option>
               <option value="week">Week</option>
             </select>
+            <a class="button" id="outlookCalendar" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>Sync to Outlook</a>
           </div>
         </div>
 
@@ -339,7 +345,9 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
       <p class="prototype-note">Design concept · Sample event information</p>
     </main>
   </div>
+  <script src="outlook-sync.js"></script>
   <script>
+    document.getElementById("outlookCalendar").href = OutlookSync.calendarUrl();
     const events = [
       { id: "linkedin-learning-reset", title: "LinkedIn Learning Champion: Tips to Reset an Overwhelming Day", date: "2026-10-30", start: "12:00", end: "13:00", location: "Online (Zoom)", attendees: 10, rsvp: "Pending", image: "../../company&culture/assets/images/team-meeting.jpg", imageAlt: "Colleagues collaborating at a team meeting", description: "Join our next LinkedIn Learning Champion session and explore practical ways to reset when a day feels overwhelming. Review the short course before the event, then bring one strategy or question to discuss with the group. You'll leave with ideas you can try in your own workday.", organizer: "Learning & Development", topics: ["Learning", "Wellbeing", "Professional development"] },
       { id: "feedingnyc-volunteer", title: "FeedingNYC Is Back! Help Pack Thanksgiving Meals", date: "2026-11-23", start: "08:30", end: "11:30", location: "New York, NY", attendees: 18, rsvp: "Yes", image: "../../company&culture/assets/images/fall-volunteer-day.jpg", imageAlt: "Colleagues volunteering together outdoors", description: "Join colleagues to pack Thanksgiving meals with FeedingNYC. Volunteers will organize supplies, prepare meal boxes, and work together to support local families ahead of the holiday. All volunteers are welcome; please arrive ready to take part in hands-on activities.", organizer: "Community Investment", topics: ["Community", "Volunteer"] },
@@ -622,7 +630,9 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
       const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
       const weeks = [];
       const visibleEvents = filteredEvents();
-      for (let week = 0; week < 6; week += 1) {
+      const leadingDays = (first.getDay() + 6) % 7;
+      const weekCount = Math.ceil((leadingDays + new Date(year, month + 1, 0).getDate()) / 7);
+      for (let week = 0; week < weekCount; week += 1) {
         const days = Array.from({ length: 7 }, (_, dayIndex) => {
           const day = new Date(start);
           day.setDate(start.getDate() + week * 7 + dayIndex);
@@ -740,17 +750,33 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
       const [year, month, day] = weekParam.split("-").map(Number);
       state.month = new Date(year, month - 1, day);
     }
+    // A search always lives in the list view; the calendar shows every event.
+    if (state.query) state.view = "list";
     searchInput.value = state.query;
+    calendarMode.value = state.calendarMode;
     document.querySelectorAll('input[name="dateFilter"]').forEach((radio) => { radio.checked = radio.value === state.dateFilter; });
     document.querySelectorAll('input[name="rsvpFilter"]').forEach((checkbox) => { checkbox.checked = state.rsvps.includes(checkbox.value); });
-    calendarMode.value = state.calendarMode;
-    document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => { state.view = button.dataset.view; render(); }));
+    const showCalendar = () => {
+      state.view = "calendar";
+      state.query = "";
+      searchInput.value = "";
+      render();
+    };
+    document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => {
+      if (button.dataset.view === "calendar") showCalendar();
+      else { state.view = "list"; render(); }
+    }));
     document.getElementById("calendarShortcut").addEventListener("click", (event) => {
       event.preventDefault();
-      state.view = "calendar";
-      render();
+      showCalendar();
     });
-    searchInput.addEventListener("input", () => { state.query = searchInput.value.trim(); render(); });
+    const runSearch = () => {
+      state.query = searchInput.value.trim();
+      if (state.query) state.view = "list";
+      render();
+    };
+    searchInput.addEventListener("input", runSearch);
+    document.getElementById("searchButton").addEventListener("click", () => { runSearch(); searchInput.focus(); });
     filterToggle.addEventListener("click", () => {
       const open = filterPanel.hidden;
       filterPanel.hidden = !open;
