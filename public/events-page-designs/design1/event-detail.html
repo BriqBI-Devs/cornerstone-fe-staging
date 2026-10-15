@@ -200,6 +200,10 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
 .rsvp-message { min-height: 15px; margin: 8px 0 0; color: var(--muted); font-size: 10px; }
 .calendar-action { width: 100%; min-height: 36px; margin-top: 5px; border: 1px solid #d8dee5; border-radius: 5px; background: #fff; cursor: pointer; font-size: 10px; font-weight: 600; }
 .calendar-action:hover { background: #f8f9fb; }
+a.calendar-action { display: flex; align-items: center; justify-content: center; gap: 7px; color: inherit; text-decoration: none; }
+#outlookSync { border-color: #bcd0f7; background: var(--blue-soft); color: var(--blue); }
+#outlookSync:hover { border-color: var(--blue); background: var(--blue-soft); }
+#outlookSync svg { width: 15px; height: 15px; }
 .attendee-summary { display: flex; align-items: center; gap: 9px; margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
 .attendee-summary[hidden] { display: none; }
 .attendee-avatars { display: flex; align-items: center; padding-left: 2px; }
@@ -297,6 +301,7 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
             <p><span>Date</span><strong id="factDate"></strong></p>
             <p><span>Time</span><strong id="factTime"></strong></p>
             <p><span>Location</span><strong id="factLocation"></strong></p>
+            <a class="calendar-action" id="outlookSync" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>Sync to Outlook</a>
           </section>
         </aside>
       </article>
@@ -317,6 +322,7 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
     </div>
   </dialog>
 
+  <script src="outlook-sync.js"></script>
   <script>
     const events = [
       { id: "linkedin-learning-reset", title: "LinkedIn Learning Champion: Tips to Reset an Overwhelming Day", date: "2026-10-30", start: "12:00", end: "13:00", location: "Online (Zoom)", attendees: 10, rsvp: "Pending", image: "../../company&culture/assets/images/team-meeting.jpg", imageAlt: "Colleagues collaborating at a team meeting", description: "Join our next LinkedIn Learning Champion session and explore practical ways to reset when a day feels overwhelming. Review the short course before the event, then bring one strategy or question to discuss with the group. You'll leave with ideas you can try in your own workday.", topics: ["Learning", "Wellbeing", "Professional development"] },
@@ -546,6 +552,7 @@ kbd { flex: 0 0 auto; padding: 2px 5px; border: 1px solid var(--line); border-ra
       if (clickEvent.target === attendeeDialog) attendeeDialog.close();
     });
     document.getElementById("factDate").textContent = dateText;
+    document.getElementById("outlookSync").href = OutlookSync.eventUrl(event);
     document.getElementById("factTime").textContent = event.allDay
       ? "All day"
       : event.dailySchedule
