@@ -17,7 +17,7 @@ kbd { padding: 2px 6px; border: 1px solid var(--line); border-radius: 6px; color
 .filter-panel legend { margin-bottom: 8px; padding: 0; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .filter-panel label { display: flex; align-items: center; gap: 10px; color: var(--ink-soft); font-size: 13px; cursor: pointer; }
 .filter-panel input { accent-color: var(--navy); }
-.view-switch { display: inline-flex; margin-left: auto; padding: 4px; border: 1px solid var(--line); background: var(--tile); border-radius: var(--pill); }
+.view-switch { display: inline-flex; padding: 4px; border: 1px solid var(--line); background: var(--tile); border-radius: var(--pill); }
 .view-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; padding: 0 16px; background: none; border: 0; border-radius: var(--pill); color: var(--ink-soft); font-size: 13px; font-weight: 600; }
 .view-button svg { width: 15px; height: 15px; }
 .view-button.active { background: var(--navy); color: #fff; }
@@ -137,3 +137,8 @@ a.button { color: inherit; text-decoration: none; }
   .date-tile { width: 54px; }
   .event-title { font-size: 15px; }
 }
+
+/* ---- Sync to Outlook ---- */
+.sync-button { margin-left: auto; text-decoration: none; }
+.sync-button svg { color: var(--link); }
+@media (max-width: 720px) { .sync-button span { display: none; } .sync-button { padding: 0 12px; } }

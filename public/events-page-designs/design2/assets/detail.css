@@ -88,3 +88,8 @@ a.calendar-action { display: flex; align-items: center; justify-content: center;
 }
 .hero-compact { padding: 22px 0 0; background: none; border: 0; }
 .hero-compact + .main-content { margin-top: 14px; }
+
+/* ---- Sync to Outlook (Event information card, always visible) ---- */
+.sync-action { gap: 8px; margin-top: 12px; background: var(--link-soft); border-color: #bcd0f7; color: var(--link); font-weight: 700; }
+.sync-action:hover { background: #dbe6fb; border-color: var(--link); }
+.sync-action svg { width: 16px; height: 16px; }
