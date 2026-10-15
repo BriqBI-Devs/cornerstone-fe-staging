@@ -19,7 +19,7 @@ const DESIGN_OPTIONS: DesignOption[] = [
     name: "Design 2 — Calendar Hub with Dark Intro",
     summary:
       "The same calendar and list as Design 1 in a new look: a dark intro band, a floating panel, a bordered calendar grid, a simple divided list and boxy controls.",
-    folder: "design2",
+    folder: "design02",
   },
   {
     name: "Design 3 — Table List + Calendar",
