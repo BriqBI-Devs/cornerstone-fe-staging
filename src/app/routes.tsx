@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { PublicLayout } from "../layouts/PublicLayout";
 import { ComingSoonPage } from "../pages/coming-soon/ComingSoonPage";
 import { CompanyCulturePage } from "../pages/company-culture/CompanyCulturePage";
+import { StoryDetailPage } from "../pages/company-culture/StoryDetailPage";
 import { EventsPage } from "../pages/events/EventsPage";
 import { HomePage } from "../pages/home/HomePage";
 import { PoliciesResourcesPage } from "../pages/policies-resources/PoliciesResourcesPage";
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
       { path: "policies-resources", element: <PoliciesResourcesPage /> },
       { path: "policies-resources/:categorySlug", element: <PolicyCategoryPage /> },
       { path: "company-culture", element: <CompanyCulturePage /> },
+      { path: "company-culture/:slug", element: <StoryDetailPage /> },
       { path: "events", element: <EventsPage /> },
       ...COMING_SOON_ROUTES.map((route) => ({
         path: `/${route.path}`,

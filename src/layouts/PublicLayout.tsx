@@ -1,5 +1,5 @@
 import { Bell, LayoutGrid, Search } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Avatar } from "../components/ui/Avatar";
 import { cn } from "../lib/cn";
@@ -40,7 +40,13 @@ export function PublicLayout() {
   const dateAndWeather = useDateAndWeather();
   const [appsOpen, setAppsOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const isHome = useLocation().pathname === "/";
+  const { pathname } = useLocation();
+  const isHome = pathname === "/";
+
+  // Every page change starts at the top.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const appsRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
@@ -48,7 +54,7 @@ export function PublicLayout() {
   useClickOutside(notificationsRef, () => setNotificationsOpen(false));
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col overflow-x-clip">
       {/* Everything above the grey line under the greeting stays pinned.
           The whole block is one sticky element whose parent is the root
           column — sticky is bounded by its own parent's box, so the pieces

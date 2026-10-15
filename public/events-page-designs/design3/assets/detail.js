@@ -44,7 +44,6 @@ if (event.rsvpRequired === false) {
   document.querySelector("#rsvpCard h2").textContent = "Open to everyone";
 }
 document.getElementById("eventTitle").textContent = event.title;
-document.getElementById("heroEyebrow").textContent = event.organizer || "Event";
 const heroDate = new Date(`${event.date}T12:00:00`);
 document.getElementById("detailDate").innerHTML = `<span>${new Intl.DateTimeFormat("en-US", { month: "short" }).format(heroDate)}</span><strong>${heroDate.getDate()}</strong>`;
 document.getElementById("eventMeta").innerHTML = `<span>${dateText}${event.allDay ? "" : ` · ${timeSummary}`}</span><span>${locationMarkup(event.location)}</span>`;
