@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Org chart</title>
+<style>
+/* ===== Tokens ===== */
+:root {
+  --strong: #0a0a0a; --text: #333; --muted: #737373; --border: #d4d4d4;
+  --badge: #f5f5f5; --idle: #fafafa; --accent: #0079db;
+  --card-w: 221px; --gap: 8px; --cell: 229px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #f5f5f5; color: var(--text); font: 15px/1.4 -apple-system, "Segoe UI", Arial, sans-serif; }
+button { font: inherit; color: inherit; cursor: pointer; }
+
+/* ===== Page header and search ===== */
+.page { max-width: 1100px; margin: 0 auto; padding: 24px; }
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+h1 { margin: 0; color: var(--strong); font-size: 22px; }
+.search { position: relative; width: min(320px, 100%); }
+.search input { width: 100%; height: 40px; padding: 0 14px; border: 1.25px solid var(--muted); border-radius: 8px; background: #fff; font: inherit; }
+.search input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.results { position: absolute; z-index: 20; top: 44px; left: 0; right: 0; margin: 0; padding: 4px; list-style: none; border: 1px solid var(--border); border-radius: 8px; background: #fff; box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+.results li button { display: block; width: 100%; min-height: 40px; padding: 4px 10px; border: 0; border-radius: 6px; background: none; text-align: left; }
+.results li button:hover, .results li button:focus-visible { background: var(--badge); outline: none; }
+.results small { display: block; color: var(--muted); font-size: 12px; }
+
+/* ===== Tiers and carousel ===== */
+.tier { margin-bottom: 24px; }
+.tier.enter { animation: drop .2s ease-out; }
+@keyframes drop { from { opacity: 0; transform: translateY(-10px); } }
+.stage { position: relative; margin: 0 auto; }
+.viewport { overflow: hidden; padding: 2px; margin: -2px; }
+.track { display: flex; gap: var(--gap); transition: transform .25s ease; }
+.nav { position: absolute; z-index: 5; top: 114px; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; border: 1.25px solid var(--muted); border-radius: 8px; background: #fff; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); }
+.nav.prev { left: -20px; } .nav.next { right: -20px; }
+.nav.step.prev { left: calc(50% - 159px); } .nav.step.next { left: calc(50% + 119px); right: auto; }
+.nav[hidden] { display: none; }
+.nav:focus-visible, .hit:focus-visible, .badge:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sep { margin-top: 20px; border-top: 1px dashed var(--border); }
+
+/* ===== Person card ===== */
+.cell { flex: none; width: var(--card-w); display: flex; flex-direction: column; align-items: center; }
+.card { position: relative; width: var(--card-w); height: 268px; padding: 20px 12px; display: flex; flex-direction: column; align-items: center; border: 1.25px solid transparent; border-radius: 12px; background: var(--idle); text-align: center; }
+.card.open { border-color: var(--border); background: #fff; }
+.card.focused { border-color: var(--accent); background: #fff; }
+.hit { position: absolute; inset: 0; border: 0; border-radius: 12px; background: none; }   /* whole card is one button */
+.avatar { width: 88px; height: 88px; flex: none; border-radius: 50%; object-fit: cover; }
+.initials { display: grid; place-items: center; border: 1px solid #e5e5e5; background: #f0f0f0; color: var(--muted); font-size: 28px; }
+.name { width: 100%; margin-top: 12px; overflow: hidden; color: var(--strong); font-size: 16px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.sub { width: 100%; overflow: hidden; color: var(--muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.view { position: relative; z-index: 2; width: 100px; height: 32px; margin-top: auto; border: 1.25px solid var(--muted); border-radius: 999px; background: #fff; font-size: 14px; font-weight: 700; }
+.view:hover { border-color: var(--strong); }
+
+/* ===== Connectors and counts ===== */
+.stub { width: 1px; height: 12px; background: var(--border); }
+.badge { position: relative; min-width: 33px; height: 24px; padding: 0 8px; border: 0; border-radius: 6px; background: var(--badge); font-size: 12px; }
+.badge::after { content: ""; position: absolute; inset: -8px -4px; }          /* 40px touch target */
+
+/* ===== Profile modal ===== */
+dialog { width: min(380px, calc(100vw - 32px)); padding: 24px; border: 1px solid var(--border); border-radius: 12px; }
+dialog::backdrop { background: rgba(0,0,0,.4); }
+dialog h2 { margin: 0 0 4px; color: var(--strong); font-size: 18px; }
+dialog p { margin: 4px 0; }
+dialog .close { margin-top: 16px; width: 100px; height: 40px; border: 1.25px solid var(--muted); border-radius: 999px; background: #fff; font-weight: 700; }
+
+@media (max-width: 480px) { .page { padding: 16px 28px; } }
+@media (prefers-reduced-motion: reduce) { .track { transition: none; } .tier.enter { animation: none; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="top">
+    <h1>Org chart</h1>
+    <div class="search">
+      <input id="search" type="search" placeholder="Search people" aria-label="Search people" autocomplete="off">
+      <ul class="results" id="results" role="listbox" hidden></ul>
+    </div>
+  </div>
+  <div id="chart"></div>
+</main>
+<dialog id="profile"><h2 id="pName"></h2><p id="pTitle"></p><p id="pDept"></p><p><a id="pMail"></a></p><button class="close" id="pClose" type="button">Close</button></dialog>
+
+<script>
+/* ===== Data (fictional): [name, title, department, managerId]; id = row number ===== */
+const ROWS = [
+  ["Alexandra Whitmore", "Chief Executive Officer", "Executive Office", null],
+  ["Marcus Delgado", "Chief Operating Officer", "Operations", 1],
+  ["Priya Raman", "Chief Technology Officer", "Technology", 1],
+  ["Elena Fischer", "Chief Financial Officer", "Finance", 1],
+  ["Jonas Lindqvist", "Chief People Officer", "People & Culture", 1],
+  ["Amara Okafor", "General Counsel", "Legal", 1],
+  ["Rafael Moreno", "Chief Marketing Officer", "Marketing", 1],
+  ["Hannah Cho", "Chief Strategy Officer", "Strategy", 1],
+  ["Theo Brandt", "Senior Vice President of Strategic Asset Management and Portfolio Operations", "Investments and Portfolio Management", 1],
+  ["Nadia Petrov", "VP, Property Operations", "Operations", 2],
+  ["Samuel Okoye", "Director of Facilities", "Operations", 2],
+  ["Isabel Moretti", "Regional Operations Manager", "Operations", 2],
+  ["Kenji Watanabe", "Director of Safety and Compliance", "Operations", 2],
+  ["Lucía Herrera", "Senior Operations Analyst", "Operations", 2],
+  ["Owen Fitzgerald", "Procurement Lead", "Operations", 2],
+  ["Zoe Abernathy", "Vendor Relations Manager", "Operations", 2],
+  ["Dmitri Volkov", "VP, Engineering", "Technology", 3],
+  ["Sofia Marchetti", "Director of Data Platforms", "Technology", 3],
+  ["Ahmed Hassan", "Head of Information Security", "Technology", 3],
+  ["Chloe Beaumont", "Senior Product Manager", "Technology", 3],
+  ["Liam O'Connell", "IT Infrastructure Manager", "Technology", 3],
+  ["Mei Tanaka", "Enterprise Architect", "Technology", 3],
+  ["Gabriel Santos", "Director of Digital Workplace", "Technology", 3],
+  ["Ingrid Solberg", "QA Lead", "Technology", 3],
+  ["Tariq Mahmood", "Cloud Platform Manager", "Technology", 3],
+  ["Fiona Gallagher", "Business Systems Analyst", "Technology", 3],
+  ["Victor Nguyen", "Help Desk Supervisor", "Technology", 3],
+  ["Naomi Clarke", "Integration Developer", "Technology", 3],
+  ["Pablo Ortega", "UX Design Lead", "Technology", 3],
+  ["Rebecca Lund", "Controller", "Finance", 4],
+  ["Anil Kapoor", "Director of Financial Planning", "Finance", 4],
+  ["Margot Delaunay", "Treasury Manager", "Finance", 4],
+  ["Ethan Brooks", "Accounts Payable Supervisor", "Finance", 4],
+  ["Yuki Sato", "Tax Manager", "Finance", 4],
+  ["Beatrice Okonkwo", "Talent Acquisition Lead", "People & Culture", 5],
+  ["Callum Reid", "Learning and Development Manager", "People & Culture", 5],
+  ["Daria Kovalenko", "HR Business Partner", "People & Culture", 5],
+  ["Isaac Bergström", "Senior Counsel", "Legal", 6],
+  ["Henrik Falk", "Property Manager", "Operations", 10],
+  ["Leila Farouk", "Assistant Property Manager", "Operations", 10],
+];
+// Simple generated illustration as a data URI (no external requests); every third person has no photo.
+const photo = (id) => id % 3 === 0 ? null : "data:image/svg+xml," + encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 88"><rect width="88" height="88" fill="hsl(${id * 47 % 360} 45% 78%)"/><circle cx="44" cy="34" r="16" fill="hsl(${id * 47 % 360} 30% 38%)"/><ellipse cx="44" cy="84" rx="30" ry="24" fill="hsl(${id * 47 % 360} 30% 38%)"/></svg>`);
+const PEOPLE = ROWS.map(([name, title, department, managerId], i) => ({
+  id: i + 1, name, title, department, managerId, photo: photo(i + 1),
+  email: name.normalize("NFD").replace(/[̀-ͯ']/g, "").toLowerCase().replace(/\s+/g, ".") + "@example.com",
+}));
+const byId = new Map(PEOPLE.map((p) => [p.id, p]));
+const reportsOf = (id) => PEOPLE.filter((p) => p.managerId === id);
+const countOf = (id) => reportsOf(id).length;
+const initials = (name) => name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+
+/* ===== State (memory only) ===== */
+const CELL = 229, GAP = 8;
+let path = [1];             // ancestor chain from the CEO down to the focused person
+let offsets = {};           // carousel page start per tier, keyed by manager id
+let shownTiers = [], lastX = {};        // manager ids of the tiers drawn last time (to animate only new ones)
+const chart = document.getElementById("chart");
+
+const chainTo = (id) => { const out = []; for (let p = byId.get(id); p; p = byId.get(p.managerId)) out.unshift(p.id); return out; };
+const perView = () => innerWidth <= 480 ? 1 : Math.min(5, Math.max(1, Math.floor((chart.clientWidth + GAP) / CELL)));
+
+/* ===== Render ===== */
+const card = (p, state) => {
+  const n = countOf(p.id), label = `${p.name}, ${p.title}, ${p.department}${n ? `, ${n} direct report${n > 1 ? "s" : ""}` : ""}`;
+  const face = p.photo ? `<img class="avatar" src="${p.photo}" alt="">` : `<div class="avatar initials" aria-hidden="true">${initials(p.name)}</div>`;
+  return `<div class="cell" role="listitem">
+    <div class="card ${state}">
+      ${face}<div class="name" title="${p.name}">${p.name}</div>
+      <div class="sub" title="${p.title}">${p.title}</div><div class="sub" title="${p.department}">${p.department}</div>
+      ${state !== "idle" ? `<button class="view" type="button" data-profile="${p.id}">View profile</button>` : ""}
+      <button class="hit" type="button" data-pick="${p.id}" aria-label="${label}" ${state === "focused" ? 'aria-current="true"' : ""}></button>
+    </div>
+    ${n ? `<span class="stub"></span><button class="badge" type="button" data-pick="${p.id}" tabindex="-1">${state === "idle" ? n : `${n} direct report${n > 1 ? "s" : ""}`}</button>` : ""}
+  </div>`;
+};
+
+function render(focus) {
+  const pv = perView(), W = chart.clientWidth, CARD = 221;
+  // Tier 0 is the CEO alone; every later tier lists the reports of the person above it.
+  const tiers = [[1], ...path.map((id) => reportsOf(id).map((p) => p.id))].filter((ids) => ids.length);
+  const keys = tiers.map((_, i) => (i === 0 ? 0 : path[i - 1]));
+  const nextX = {};
+  chart.innerHTML = tiers.map((ids, i) => {
+    const at = ids.indexOf(path[i]), picked = at >= 0;
+    const cards = ids.map((id) => card(byId.get(id), id === path[i] ? (i === path.length - 1 ? "focused" : "open") : "idle")).join("");
+    let width, x, nav;
+    if (picked) {                       // a row with a selected person: that person is always in the middle
+      width = W; x = W / 2 - (at * CELL + CARD / 2);
+      const step = (dir, label, ok) => `<button class="nav step ${dir}" type="button" data-step="${dir === "prev" ? -1 : 1}" aria-label="${label}" ${ok ? "" : "hidden"}>${arrow(dir === "prev" ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6")}</button>`;
+      nav = step("prev", "Previous person", at > 0) + step("next", "Next person", at < ids.length - 1);
+    } else {                            // the last row (the reports) pages normally
+      width = Math.min(ids.length, pv) * CELL - GAP;
+      const off = offsets[keys[i]] = Math.max(0, Math.min(offsets[keys[i]] || 0, ids.length - pv));
+      x = -off * CELL;
+      nav = `<button class="nav prev" type="button" aria-label="Previous" ${off === 0 ? "hidden" : ""}>${arrow("M15 6l-6 6 6 6")}</button>
+        <button class="nav next" type="button" aria-label="Next" ${off + pv >= ids.length ? "hidden" : ""}>${arrow("M9 6l6 6-6 6")}</button>`;
+    }
+    nextX[keys[i]] = x;
+    // A row that already exists starts where it was, so the move to the new position slides.
+    const start = shownTiers[i] === keys[i] && lastX[keys[i]] !== undefined ? lastX[keys[i]] : x;
+    return `<section class="tier ${shownTiers[i] === keys[i] ? "" : "enter"}" data-key="${keys[i]}" data-n="${ids.length}" data-picked="${picked}">
+      <div class="stage" style="width:${width}px">${nav}
+        <div class="viewport"><div class="track" role="list" data-x="${x}" style="transform:translateX(${start}px)">${cards}</div></div>
+      </div>${i < tiers.length - 1 ? '<div class="sep"></div>' : ""}</section>`;
+  }).join("");
+  shownTiers = keys; lastX = nextX;
+  chart.querySelectorAll(".track").forEach((t) => { void t.offsetWidth; t.style.transform = `translateX(${t.dataset.x}px)`; });
+  if (focus) chart.querySelector(focus)?.focus();
+}
+const arrow = (d) => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+
+/* ===== Events ===== */
+chart.addEventListener("click", (e) => {
+  const pick = e.target.closest("[data-pick]"), view = e.target.closest("[data-profile]"), nav = e.target.closest(".nav");
+  if (view) return openProfile(byId.get(+view.dataset.profile));
+  const tier = (pick || nav)?.closest(".tier"), depth = [...chart.children].indexOf(tier);
+  if (nav?.dataset.step) {                      // beside the selected person: move to the previous or next person in that row
+    const ids = reportsOf(depth === 0 ? -1 : path[depth - 1]).map((p) => p.id), list = depth === 0 ? [1] : ids;
+    const to = list[list.indexOf(path[depth]) + +nav.dataset.step];
+    if (to) { path = path.slice(0, depth).concat(to); render(`.tier:nth-child(${depth + 1}) .step.${+nav.dataset.step < 0 ? "prev" : "next"}`); }
+    return;
+  }
+  if (nav) return page(nav);
+  if (!pick) return;
+  path = path.slice(0, depth).concat(+pick.dataset.pick);   // drops every tier below, then shows this person's reports
+  render(`.hit[data-pick="${pick.dataset.pick}"]`);
+});
+
+function page(button) {                         // slide the track in place so the CSS transition can play
+  const tier = button.closest(".tier"), key = tier.dataset.key, n = +tier.dataset.n, pv = perView();
+  const max = Math.max(0, n - pv), off = Math.max(0, Math.min(max, (offsets[key] || 0) + (button.classList.contains("next") ? pv : -pv)));
+  offsets[key] = off;
+  tier.querySelector(".track").style.transform = `translateX(${-off * CELL}px)`;
+  tier.querySelector(".prev").hidden = off === 0;
+  tier.querySelector(".next").hidden = off >= max;
+}
+
+const dialog = document.getElementById("profile");
+function openProfile(p) {
+  pName.textContent = p.name; pTitle.textContent = p.title; pDept.textContent = p.department;
+  pMail.textContent = p.email; pMail.href = "mailto:" + p.email;
+  dialog.showModal();
+}
+pClose.addEventListener("click", () => dialog.close());
+
+/* Search: up to 6 matches; choosing one rebuilds the chart with the full ancestor chain. */
+const search = document.getElementById("search"), results = document.getElementById("results");
+search.addEventListener("input", () => {
+  const q = search.value.trim().toLowerCase();
+  const found = q ? PEOPLE.filter((p) => p.name.toLowerCase().includes(q)).slice(0, 6) : [];
+  results.hidden = !found.length;
+  results.innerHTML = found.map((p) => `<li><button type="button" data-id="${p.id}">${p.name}<small>${p.title}</small></button></li>`).join("");
+});
+results.addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  path = chainTo(+b.dataset.id); search.value = ""; results.hidden = true; render(`.hit[data-pick="${b.dataset.id}"]`);
+});
+document.addEventListener("click", (e) => { if (!e.target.closest(".search")) results.hidden = true; });
+
+let timer; addEventListener("resize", () => { clearTimeout(timer); timer = setTimeout(() => render(), 120); });
+
+/* ===== Start: the CEO focused with their reports below; ?focus=<id> starts deeper ===== */
+const start = +new URLSearchParams(location.search).get("focus");
+if (byId.has(start)) path = chainTo(start);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+/* Org chart browser (scoped under #chart so it does not clash with the profile/directory styles) */
+#chart { --card-w: 221px; --gap: 8px; --cell: 229px; --strong: #0a0a0a; --muted: #737373; --border: #d4d4d4; --badge: #f5f5f5; --idle: #fafafa; --accent: #0079db; }
+#chart .initials { background: #f0f0f0; color: #737373; }
+#chart a.view { display: grid; place-items: center; color: inherit; }
+.oc-search { position: relative; width: min(320px, 100%); margin-bottom: 24px; }
+.oc-search { --accent: #0079db; --border: #d4d4d4; --badge: #f5f5f5; --muted: #737373; }
+.oc-search input { width: 100%; height: 40px; padding: 0 14px; border: 1.25px solid var(--muted); border-radius: 8px; background: #fff; font: inherit; }
+.oc-search input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.results { position: absolute; z-index: 20; top: 44px; left: 0; right: 0; margin: 0; padding: 4px; list-style: none; border: 1px solid var(--border); border-radius: 8px; background: #fff; box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+.results li button { display: block; width: 100%; min-height: 40px; padding: 4px 10px; border: 0; border-radius: 6px; background: none; text-align: left; }
+.results li button:hover, .results li button:focus-visible { background: var(--badge); outline: none; }
+.results small { display: block; color: var(--muted); font-size: 12px; }
+
+
+/* ===== Tiers and carousel ===== */
+#chart .tier { margin-bottom: 24px; }
+#chart .tier.enter { animation: drop .2s ease-out; }
+@keyframes drop { from { opacity: 0; transform: translateY(-10px); } }
+#chart .stage { position: relative; margin: 0 auto; }
+#chart .viewport { overflow: hidden; padding: 2px; margin: -2px; }
+#chart .track { display: flex; gap: var(--gap); transition: transform .25s ease; }
+#chart .nav { position: absolute; z-index: 5; top: 114px; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; border: 1.25px solid var(--muted); border-radius: 8px; background: #fff; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); }
+#chart .nav.prev { left: -20px; }
+#chart .nav.next { right: -20px; }
+#chart .nav.step.prev { left: calc(50% - 159px); }
+#chart .nav.step.next { left: calc(50% + 119px); right: auto; }
+#chart .nav[hidden] { display: none; }
+#chart .nav:focus-visible, #chart .hit:focus-visible, #chart .badge:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+#chart .sep { margin-top: 20px; border-top: 1px dashed var(--border); }
+/* ===== Person card ===== */
+#chart .cell { flex: none; width: var(--card-w); display: flex; flex-direction: column; align-items: center; }
+#chart .card { position: relative; width: var(--card-w); height: 268px; padding: 20px 12px; display: flex; flex-direction: column; align-items: center; border: 1.25px solid transparent; border-radius: 12px; background: var(--idle); text-align: center; }
+#chart .card.open { border-color: var(--border); background: #fff; }
+#chart .card.focused { border-color: var(--accent); background: #fff; }
+#chart .hit { position: absolute; inset: 0; border: 0; border-radius: 12px; background: none; }
+/* whole card is one button */
+#chart .avatar { width: 88px; height: 88px; flex: none; border-radius: 50%; object-fit: cover; }
+#chart .initials { display: grid; place-items: center; border: 1px solid #e5e5e5; background: #f0f0f0; color: var(--muted); font-size: 28px; }
+#chart .name { width: 100%; margin-top: 12px; overflow: hidden; color: var(--strong); font-size: 16px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+#chart .sub { width: 100%; overflow: hidden; color: var(--muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+#chart .view { position: relative; z-index: 2; width: 100px; height: 32px; margin-top: auto; border: 1.25px solid var(--muted); border-radius: 999px; background: #fff; font-size: 14px; font-weight: 700; }
+#chart .view:hover { border-color: var(--strong); }
+/* ===== Connectors and counts ===== */
+#chart .stub { width: 1px; height: 12px; background: var(--border); }
+#chart .badge { position: relative; min-width: 33px; height: 24px; padding: 0 8px; border: 0; border-radius: 6px; background: var(--badge); font-size: 12px; }
+#chart .badge::after { content: ""; position: absolute; inset: -8px -4px; }          /* 40px touch target */
+
+
+@media (prefers-reduced-motion: reduce) { #chart .track { transition: none; } #chart .tier.enter { animation: none; } }
+
+/* Up arrow: loads the manager row above */
+.up-wrap { display: flex; justify-content: center; margin-bottom: 4px; }
+.up { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--line, #e5e5e0); border-radius: 50%; background: #fff; color: #1b2a3a; cursor: pointer; box-shadow: 0 2px 6px -2px rgba(27,42,58,.25); transition: border-color .15s, background .15s; }
+.up:hover, .up:focus-visible { border-color: #1d4ed8; background: rgba(29,78,216,.06); color: #1d4ed8; outline: none; }
+
+/* ===== Design 2: heading, search, rectangular cards (card size unchanged) ===== */
+.oc-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.oc-head h1 { margin: 0; padding: 0; border: 0; font-size: 30px; letter-spacing: -.02em; }
+.oc-head .eyebrow { margin: 0 0 6px; color: var(--link); font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.oc-head .sub { max-width: 520px; margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+.oc-search { width: min(360px, 100%); margin: 0; }
+.oc-field { position: relative; display: block; }
+.oc-field svg { position: absolute; top: 50%; left: 13px; width: 16px; height: 16px; color: var(--muted); transform: translateY(-50%); }
+.oc-search input { height: 44px; padding: 0 14px 0 38px; border: 1px solid #d3d9e1; border-radius: 4px; }
+.oc-search input:focus-visible { border-color: var(--link); outline: 3px solid rgba(29,78,216,.18); outline-offset: 0; }
+.oc-search .results { border-radius: 4px; }
+.oc-search .results li button { border-radius: 3px; }
+#chart .card { align-items: stretch; padding: 18px 16px 16px; border-radius: 14px; border-color: var(--border); background: #fafafa; text-align: left; }
+#chart .card.open { border-color: var(--border); background: #fff; }
+#chart .card.focused { border-color: var(--accent); background: #fff; }
+#chart .hit { border-radius: 14px; }
+#chart .avatar { width: 64px; height: 64px; margin-bottom: 14px; border-radius: 4px; }
+#chart .initials { font-size: 22px; }
+#chart .name { margin-top: 0; padding-bottom: 6px; font-size: 16px; }
+#chart .sub { font-size: 12.5px; line-height: 1.5; }
+#chart .sub + .sub { margin-top: 1px; color: #8a8a8a; }
+#chart a.view { display: inline-grid; align-self: flex-start; width: auto; height: 30px; padding: 0 14px; border-radius: 3px; font-size: 13px; }
+#chart .badge { border-radius: 3px; }
+
+/* Selected card: one even 2px blue border; no extra focus ring on load */
+#chart .hit:focus, #chart .hit:focus-visible { outline: none; }
+#chart .card.focused, #chart .card:has(.hit:focus-visible) { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+
+/* ===== Design 3: floating white cards (every card looks the same; only the selected one is outlined) ===== */
+#chart .nav { top: 92px; }
+#chart .card { align-items: center; height: 268px; padding: 24px 14px 16px; border: 1px solid #e3e8f0; border-radius: 16px; background: #fff; box-shadow: 0 10px 24px -16px rgba(27,42,58,.45); text-align: center; transition: transform .15s, box-shadow .15s, border-color .15s; }
+#chart .card:hover { transform: translateY(-3px); box-shadow: 0 18px 30px -16px rgba(27,42,58,.5); }
+#chart .card.open { border-color: #e3e8f0; background: #fff; box-shadow: 0 10px 24px -16px rgba(27,42,58,.45); }
+#chart .card.focused { border-color: var(--accent); background: #fff; box-shadow: 0 0 0 1px var(--accent), 0 18px 30px -16px rgba(27,42,58,.5); }
+#chart .hit { border-radius: 16px; }
+#chart .avatar { width: 84px; height: 84px; margin: 0 0 14px; border: 0; border-radius: 50%; box-shadow: 0 6px 14px -6px rgba(27,42,58,.45); }
+#chart .initials { font-size: 26px; }
+#chart .name { text-align: center; font-size: 16px; }
+#chart .sub { text-align: center; font-size: 12.5px; line-height: 1.45; }
+#chart .sub + .sub { margin-top: 8px; color: var(--strong); }
+#chart .sub + .sub:not(:empty) { align-self: center; width: auto; max-width: 100%; padding: 2px 12px; border-radius: 999px; background: #eef2f8; font-size: 11.5px; font-weight: 600; }
+#chart a.view { align-self: center; justify-self: center; display: inline-flex; align-items: center; white-space: pre; width: auto; height: 30px; margin-top: auto; padding: 0; border: 0; border-radius: 0; background: none; color: var(--accent); font-size: 13px; font-weight: 700; }
+#chart a.view::after { content: " →"; }
+#chart a.view:hover { background: none; color: #1639a8; text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { #chart .card { transition: none; } #chart .card:hover { transform: none; } }
+
+/* ===== Design 3: header band + refined cards ===== */
+.oc-head { align-items: center; margin-bottom: 28px; padding: 28px 32px; border: 0; border-radius: 16px; background: #1b2a3a radial-gradient(circle at 100% 0, #2e4a68, transparent 60%); color: #fff; box-shadow: 0 18px 34px -24px rgba(27,42,58,.7); }
+.oc-head .eyebrow { color: var(--yellow); }
+.oc-head h1 { color: #fff; font-size: 32px; }
+.oc-head .sub { color: rgba(255,255,255,.72); }
+.oc-search { width: min(380px, 100%); }
+.oc-search input { height: 48px; border: 0; border-radius: 12px; background: #fff; box-shadow: 0 10px 20px -12px rgba(0,0,0,.5); font-size: 14.5px; }
+.oc-search input:focus-visible { outline: 3px solid rgba(245,197,24,.7); }
+.oc-search .results { border-radius: 12px; }
+.oc-search .results li button { border-radius: 8px; color: var(--navy); }
+#chart .card { border-color: #e3e8f0; }
+#chart .card.focused, #chart .card.focused:has(.hit:focus-visible) { border-color: #1b2a3a; background: #1b2a3a; box-shadow: 0 18px 30px -14px rgba(27,42,58,.7); }
+#chart .card.focused .name { color: #fff; }
+#chart .card.focused .sub { color: rgba(255,255,255,.72); }
+#chart .card.focused .sub + .sub:not(:empty) { background: rgba(255,255,255,.14); color: #fff; }
+#chart .card.focused .avatar { box-shadow: 0 0 0 3px var(--yellow); }
+#chart .card.focused a.view { color: var(--yellow); }
+#chart .card.focused a.view:hover { color: #ffe27a; }
+#chart .badge { border: 1px solid #dfe5ee; background: #fff; }
+
+/* ===== Design 3: simple light header; plain photo ring on the selected card ===== */
+.oc-head { align-items: flex-end; margin-bottom: 28px; padding: 4px 0 22px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: none; color: var(--navy); box-shadow: none; }
+.oc-head .eyebrow { margin-bottom: 8px; color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .02em; text-transform: none; }
+.oc-head .eyebrow::after { content: " / Org chart"; color: var(--navy); font-weight: 700; }
+.oc-head h1 { color: var(--navy); font-size: 30px; }
+.oc-head .sub { color: var(--muted); }
+.oc-search input { height: 46px; border: 1px solid #d3d9e1; border-radius: 10px; box-shadow: none; }
+.oc-search input:focus-visible { border-color: var(--link); outline: 3px solid rgba(29,78,216,.15); }
+#chart .card.focused .avatar { box-shadow: 0 6px 14px -6px rgba(0,0,0,.5); }
+.oc-head .eyebrow a:hover { color: var(--link); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ===== Design 4 org chart: vertical cards (photo on top, then name, title, team, action) ===== */
+.oc-head { flex-direction: column; align-items: center; gap: 16px; padding: 8px 0 26px; border-bottom: 1px solid #e5e5e0; text-align: center; }
+.oc-head .sub { margin-left: auto; margin-right: auto; }
+.oc-search { width: min(520px, 100%); }
+.oc-search input { border: 1px solid #e5e5e0; border-radius: 6px; }
+#chart .nav { top: 100px; }
+#chart .sep { width: 2px; height: 28px; margin: 8px auto 0; border: 0; background: #e5e5e0; }
+#chart .tier { margin-bottom: 8px; }
+#chart .card { display: flex; flex-direction: column; align-items: center; height: 268px; padding: 22px 16px 16px; border: 1px solid #e5e5e0; border-radius: 8px; background: #fff; box-shadow: none; text-align: center; transform: none; transition: border-color .15s; }
+#chart .card:hover { transform: none; border-color: #1d4ed8; box-shadow: none; }
+#chart .card.open { border-color: #e5e5e0; background: #fff; box-shadow: none; }
+#chart .card.focused, #chart .card.focused:has(.hit:focus-visible) { border-color: #1b2a3a; background: #fff; box-shadow: 0 0 0 1px #1b2a3a; }
+#chart .card.focused .name { color: #1b2a3a; }
+#chart .card.focused .sub { color: #737373; }
+#chart .hit { border-radius: 8px; }
+#chart .avatar, #chart .card.focused .avatar { width: 72px; height: 72px; margin: 0 0 14px; border: 0; border-radius: 50%; box-shadow: 0 0 0 1px #e5e5e0; object-fit: cover; }
+#chart .initials { font-size: 22px; }
+#chart .name { padding: 0; text-align: center; font-size: 16px; }
+#chart .sub { padding: 0; text-align: center; font-size: 12.5px; line-height: 1.4; }
+#chart .sub + .sub, #chart .sub + .sub:not(:empty), #chart .card.focused .sub + .sub:not(:empty) { align-self: center; width: auto; max-width: 100%; margin-top: 10px; padding: 3px 10px; border: 1px solid #e5e5e0; border-radius: 999px; background: #f7f7f5; color: #1b2a3a; font-size: 11.5px; font-weight: 600; }
+#chart .card::before { content: attr(data-dept); position: absolute; top: 10px; right: 10px; padding: 1px 6px; border: 1px solid #e5e5e0; border-radius: 4px; background: #fff; color: rgba(27,42,58,.65); font: 600 9.5px ui-monospace, Consolas, monospace; letter-spacing: .04em; }
+#chart .card.focused::before { border-color: #f5c518; background: #f5c518; color: #1b2a3a; }
+#chart a.view, #chart .card.focused a.view { align-self: center; display: inline-flex; align-items: center; width: auto; height: 30px; margin: auto 0 0; padding: 0 14px; border: 1px solid #e5e5e0; border-radius: 6px; background: #fff; color: #1d4ed8; font-size: 12.5px; font-weight: 600; }
+#chart a.view::after { content: none; }
+#chart a.view:hover, #chart .card.focused a.view:hover { border-color: #1d4ed8; background: rgba(29,78,216,.08); color: #1d4ed8; text-decoration: none; }
+#chart .badge { border: 1px solid #e5e5e0; border-radius: 6px; background: #fff; color: #1b2a3a; font-weight: 600; }
+#chart .badge:hover { border-color: #1d4ed8; color: #1d4ed8; }
+#chart .card::before, #chart .card.focused::before { content: none; display: none; }

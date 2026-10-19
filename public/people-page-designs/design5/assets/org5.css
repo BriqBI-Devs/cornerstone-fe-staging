@@ -1,0 +1,47 @@
+/* Design 5 org chart: night theme, vertical cards (photo, name, title, team pill, action) */
+#chart { --card-w: 221px; --accent: #f5c518; --border: #e5e5e0; --muted: #6b7787; --strong: #1b2a3a; --badge: #eef2f8; --idle: #ffffff; }
+.oc-head { display: flex; flex-direction: column; align-items: center; gap: 16px; margin: 0 0 28px; padding: 6px 0 26px; border: 0; border-bottom: 1px solid #e5e5e0; text-align: center; }
+.oc-head .eyebrow { margin: 0 0 10px; color: #1b2a3a; font-size: 11.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.oc-head .eyebrow a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.oc-head h1 { margin: 0; padding: 0; border: 0; font-size: 36px; font-weight: 800; letter-spacing: -.02em; }
+.oc-head .sub { max-width: 520px; margin: 8px auto 0; color: #6b7787; font-size: 14.5px; }
+.oc-search { position: relative; width: min(520px, 100%); margin: 0; }
+.oc-field { position: relative; display: block; }
+.oc-field svg { position: absolute; top: 50%; left: 14px; width: 16px; height: 16px; color: #6b7787; transform: translateY(-50%); }
+.oc-search input { width: 100%; height: 46px; padding: 0 14px 0 40px; border: 1px solid #e5e5e0; border-radius: 8px; background: #ffffff; color: #1b2a3a; font: inherit; }
+.oc-search input::placeholder { color: #6b7787; }
+.oc-search input:focus-visible { border-color: #f5c518; outline: 3px solid rgba(245,197,24,.18); outline-offset: 0; }
+.oc-search .results { border: 1px solid #e5e5e0; border-radius: 8px; background: #ffffff; box-shadow: 0 18px 30px rgba(0,0,0,.5); }
+.oc-search .results li button { color: #1b2a3a; }
+.oc-search .results li button:hover, .oc-search .results li button:focus-visible { background: #eef2f8; }
+.oc-search .results small { color: #6b7787; }
+
+#chart .sep { width: 2px; height: 28px; margin: 8px auto 0; border: 0; background: #e5e5e0; }
+#chart .tier { margin-bottom: 8px; }
+#chart .nav { top: 100px; border: 1px solid #e5e5e0; background: #ffffff; color: #1b2a3a; box-shadow: 0 6px 14px rgba(0,0,0,.45); }
+#chart .nav:hover { border-color: #f5c518; color: #f5c518; }
+#chart .card { display: flex; flex-direction: column; align-items: center; height: 268px; padding: 24px 16px 16px; border: 1px solid #e5e5e0; border-radius: 12px; background: #ffffff; box-shadow: none; text-align: center; transition: border-color .15s, transform .15s; }
+#chart .card:hover { border-color: #b9c7e0; transform: translateY(-2px); }
+#chart .card.open { border-color: #e5e5e0; background: #ffffff; }
+#chart .card.focused, #chart .card.focused:has(.hit:focus-visible) { border-color: #f5c518; background: #eef2f8; box-shadow: 0 0 0 1px #f5c518, 0 18px 34px -16px rgba(245,197,24,.35); }
+#chart .hit { border-radius: 12px; }
+#chart .avatar { width: 80px; height: 80px; margin: 0 0 14px; border: 0; border-radius: 50%; box-shadow: 0 0 0 2px #e5e5e0; object-fit: cover; }
+#chart .card.focused .avatar { box-shadow: 0 0 0 3px #f5c518; }
+#chart .initials { background: #1b2a3a; color: #fff; font-size: 24px; }
+#chart .name { width: 100%; margin: 0; overflow: hidden; color: #1b2a3a; font-size: 16px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+#chart .sub { width: 100%; overflow: hidden; color: #6b7787; font-size: 12.5px; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
+#chart .sub + .sub { align-self: center; width: auto; max-width: 100%; margin-top: 10px; padding: 3px 11px; border: 1px solid #e5e5e0; border-radius: 999px; background: #f7f7f5; color: #1b2a3a; font-size: 11.5px; font-weight: 600; }
+#chart a.view { display: inline-flex; align-items: center; align-self: center; width: auto; height: 30px; margin: auto 0 0; padding: 0 16px; border: 1px solid #f5c518; border-radius: 6px; background: #f5c518; color: #0d1722; font-size: 12.5px; font-weight: 700; }
+#chart a.view:hover { background: #ffd84a; }
+#chart .stub { background: #e5e5e0; }
+#chart .badge { border: 1px solid #e5e5e0; border-radius: 999px; background: #ffffff; color: #1b2a3a; font-weight: 600; }
+#chart .badge:hover { border-color: #f5c518; color: #f5c518; }
+#chart .sep, #chart .up { border-color: #e5e5e0; }
+#chart .nav:focus-visible, #chart .hit:focus-visible, #chart .badge:focus-visible { outline: 3px solid rgba(245,197,24,.5); }
+#chart .hit:focus, #chart .hit:focus-visible { outline: none; }
+@media (prefers-reduced-motion: reduce) { #chart .card { transition: none; } #chart .card:hover { transform: none; } }
+
+/* Breadcrumb: People / Org chart */
+.oc-head .eyebrow { margin: 0 0 10px; color: #6b7787; font-size: 13px; font-weight: 600; letter-spacing: 0; text-transform: none; }
+.oc-head .eyebrow a:hover { color: #1d4ed8; }
+.oc-head .eyebrow::after { content: " / Org chart"; color: #1b2a3a; font-weight: 700; }
