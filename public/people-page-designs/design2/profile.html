@@ -23,7 +23,7 @@
     const p = byId(new URLSearchParams(location.search).get("id")) || PEOPLE[0];
     loadProfileEdits(p);
     document.title = `${p.name} | Cornerstone`;
-    const boss = byId(p.manager), reports = reportsOf(p.id), email = p.name.toLowerCase().replace(/[^a-z]+/g, ".") + "@example.com";
+    const boss = byId(p.manager), reports = reportsOf(p.id), email = (p.edit && p.edit.email) || "";
     const row = (q, cls = "") => `<a class="mini ${cls}" href="profile.html?id=${q.id}">${avatar(q)}<span>${q.name}<small>${q.title}</small></span></a>`;
     const oc = (q, cls = "") => `<a class="k4-oc ${cls}" href="profile.html?id=${q.id}">${avatar(q)}<span><strong>${q.name}</strong><small>${q.title}</small></span></a>`;
     const fact = (l, v, x = "") => `<div class="k4-row"><dt>${l}</dt><dd>${v}${x}</dd></div>`;
@@ -63,15 +63,16 @@
     const EDIT = initProfileEdit({ p, boss, email });
     document.addEventListener("click", (e) => { if (e.target.closest("[data-edit]")) EDIT.open(); });
     const show = () => document.getElementById("profile").innerHTML = `
+      ${PROFILE_BANNER(p)}
       <a class="k4-back" href="index.html">← Back</a>
       <div class="k4-grid">
         <aside><div class="k4-photo">${avatar(p)}</div></aside>
         <section>
-          <div class="k4-name"><h1>${p.name}</h1><span>${ICON.pin} ${p.location}</span></div>
+          <div class="k4-name"><h1>${p.name}</h1></div>
           <p class="k4-role">${p.title}</p>
           ${PROFILE_DESC(p, boss, reports)}
           <div class="k4-actions">
-            <a class="k4-act" href="mailto:${email}">${ICON.mail} Send message</a>
+            ${email ? `<a class="k4-act" href="mailto:${email}">${ICON.mail} Send message</a>` : ""}
             <a class="k4-act on" href="org-chart.html?id=${p.id}">${ICON.chart} Org chart</a>
             <button type="button" class="k4-act" data-edit>✎ Edit profile</button>
           </div>

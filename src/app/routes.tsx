@@ -5,12 +5,12 @@ import { CompanyCulturePage } from "../pages/company-culture/CompanyCulturePage"
 import { StoryDetailPage } from "../pages/company-culture/StoryDetailPage";
 import { EventsPage } from "../pages/events/EventsPage";
 import { HomePage } from "../pages/home/HomePage";
+import { PeoplePage } from "../pages/people/PeoplePage";
 import { PoliciesResourcesPage } from "../pages/policies-resources/PoliciesResourcesPage";
 import { PolicyCategoryPage } from "../pages/policies-resources/PolicyCategoryPage";
 
 const COMING_SOON_ROUTES: { path: string; title: string }[] = [
   { path: "news", title: "News" },
-  { path: "people", title: "People" },
   { path: "departments", title: "Departments" },
   { path: "documents", title: "Documents" },
 ];
@@ -25,6 +25,7 @@ export const router = createBrowserRouter([
       { path: "company-culture", element: <CompanyCulturePage /> },
       { path: "company-culture/:slug", element: <StoryDetailPage /> },
       { path: "events", element: <EventsPage /> },
+      { path: "people", element: <PeoplePage /> },
       ...COMING_SOON_ROUTES.map((route) => ({
         path: `/${route.path}`,
         element: <ComingSoonPage title={route.title} />,

@@ -82,7 +82,12 @@ dl[data-collapsible]:not(.open) > :nth-child(n+5) { display: none; }
 .show-more { margin-top: 8px; padding: 6px 0; border: 0; background: none; color: #1d4ed8; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
 .show-more:hover { text-decoration: underline; }
 
-/* Profile description */
-.pdesc { max-width: 560px; margin-top: 12px; color: rgba(255,255,255,.88); font-size: 14.5px; line-height: 1.55; }
-.pdesc a { color: #fff; font-weight: 600; text-decoration: underline; }
-.pdesc ul, .pdesc ol { margin: 6px 0; padding-left: 20px; }
+/* Profile description (on the navy hero) */
+.pdesc-wrap { max-width: 620px; margin-top: 14px; text-align: left; }
+.pdesc-wrap .pdesc-label { display: block; margin: 0 0 4px; color: rgba(255,255,255,.6); font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.pdesc-wrap .pdesc { color: rgba(255,255,255,.92); font-size: 15px; line-height: 1.6; }
+.pdesc-wrap .pdesc.clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.pdesc-wrap .pdesc a { color: #fff; font-weight: 600; text-decoration: underline; }
+.pdesc-wrap .pdesc ul, .pdesc-wrap .pdesc ol { margin: 6px 0; padding-left: 20px; }
+.pdesc-wrap .pdesc-more { margin-top: 4px; padding: 0; border: 0; background: none; color: var(--yellow); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.pdesc-wrap .pdesc-more:hover { text-decoration: underline; }

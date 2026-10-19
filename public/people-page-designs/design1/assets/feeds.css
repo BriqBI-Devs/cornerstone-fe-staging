@@ -39,6 +39,11 @@ dl[data-collapsible]:not(.open) > :nth-child(n+5) { display: none; }
 .show-more:hover { text-decoration: underline; }
 
 /* Profile description */
-.pdesc { max-width: 560px; margin-top: 10px; color: var(--navy); font-size: 14.5px; line-height: 1.55; }
-.pdesc a { color: var(--link); font-weight: 600; }
-.pdesc ul, .pdesc ol { margin: 6px 0; padding-left: 20px; }
+.pdesc-wrap { max-width: 620px; margin-top: 14px; text-align: left; }
+.pdesc-wrap .pdesc-label { display: block; margin: 0 0 4px; color: var(--muted); font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.pdesc-wrap .pdesc { color: var(--navy); font-size: 15px; line-height: 1.6; }
+.pdesc-wrap .pdesc.clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.pdesc-wrap .pdesc a { color: var(--link); font-weight: 600; }
+.pdesc-wrap .pdesc ul, .pdesc-wrap .pdesc ol { margin: 6px 0; padding-left: 20px; }
+.pdesc-wrap .pdesc-more { margin-top: 4px; padding: 0; border: 0; background: none; color: var(--link); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.pdesc-wrap .pdesc-more:hover { text-decoration: underline; }

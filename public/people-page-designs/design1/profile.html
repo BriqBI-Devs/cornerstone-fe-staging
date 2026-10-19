@@ -23,7 +23,7 @@
     const p = byId(new URLSearchParams(location.search).get("id")) || PEOPLE[0];
     loadProfileEdits(p);
     document.title = `${p.name} | Cornerstone`;
-    const boss = byId(p.manager), reports = reportsOf(p.id), email = p.name.toLowerCase().replace(/[^a-z]+/g, ".") + "@example.com";
+    const boss = byId(p.manager), reports = reportsOf(p.id), email = (p.edit && p.edit.email) || "";
     const row = (person, cls = "") => `<a class="mini ${cls}" href="profile.html?id=${person.id}">${avatar(person)}<span>${person.name}<small>${person.title}</small></span></a>`;
 
     // Sample content (real data comes from SharePoint): published = authored by the person, mentioned = @tagged in
@@ -61,11 +61,12 @@
     const EDIT = initProfileEdit({ p, boss, email });
     document.addEventListener("click", (e) => { if (e.target.closest("[data-edit]")) EDIT.open(); });
     const show = () => document.getElementById("profile").innerHTML = `
+      ${PROFILE_BANNER(p)}
       <section class="hero">
         ${avatar(p)}
         <div class="hero-text"><h1>${p.name}</h1><p>${p.title}</p>${PROFILE_DESC(p, boss, reports)}</div>
         <div class="actions">
-          <a class="btn primary" href="mailto:${email}">${ICON.mail} Email</a>
+          ${email ? `<a class="btn primary" href="mailto:${email}">${ICON.mail} Email</a>` : ""}
           <a class="btn" href="org-chart.html?id=${p.id}">${ICON.chart} View org chart</a>
           <button type="button" class="btn" data-edit>✎ Edit profile</button>
         </div>

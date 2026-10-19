@@ -24,7 +24,7 @@
     const p = byId(new URLSearchParams(location.search).get("id")) || PEOPLE[0];
     loadProfileEdits(p);
     document.title = `${p.name} | Cornerstone`;
-    const boss = byId(p.manager), reports = reportsOf(p.id), email = p.name.toLowerCase().replace(/[^a-z]+/g, ".") + "@example.com";
+    const boss = byId(p.manager), reports = reportsOf(p.id), email = (p.edit && p.edit.email) || "";
     const oc = (q, cls = "") => `<a class="k4-oc ${cls}" href="profile.html?id=${q.id}">${avatar(q)}<span><strong>${q.name}</strong><small>${q.title}</small></span></a>`;
     const chain = []; for (let x = boss; x; x = byId(x.manager)) chain.unshift(x);   // every manager up to the CEO
     const SHOW = 6;
@@ -69,13 +69,14 @@
     const EDIT = initProfileEdit({ p, boss, email });
     document.addEventListener("click", (e) => { if (e.target.closest("[data-edit]")) EDIT.open(); });
     const show = () => document.getElementById("profile").innerHTML = `
+      ${PROFILE_BANNER(p)}
       <section class="p7-hero">
         <a class="p7-back" href="index.html">← Back to People</a>
         <button type="button" class="p7-edit" data-edit>✎ Edit profile</button>
         <div class="p7-who">
           <div class="p7-photo">${avatar(p)}</div>
           <div>
-            <p class="p7-tag">${FACETS.entity(p)} · ${FACETS.department(p)}</p>
+            ${p.edit.entity || p.edit.department ? `<p class="p7-tag">${[p.edit.entity, p.edit.department].filter(Boolean).map(PE_ESC).join(" · ")}</p>` : ""}
             <h1>${p.name}</h1>
             <p class="p7-role">${p.title}</p>
             ${PROFILE_DESC(p, boss, reports)}
@@ -98,7 +99,7 @@
         <aside class="p7-right">
           <section class="p7-card p7-contact" aria-labelledby="h-contact">
             <h2 id="h-contact">Details</h2>
-            <a class="p7-btn primary" href="mailto:${email}">${ICON.mail} Send email</a>
+            ${email ? `<a class="p7-btn primary" href="mailto:${email}">${ICON.mail} Send email</a>` : ""}
             <h3 class="p7-sub">Contact</h3>
             ${DETAIL_LIST("contact", DET.contact.map(([k, v]) => row(k, v)))}
             <h3 class="p7-sub">Additional</h3>

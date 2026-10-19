@@ -67,32 +67,12 @@ const FACETS = {
 };
 const FILTERS = [["company", "Company"], ["department", "Department"], ["title", "Job title"], ["timezone", "Time zone"], ["management", "Management"], ["entity", "Entity"]];
 
-// Profile details: four contact and four additional fields. Values come from the person's saved edits, else sample data.
-const ZONE_LABELS = { "America/New_York": "(GMT-04:00) Eastern Time - New York", "America/Chicago": "(GMT-05:00) Central Time - Chicago", "America/Denver": "(GMT-06:00) Mountain Time - Denver", "America/Los_Angeles": "(GMT-07:00) Pacific Time - Los Angeles", "Europe/London": "(GMT+01:00) British Time - London", "Europe/Paris": "(GMT+02:00) Central European Time - Paris", "Asia/Kolkata": "(GMT+05:30) India Standard Time - Kolkata", "Asia/Tokyo": "(GMT+09:00) Japan Standard Time - Tokyo", "Australia/Sydney": "(GMT+10:00) Australian Eastern Time - Sydney" };
-const LANGUAGE_LABELS = { "en-US": "English (US) - English (US)", "en-GB": "English (UK) - English (UK)", es: "Español - Spanish", fr: "Français - French", de: "Deutsch - German", "pt-BR": "Português (Brasil) - Portuguese (Brazil)", hi: "हिन्दी - Hindi" };
-const PROFILE_DETAILS = (p, email) => {
-  const e = p.edit || {}, n = String(p.id).padStart(2, "0");
-  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-  const def = { phone: `(212) 555-01${n}`, mobile: `(917) 555-02${n}`, employeeNumber: `E-${1000 + p.id}`, userType: "Employee", officeDays: ["Mon, Wed, Thu", "Tue, Wed, Thu", "Mon, Tue, Fri", "Wed, Thu"][p.id % 4] };
-  const get = (k) => e[k] ?? def[k] ?? "";   // a cleared field is "" and stays hidden
-  const tel = (v) => v ? `<a href="tel:${esc(v)}">${esc(v)}</a>` : "";
-  const keep = (rows) => rows.filter(([, v]) => v);
-  const saved = Object.keys(e).length > 0;   // after an edit, show every field that has a value
-  const social = [["linkedin", "LinkedIn"], ["x", "X (Twitter)"], ["facebook", "Facebook"], ["instagram", "Instagram"], ["youtube", "YouTube"]]
-    .map(([k, l]) => [l, e["social_" + k] ? `<a href="${esc(e["social_" + k])}" target="_blank" rel="noopener">${esc(e["social_" + k].replace(/^https?:\/\/(www\.)?/, ""))}</a>` : ""]);
-  const moreContact = saved ? [["Extension", esc(e.ext)], ["Zoom meeting ID", esc(e.zoom)], ...social] : [];
-  const moreAdditional = saved ? [["Management", esc(e.cf_management)], ["Entity", esc(e.cf_entity)], ["Department/Business Line", esc(e.cf_businessLine)]] : [];
-  return {
-    contact: keep([["Email", `<a href="mailto:${email}">${email}</a>`], ["Phone", tel(get("phone"))], ["Mobile phone", tel(get("mobile"))], ["Time zone", esc(ZONE_LABELS[e.timezone] || FACETS.timezone(p))], ...moreContact]),
-    additional: keep([["Employee number", esc(get("employeeNumber"))], ["User type", esc(get("userType"))], ["Language", esc(LANGUAGE_LABELS[e.language || "en-US"])], ["Office Days", esc(e.cf_officeDays ?? def.officeDays)], ...moreAdditional]),
-  };
-};
-
 // Details list: the first four rows show; a "Show N more" button reveals the rest. `items` are ready-made row markup.
 window.DETAILS_OPEN = window.DETAILS_OPEN || {};
 const DETAIL_LIST = (key, items, dlClass = "") => {
   const html = items.join(""), tpl = document.createElement("template");
   tpl.innerHTML = html;
+  if (!html) return `<p class="empty-note">Not added yet.</p>`;
   const open = !!window.DETAILS_OPEN[key], extra = tpl.content.children.length - 4;   // count the rows, not the array entries
   return `<dl data-collapsible="${key}" class="${dlClass} ${open ? "open" : ""}">${html}</dl>` +
     (extra > 0 ? `<button type="button" class="show-more" data-more="${key}" data-extra="${extra}" aria-expanded="${open}">${open ? "Show less" : `Show ${extra} more`}</button>` : "");
@@ -107,9 +87,54 @@ document.addEventListener("click", (e) => {
   b.textContent = open ? "Show less" : `Show ${b.dataset.extra} more`;
 });
 
-// Description shown on the profile: the saved bio, else a one-line summary built from the org data.
-const PROFILE_DESC = (p, boss, reports) => {
+// ---- Profile details come only from what was entered in the Edit profile form (no sample values) ----
+const PE_ESC = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const ZONE_LABELS = { "America/New_York": "(GMT-04:00) Eastern Time - New York", "America/Chicago": "(GMT-05:00) Central Time - Chicago", "America/Denver": "(GMT-06:00) Mountain Time - Denver", "America/Los_Angeles": "(GMT-07:00) Pacific Time - Los Angeles", "Europe/London": "(GMT+01:00) British Time - London", "Europe/Paris": "(GMT+02:00) Central European Time - Paris", "Asia/Kolkata": "(GMT+05:30) India Standard Time - Kolkata", "Asia/Tokyo": "(GMT+09:00) Japan Standard Time - Tokyo", "Australia/Sydney": "(GMT+10:00) Australian Eastern Time - Sydney" };
+const LANGUAGE_LABELS = { "en-US": "English (US) - English (US)", "en-GB": "English (UK) - English (UK)", es: "Español - Spanish", fr: "Français - French", de: "Deutsch - German", "pt-BR": "Português (Brasil) - Portuguese (Brazil)", hi: "हिन्दी - Hindi" };
+const PROFILE_DETAILS = (p) => {
+  const e = p.edit || {};
+  const link = (href, text) => `<a href="${PE_ESC(href)}">${PE_ESC(text)}</a>`;
+  const keep = (rows) => rows.filter(([, v]) => v);
+  const social = [["linkedin", "LinkedIn"], ["x", "X (Twitter)"], ["facebook", "Facebook"], ["instagram", "Instagram"], ["youtube", "YouTube"]]
+    .map(([k, l]) => [l, e["social_" + k] ? `<a href="${PE_ESC(e["social_" + k])}" target="_blank" rel="noopener">${PE_ESC(e["social_" + k].split("//").pop().replace("www.", ""))}</a>` : ""]);
+  return {
+    contact: keep([["Email", e.email ? link("mailto:" + e.email, e.email) : ""], ["Phone", e.phone ? link("tel:" + e.phone, e.phone) : ""], ["Mobile phone", e.mobile ? link("tel:" + e.mobile, e.mobile) : ""], ["Time zone", PE_ESC(ZONE_LABELS[e.timezone])], ["Extension", PE_ESC(e.ext)], ["Zoom meeting ID", PE_ESC(e.zoom)], ...social]),
+    additional: keep([["Employee number", PE_ESC(e.employeeNumber)], ["User type", PE_ESC(e.userType)], ["Language", PE_ESC(LANGUAGE_LABELS[e.language])], ["Office Days", PE_ESC(e.cf_officeDays)], ["Management", PE_ESC(e.cf_management)], ["Entity", PE_ESC(e.cf_entity)], ["Department/Business Line", PE_ESC(e.cf_businessLine)]]),
+  };
+};
+// Required fields: first name, last name, job title and email. Missing ones show a banner on the profile.
+const PROFILE_MISSING = (p) => {
+  const [first, ...rest] = String(p.name || "").trim().split(" ");
+  return [["First name", first], ["Last name", rest.join(" ")], ["Job title", p.title], ["Email", p.edit && p.edit.email]].filter(([, v]) => !String(v || "").trim()).map(([l]) => l);
+};
+const PROFILE_BANNER = (p) => {
+  const m = PROFILE_MISSING(p);
+  return m.length ? `<div class="pe-banner" role="status"><span>Complete your profile: add <b>${m.join(", ")}</b>.</span><button type="button" data-edit>Complete profile</button></div>` : "";
+};
+// Description: only the saved bio (clamped to three lines with "Read more"). Nothing is shown when there is no bio.
+const PROFILE_DESC = (p) => {
   const bio = p.edit && p.edit.bio;
-  const text = bio || `Based in ${p.location}${boss ? `, reporting to <a href="profile.html?id=${boss.id}">${boss.name}</a>` : " and leading the organization"}${reports.length ? `, with ${reports.length} direct report${reports.length > 1 ? "s" : ""}` : ""}.`;
-  return `<div class="pdesc">${text}</div>`;
+  if (!bio || !bio.replace(/<[^>]*>/g, "").trim()) return "";
+  const long = bio.replace(/<[^>]*>/g, "").length > 200;
+  return `<div class="pdesc-wrap"><span class="pdesc-label">About</span><div class="pdesc${long ? " clamp" : ""}">${bio}</div>${long ? `<button type="button" class="pdesc-more" data-desc-more>Read more</button>` : ""}</div>`;
+};
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-desc-more]");
+  if (!b) return;
+  const collapsed = b.previousElementSibling.classList.toggle("clamp");
+  b.textContent = collapsed ? "Read more" : "Show less";
+});
+
+// Design-only starter values, saved in the same shape as the Edit profile form. Anything saved in the form replaces them.
+const PROFILE_SEED = (p) => {
+  const n = String(p.id).padStart(2, "0");
+  const slug = String(p.name).toLowerCase().replace(/[^a-z]+/g, ".").replace(/^\.+|\.+$/g, "");
+  return {
+    email: `${slug}@example.com`, phone: `(212) 555-01${n}`, mobile: `(917) 555-02${n}`, timezone: "America/New_York",
+    company: FACETS.company(p), department: FACETS.department(p), entity: FACETS.entity(p),
+    bio: PE_ESC(`${p.title} in ${p.team}, based in ${p.location}.`),
+    employeeNumber: `E-${1000 + p.id}`, userType: "Employee", language: "en-US",
+    cf_officeDays: ["Mon, Wed, Thu", "Tue, Wed, Thu", "Mon, Tue, Fri", "Wed, Thu"][p.id % 4],
+    cf_management: FACETS.management(p), cf_entity: FACETS.entity(p), cf_businessLine: FACETS.department(p),
+  };
 };

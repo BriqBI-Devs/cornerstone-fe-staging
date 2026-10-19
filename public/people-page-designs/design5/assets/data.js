@@ -72,6 +72,7 @@ window.DETAILS_OPEN = window.DETAILS_OPEN || {};
 const DETAIL_LIST = (key, items, dlClass = "") => {
   const html = items.join(""), tpl = document.createElement("template");
   tpl.innerHTML = html;
+  if (!html) return `<p class="empty-note">Not added yet.</p>`;
   const open = !!window.DETAILS_OPEN[key], extra = tpl.content.children.length - 4;   // count the rows, not the array entries
   return `<dl data-collapsible="${key}" class="${dlClass} ${open ? "open" : ""}">${html}</dl>` +
     (extra > 0 ? `<button type="button" class="show-more" data-more="${key}" data-extra="${extra}" aria-expanded="${open}">${open ? "Show less" : `Show ${extra} more`}</button>` : "");
@@ -85,3 +86,55 @@ document.addEventListener("click", (e) => {
   b.setAttribute("aria-expanded", String(open));
   b.textContent = open ? "Show less" : `Show ${b.dataset.extra} more`;
 });
+
+// ---- Profile details come only from what was entered in the Edit profile form (no sample values) ----
+const PE_ESC = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const ZONE_LABELS = { "America/New_York": "(GMT-04:00) Eastern Time - New York", "America/Chicago": "(GMT-05:00) Central Time - Chicago", "America/Denver": "(GMT-06:00) Mountain Time - Denver", "America/Los_Angeles": "(GMT-07:00) Pacific Time - Los Angeles", "Europe/London": "(GMT+01:00) British Time - London", "Europe/Paris": "(GMT+02:00) Central European Time - Paris", "Asia/Kolkata": "(GMT+05:30) India Standard Time - Kolkata", "Asia/Tokyo": "(GMT+09:00) Japan Standard Time - Tokyo", "Australia/Sydney": "(GMT+10:00) Australian Eastern Time - Sydney" };
+const LANGUAGE_LABELS = { "en-US": "English (US) - English (US)", "en-GB": "English (UK) - English (UK)", es: "Español - Spanish", fr: "Français - French", de: "Deutsch - German", "pt-BR": "Português (Brasil) - Portuguese (Brazil)", hi: "हिन्दी - Hindi" };
+const PROFILE_DETAILS = (p) => {
+  const e = p.edit || {};
+  const link = (href, text) => `<a href="${PE_ESC(href)}">${PE_ESC(text)}</a>`;
+  const keep = (rows) => rows.filter(([, v]) => v);
+  const social = [["linkedin", "LinkedIn"], ["x", "X (Twitter)"], ["facebook", "Facebook"], ["instagram", "Instagram"], ["youtube", "YouTube"]]
+    .map(([k, l]) => [l, e["social_" + k] ? `<a href="${PE_ESC(e["social_" + k])}" target="_blank" rel="noopener">${PE_ESC(e["social_" + k].split("//").pop().replace("www.", ""))}</a>` : ""]);
+  return {
+    contact: keep([["Email", e.email ? link("mailto:" + e.email, e.email) : ""], ["Phone", e.phone ? link("tel:" + e.phone, e.phone) : ""], ["Mobile phone", e.mobile ? link("tel:" + e.mobile, e.mobile) : ""], ["Time zone", PE_ESC(ZONE_LABELS[e.timezone])], ["Extension", PE_ESC(e.ext)], ["Zoom meeting ID", PE_ESC(e.zoom)], ...social]),
+    additional: keep([["Employee number", PE_ESC(e.employeeNumber)], ["User type", PE_ESC(e.userType)], ["Language", PE_ESC(LANGUAGE_LABELS[e.language])], ["Office Days", PE_ESC(e.cf_officeDays)], ["Management", PE_ESC(e.cf_management)], ["Entity", PE_ESC(e.cf_entity)], ["Department/Business Line", PE_ESC(e.cf_businessLine)]]),
+  };
+};
+// Required fields: first name, last name, job title and email. Missing ones show a banner on the profile.
+const PROFILE_MISSING = (p) => {
+  const [first, ...rest] = String(p.name || "").trim().split(" ");
+  return [["First name", first], ["Last name", rest.join(" ")], ["Job title", p.title], ["Email", p.edit && p.edit.email]].filter(([, v]) => !String(v || "").trim()).map(([l]) => l);
+};
+const PROFILE_BANNER = (p) => {
+  const m = PROFILE_MISSING(p);
+  return m.length ? `<div class="pe-banner" role="status"><span>Complete your profile: add <b>${m.join(", ")}</b>.</span><button type="button" data-edit>Complete profile</button></div>` : "";
+};
+// Description: only the saved bio (clamped to three lines with "Read more"). Nothing is shown when there is no bio.
+const PROFILE_DESC = (p) => {
+  const bio = p.edit && p.edit.bio;
+  if (!bio || !bio.replace(/<[^>]*>/g, "").trim()) return "";
+  const long = bio.replace(/<[^>]*>/g, "").length > 200;
+  return `<div class="pdesc-wrap"><span class="pdesc-label">About</span><div class="pdesc${long ? " clamp" : ""}">${bio}</div>${long ? `<button type="button" class="pdesc-more" data-desc-more>Read more</button>` : ""}</div>`;
+};
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-desc-more]");
+  if (!b) return;
+  const collapsed = b.previousElementSibling.classList.toggle("clamp");
+  b.textContent = collapsed ? "Read more" : "Show less";
+});
+
+// Design-only starter values, saved in the same shape as the Edit profile form. Anything saved in the form replaces them.
+const PROFILE_SEED = (p) => {
+  const n = String(p.id).padStart(2, "0");
+  const slug = String(p.name).toLowerCase().replace(/[^a-z]+/g, ".").replace(/^\.+|\.+$/g, "");
+  return {
+    email: `${slug}@example.com`, phone: `(212) 555-01${n}`, mobile: `(917) 555-02${n}`, timezone: "America/New_York",
+    company: FACETS.company(p), department: FACETS.department(p), entity: FACETS.entity(p),
+    bio: PE_ESC(`${p.title} in ${p.team}, based in ${p.location}.`),
+    employeeNumber: `E-${1000 + p.id}`, userType: "Employee", language: "en-US",
+    cf_officeDays: ["Mon, Wed, Thu", "Tue, Wed, Thu", "Mon, Tue, Fri", "Wed, Thu"][p.id % 4],
+    cf_management: FACETS.management(p), cf_entity: FACETS.entity(p), cf_businessLine: FACETS.department(p),
+  };
+};

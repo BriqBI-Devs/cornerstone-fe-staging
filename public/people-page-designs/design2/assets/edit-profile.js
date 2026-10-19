@@ -3,7 +3,7 @@
 (function () {
   // Apply a person's saved edits before the page reads their name, title and manager.
   window.loadProfileEdits = (p) => {
-    p.edit = p.edit || {};
+    p.edit = typeof PROFILE_SEED === "function" ? PROFILE_SEED(p) : {};   // starter values until something is saved
     try {
       const s = JSON.parse(localStorage.getItem(`p5-edit-${p.id}`) || "null");
       if (s) { p.name = s.name; p.title = s.title; p.manager = s.manager; p.edit = s.edit || {}; }
@@ -13,10 +13,10 @@
   window.initProfileEdit = ({ p, boss, email }) => {
     // Tenant-specific "additional columns". Each tenant can change this list; the form and the profile are built from it.
     const CUSTOM_FIELDS = [
-      ["management", "Management", () => FACETS.management(p)],
-      ["entity", "Entity", () => FACETS.entity(p)],
-      ["businessLine", "Department/Business Line", () => FACETS.department(p)],
-      ["officeDays", "Office Days", () => DEF.officeDays],
+      ["management", "Management", () => ""],
+      ["entity", "Entity", () => ""],
+      ["businessLine", "Department/Business Line", () => ""],
+      ["officeDays", "Office Days", () => ""],
     ];
     const LANGUAGES = [["en-US", "English (US) - English (US)"], ["en-GB", "English (UK) - English (UK)"], ["es", "Español - Spanish"], ["fr", "Français - French"], ["de", "Deutsch - German"], ["pt-BR", "Português (Brasil) - Portuguese (Brazil)"], ["hi", "हिन्दी - Hindi"]];
     /* ===== Edit profile dialog (Personal, About, Contact, Org chart) ===== */
@@ -74,11 +74,11 @@
               ${text("first", "First name", { max: 80, required: true, fallback: first })}
               ${text("last", "Last name", { max: 80, required: true, fallback: last })}
             </div>
-            ${text("jobTitle", "Job title", { fallback: p.title })}
+            ${text("jobTitle", "Job title", { required: true, fallback: p.title })}
             <div class="grid2">
-              ${text("company", "Company name", { fallback: FACETS.company(p) })}
-              ${text("entity", "Entity", { fallback: FACETS.entity(p) })}
-              ${text("department", "Department", { fallback: FACETS.department(p) })}
+              ${text("company", "Company name")}
+              ${text("entity", "Entity")}
+              ${text("department", "Department")}
               ${text("division", "Division")}
             </div>
             ${picker("pronouns", "Pronouns", PRONOUNS.map((x) => [x, x]), val("pronouns"))}
@@ -113,17 +113,17 @@
             </div>
             <div class="grid2">
               <label class="f"><span>Birthday</span><input name="birthday" type="date" value="${esc(val("birthday", val("bMonth") && val("bDay") ? `2000-${String(val("bMonth")).padStart(2, "0")}-${String(val("bDay")).padStart(2, "0")}` : ""))}"></label>
-              <label class="f"><span>Hire date</span><input name="hire" type="date" value="${esc(val("hire", p.joined || ""))}"></label>
+              <label class="f"><span>Hire date</span><input name="hire" type="date" value="${esc(val("hire"))}"></label>
             </div>
           </fieldset>
 
           <fieldset data-pane="2" hidden><legend>Contact</legend>
-            ${text("email", "Email", { type: "email", fallback: email })}
-            ${picker("timezone", "Time zone", ZONES, val("timezone", "America/New_York"))}
+            ${text("email", "Email", { type: "email", required: true })}
+            ${picker("timezone", "Time zone", ZONES, val("timezone"))}
             <div class="grid3">
-              ${text("phone", "Phone", { type: "tel", fallback: DEF.phone })}
+              ${text("phone", "Phone", { type: "tel" })}
               ${text("ext", "Extension")}
-              ${text("mobile", "Mobile phone", { type: "tel", fallback: DEF.mobile })}
+              ${text("mobile", "Mobile phone", { type: "tel" })}
             </div>
             ${text("zoom", "Zoom Personal Meeting ID", { placeholder: "123 456 7890" })}
             <div class="f"><span>Social links</span><div class="social">${SOCIAL.map(([k, l, ph]) => `<label><i>${l}</i><input name="social_${k}" type="url" placeholder="${ph}" value="${esc(val("social_" + k))}"></label>`).join("")}</div></div>
@@ -131,10 +131,10 @@
 
           <fieldset data-pane="3" hidden><legend>Additional</legend>
             <div class="grid2">
-              ${text("employeeNumber", "Employee number", { fallback: DEF.employeeNumber })}
-              ${text("userType", "User type", { fallback: DEF.userType })}
+              ${text("employeeNumber", "Employee number", {})}
+              ${text("userType", "User type", {})}
             </div>
-            <label class="f"><span>Language</span><select name="language">${LANGUAGES.map(([v, l]) => `<option value="${v}" ${val("language", "en-US") === v ? "selected" : ""}>${l}</option>`).join("")}</select></label>
+            <label class="f"><span>Language</span><select name="language"><option value="">Select language</option>${LANGUAGES.map(([v, l]) => `<option value="${v}" ${val("language") === v ? "selected" : ""}>${l}</option>`).join("")}</select></label>
             ${CUSTOM_FIELDS.map(([k, l, def]) => text("cf_" + k, l, { max: 1024, fallback: def() })).join("")}
           </fieldset>
 
