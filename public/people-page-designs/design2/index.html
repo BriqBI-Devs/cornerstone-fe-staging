@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>People | Cornerstone</title>
+  <link rel="stylesheet" href="assets/people.css">
+  <link rel="stylesheet" href="assets/design2.css">
+</head>
+<body>
+  <div id="shell"></div>
+  <main>
+    <div class="d2-head">
+      <p class="eyebrow">Directory</p>
+      <h1>People</h1>
+      <p class="d2-sub">Find colleagues, see where they sit, and open their profile.</p>
+    </div>
+    <div class="tools">
+      <input class="field" id="search" type="search" placeholder="Search people…" aria-label="Search people">
+      <select class="field sort" id="sort" aria-label="Sort by"><option value="asc">Sort by: Name, A-Z</option><option value="desc">Sort by: Name, Z-A</option></select>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="table">
+      <div class="cols"><span id="count"></span><span>Team</span><span>Location</span><span></span></div>
+      <div id="list"></div>
+    </div>
+    <nav class="pager" id="pager" aria-label="Pagination"></nav>
+  </main>
+
+  <script src="assets/data.js"></script>
+  <script>
+    document.getElementById("shell").innerHTML = SHELL(true);
+    const $ = (id) => document.getElementById(id);
+
+    const PAGE_SIZE = 14;
+    let page = 1;
+    const sel = {};
+    $("filters").innerHTML = FILTERS.map(([k, label]) => `<label>${label}<select class="field" data-f="${k}"><option value="">Any</option>${[...new Set(PEOPLE.map(FACETS[k]))].sort().map((v) => `<option>${v}</option>`).join("")}</select></label>`).join("") + '<button type="button" class="clear" id="clear" hidden>Clear filters</button>';
+
+    // 1 2 3 4 … with the current page in the middle once there are many pages.
+    const pageNumbers = (total) => {
+      if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+      const around = [page - 1, page, page + 1].filter((n) => n > 1 && n < total);
+      return [1, ...(around[0] > 2 ? ["…"] : []), ...around, ...(around.at(-1) < total - 1 ? ["…"] : []), total];
+    };
+
+    function render() {
+      const query = $("search").value.trim().toLowerCase();
+      const shown = PEOPLE
+        .filter((p) => `${p.name} ${jobLine(p)}`.toLowerCase().includes(query))
+        .filter((p) => FILTERS.every(([k]) => !sel[k] || FACETS[k](p) === sel[k]))
+        .sort((a, b) => a.name.localeCompare(b.name) * ($("sort").value === "asc" ? 1 : -1));
+      const pages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
+      page = Math.min(page, pages);
+      const start = (page - 1) * PAGE_SIZE;
+      $("count").textContent = `${shown.length} ${shown.length === 1 ? "person" : "people"}`;
+      $("clear").hidden = !Object.values(sel).some(Boolean);
+      $("pager").hidden = pages === 1;
+      $("pager").innerHTML =
+        `<button ${page === 1 ? "disabled" : ""} data-page="${page - 1}" aria-label="Previous page">‹</button>` +
+        pageNumbers(pages).map((n) => n === "…" ? `<span>…</span>` : `<button data-page="${n}" ${n === page ? 'aria-current="page"' : ""}>${n}</button>`).join("") +
+        `<button ${page === pages ? "disabled" : ""} data-page="${page + 1}" aria-label="Next page">›</button>`;
+      $("list").innerHTML = shown.slice(start, start + PAGE_SIZE).map((p) => `
+        <div class="row">
+          <span class="who">${avatar(p)}
+            <span style="min-width:0"><strong><a href="profile.html?id=${p.id}">${p.name}</a></strong><small>${p.title}</small></span></span>
+          <span class="cell">${p.team}</span>
+          <span class="cell">${p.location}</span>
+          <a class="btn" href="org-chart.html?id=${p.id}">Org chart</a>
+        </div>`).join("") || `<p class="job" style="padding:24px 12px">No people match your search or filters.</p>`;
+    }
+    ["search", "sort"].forEach((id) => $(id).addEventListener("input", () => { page = 1; render(); }));
+    $("filters").addEventListener("change", (e) => { const s = e.target.closest("select[data-f]"); if (s) { sel[s.dataset.f] = s.value; s.closest("label").classList.toggle("on", !!s.value); page = 1; render(); } });
+    $("clear").addEventListener("click", () => { Object.keys(sel).forEach((k) => delete sel[k]); document.querySelectorAll("#filters select").forEach((s) => { s.value = ""; s.closest("label").classList.remove("on"); }); page = 1; render(); });
+    $("pager").addEventListener("click", (e) => {
+      const target = e.target.closest("button[data-page]");
+      if (!target) return;
+      page = +target.dataset.page;
+      render();
+      document.querySelector(".table").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    render();
+    PHOTOS.then(render);
+  </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+// Sample people. `manager` is the id of the person they report to (null = top of the chart).
+const PEOPLE = [
+  { id: 1, name: "Morgan Hale", title: "Chief Executive Officer", team: "Executive Team", location: "New York", manager: null, joined: "2014-03-03", expertise: ["Strategy", "Leadership"] },
+  { id: 2, name: "Jordan Ellis", title: "Chief Technology Officer", team: "Technology", location: "New York", manager: 1, joined: "2018-06-11", expertise: ["IT Strategy", "Security"] },
+  { id: 3, name: "Priya Osei", title: "Chief Operating Officer", team: "Operations", location: "Boston", manager: 1, joined: "2015-01-19", expertise: ["Operations", "Process Improvement"] },
+  { id: 4, name: "Marcus Field", title: "Chief Investment Officer", team: "Investments", location: "Boston", manager: 1, joined: "2016-09-05", expertise: ["Asset Management", "Finance"] },
+  { id: 5, name: "Margaret Carestia", title: "Controller", team: "Accounting & Finance", location: "New York", manager: 4, joined: "2014-10-20", expertise: ["Accounting", "Budgeting"] },
+  { id: 6, name: "Denise Ramirez", title: "Senior Property Manager", team: "Property Operations", location: "New York", manager: 3, joined: "2016-09-12", expertise: ["Property Management", "Vendors"] },
+  { id: 7, name: "Tomás Rivera", title: "Project Coordinator", team: "Property Operations", location: "Saratoga", manager: 6, joined: "2026-09-08", expertise: ["Scheduling"] },
+  { id: 8, name: "Alex Kim", title: "Financial Analyst", team: "Accounting & Finance", location: "New York", manager: 5, joined: "2026-09-08", expertise: ["Forecasting"] },
+  { id: 9, name: "Priya Shah", title: "Marketing Specialist", team: "Communications & Marketing", location: "New York", manager: 28, joined: "2026-09-08", expertise: ["Content", "Social Media"] },
+  { id: 10, name: "Sarah Hunt", title: "HR Generalist", team: "People Team", location: "New York", manager: 13, joined: "2026-09-08", expertise: ["Onboarding", "Benefits"] },
+  { id: 11, name: "Laura Reyes", title: "Risk Manager", team: "Risk & Insurance", location: "Saratoga", manager: 4, joined: "2019-04-22", expertise: ["Insurance", "Compliance"] },
+  { id: 12, name: "Connor Marsh", title: "Building Envelope Engineer", team: "Building Envelope & Sustainability", location: "Boston", manager: 3, joined: "2021-02-15", expertise: ["Roof Surveys", "Sustainability"] },
+  { id: 13, name: "Riley Bennett", title: "Chief People Officer", team: "People Team", location: "New York", manager: 1, joined: "2017-05-08", expertise: ["Culture","Talent"] },
+  { id: 14, name: "Taylor Brooks", title: "General Counsel", team: "Legal", location: "New York", manager: 1, joined: "2016-02-01", expertise: ["Contracts","Real Estate Law"] },
+  { id: 15, name: "Casey Parker", title: "Senior Counsel", team: "Legal", location: "New York", manager: 14, joined: "2019-08-26", expertise: ["Leasing","Compliance"] },
+  { id: 16, name: "Quinn Bailey", title: "Paralegal", team: "Legal", location: "Boston", manager: 15, joined: "2023-03-13", expertise: ["Document Review"] },
+  { id: 17, name: "Drew Sullivan", title: "IT Manager", team: "Technology", location: "New York", manager: 2, joined: "2018-11-05", expertise: ["Infrastructure","Vendors"] },
+  { id: 18, name: "Skyler Price", title: "Systems Administrator", team: "Technology", location: "Boston", manager: 17, joined: "2022-01-17", expertise: ["Networks","Microsoft 365"] },
+  { id: 19, name: "Reese Coleman", title: "Help Desk Analyst", team: "Technology", location: "Boston", manager: 17, joined: "2024-06-03", expertise: ["Support","SysAid"] },
+  { id: 20, name: "Rowan Murphy", title: "Director of Construction", team: "Construction", location: "Boston", manager: 3, joined: "2015-07-13", expertise: ["Construction Management"] },
+  { id: 21, name: "Emerson Hughes", title: "Senior Project Manager", team: "Construction", location: "Boston", manager: 20, joined: "2018-04-02", expertise: ["Budgets","Schedules"] },
+  { id: 22, name: "Finley Ward", title: "Site Superintendent", team: "Construction", location: "Saratoga", manager: 21, joined: "2020-09-14", expertise: ["Site Safety","Subcontractors"] },
+  { id: 23, name: "Dakota James", title: "Director of Development", team: "Development", location: "Harlem", manager: 4, joined: "2017-10-23", expertise: ["Entitlements","Partnerships"] },
+  { id: 24, name: "Peyton Russell", title: "Development Associate", team: "Development", location: "Harlem", manager: 23, joined: "2023-07-10", expertise: ["Underwriting"] },
+  { id: 25, name: "Kendall Griffin", title: "Community Investment Lead", team: "Community Investment", location: "Harlem", manager: 3, joined: "2019-01-28", expertise: ["Volunteering","Partnerships"] },
+  { id: 26, name: "Charlie Barnes", title: "Accounting Manager", team: "Accounting & Finance", location: "New York", manager: 5, joined: "2018-02-12", expertise: ["Reporting","Audit"] },
+  { id: 27, name: "Jamie Foster", title: "Accounts Payable Specialist", team: "Accounting & Finance", location: "New York", manager: 26, joined: "2025-02-24", expertise: ["Payments"] },
+  { id: 28, name: "Cameron Hayes", title: "Communications Manager", team: "Communications & Marketing", location: "New York", manager: 3, joined: "2020-03-02", expertise: ["Internal Comms","Events"] },
+  { id: 29, name: "Blake Cooper", title: "Recruiter", team: "People Team", location: "New York", manager: 13, joined: "2022-10-03", expertise: ["Hiring","Interviewing"] },
+  { id: 30, name: "Alexandra Ross", title: "HR Business Partner", team: "People Team", location: "Boston", manager: 13, joined: "2021-05-17", expertise: ["Employee Relations"] },
+];
+// Portraits from the Random User API. The seed keeps the same faces on every load; if the request fails (offline), people keep their initials.
+const PHOTOS = fetch(`https://randomuser.me/api/?results=${PEOPLE.length}&seed=cornerstone&inc=picture&noinfo`)
+  .then((response) => response.json())
+  .then(({ results }) => results.forEach((entry, i) => { PEOPLE[i].photo = entry.picture.large; }))
+  .catch(() => {});
+const avatar = (person) => person.photo
+  ? `<img class="avatar" src="${person.photo}" alt="">`
+  : `<span class="avatar">${initials(person.name)}</span>`;
+const byId = (id) => PEOPLE.find((person) => person.id === Number(id));
+const reportsOf = (id) => PEOPLE.filter((person) => person.manager === id);
+const initials = (name) => name.split(" ").map((part) => part[0]).slice(0, 2).join("");
+const jobLine = (person) => [person.title, person.team, person.location].join(" · ");
+const tenure = (joined) => {
+  const months = Math.max(0, Math.round((new Date("2026-10-19") - new Date(joined)) / 2629800000));
+  const years = Math.floor(months / 12), rest = months % 12;
+  return [years && `${years} yr${years > 1 ? "s" : ""}`, rest && `${rest} mo`].filter(Boolean).join(" ") || "New";
+};
+const SHELL = (active) => `
+  <header><div class="wordmark">CORNERSTONE</div><nav>
+    <a class="off" aria-disabled="true" tabindex="-1">News</a><a class="off" aria-disabled="true" tabindex="-1">Company + Culture</a><a class="off" aria-disabled="true" tabindex="-1">Events</a>
+    <a class="${active ? "active" : ""}" href="index.html">People</a><a class="off" aria-disabled="true" tabindex="-1">Departments</a><a class="off" aria-disabled="true" tabindex="-1">Policies + Resources</a>
+  </nav></header>`;

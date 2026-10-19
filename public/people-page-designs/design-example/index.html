@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>People | Cornerstone</title>
+  <style>
+    nav a.off { cursor: default; pointer-events: none; }
+    :root { --navy: #1b2a3a; --link: #1d4ed8; --yellow: #f5c518; --subtle: #f7f7f5; --line: #e5e5e0; --muted: rgba(27,42,58,.6); }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--navy); background: #fff; font: 14px/1.5 Inter, system-ui, sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    header { padding: 16px 32px 0; border-bottom: 1px solid var(--line); text-align: center; }
+    .wordmark { font: 700 28px Georgia, serif; letter-spacing: .06em; }
+    nav { display: flex; justify-content: center; gap: 28px; padding: 14px 0 10px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+    nav a.active { border-bottom: 2px solid var(--yellow); }
+    main { max-width: 1216px; margin: 0 auto; padding: 32px 32px 56px; }
+    h1 { margin: 0 0 6px; font-size: 32px; font-weight: 800; letter-spacing: -.02em; }
+    .lede { max-width: 520px; margin: 0 0 24px; color: var(--muted); }
+    .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px; margin-bottom: 20px; border-radius: 8px; background: var(--subtle); }
+    .bar input, .bar select { height: 38px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; }
+    .bar input { flex: 1; min-width: 220px; max-width: 360px; }
+    .bar .count { margin-left: auto; color: var(--muted); font-size: 13px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .card { display: flex; flex-direction: column; align-items: center; padding: 24px 16px 20px; border: 1px solid var(--line); border-radius: 8px; text-align: center; transition: border-color .15s, box-shadow .15s; }
+    .card:hover { border-color: var(--link); box-shadow: 0 6px 18px -8px rgba(27,42,58,.25); }
+    .avatar { display: grid; place-items: center; width: 72px; height: 72px; margin-bottom: 12px; border-radius: 50%; color: #fff; font-size: 22px; font-weight: 700; }
+    .card h2 { margin: 0; font-size: 16px; }
+    .card .title { margin: 2px 0 10px; color: var(--muted); font-size: 13px; }
+    .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+    .tags span { padding: 3px 10px; border-radius: 6px; background: var(--subtle); font-size: 12px; font-weight: 600; }
+    .empty { grid-column: 1 / -1; padding: 40px 0; color: var(--muted); text-align: center; }
+    .note { margin-top: 32px; color: var(--muted); font-size: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wordmark">CORNERSTONE</div>
+    <nav>
+      <a class="off" aria-disabled="true" tabindex="-1">News</a><a class="off" aria-disabled="true" tabindex="-1">Company + Culture</a><a class="off" aria-disabled="true" tabindex="-1">Events</a>
+      <a class="active" href="index.html">People</a><a class="off" aria-disabled="true" tabindex="-1">Departments</a><a class="off" aria-disabled="true" tabindex="-1">Policies + Resources</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>People</h1>
+    <p class="lede">Find a colleague by name, role, team or office.</p>
+
+    <div class="bar">
+      <input id="search" type="search" placeholder="Search people" aria-label="Search people">
+      <select id="team" aria-label="Team"><option value="">All teams</option></select>
+      <select id="location" aria-label="Location"><option value="">All locations</option></select>
+      <span class="count" id="count"></span>
+    </div>
+
+    <div class="grid" id="grid"></div>
+    <p class="note">Design concept · Sample people information</p>
+  </main>
+
+  <script>
+    const PEOPLE = [
+      ["Denise Ramirez", "Senior Property Manager", "Property Operations", "New York"],
+      ["Margaret Carestia", "Controller", "Accounting & Finance", "New York"],
+      ["Priya Osei", "Asset Manager", "Asset Management", "Boston"],
+      ["Marcus Field", "Operations Lead", "Property Operations", "Boston"],
+      ["Alex Kim", "Financial Analyst", "Accounting & Finance", "New York"],
+      ["Priya Shah", "Marketing Specialist", "Communications & Marketing", "New York"],
+      ["Tomás Rivera", "Project Coordinator", "Property Operations", "Saratoga"],
+      ["Sarah Hunt", "HR Generalist", "People Team", "New York"],
+      ["Laura Reyes", "Risk Manager", "Risk & Insurance", "Saratoga"],
+      ["Connor Marsh", "Building Envelope Engineer", "Building Envelope & Sustainability", "Boston"],
+      ["Jamie Ortiz", "Communications Manager", "Communications & Marketing", "New York"],
+      ["Rosa Vidal", "Community Investment Lead", "Community Investment", "Harlem"],
+    ];
+    const COLORS = ["#1b2a3a", "#b45309", "#0f766e", "#be123c", "#6d28d9"];
+    const grid = document.getElementById("grid"), search = document.getElementById("search");
+    const team = document.getElementById("team"), location_ = document.getElementById("location"), count = document.getElementById("count");
+
+    const fill = (select, index) => [...new Set(PEOPLE.map((p) => p[index]))].sort()
+      .forEach((value) => select.add(new Option(value, value)));
+    fill(team, 2); fill(location_, 3);
+
+    const initials = (name) => name.split(" ").map((part) => part[0]).slice(0, 2).join("");
+    const color = (name) => COLORS[[...name].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % COLORS.length];
+
+    function render() {
+      const query = search.value.trim().toLowerCase();
+      const shown = PEOPLE.filter(([name, title, t, loc]) =>
+        (!team.value || t === team.value) && (!location_.value || loc === location_.value) &&
+        `${name} ${title} ${t} ${loc}`.toLowerCase().includes(query));
+      count.textContent = `${shown.length} ${shown.length === 1 ? "person" : "people"}`;
+      grid.innerHTML = shown.length ? shown.map(([name, title, t, loc]) => `
+        <a class="card" href="#">
+          <span class="avatar" style="background:${color(name)}">${initials(name)}</span>
+          <h2>${name}</h2>
+          <p class="title">${title}</p>
+          <div class="tags"><span>${t}</span><span>${loc}</span></div>
+        </a>`).join("") : `<p class="empty">No people match your search.</p>`;
+    }
+    [search, team, location_].forEach((el) => el.addEventListener("input", render));
+    render();
+  </script>
+</body>
+</html>
