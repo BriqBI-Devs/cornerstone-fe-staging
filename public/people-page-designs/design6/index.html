@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>People | Cornerstone</title>
+  <link rel="stylesheet" href="assets/people.css">
+</head>
+<body>
+  <div id="shell"></div>
+  <main id="main">
+    <div class="dir-head">
+      <p class="dir-eyebrow">Directory</p>
+      <h1>People</h1>
+      <p class="dir-sub">Find colleagues, see where they sit, and open their profile.</p>
+    </div>
+    <div class="tools" role="search">
+      <input class="field" id="search" type="search" placeholder="Search by name, title, team or location…" aria-label="Search people" autocomplete="off">
+      <select class="field sort" id="sort" aria-label="Sort by">
+        <option value="name-asc">Sort by: Name, A-Z</option>
+        <option value="name-desc">Sort by: Name, Z-A</option>
+        <option value="team">Sort by: Team</option>
+        <option value="location">Sort by: Location</option>
+      </select>
+    </div>
+    <button type="button" class="btn filters-toggle" id="filtersToggle" aria-expanded="false" aria-controls="filters">Filters</button>
+    <div class="dir-layout">
+      <aside class="filters" id="filters" aria-label="Filters"></aside>
+      <div>
+        <div class="table">
+          <div class="cols">
+            <button type="button" data-sort="name" id="colName"></button>
+            <button type="button" data-sort="team">Team</button>
+            <button type="button" data-sort="location">Location</button>
+            <span></span>
+          </div>
+          <div id="list"></div>
+        </div>
+      </div>
+    </div>
+    <nav class="pager" id="pager" aria-label="Pagination"></nav>
+  </main>
+
+  <script src="assets/data.js"></script>
+  <script>
+    document.getElementById("shell").innerHTML = SHELL(true);
+    const $ = (id) => document.getElementById(id);
+    const esc = PE_ESC;
+
+    const PAGE_SIZE = 14;
+    const SORTS = ["name-asc", "name-desc", "team", "location"];
+    let page = 1;
+    const sel = {};
+
+    // State lives in the query string (?q=&sort=&page=&department=…) so a reload or "back" from a profile restores the view.
+    const params = new URLSearchParams(location.search);
+    $("search").value = params.get("q") || "";
+    if (SORTS.includes(params.get("sort"))) $("sort").value = params.get("sort");
+    page = Math.max(1, +params.get("page") || 1);
+    FILTERS.forEach(([k]) => { if (params.get(k)) sel[k] = params.get(k); });
+    const syncUrl = () => {
+      const next = new URLSearchParams();
+      if ($("search").value.trim()) next.set("q", $("search").value.trim());
+      if ($("sort").value !== "name-asc") next.set("sort", $("sort").value);
+      if (page > 1) next.set("page", page);
+      Object.entries(sel).forEach(([k, v]) => v && next.set(k, v));
+      history.replaceState(null, "", next.toString() ? `?${next}` : location.pathname);
+    };
+
+    // Each filter lists the values that exist, with how many people have them.
+    const buildFilters = () => {
+      $("filters").innerHTML = FILTERS.map(([k, label]) => {
+        const counts = {};
+        PEOPLE.forEach((p) => { const v = FACETS[k](p); counts[v] = (counts[v] || 0) + 1; });
+        return `<label>${label}<select class="field" data-f="${k}"><option value="">Any</option>${Object.keys(counts).sort().map((v) => `<option value="${esc(v)}" ${sel[k] === v ? "selected" : ""}>${esc(v)}</option>`).join("")}</select></label>`;
+      }).join("") + '<button type="button" class="clear" id="clear" hidden>Clear filters</button>';
+    };
+    buildFilters();
+
+    // 1 2 3 4 … with the current page in the middle once there are many pages.
+    const pageNumbers = (total) => {
+      if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+      const around = [page - 1, page, page + 1].filter((n) => n > 1 && n < total);
+      return [1, ...(around[0] > 2 ? ["…"] : []), ...around, ...(around.at(-1) < total - 1 ? ["…"] : []), total];
+    };
+
+    const hl = (text, q) => {
+      const t = esc(text);
+      if (!q) return t;
+      const i = text.toLowerCase().indexOf(q);
+      return i < 0 ? t : `${esc(text.slice(0, i))}<mark>${esc(text.slice(i, i + q.length))}</mark>${esc(text.slice(i + q.length))}`;
+    };
+    const sorters = {
+      "name-asc": (a, b) => a.name.localeCompare(b.name),
+      "name-desc": (a, b) => b.name.localeCompare(a.name),
+      team: (a, b) => a.team.localeCompare(b.team) || a.name.localeCompare(b.name),
+      location: (a, b) => a.location.localeCompare(b.location) || a.name.localeCompare(b.name),
+    };
+
+    function render() {
+      const query = $("search").value.trim().toLowerCase();
+      const sortKey = $("sort").value;
+      const shown = PEOPLE
+        .filter((p) => `${p.name} ${jobLine(p)}`.toLowerCase().includes(query))
+        .filter((p) => FILTERS.every(([k]) => !sel[k] || FACETS[k](p) === sel[k]))
+        .sort(sorters[sortKey]);
+      const pages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
+      page = Math.min(page, pages);
+      const start = (page - 1) * PAGE_SIZE;
+      const active = FILTERS.filter(([k]) => sel[k]);
+
+      $("colName").textContent = `${shown.length} ${shown.length === 1 ? "person" : "people"}`;
+      $("colName").setAttribute("aria-live", "polite");
+      document.querySelectorAll(".cols button").forEach((b) => {
+        const k = b.dataset.sort, on = sortKey.startsWith(k);
+        if (on) b.setAttribute("aria-sort", sortKey === "name-desc" ? "descending" : "ascending"); else b.removeAttribute("aria-sort");
+      });
+      $("clear").hidden = !active.length;
+      $("filtersToggle").textContent = active.length ? `Filters (${active.length})` : "Filters";
+      $("pager").hidden = pages === 1;
+      $("pager").innerHTML =
+        `<button ${page === 1 ? "disabled" : ""} data-page="${page - 1}" aria-label="Previous page">‹</button>` +
+        pageNumbers(pages).map((n) => n === "…" ? `<span>…</span>` : `<button data-page="${n}" aria-label="Page ${n}" ${n === page ? 'aria-current="page"' : ""}>${n}</button>`).join("") +
+        `<button ${page === pages ? "disabled" : ""} data-page="${page + 1}" aria-label="Next page">›</button>`;
+      $("list").innerHTML = shown.slice(start, start + PAGE_SIZE).map((p) => `
+        <div class="row">
+          <span class="who">${avatar(p)}
+            <span style="min-width:0"><strong><a href="profile.html?id=${p.id}">${hl(p.name, query)}</a></strong><small>${hl(p.title, query)}</small></span></span>
+          <span class="cell">${hl(p.team, query)}</span>
+          <span class="cell">${hl(p.location, query)}</span>
+          <a class="btn" href="org-chart.html?id=${p.id}" aria-label="Org chart for ${esc(p.name)}">Org chart</a>
+        </div>`).join("") || `<div class="empty-state"><strong>No people match</strong><p>Try a different name, or remove some filters.</p><button type="button" class="btn" data-reset>Reset search and filters</button></div>`;
+      syncUrl();
+    }
+
+    let debounce;
+    $("search").addEventListener("input", () => { clearTimeout(debounce); debounce = setTimeout(() => { page = 1; render(); }, 150); });
+    $("sort").addEventListener("input", () => { page = 1; render(); });
+    document.querySelector(".cols").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-sort]");
+      if (!b) return;
+      const k = b.dataset.sort, cur = $("sort").value;
+      $("sort").value = k === "name" ? (cur === "name-asc" ? "name-desc" : "name-asc") : k;
+      page = 1; render();
+    });
+    $("filters").addEventListener("change", (e) => { const s = e.target.closest("select[data-f]"); if (s) { sel[s.dataset.f] = s.value; page = 1; render(); } });
+    const resetFilters = () => { Object.keys(sel).forEach((k) => delete sel[k]); document.querySelectorAll("#filters select").forEach((s) => { s.value = ""; }); page = 1; };
+    $("filters").addEventListener("click", (e) => { if (e.target.closest("#clear")) { resetFilters(); render(); } });
+    $("list").addEventListener("click", (e) => { if (e.target.closest("[data-reset]")) { $("search").value = ""; resetFilters(); render(); } });
+    $("filtersToggle").addEventListener("click", () => {
+      const open = $("filters").classList.toggle("open");
+      $("filtersToggle").setAttribute("aria-expanded", String(open));
+    });
+    $("pager").addEventListener("click", (e) => {
+      const target = e.target.closest("button[data-page]");
+      if (!target) return;
+      page = +target.dataset.page;
+      render();
+      document.querySelector(".table").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    render();
+    PHOTOS.then(render);
+  </script>
+</body>
+</html>

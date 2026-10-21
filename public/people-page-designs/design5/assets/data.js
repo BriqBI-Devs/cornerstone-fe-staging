@@ -111,19 +111,6 @@ const PROFILE_BANNER = (p) => {
   const m = PROFILE_MISSING(p);
   return m.length ? `<div class="pe-banner" role="status"><span>Complete your profile: add <b>${m.join(", ")}</b>.</span><button type="button" data-edit>Complete profile</button></div>` : "";
 };
-// Description: only the saved bio (clamped to three lines with "Read more"). Nothing is shown when there is no bio.
-const PROFILE_DESC = (p) => {
-  const bio = p.edit && p.edit.bio;
-  if (!bio || !bio.replace(/<[^>]*>/g, "").trim()) return "";
-  const long = bio.replace(/<[^>]*>/g, "").length > 200;
-  return `<div class="pdesc-wrap"><span class="pdesc-label">About</span><div class="pdesc${long ? " clamp" : ""}">${bio}</div>${long ? `<button type="button" class="pdesc-more" data-desc-more>Read more</button>` : ""}</div>`;
-};
-document.addEventListener("click", (e) => {
-  const b = e.target.closest("[data-desc-more]");
-  if (!b) return;
-  const collapsed = b.previousElementSibling.classList.toggle("clamp");
-  b.textContent = collapsed ? "Read more" : "Show less";
-});
 
 // Design-only starter values, saved in the same shape as the Edit profile form. Anything saved in the form replaces them.
 const PROFILE_SEED = (p) => {
@@ -132,7 +119,6 @@ const PROFILE_SEED = (p) => {
   return {
     email: `${slug}@example.com`, phone: `(212) 555-01${n}`, mobile: `(917) 555-02${n}`, timezone: "America/New_York",
     company: FACETS.company(p), department: FACETS.department(p), entity: FACETS.entity(p),
-    bio: PE_ESC(`${p.title} in ${p.team}, based in ${p.location}.`),
     employeeNumber: `E-${1000 + p.id}`, userType: "Employee", language: "en-US",
     cf_officeDays: ["Mon, Wed, Thu", "Tue, Wed, Thu", "Mon, Tue, Fri", "Wed, Thu"][p.id % 4],
     cf_management: FACETS.management(p), cf_entity: FACETS.entity(p), cf_businessLine: FACETS.department(p),

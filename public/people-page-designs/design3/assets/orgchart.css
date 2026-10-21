@@ -129,3 +129,6 @@
 .oc-search input:focus-visible { border-color: var(--link); outline: 3px solid rgba(29,78,216,.15); }
 #chart .card.focused .avatar { box-shadow: 0 6px 14px -6px rgba(0,0,0,.5); }
 .oc-head .eyebrow a:hover { color: var(--link); text-decoration: underline; text-underline-offset: 3px; }
+
+.results li button[aria-selected="true"] { background: var(--badge); }
+.results:empty { display: none; }

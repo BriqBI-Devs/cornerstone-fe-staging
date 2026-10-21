@@ -80,3 +80,6 @@
 /* Selected card: one even 2px blue border; no extra focus ring on load */
 #chart .hit:focus, #chart .hit:focus-visible { outline: none; }
 #chart .card.focused, #chart .card:has(.hit:focus-visible) { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+
+.results li button[aria-selected="true"] { background: var(--badge); }
+.results:empty { display: none; }

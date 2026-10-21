@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Profile | Cornerstone</title>
   <link rel="stylesheet" href="assets/people.css">
-  <link rel="stylesheet" href="assets/profile4.css">
+  <link rel="stylesheet" href="assets/profile2.css">
   <link rel="stylesheet" href="assets/edit-profile.css">
 </head>
 <body>
   <div id="shell"></div>
-  <main class="k4">
+  <main id="main" class="p2">
+    <a class="p2-back" href="index.html">← Back to People</a>
     <div id="profile"></div>
   </main>
 
@@ -18,94 +19,154 @@
   <script src="assets/edit-profile.js"></script>
   <script>
     document.getElementById("shell").innerHTML = SHELL(true);
-    const ICON = { mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>`, pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>`, chart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/></svg>` };
-    const COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>';
-    const p = byId(new URLSearchParams(location.search).get("id")) || PEOPLE[0];
-    loadProfileEdits(p);
-    document.title = `${p.name} | Cornerstone`;
-    const boss = byId(p.manager), reports = reportsOf(p.id), email = (p.edit && p.edit.email) || "";
-    const row = (q, cls = "") => `<a class="mini ${cls}" href="profile.html?id=${q.id}">${avatar(q)}<span>${q.name}<small>${q.title}</small></span></a>`;
-    const oc = (q, cls = "") => `<a class="k4-oc ${cls}" href="profile.html?id=${q.id}">${avatar(q)}<span><strong>${q.name}</strong><small>${q.title}</small></span></a>`;
-    const fact = (l, v, x = "") => `<div class="k4-row"><dt>${l}</dt><dd>${v}${x}</dd></div>`;
+    const esc = PE_ESC;
+    const svg = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+    const ICON = {
+      mail: svg('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>'),
+      team: svg('<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.2a3 3 0 0 1 0 5.6M18 14.4c1.8.8 3 2.6 3 5.6"/>'),
+      building: svg('<path d="M4 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M14 9h5a1 1 0 0 1 1 1v11M3 21h18M8 7h2M8 11h2M8 15h2"/>'),
+      chart: svg('<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/>'),
+      copy: svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>'),
+      lock: svg('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'),
+    };
+    const root = document.getElementById("profile");
+    const SOC = {
+      linkedin: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>',
+      x: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-7.5 8.57L23 22h-6.9l-5.4-7.07L4.5 22H1.4l8-9.17L1 2h7.07l4.9 6.48L18.9 2zm-1.2 18h1.9L7.4 3.9H5.4L17.7 20z"/></svg>',
+      facebook: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 22v-8.2h2.8l.5-3.3h-3.3V8.4c0-.95.4-1.7 1.75-1.7H17V3.8c-.3 0-1.3-.15-2.4-.15-2.5 0-4.1 1.5-4.1 4.2v2.65H7.7v3.3h2.8V22h3z"/></svg>',
+      instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>',
+      youtube: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.3 5 12 5 12 5s-6.3 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2C2 8.75 2 12 2 12s0 3.25.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.7 19 12 19 12 19s6.3 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.25 22 12 22 12s0-3.25-.4-4.8zM10 15V9l5.2 3L10 15z"/></svg>',
+    };
+    const p = byId(new URLSearchParams(location.search).get("id"));
 
-    // Sample content (real data comes from SharePoint): published = authored by the person, mentioned = @tagged in
-    const seed = [...String(p.id)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
-    const rnd = (n) => { let s = (seed + n * 2654435761) >>> 0; s = Math.imul(s ^ (s >>> 15), 2246822519); s ^= s >>> 13; return (s >>> 0) / 4294967296; };
-    const IMG = "../assets/";
-    const POOL = {
-      p: [["12-Foot Snowman Arrives at HQ", "12-foot-snowman.jpg", "Company News"], ["Hispanic Heritage Month", "hispanic-heritage-month.jpg", "Community Updates"], ["Outdoor Event: Save the Date", "outdoor-event.jpg", "Company News"], ["River Crossing Family Day", "river-crossing-family-day.jpg", "Community Updates"], ["September Community Digest", "september-community-digest.jpg", "Community Updates"], ["Team Celebration Recap", "team-celebration.avif", "HR Central"], ["Workiversaries: Full List", "workiversaries-full-list.jpg", "HR Central"]],
-      m: [[`Congratulations to ${p.name}`, "team-celebration.avif", "HR Central"], [`Workiversaries: ${p.name} + team`, "workiversaries-full-list.jpg", "HR Central"], [`September Community Digest: thanks ${p.name}`, "september-community-digest.jpg", "Community Updates"], [`River Crossing Family Day volunteers: ${p.name}`, "river-crossing-family-day.jpg", "Community Updates"], [`Hispanic Heritage Month panel with ${p.name}`, "hispanic-heritage-month.jpg", "Managers' Corner"], [`Outdoor Event hosts: ${p.name}`, "outdoor-event.jpg", "Company News"], [`Snowman build crew: ${p.name}`, "12-foot-snowman.jpg", "Company News"]],
-    };
-    const make = (kind, count) => POOL[kind].map(([title, img, site], i) => ({ title, img, site, ms: Date.UTC(2022, 0, 1) + Math.floor(rnd(i + 99 + (kind === "m" ? 50 : 0)) * (Date.UTC(2026, 4, 1) - Date.UTC(2022, 0, 1))), lock: site === "Managers' Corner" })).sort((x, y) => rnd(x.ms) - rnd(y.ms)).slice(0, Math.min(count, 7));
-    const FEED = {
-      published: { label: "Published", items: make("p", 3 + Math.floor(rnd(1) * 5)) },
-      mentioned: { label: "Mentioned", items: make("m", 2 + Math.floor(rnd(2) * 6)) },
-    };
-    const PER = { published: 4, mentioned: 4 }, LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
-    const st = { published: { page: 1, sort: "latest" }, mentioned: { page: 1, sort: "latest" } };
-    const fmt = (ms) => new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
-    const feed = (key) => {
-      const { label, items } = FEED[key], s = st[key];
-      const sorted = [...items].sort((a, b) => s.sort === "latest" ? b.ms - a.ms : a.ms - b.ms);
-      const PAGE = PER[key], pages = Math.max(1, Math.ceil(sorted.length / PAGE));
-      s.page = Math.min(s.page, pages);
-      const rows = sorted.slice((s.page - 1) * PAGE, s.page * PAGE).map((c) => `<li class="k4-item"><a class="k4-thumb" href="#" aria-label="${c.title}"><img src="${IMG}${c.img}" alt="" loading="lazy"></a><div><a class="k4-title" href="#">${c.title}</a><p>In <a href="#">${c.lock ? LOCK : ""}${c.site}</a> on ${fmt(c.ms)}</p></div></li>`).join("");
-      const nums = Array.from({ length: pages }, (_, i) => `<button type="button" data-feed="${key}" data-page="${i + 1}" ${i + 1 === s.page ? 'aria-current="page"' : ""}>${i + 1}</button>`).join("");
-      return `<section class="k4-feed" aria-labelledby="f-${key}">
-        <header><h2 id="f-${key}">${label} <em>${items.length}</em></h2>
-          <label>Sort by: <select data-feed="${key}" data-sort><option value="latest" ${s.sort === "latest" ? "selected" : ""}>Latest</option><option value="oldest" ${s.sort === "oldest" ? "selected" : ""}>Oldest</option></select></label></header>
-        <ul>${rows}</ul>
-        ${pages > 1 ? `<nav class="k4-pg" aria-label="${label} pages"><button type="button" data-feed="${key}" data-page="${s.page - 1}" ${s.page === 1 ? "disabled" : ""} aria-label="Previous page">‹</button>${nums}<button type="button" data-feed="${key}" data-page="${s.page + 1}" ${s.page === pages ? "disabled" : ""} aria-label="Next page">›</button></nav>` : ""}
+    if (!p) {
+      document.title = "Person not found | Cornerstone";
+      root.innerHTML = `<div class="p2-missing"><h1>Person not found</h1><p>This profile doesn't exist or may have been removed.</p><a class="btn primary" href="index.html">Back to People</a></div>`;
+    } else {
+      init();
+    }
+
+
+    function init() {
+      loadProfileEdits(p);
+      document.title = `${p.name} | Cornerstone`;
+      const boss = byId(p.manager), reports = reportsOf(p.id), e = p.edit, email = e.email || "";
+      const oc = (q, cls = "") => `<a class="p2-oc ${cls}" href="profile.html?id=${q.id}">${avatar(q)}<span><strong>${esc(q.name)}</strong><small>${esc(q.title)}</small></span></a>`;
+
+      // Sample content (real data comes from SharePoint): published = authored by the person, mentioned = @tagged in
+      const seed = [...String(p.id)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+      const rnd = (n) => { let s = (seed + n * 2654435761) >>> 0; s = Math.imul(s ^ (s >>> 15), 2246822519); s ^= s >>> 13; return (s >>> 0) / 4294967296; };
+      const IMG = "../assets/";
+      const POOL = {
+        p: [["12-Foot Snowman Arrives at HQ", "12-foot-snowman.jpg", "Company News"], ["Hispanic Heritage Month", "hispanic-heritage-month.jpg", "Community Updates"], ["Outdoor Event: Save the Date", "outdoor-event.jpg", "Company News"], ["River Crossing Family Day", "river-crossing-family-day.jpg", "Community Updates"], ["September Community Digest", "september-community-digest.jpg", "Community Updates"], ["Team Celebration Recap", "team-celebration.avif", "HR Central"], ["Workiversaries: Full List", "workiversaries-full-list.jpg", "HR Central"]],
+        m: [[`Congratulations to ${p.name}`, "team-celebration.avif", "HR Central"], [`Workiversaries: ${p.name} + team`, "workiversaries-full-list.jpg", "HR Central"], [`September Community Digest: thanks ${p.name}`, "september-community-digest.jpg", "Community Updates"], [`River Crossing Family Day volunteers: ${p.name}`, "river-crossing-family-day.jpg", "Community Updates"], [`Hispanic Heritage Month panel with ${p.name}`, "hispanic-heritage-month.jpg", "Managers' Corner"], [`Outdoor Event hosts: ${p.name}`, "outdoor-event.jpg", "Company News"], [`Snowman build crew: ${p.name}`, "12-foot-snowman.jpg", "Company News"]],
+      };
+      // Two more of each kind, so every person has at least 7 published and 7 mentioned items (7 to 9).
+      POOL.p.push(["August Community Digest", "august-community-digest.jpg", "Community Updates"], ["Diwali Across Our Offices", "diwali-across-offices.jpg", "Community Updates"]);
+      POOL.m.push([`August new hires: welcome, and thanks ${p.name}`, "august-new-hires.jpg", "HR Central"], [`July Workiversaries: ${p.name}`, "july-workiversaries.jpg", "HR Central"]);
+      const make = (kind, count) => POOL[kind].map(([title, img, site], i) => ({ title, img, site, ms: Date.UTC(2022, 0, 1) + Math.floor(rnd(i + 99 + (kind === "m" ? 50 : 0)) * (Date.UTC(2026, 4, 1) - Date.UTC(2022, 0, 1))), lock: site === "Managers' Corner" })).sort((x, y) => rnd(x.ms) - rnd(y.ms)).slice(0, Math.min(count, POOL[kind].length));
+      const FEED = {
+        published: { label: "Published", items: make("p", 7 + Math.floor(rnd(1) * 3)) },
+        mentioned: { label: "Mentioned", items: make("m", 7 + Math.floor(rnd(2) * 3)) },
+      };
+      const PER = 10;
+      const st = { feed: "published", published: { page: 1, sort: "latest" }, mentioned: { page: 1, sort: "latest" } };
+      const fmt = (ms) => new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+
+      const feed = (key) => {
+        const { label, items } = FEED[key], s = st[key];
+        const sorted = [...items].sort((a, b) => s.sort === "latest" ? b.ms - a.ms : a.ms - b.ms);
+        const pages = Math.max(1, Math.ceil(sorted.length / PER));
+        s.page = Math.min(s.page, pages);
+        const rows = sorted.slice((s.page - 1) * PER, s.page * PER).map((c) => `<li class="p2-story"><a class="p2-thumb" href="#" data-stub aria-label="${esc(c.title)}"><img src="${IMG}${c.img}" alt="" loading="lazy"></a><div><h3><a href="#" data-stub>${esc(c.title)}</a></h3><p>In <a href="#" data-stub>${c.lock ? ICON.lock : ""}${esc(c.site)}</a> on ${fmt(c.ms)}</p></div></li>`).join("");
+        const nums = Array.from({ length: pages }, (_, i) => i + 1).filter((n) => pages <= 7 || n === 1 || n === pages || Math.abs(n - s.page) <= 1)
+          .flatMap((n, i, a) => (i && n - a[i - 1] > 1 ? ['<span aria-hidden="true">…</span>'] : []).concat(`<button type="button" data-feed="${key}" data-page="${n}" aria-label="Page ${n}" ${n === s.page ? 'aria-current="page"' : ""}>${n}</button>`)).join("");
+        return `<section aria-labelledby="f-activity">
+          <h2 class="p2-h" id="f-activity"><span>Activity</span>
+            <label class="p2-sort">Sort by: <select data-feed="${key}" data-sort><option value="latest" ${s.sort === "latest" ? "selected" : ""}>Latest</option><option value="oldest" ${s.sort === "oldest" ? "selected" : ""}>Oldest</option></select></label></h2>
+          <div class="p2-tabs" role="tablist" aria-label="Activity">${["published", "mentioned"].map((k) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${st.feed === k}">${FEED[k].label}<em>${FEED[k].items.length}</em></button>`).join("")}</div>
+          ${items.length ? `<ul class="p2-list">${rows}</ul>` : `<p class="p2-empty">Nothing ${label.toLowerCase()} yet.</p>`}
+          ${pages > 1 ? `<nav class="p2-pg" aria-label="${label} pages"><button type="button" data-feed="${key}" data-page="${s.page - 1}" ${s.page === 1 ? "disabled" : ""} aria-label="Previous page">‹</button>${nums}<button type="button" data-feed="${key}" data-page="${s.page + 1}" ${s.page === pages ? "disabled" : ""} aria-label="Next page">›</button></nav>` : ""}
+        </section>`;
+      };
+
+      const DET = PROFILE_DETAILS(p, email);
+      const EDIT = initProfileEdit({ p, boss, email });
+      document.addEventListener("click", (ev) => { if (ev.target.closest("[data-edit]")) EDIT.open(); });
+
+      const contactRows = [
+        ["Email", e.email, e.email && "mailto:" + e.email, e.email],
+        ["Phone", e.phone, e.phone && "tel:" + e.phone, e.phone],
+        ["Mobile", e.mobile, e.mobile && "tel:" + e.mobile, e.mobile],
+        ["Extension", e.ext, "", e.ext],
+        ["Time zone", ZONE_LABELS[e.timezone], "", ""],
+        ["Zoom ID", e.zoom, "", e.zoom],
+      ].filter(([, v]) => v);
+      const localTime = () => { try { return new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: e.timezone }); } catch { return ""; } };
+      const zoneShort = (ZONE_LABELS[e.timezone] || "").replace(/^(GMT[^)]*)s*/, "").replace(/ - .*/, "");
+      const socials = [["linkedin", "LinkedIn"], ["x", "X"], ["facebook", "Facebook"], ["instagram", "Instagram"], ["youtube", "YouTube"]].filter(([k]) => /^https?:/i.test(e["social_" + k] || ""));
+
+      const arrow = `<span class="p2-arrow" aria-hidden="true">${svg('<path d="M5 12h14M13 6l6 6-6 6"/>')}</span>`;
+      const flow = () => `<section aria-labelledby="h-org"><h2 class="p2-h" id="h-org"><span>Reporting line</span><a class="p2-more" href="org-chart.html?id=${p.id}">Open full org chart</a></h2>
+        <div class="p2-flow">
+          ${boss ? `<div class="p2-step"><span>Reports to</span>${oc(boss)}</div>${arrow}` : ""}
+          <div class="p2-step"><span>${boss ? "This person" : "Top of the organization"}</span>${oc(p, "me")}</div>
+          ${reports.length ? `${arrow}<div class="p2-step"><span>Direct reports · ${reports.length}</span><div class="p2-reps">${reports.slice(0, 4).map((r) => `<a class="p2-rep" href="profile.html?id=${r.id}">${avatar(r)}${esc(r.name)}</a>`).join("")}${reports.length > 4 ? `<a class="p2-more" href="org-chart.html?id=${p.id}">+ ${reports.length - 4} more</a>` : ""}</div></div>` : ""}
+        </div>
       </section>`;
-    };
 
-    const DET = PROFILE_DETAILS(p, email);
-    const EDIT = initProfileEdit({ p, boss, email });
-    document.addEventListener("click", (e) => { if (e.target.closest("[data-edit]")) EDIT.open(); });
-    const show = () => document.getElementById("profile").innerHTML = `
-      ${PROFILE_BANNER(p)}
-      <a class="k4-back" href="index.html">← Back</a>
-      <div class="k4-grid">
-        <aside><div class="k4-photo">${avatar(p)}</div></aside>
-        <section>
-          <div class="k4-name"><h1>${p.name}</h1></div>
-          <p class="k4-role">${p.title}</p>
-          ${PROFILE_DESC(p, boss, reports)}
-          <div class="k4-actions">
-            ${email ? `<a class="k4-act" href="mailto:${email}">${ICON.mail} Send message</a>` : ""}
-            <a class="k4-act on" href="org-chart.html?id=${p.id}">${ICON.chart} Org chart</a>
-            <button type="button" class="k4-act" data-edit>✎ Edit profile</button>
+      const show = () => {
+        const focusId = document.activeElement && document.activeElement.id;
+        root.innerHTML = `
+        ${PROFILE_BANNER(p)}
+        <div class="p2-split">
+          <aside class="p2-rail" aria-label="Profile summary">
+            ${avatar(p)}
+            <h1>${esc(p.name)}${e.pronouns ? `<span class="p2-pronouns">${esc(e.pronouns)}</span>` : ""}</h1>
+            <p class="p2-role">${esc(p.title)}</p>
+            <ul class="p2-org">
+              <li>${ICON.building}${esc(e.company || FACETS.company(p))}</li>
+              <li>${ICON.team}${esc(e.department || p.team)}</li>
+            </ul>
+            <div class="p2-actions">
+              ${email ? `<a class="btn primary" href="mailto:${esc(email)}">${ICON.mail} Send message</a>` : ""}
+              <a class="btn" href="org-chart.html?id=${p.id}">${ICON.chart} Org chart</a>
+              <button type="button" class="btn" data-edit>✎ Edit profile</button>
+            </div>
+            <h2 class="p2-rail-label">Contact</h2>
+            ${contactRows.length ? DETAIL_LIST("contact", [...contactRows.map(([k, text, href, copy]) => `<div class="p2-crow"><div><dt>${k}</dt><dd>${href ? `<a href="${esc(href)}">${esc(text)}</a>` : esc(text)}</dd></div>${copy ? `<button type="button" class="p2-copy" data-copy="${esc(copy)}" aria-label="Copy ${k.toLowerCase()}" title="Copy">${ICON.copy}</button>` : ""}</div>`), ...(e.timezone ? [`<div class="p2-crow"><div><dt>Local time</dt><dd>${localTime()} · ${esc(zoneShort)}</dd></div></div>`] : [])], "p2-clist") : `<p class="p2-empty">No contact details yet.</p>`}
+            ${socials.length ? `<div class="p2-social">${socials.map(([k, l]) => `<a class="soc" href="${esc(e["social_" + k])}" target="_blank" rel="noopener" aria-label="${l}" title="${l}">${SOC[k]}</a>`).join("")}</div>` : ""}
+          </aside>
+          <div class="p2-stream">
+            ${flow()}
+            ${DET.additional.length ? `<section aria-labelledby="h-more"><h2 class="p2-h" id="h-more">Additional</h2>${DETAIL_LIST("additional", DET.additional.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`), "p2-facts")}</section>` : ""}
+            ${feed(st.feed)}
           </div>
-          <h3 class="k4-label">Contact</h3>
-          ${DETAIL_LIST("contact", DET.contact.map(([k, v]) => fact(k, v)))}
-          <h3 class="k4-label">Additional</h3>
-          ${DETAIL_LIST("additional", DET.additional.map(([k, v]) => fact(k, v)))}
-          <p class="k4-toast" id="toast" role="status"></p>
-        </section>
-      </div>
-      <section class="k4-org"><h3 class="k4-label">Org chart</h3>
-        ${boss ? `<p class="k4-tier">Reports to</p><div class="k4-cards one">${oc(boss)}</div><span class="k4-join"></span>` : ""}
-        <div class="k4-cards one">${oc(p, "me")}</div>
-        ${reports.length ? `<span class="k4-join"></span><p class="k4-tier">Direct reports · ${reports.length}</p><div class="k4-cards">${reports.slice(0, 6).map((r) => oc(r)).join("")}</div>${reports.length > 6 ? `<a class="more" href="org-chart.html?id=${p.id}">+ ${reports.length - 6} more in org chart</a>` : ""}` : ""}
-      </section>
-      <div class="k4-feeds">${feed("published")}${feed("mentioned")}</div>`;
+        </div>`;
+        if (focusId) document.getElementById(focusId)?.focus({ preventScroll: true });
+      };
 
-    document.getElementById("profile").addEventListener("click", async (e) => {
-      const pg = e.target.closest("button[data-page]");
-      if (pg) { st[pg.dataset.feed].page = +pg.dataset.page; show(); return; }
-      const b = e.target.closest("[data-copy]");
-      if (!b) return;
-      try { await navigator.clipboard.writeText(b.dataset.copy); } catch { /* clipboard unavailable: still confirm below */ }
-      const m = document.getElementById("toast");
-      m.textContent = "Email address copied";
-      setTimeout(() => { m.textContent = ""; }, 2000);
-    });
-    document.getElementById("profile").addEventListener("change", (e) => {
-      const s = e.target.closest("select[data-sort]");
-      if (s) { st[s.dataset.feed] = { page: 1, sort: s.value }; show(); }
-    });
-    show();
-    PHOTOS.then(show);
+      root.addEventListener("click", (ev) => {
+        const tb = ev.target.closest("[data-tab]");
+        if (tb) { st.feed = tb.dataset.tab; show(); return; }
+        const pg = ev.target.closest("button[data-page]");
+        if (pg) { st[pg.dataset.feed].page = +pg.dataset.page; show(); return; }
+        if (ev.target.closest("[data-stub]")) { ev.preventDefault(); return; }   // content links go to SharePoint pages in the real app
+        const cp = ev.target.closest("[data-copy]");
+        if (cp) {
+          navigator.clipboard?.writeText(cp.dataset.copy).catch(() => {});
+          document.querySelector(".p2-toast")?.remove();
+          const t = Object.assign(document.createElement("p"), { className: "p2-toast", textContent: "Copied to clipboard" });
+          t.setAttribute("role", "status"); document.body.append(t); setTimeout(() => t.remove(), 1800);
+        }
+      });
+      root.addEventListener("change", (ev) => {
+        const s = ev.target.closest("select[data-sort]");
+        if (s) { st[s.dataset.feed] = { page: 1, sort: s.value }; show(); }
+      });
+      show();
+      PHOTOS.then(show);
+    }
   </script>
 </body>
 </html>

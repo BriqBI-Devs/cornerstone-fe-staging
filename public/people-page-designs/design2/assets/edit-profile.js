@@ -8,6 +8,7 @@
       const s = JSON.parse(localStorage.getItem(`p5-edit-${p.id}`) || "null");
       if (s) { p.name = s.name; p.title = s.title; p.manager = s.manager; p.edit = s.edit || {}; }
     } catch { /* storage unavailable */ }
+    delete p.edit.bio;   // the bio is no longer part of the profile
   };
 
   window.initProfileEdit = ({ p, boss, email }) => {
@@ -22,19 +23,6 @@
     /* ===== Edit profile dialog (Personal, About, Contact, Org chart) ===== */
     let dlg = document.getElementById("editDlg");
     if (!dlg) { dlg = document.createElement("dialog"); dlg.id = "editDlg"; dlg.className = "p5-dlg"; dlg.setAttribute("aria-label", "Edit profile"); document.body.append(dlg); }
-    const EMOJI = ["😀", "😃", "😄", "😁", "😆", "😅", "😂", "🙂", "😉", "😊", "😍", "🥰", "😘", "😎", "🤩", "🤗", "🤔", "😐", "😴", "😢", "😭", "😡", "🥳", "🙌", "👏", "👍", "👋", "🙏", "💪", "🎉", "🎊", "✨", "🔥", "💡", "📌", "📎", "📅", "✅", "❌", "❤️", "💙", "💚", "💛", "🌟", "☀️", "🌈", "🚀", "🏆", "📣", "📞", "💬", "🍀", "☕", "🎯", "🏠", "🌍", "🎓", "💼", "🤝"];
-    let savedRange = null, savedText = "";
-    const saveSel = () => {
-      const sel = getSelection(), area = dlg.querySelector("#bio");
-      if (sel.rangeCount && area.contains(sel.anchorNode)) { savedRange = sel.getRangeAt(0).cloneRange(); savedText = sel.toString(); }
-      else { savedRange = null; savedText = ""; }
-    };
-    const insertAtCursor = (content, html = false) => {
-      const area = dlg.querySelector("#bio"); area.focus();
-      const sel = getSelection(); sel.removeAllRanges();
-      if (savedRange) sel.addRange(savedRange); else { const r = document.createRange(); r.selectNodeContents(area); r.collapse(false); sel.addRange(r); }
-      document.execCommand(html ? "insertHTML" : "insertText", false, content);
-    };
     const PRONOUNS = ["She/her", "He/him", "They/them", "She/they", "He/they", "Ze/zir", "Prefer not to say"];
     const ZONES = [["America/New_York", "(GMT-04:00) Eastern Time - New York"], ["America/Chicago", "(GMT-05:00) Central Time - Chicago"], ["America/Denver", "(GMT-06:00) Mountain Time - Denver"], ["America/Los_Angeles", "(GMT-07:00) Pacific Time - Los Angeles"], ["Europe/London", "(GMT+01:00) British Time - London"], ["Europe/Paris", "(GMT+02:00) Central European Time - Paris"], ["Asia/Kolkata", "(GMT+05:30) India Standard Time - Kolkata"], ["Asia/Tokyo", "(GMT+09:00) Japan Standard Time - Tokyo"], ["Australia/Sydney", "(GMT+10:00) Australian Eastern Time - Sydney"]];
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -93,24 +81,6 @@
           </fieldset>
 
           <fieldset data-pane="1" hidden><legend>About</legend>
-            <div class="f"><span>Bio</span>
-              <div class="rte">
-                <div class="rte-bar" role="toolbar" aria-label="Formatting">
-                  <button type="button" data-cmd="bold" title="Bold"><b>B</b></button>
-                  <button type="button" data-cmd="italic" title="Italic"><i>I</i></button>
-                  <button type="button" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
-                  <button type="button" data-cmd="underline" title="Underline"><u>U</u></button>
-                  <span class="sep"></span>
-                  <button type="button" data-cmd="insertUnorderedList" title="Bullet list">•≡</button>
-                  <button type="button" data-cmd="insertOrderedList" title="Numbered list">1.</button>
-                  <span class="sep"></span>
-                  <button type="button" data-cmd="emoji" title="Emoji">☺</button>
-                  <button type="button" data-cmd="link" title="Insert link">🔗</button>
-                </div>
-                <div class="rte-pop" id="rtePop" hidden></div>
-                <div class="rte-area" id="bio" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Share a bit about yourself...">${val("bio")}</div>
-              </div>
-            </div>
             <div class="grid2">
               <label class="f"><span>Birthday</span><input name="birthday" type="date" value="${esc(val("birthday", val("bMonth") && val("bDay") ? `2000-${String(val("bMonth")).padStart(2, "0")}-${String(val("bDay")).padStart(2, "0")}` : ""))}"></label>
               <label class="f"><span>Hire date</span><input name="hire" type="date" value="${esc(val("hire"))}"></label>
@@ -178,36 +148,6 @@
         dlg.querySelector(`[data-pk="${n}"]`).value = ""; dlg.querySelector(`input[name="${n}"]`).value = "";
         return;
       }
-      const pop = dlg.querySelector("#rtePop");
-      if (pop && !pop.hidden && !e.target.closest(".rte-pop") && !e.target.closest("[data-cmd=emoji],[data-cmd=link]")) pop.hidden = true;
-      if (e.target.closest("[data-emoji]")) { insertAtCursor(e.target.closest("[data-emoji]").dataset.emoji); pop.hidden = true; return; }
-      if (e.target.closest("[data-pop-close]")) { pop.hidden = true; return; }
-      if (e.target.closest("[data-link-ok]")) {
-        let url = pop.querySelector("[name=linkUrl]").value.trim();
-        const label = pop.querySelector("[name=linkText]").value.trim();
-        if (!url) { pop.querySelector("[name=linkUrl]").focus(); return; }
-        if (!/^(https?:|mailto:|tel:)/i.test(url)) url = "https://" + url;
-        insertAtCursor(`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(label || url)}</a>`, true);
-        pop.hidden = true;
-        return;
-      }
-      const cmd = e.target.closest("[data-cmd]")?.dataset.cmd;
-      if (cmd === "emoji" || cmd === "link") {
-        saveSel();
-        if (!pop.hidden && pop.dataset.kind === cmd) { pop.hidden = true; return; }
-        pop.dataset.kind = cmd;
-        pop.innerHTML = cmd === "emoji"
-          ? `<div class="emoji-grid" role="listbox" aria-label="Emoji">${EMOJI.map((m) => `<button type="button" data-emoji="${m}" aria-label="${m}">${m}</button>`).join("")}</div>`
-          : `<div class="link-form"><label>Text to display<input name="linkText" type="text" placeholder="e.g. My portfolio" value="${esc(savedText)}"></label><label>Link URL<input name="linkUrl" type="text" placeholder="https://example.com" value=""></label><div class="link-actions"><button type="button" class="btn-line" data-pop-close>Cancel</button><button type="button" class="btn-save" data-link-ok>Insert link</button></div></div>`;
-        pop.hidden = false;
-        pop.querySelector("input")?.focus();
-        return;
-      }
-      if (cmd) {
-        const area = dlg.querySelector("#bio"); area.focus();
-        document.execCommand(cmd);
-        return;
-      }
     });
     // Picker: typing an exact option label stores that option's value
     dlg.addEventListener("input", (e) => {
@@ -230,9 +170,8 @@
       if (bad) setPane(+bad.closest("[data-pane]").dataset.pane);
       if (!form.reportValidity()) return;
       const f = new FormData(form);
-      const bio = dlg.querySelector("#bio").innerHTML.trim();
       const data = Object.fromEntries(f.entries());
-      Object.assign(p.edit, data, { bio });
+      Object.assign(p.edit, data);
       p.name = `${data.first.trim()} ${data.last.trim()}`.trim();
       p.title = data.jobTitle.trim() || p.title;
       const newManager = data.manager === "" ? null : +data.manager;
