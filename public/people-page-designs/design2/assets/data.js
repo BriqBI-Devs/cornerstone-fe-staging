@@ -119,6 +119,8 @@ const PROFILE_SEED = (p) => {
   const slug = String(p.name).toLowerCase().replace(/[^a-z]+/g, ".").replace(/^\.+|\.+$/g, "");
   return {
     email: `${slug}@example.com`, phone: `(212) 555-01${n}`, mobile: `(917) 555-02${n}`, timezone: "America/New_York",
+    ext: `${3000 + p.id}`, zoom: `${810 + (p.id % 9)} ${550 + p.id} ${1000 + p.id}`,
+    social_linkedin: `https://www.linkedin.com/in/${slug}`, social_x: `https://x.com/${slug.replace(/./g, "_")}`, social_facebook: `https://www.facebook.com/${slug}`, social_instagram: `https://www.instagram.com/${slug.replace(/./g, "_")}`, social_youtube: `https://www.youtube.com/@${slug.replace(/./g, "")}`,
     company: FACETS.company(p), department: FACETS.department(p), entity: FACETS.entity(p),
     employeeNumber: `E-${1000 + p.id}`, userType: "Employee", language: "en-US",
     cf_officeDays: ["Mon, Wed, Thu", "Tue, Wed, Thu", "Mon, Tue, Fri", "Wed, Thu"][p.id % 4],

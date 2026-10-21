@@ -450,3 +450,17 @@ dl[data-collapsible][data-limit="3"]:not(.open) > :nth-child(n+4) { display: non
 /* Sort control sits in the same row as the Published / Mentioned tabs, at the right */
 .p6-tabs { align-items: center; }
 .p6-tabs .p6-sort { margin: 0 0 4px auto; align-self: center; }
+
+/* ===== Yellow accent (brand-accent #f5c518) mixed in: label bars, active tab, org node, hovers, focus ===== */
+.hb-rail h2, .hb-card h2, .lk-act .p6-card > h2 { display: flex; align-items: center; gap: 8px; }
+.hb-rail h2::before, .hb-card h2::before, .lk-act .p6-card > h2::before { content: ""; flex: none; width: 4px; height: 14px; border-radius: 2px; background: var(--yellow); }
+.lk-act .p6-card > h2::before { display: block; }
+.p6-tabs button[aria-selected="true"] { border-bottom-color: var(--yellow); }
+.hb-card .cd-person.me { box-shadow: inset 4px 0 0 var(--yellow); }
+a.cd-person:hover { border-color: var(--yellow); }
+.p6-copy:hover { background: #fdf3c8; color: var(--navy); }
+.p6-soc:hover { border-color: var(--yellow) !important; background: var(--yellow); color: var(--navy); }
+.lk-btn:focus-visible, .hb-cta:focus-visible, .p6-copy:focus-visible, .p6-tabs button:focus-visible, .show-more:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+.hb-kv > div:hover { background: linear-gradient(90deg, #fffbea, transparent); }
+.p6-item:hover h3 a, .p6-item h3 a:hover { text-decoration-color: var(--yellow); }
+.pi-sep { color: var(--yellow); }

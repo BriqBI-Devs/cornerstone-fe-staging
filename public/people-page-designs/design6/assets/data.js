@@ -70,12 +70,12 @@ const FILTERS = [["company", "Company"], ["department", "Department"], ["title",
 
 // Details list: the first four rows show; a "Show N more" button reveals the rest. `items` are ready-made row markup.
 window.DETAILS_OPEN = window.DETAILS_OPEN || {};
-const DETAIL_LIST = (key, items, dlClass = "") => {
+const DETAIL_LIST = (key, items, dlClass = "", limit = 4) => {
   const html = items.join(""), tpl = document.createElement("template");
   tpl.innerHTML = html;
   if (!html) return `<p class="empty-note">Not added yet.</p>`;
-  const open = !!window.DETAILS_OPEN[key], extra = tpl.content.children.length - 4;   // count the rows, not the array entries
-  return `<dl data-collapsible="${key}" class="${dlClass} ${open ? "open" : ""}">${html}</dl>` +
+  const open = !!window.DETAILS_OPEN[key], extra = tpl.content.children.length - limit;   // count the rows, not the array entries
+  return `<dl data-collapsible="${key}" data-limit="${limit}" class="${dlClass} ${open ? "open" : ""}">${html}</dl>` +
     (extra > 0 ? `<button type="button" class="show-more" data-more="${key}" data-extra="${extra}" aria-expanded="${open}">${open ? "Show less" : `Show ${extra} more`}</button>` : "");
 };
 document.addEventListener("click", (e) => {
@@ -119,6 +119,8 @@ const PROFILE_SEED = (p) => {
   const slug = String(p.name).toLowerCase().replace(/[^a-z]+/g, ".").replace(/^\.+|\.+$/g, "");
   return {
     email: `${slug}@example.com`, phone: `(212) 555-01${n}`, mobile: `(917) 555-02${n}`, timezone: "America/New_York",
+    ext: `${3000 + p.id}`, zoom: `${810 + (p.id % 9)} ${550 + p.id} ${1000 + p.id}`,
+    social_linkedin: `https://www.linkedin.com/in/${slug}`, social_x: `https://x.com/${slug.replace(/./g, "_")}`, social_facebook: `https://www.facebook.com/${slug}`, social_instagram: `https://www.instagram.com/${slug.replace(/./g, "_")}`, social_youtube: `https://www.youtube.com/@${slug.replace(/./g, "")}`,
     company: FACETS.company(p), department: FACETS.department(p), entity: FACETS.entity(p),
     employeeNumber: `E-${1000 + p.id}`, userType: "Employee", language: "en-US",
     cf_officeDays: ["Mon, Wed, Thu", "Tue, Wed, Thu", "Mon, Tue, Fri", "Wed, Thu"][p.id % 4],

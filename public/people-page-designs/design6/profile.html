@@ -123,14 +123,118 @@
         ${!reports.length && boss ? `<p class="p6-note" style="margin-top:12px">No direct reports.</p>` : ""}
       </section>`;
 
+      const phone = e.phone || e.mobile;
+      const bcCard = () => `<section class="bc" id="bc" aria-label="Profile header">
+        <div class="bc-id">
+          ${avatar(p)}
+          <div>
+            <p class="bc-label">${esc(company)}</p>
+            <h1>${esc(p.name)}${e.pronouns ? `<span class="p6-pron">${esc(e.pronouns)}</span>` : ""}</h1>
+            <p class="bc-role">${esc(p.title)}<span aria-hidden="true">·</span>${esc(dept)}</p>
+          </div>
+        </div>
+        <dl class="bc-reach">
+          ${e.email ? `<div><dt>Email</dt><dd><a href="mailto:${esc(e.email)}">${esc(e.email)}</a><button type="button" class="p6-copy" data-copy="${esc(e.email)}" aria-label="Copy email" title="Copy">${ICON.copy}</button></dd></div>` : ""}
+          ${phone ? `<div><dt>Phone</dt><dd><a href="tel:${esc(phone)}">${esc(phone)}</a><button type="button" class="p6-copy" data-copy="${esc(phone)}" aria-label="Copy phone" title="Copy">${ICON.copy}</button></dd></div>` : ""}
+          ${e.timezone ? `<div><dt>Local time</dt><dd>${localTime()} <small>${esc(zoneShort)}</small></dd></div>` : ""}
+        </dl>
+        <div class="bc-actions">
+          ${email ? `<a class="p6-btn primary" href="mailto:${esc(email)}">${ICON.mail} Message</a>` : ""}
+          <a class="p6-btn" href="org-chart.html?id=${p.id}">${ICON.chart} Org chart</a>
+          <button type="button" class="p6-btn quiet" data-edit>Edit profile</button>
+        </div>
+      </section>`;
+      const miniBar = () => `<div class="bc-mini" id="bcMini" aria-hidden="true">
+        <div class="bc-mini-in">
+          ${avatar(p)}
+          <div><strong>${esc(p.name)}</strong><small>${esc(p.title)}</small></div>
+          ${email ? `<a class="p6-btn primary" href="mailto:${esc(email)}" tabindex="-1">${ICON.mail} Message</a>` : ""}
+          <button type="button" class="p6-btn" data-edit tabindex="-1">Edit profile</button>
+        </div>
+      </div>`;
+      // The condensed bar appears once the business card has scrolled out of view.
+      let heroObs;
+      const watchHero = () => {
+        heroObs?.disconnect();
+        const hero = document.getElementById("bc"), mini = document.getElementById("bcMini");
+        if (!hero || !mini || !("IntersectionObserver" in window)) return;
+        heroObs = new IntersectionObserver(([en]) => {
+          const on = !en.isIntersecting;
+          mini.classList.toggle("on", on);
+          mini.setAttribute("aria-hidden", String(!on));
+          mini.querySelectorAll("a, button").forEach((el) => { el.tabIndex = on ? 0 : -1; });
+        }, { threshold: 0 });
+        heroObs.observe(hero);
+      };
+
+      const sxPerson = (q) => `<a class="sx-person" href="profile.html?id=${q.id}">${avatar(q)}<span><strong>${esc(q.name)}</strong><small>${esc(q.title)}</small></span></a>`;
+
+      // Month-grouped timeline of the active tab (Published / Mentioned) with a date rail on the left
+      const timelineCard = () => {
+        const key = st.feed, { label, items } = FEED[key], t = st[key];
+        const sorted = [...items].sort((x, y) => t.sort === "latest" ? y.ms - x.ms : x.ms - y.ms);
+        const pages = Math.max(1, Math.ceil(sorted.length / PER));
+        t.page = Math.min(t.page, pages);
+        const slice = sorted.slice((t.page - 1) * PER, t.page * PER);
+        const month = (ms) => new Date(ms).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+        const groups = [];
+        slice.forEach((c) => { const m = month(c.ms); (groups.at(-1)?.m === m ? groups.at(-1).rows : (groups.push({ m, rows: [] }), groups.at(-1).rows)).push(c); });
+        const rows = (list) => list.map((c) => `<li class="tl-item"><a class="tl-thumb" href="#" data-stub aria-label="${esc(c.title)}"><img src="${IMG}${c.img}" alt="" loading="lazy"></a><div><span class="p6-cat">${c.lock ? ICON.lock : ""}${esc(c.site)}</span><h3><a href="#" data-stub>${esc(c.title)}</a></h3><p class="p6-date">${fmt(c.ms)}</p></div></li>`).join("");
+        const sortHtml = `<label class="p6-sort">Sort by:&nbsp;<select data-sort><option value="latest" ${t.sort === "latest" ? "selected" : ""}>Latest</option><option value="oldest" ${t.sort === "oldest" ? "selected" : ""}>Oldest</option></select></label>`;
+        const nums = Array.from({ length: pages }, (_, i) => i + 1).filter((n) => pages <= 7 || n === 1 || n === pages || Math.abs(n - t.page) <= 1)
+          .flatMap((n, i, arr) => (i && n - arr[i - 1] > 1 ? ['<span aria-hidden="true">…</span>'] : []).concat(`<button type="button" data-page="${n}" aria-label="Page ${n}" ${n === t.page ? 'aria-current="page"' : ""}>${n}</button>`)).join("");
+        return `<section aria-labelledby="h-act"><h2 class="tl-h" id="h-act">Activity</h2>
+          <div class="p6-tabs" role="tablist" aria-label="Activity">${["published", "mentioned"].map((k) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${st.feed === k}">${FEED[k].label}<em>${FEED[k].items.length}</em></button>`).join("")}${sortHtml}</div>
+          ${items.length ? `<div class="tl">${groups.map((g) => `<div class="tl-group"><h3 class="tl-date">${g.m}</h3><ul class="tl-list">${rows(g.rows)}</ul></div>`).join("")}</div>` : `<p class="p6-empty" style="margin-top:18px">Nothing ${label.toLowerCase()} yet.</p>`}
+          ${pages > 1 ? `<nav class="p6-pg" aria-label="${label} pages"><button type="button" data-page="${t.page - 1}" ${t.page === 1 ? "disabled" : ""} aria-label="Previous page">‹</button>${nums}<button type="button" data-page="${t.page + 1}" ${t.page === pages ? "disabled" : ""} aria-label="Next page">›</button></nav>` : ""}
+        </section>`;
+      };
+
+      const [first, ...restParts] = String(p.name).trim().split(" "), rest = restParts.join(" ");
+
+      const poNode = (q, tag, me = false) => `<a class="po-node${me ? " me" : ""}" href="profile.html?id=${q.id}">${avatar(q)}<span>${tag ? `<small>${esc(tag)}</small>` : ""}<strong>${esc(q.name)}</strong><em>${esc(q.title)}</em></span></a>`;
+
       const show = () => {
         const focusId = document.activeElement && document.activeElement.id;
         root.innerHTML = `${PROFILE_BANNER(p)}
-        <div class="p6-grid">
-          <div class="p6-main">${idCard()}${activityCard()}</div>
-          <aside class="p6-side">${contactCard()}${moreCard()}${teamCard()}</aside>
-        </div>`;
+        <section class="po" id="bc" aria-label="Profile header">
+          <div class="po-text">
+            <div class="po-id">
+              ${avatar(p)}
+              <div>
+                <h1 class="po-name2">${esc(p.name)}${e.pronouns ? `<small class="p6-pron">${esc(e.pronouns)}</small>` : ""}</h1>
+                <p class="po-role2">${esc(p.title)}</p>
+                <p class="po-dept">${esc(dept)}<span aria-hidden="true">·</span>${esc(company)}</p>
+              </div>
+            </div>
+            ${contactRows.length || e.timezone ? DETAIL_LIST("contact", [...contactRows.map(([k, text, href]) => `<div><dt>${k}</dt><dd>${href ? `<a href="${esc(href)}">${esc(text)}</a>` : esc(text)}<button type="button" class="p6-copy" data-copy="${esc(text)}" aria-label="Copy ${k.toLowerCase()}" title="Copy">${ICON.copy}</button></dd></div>`), ...(e.timezone ? [`<div><dt>Local time</dt><dd>${localTime()} <small>${esc(zoneShort)}</small></dd></div>`] : [])], "po-lines", 3) : `<p class="p6-empty">No contact details yet. <button type="button" data-edit>Add contact details</button></p>`}
+            ${socials.length ? `<div class="p6-social">${socials.map(([k, l]) => `<a class="soc" href="${esc(e["social_" + k])}" target="_blank" rel="noopener" aria-label="${l}" title="${l}">${SOC[k]}</a>`).join("")}</div>` : ""}
+            <div class="po-actions">
+              ${email ? `<a class="p6-btn primary" href="mailto:${esc(email)}">${ICON.mail} Message</a>` : ""}
+              <a class="p6-btn" href="org-chart.html?id=${p.id}">${ICON.chart} Org chart</a>
+              <button type="button" class="p6-btn quiet" data-edit>Edit profile</button>
+            </div>
+          </div>
+          <aside class="po-org" aria-labelledby="h-org">
+            <h2 class="tl-h" id="h-org">Org chart <a href="org-chart.html?id=${p.id}">Open full chart →</a></h2>
+            <ul class="po-tree">
+              <li>${boss ? poNode(boss, "Reports to") : `<span class="po-top">Top of the organization</span>`}
+                <ul>
+                  <li class="me">${poNode(p, "This person", true)}
+                    ${reports.length ? `<ul>${reports.slice(0, 4).map((q) => `<li>${poNode(q, "")}</li>`).join("")}${reports.length > 4 ? `<li><a class="po-moretxt" href="org-chart.html?id=${p.id}">+ ${reports.length - 4} more direct reports</a></li>` : ""}</ul>` : ""}
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            ${reports.length ? "" : `<p class="po-none">No direct reports</p>`}
+          </aside>
+        </section>
+
+                ${DET.additional.length ? `<section class="po-sec" aria-labelledby="h-more"><h2 class="tl-h" id="h-more">Additional</h2>${DETAIL_LIST("additional", DET.additional.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`), "po-grid", 6)}</section>` : ""}
+
+        <div class="po-act">${activityCard()}</div>`;
         if (focusId) document.getElementById(focusId)?.focus({ preventScroll: true });
+        watchHero();
       };
 
       root.addEventListener("click", (ev) => {
