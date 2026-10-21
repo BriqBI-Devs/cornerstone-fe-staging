@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profile | Cornerstone</title>
+  <link rel="stylesheet" href="assets/people.css">
+  <link rel="stylesheet" href="assets/profile6.css">
+  <link rel="stylesheet" href="assets/inspector7.css">
+  <link rel="stylesheet" href="assets/edit-profile.css">
+</head>
+<body>
+  <div id="shell"></div>
+  <main id="main" class="p6-page">
+    <a class="p6-back" href="index.html">← Back to People</a>
+    <div id="profile"></div>
+  </main>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/edit-profile.js"></script>
+  <script>
+    document.getElementById("shell").innerHTML = SHELL(true);
+    const esc = PE_ESC;
+    const svg = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+    const ICON = {
+      mail: svg('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>'),
+      chart: svg('<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/>'),
+      copy: svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>'),
+      lock: svg('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>'),
+    };
+    const root = document.getElementById("profile");
+    const SOC = {
+      linkedin: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>',
+      x: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-7.5 8.57L23 22h-6.9l-5.4-7.07L4.5 22H1.4l8-9.17L1 2h7.07l4.9 6.48L18.9 2zm-1.2 18h1.9L7.4 3.9H5.4L17.7 20z"/></svg>',
+      facebook: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 22v-8.2h2.8l.5-3.3h-3.3V8.4c0-.95.4-1.7 1.75-1.7H17V3.8c-.3 0-1.3-.15-2.4-.15-2.5 0-4.1 1.5-4.1 4.2v2.65H7.7v3.3h2.8V22h3z"/></svg>',
+      instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>',
+      youtube: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.3 5 12 5 12 5s-6.3 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2C2 8.75 2 12 2 12s0 3.25.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.7 19 12 19 12 19s6.3 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.25 22 12 22 12s0-3.25-.4-4.8zM10 15V9l5.2 3L10 15z"/></svg>',
+    };
+    const p = byId(new URLSearchParams(location.search).get("id"));
+
+    if (!p) {
+      document.title = "Person not found | Cornerstone";
+      root.innerHTML = `<div class="p6-missing"><h1>Person not found</h1><p>This profile doesn't exist or may have been removed.</p><a class="p6-btn primary" href="index.html">Back to People</a></div>`;
+    } else {
+      init();
+    }
+
+
+    function init() {
+      loadProfileEdits(p);
+      document.title = `${p.name} | Cornerstone`;
+      const boss = byId(p.manager), reports = reportsOf(p.id), e = p.edit, email = e.email || "";
+
+      // Sample content (real data comes from SharePoint): published = authored by the person, mentioned = @tagged in
+      const seed = [...String(p.id)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+      const rnd = (n) => { let s = (seed + n * 2654435761) >>> 0; s = Math.imul(s ^ (s >>> 15), 2246822519); s ^= s >>> 13; return (s >>> 0) / 4294967296; };
+      const IMG = "../assets/";
+      const POOL = {
+        p: [["12-Foot Snowman Arrives at HQ", "12-foot-snowman.jpg", "Company News"], ["Hispanic Heritage Month", "hispanic-heritage-month.jpg", "Community Updates"], ["Outdoor Event: Save the Date", "outdoor-event.jpg", "Company News"], ["River Crossing Family Day", "river-crossing-family-day.jpg", "Community Updates"], ["September Community Digest", "september-community-digest.jpg", "Community Updates"], ["Team Celebration Recap", "team-celebration.avif", "HR Central"], ["Workiversaries: Full List", "workiversaries-full-list.jpg", "HR Central"]],
+        m: [[`Congratulations to ${p.name}`, "team-celebration.avif", "HR Central"], [`Workiversaries: ${p.name} + team`, "workiversaries-full-list.jpg", "HR Central"], [`September Community Digest: thanks ${p.name}`, "september-community-digest.jpg", "Community Updates"], [`River Crossing Family Day volunteers: ${p.name}`, "river-crossing-family-day.jpg", "Community Updates"], [`Hispanic Heritage Month panel with ${p.name}`, "hispanic-heritage-month.jpg", "Managers' Corner"], [`Outdoor Event hosts: ${p.name}`, "outdoor-event.jpg", "Company News"], [`Snowman build crew: ${p.name}`, "12-foot-snowman.jpg", "Company News"]],
+      };
+      // Two more of each kind, so every person has at least 7 published and 7 mentioned items (7 to 9).
+      POOL.p.push(["August Community Digest", "august-community-digest.jpg", "Community Updates"], ["Diwali Across Our Offices", "diwali-across-offices.jpg", "Community Updates"]);
+      POOL.m.push([`August new hires: welcome, and thanks ${p.name}`, "august-new-hires.jpg", "HR Central"], [`July Workiversaries: ${p.name}`, "july-workiversaries.jpg", "HR Central"]);
+      const make = (kind, count) => POOL[kind].map(([title, img, site], i) => ({ title, img, site, ms: Date.UTC(2022, 0, 1) + Math.floor(rnd(i + 99 + (kind === "m" ? 50 : 0)) * (Date.UTC(2026, 4, 1) - Date.UTC(2022, 0, 1))), lock: site === "Managers' Corner" })).sort((x, y) => rnd(x.ms) - rnd(y.ms)).slice(0, Math.min(count, POOL[kind].length));
+      const FEED = {
+        published: { label: "Published", items: make("p", 7 + Math.floor(rnd(1) * 3)) },
+        mentioned: { label: "Mentioned", items: make("m", 7 + Math.floor(rnd(2) * 3)) },
+      };
+      const PER = 10;
+      const st = { ptab: ["overview", "contact", "org", "activity"].includes(location.hash.slice(1)) && ["overview", "org", "activity"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "overview", feed: "published", published: { page: 1, sort: "latest" }, mentioned: { page: 1, sort: "latest" } };
+      const fmt = (ms) => new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+
+      const feed = () => {
+        const key = st.feed, { label, items } = FEED[key], s = st[key];
+        const sorted = [...items].sort((a, b) => s.sort === "latest" ? b.ms - a.ms : a.ms - b.ms);
+        const pages = Math.max(1, Math.ceil(sorted.length / PER));
+        s.page = Math.min(s.page, pages);
+        const rows = sorted.slice((s.page - 1) * PER, s.page * PER).map((c) => `<li class="p6-item"><a class="p6-thumb" href="#" data-stub aria-label="${esc(c.title)}"><img src="${IMG}${c.img}" alt="" loading="lazy"></a><div><span class="p6-cat">${c.lock ? ICON.lock : ""}${esc(c.site)}</span><h3><a href="#" data-stub>${esc(c.title)}</a></h3><p class="p6-date">${fmt(c.ms)}</p></div></li>`).join("");
+        const nums = Array.from({ length: pages }, (_, i) => i + 1).filter((n) => pages <= 7 || n === 1 || n === pages || Math.abs(n - s.page) <= 1)
+          .flatMap((n, i, a) => (i && n - a[i - 1] > 1 ? ['<span aria-hidden="true">…</span>'] : []).concat(`<button type="button" data-page="${n}" aria-label="Page ${n}" ${n === s.page ? 'aria-current="page"' : ""}>${n}</button>`)).join("");
+        return `<label class="p6-sort">Sort by:&nbsp;<select data-sort><option value="latest" ${s.sort === "latest" ? "selected" : ""}>Latest</option><option value="oldest" ${s.sort === "oldest" ? "selected" : ""}>Oldest</option></select></label>
+          ${items.length ? `<ul class="p6-list">${rows}</ul>` : `<p class="p6-empty" style="margin-top:14px">Nothing ${label.toLowerCase()} yet.</p>`}
+          ${pages > 1 ? `<nav class="p6-pg" aria-label="${label} pages"><button type="button" data-page="${s.page - 1}" ${s.page === 1 ? "disabled" : ""} aria-label="Previous page">‹</button>${nums}<button type="button" data-page="${s.page + 1}" ${s.page === pages ? "disabled" : ""} aria-label="Next page">›</button></nav>` : ""}`;
+      };
+
+      const DET = PROFILE_DETAILS(p, email);
+      const EDIT = initProfileEdit({ p, boss, email });
+      document.addEventListener("click", (ev) => { if (ev.target.closest("[data-edit]")) EDIT.open(); });
+
+      const localTime = () => { try { return new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: e.timezone }); } catch { return ""; } };
+      const zoneShort = (ZONE_LABELS[e.timezone] || "").replace(/^\(GMT[^)]*\)\s*/, "").replace(/ - .*/, "");
+      const contactRows = [["Email", e.email, e.email && "mailto:" + e.email], ["Phone", e.phone, e.phone && "tel:" + e.phone], ["Mobile", e.mobile, e.mobile && "tel:" + e.mobile], ["Extension", e.ext, ""], ["Zoom ID", e.zoom, ""]].filter(([, v]) => v);
+      const socials = [["linkedin", "LinkedIn"], ["x", "X"], ["facebook", "Facebook"], ["instagram", "Instagram"], ["youtube", "YouTube"]].filter(([k]) => /^https?:/i.test(e["social_" + k] || ""));
+      const company = e.company || FACETS.company(p), dept = e.department || p.team;
+
+      const idCard = () => `<section class="p6-card p6-id" aria-label="Profile header">
+        <div class="p6-body">
+          ${avatar(p)}
+          <p class="p6-label">${esc(company)}</p>
+          <h1>${esc(p.name)}${e.pronouns ? `<span class="p6-pron">${esc(e.pronouns)}</span>` : ""}</h1>
+          <p class="p6-head">${esc(p.title)}<span class="p6-dot" aria-hidden="true">·</span>${esc(dept)}</p>
+          <div class="p6-actions">
+            ${email ? `<a class="p6-btn primary" href="mailto:${esc(email)}">${ICON.mail} Message</a>` : ""}
+            <a class="p6-btn" href="org-chart.html?id=${p.id}">${ICON.chart} Org chart</a>
+            <button type="button" class="p6-btn quiet" data-edit>Edit profile</button>
+          </div>
+        </div>
+      </section>`;
+      const activityCard = () => `<section class="p6-card" aria-labelledby="h-act"><h2 id="h-act">Activity</h2>
+        <div class="p6-tabs" role="tablist" aria-label="Activity">${["published", "mentioned"].map((k) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${st.feed === k}">${FEED[k].label}<em>${FEED[k].items.length}</em></button>`).join("")}</div>
+        ${feed()}</section>`;
+      const contactCard = () => `<section class="p6-card" aria-labelledby="h-contact"><h2 id="h-contact">Contact</h2>
+        ${contactRows.length || e.timezone ? DETAIL_LIST("contact", [...contactRows.map(([k, text, href]) => `<div><div><dt>${k}</dt><dd>${href ? `<a href="${esc(href)}">${esc(text)}</a>` : esc(text)}</dd></div><button type="button" class="p6-copy" data-copy="${esc(text)}" aria-label="Copy ${k.toLowerCase()}" title="Copy">${ICON.copy}</button></div>`), ...(e.timezone ? [`<div><div><dt>Local time</dt><dd>${localTime()} · ${esc(zoneShort)}</dd></div></div>`] : [])], "p6-kv") : `<p class="p6-empty">No contact details yet. <button type="button" data-edit>Add contact details</button></p>`}
+        ${socials.length ? `<div class="p6-social">${socials.map(([k, l]) => `<a class="soc" href="${esc(e["social_" + k])}" target="_blank" rel="noopener" aria-label="${l}" title="${l}">${SOC[k]}</a>`).join("")}</div>` : ""}
+      </section>`;
+      const moreCard = () => `<section class="p6-card" aria-labelledby="h-more"><h2 id="h-more">Additional</h2>
+        ${DET.additional.length ? DETAIL_LIST("additional", DET.additional.map(([k, v]) => `<div><div><dt>${k}</dt><dd>${v}</dd></div></div>`), "p6-kv") : `<p class="p6-empty">Nothing added yet. <button type="button" data-edit>Add details</button></p>`}
+      </section>`;
+      const personRow = (q, tag) => `<li class="p6-person">${avatar(q)}<div>${tag ? `<span class="tag">${tag}</span>` : ""}<strong><a href="profile.html?id=${q.id}">${esc(q.name)}</a></strong><small>${esc(q.title)}</small></div><a class="p6-mini" href="profile.html?id=${q.id}">View</a></li>`;
+      const teamCard = () => `<section class="p6-card" aria-labelledby="h-team"><h2 id="h-team">Team <a href="org-chart.html?id=${p.id}">Org chart</a></h2>
+        <ul class="p6-people">${boss ? personRow(boss, "Reports to") : ""}${reports.slice(0, 4).map((r, i) => personRow(r, i ? "" : `Direct reports · ${reports.length}`)).join("")}${reports.length > 4 ? `<li><a class="p6-mini" href="org-chart.html?id=${p.id}">+ ${reports.length - 4} more</a></li>` : ""}</ul>
+        ${boss || reports.length ? "" : `<p class="p6-note">Top of the organization with no direct reports.</p>`}
+        ${!reports.length && boss ? `<p class="p6-note" style="margin-top:12px">No direct reports.</p>` : ""}
+      </section>`;
+
+      const phone = e.phone || e.mobile;
+      const bcCard = () => `<section class="bc" id="bc" aria-label="Profile header">
+        <div class="bc-id">
+          ${avatar(p)}
+          <div>
+            <p class="bc-label">${esc(company)}</p>
+            <h1>${esc(p.name)}${e.pronouns ? `<span class="p6-pron">${esc(e.pronouns)}</span>` : ""}</h1>
+            <p class="bc-role">${esc(p.title)}<span aria-hidden="true">·</span>${esc(dept)}</p>
+          </div>
+        </div>
+        <dl class="bc-reach">
+          ${e.email ? `<div><dt>Email</dt><dd><a href="mailto:${esc(e.email)}">${esc(e.email)}</a><button type="button" class="p6-copy" data-copy="${esc(e.email)}" aria-label="Copy email" title="Copy">${ICON.copy}</button></dd></div>` : ""}
+          ${phone ? `<div><dt>Phone</dt><dd><a href="tel:${esc(phone)}">${esc(phone)}</a><button type="button" class="p6-copy" data-copy="${esc(phone)}" aria-label="Copy phone" title="Copy">${ICON.copy}</button></dd></div>` : ""}
+          ${e.timezone ? `<div><dt>Local time</dt><dd>${localTime()} <small>${esc(zoneShort)}</small></dd></div>` : ""}
+        </dl>
+        <div class="bc-actions">
+          ${email ? `<a class="p6-btn primary" href="mailto:${esc(email)}">${ICON.mail} Message</a>` : ""}
+          <a class="p6-btn" href="org-chart.html?id=${p.id}">${ICON.chart} Org chart</a>
+          <button type="button" class="p6-btn quiet" data-edit>Edit profile</button>
+        </div>
+      </section>`;
+      const miniBar = () => `<div class="bc-mini" id="bcMini" aria-hidden="true">
+        <div class="bc-mini-in">
+          ${avatar(p)}
+          <div><strong>${esc(p.name)}</strong><small>${esc(p.title)}</small></div>
+          ${email ? `<a class="p6-btn primary" href="mailto:${esc(email)}" tabindex="-1">${ICON.mail} Message</a>` : ""}
+          <button type="button" class="p6-btn" data-edit tabindex="-1">Edit profile</button>
+        </div>
+      </div>`;
+      // The condensed bar appears once the business card has scrolled out of view.
+      let heroObs;
+      const watchHero = () => {
+        heroObs?.disconnect();
+        const hero = document.getElementById("bc"), mini = document.getElementById("bcMini");
+        if (!hero || !mini || !("IntersectionObserver" in window)) return;
+        heroObs = new IntersectionObserver(([en]) => {
+          const on = !en.isIntersecting;
+          mini.classList.toggle("on", on);
+          mini.setAttribute("aria-hidden", String(!on));
+          mini.querySelectorAll("a, button").forEach((el) => { el.tabIndex = on ? 0 : -1; });
+        }, { threshold: 0 });
+        heroObs.observe(hero);
+      };
+
+      const sxPerson = (q) => `<a class="sx-person" href="profile.html?id=${q.id}">${avatar(q)}<span><strong>${esc(q.name)}</strong><small>${esc(q.title)}</small></span></a>`;
+
+      // Month-grouped timeline of the active tab (Published / Mentioned) with a date rail on the left
+      const timelineCard = () => {
+        const key = st.feed, { label, items } = FEED[key], t = st[key];
+        const sorted = [...items].sort((x, y) => t.sort === "latest" ? y.ms - x.ms : x.ms - y.ms);
+        const pages = Math.max(1, Math.ceil(sorted.length / PER));
+        t.page = Math.min(t.page, pages);
+        const slice = sorted.slice((t.page - 1) * PER, t.page * PER);
+        const month = (ms) => new Date(ms).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+        const groups = [];
+        slice.forEach((c) => { const m = month(c.ms); (groups.at(-1)?.m === m ? groups.at(-1).rows : (groups.push({ m, rows: [] }), groups.at(-1).rows)).push(c); });
+        const rows = (list) => list.map((c) => `<li class="tl-item"><a class="tl-thumb" href="#" data-stub aria-label="${esc(c.title)}"><img src="${IMG}${c.img}" alt="" loading="lazy"></a><div><span class="p6-cat">${c.lock ? ICON.lock : ""}${esc(c.site)}</span><h3><a href="#" data-stub>${esc(c.title)}</a></h3><p class="p6-date">${fmt(c.ms)}</p></div></li>`).join("");
+        const sortHtml = `<label class="p6-sort">Sort by:&nbsp;<select data-sort><option value="latest" ${t.sort === "latest" ? "selected" : ""}>Latest</option><option value="oldest" ${t.sort === "oldest" ? "selected" : ""}>Oldest</option></select></label>`;
+        const nums = Array.from({ length: pages }, (_, i) => i + 1).filter((n) => pages <= 7 || n === 1 || n === pages || Math.abs(n - t.page) <= 1)
+          .flatMap((n, i, arr) => (i && n - arr[i - 1] > 1 ? ['<span aria-hidden="true">…</span>'] : []).concat(`<button type="button" data-page="${n}" aria-label="Page ${n}" ${n === t.page ? 'aria-current="page"' : ""}>${n}</button>`)).join("");
+        return `<section aria-labelledby="h-act"><h2 class="tl-h" id="h-act">Activity</h2>
+          <div class="p6-tabs" role="tablist" aria-label="Activity">${["published", "mentioned"].map((k) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${st.feed === k}">${FEED[k].label}<em>${FEED[k].items.length}</em></button>`).join("")}${sortHtml}</div>
+          ${items.length ? `<div class="tl">${groups.map((g) => `<div class="tl-group"><h3 class="tl-date">${g.m}</h3><ul class="tl-list">${rows(g.rows)}</ul></div>`).join("")}</div>` : `<p class="p6-empty" style="margin-top:18px">Nothing ${label.toLowerCase()} yet.</p>`}
+          ${pages > 1 ? `<nav class="p6-pg" aria-label="${label} pages"><button type="button" data-page="${t.page - 1}" ${t.page === 1 ? "disabled" : ""} aria-label="Previous page">‹</button>${nums}<button type="button" data-page="${t.page + 1}" ${t.page === pages ? "disabled" : ""} aria-label="Next page">›</button></nav>` : ""}
+        </section>`;
+      };
+
+      const [first, ...restParts] = String(p.name).trim().split(" "), rest = restParts.join(" ");
+
+      const poNode = (q, tag, me = false) => `<a class="po-node${me ? " me" : ""}" href="profile.html?id=${q.id}">${avatar(q)}<span>${tag ? `<small>${esc(tag)}</small>` : ""}<strong>${esc(q.name)}</strong><em>${esc(q.title)}</em></span></a>`;
+
+      const NAV = [["overview", "Overview", ""], ["contact", "Contact", ""], ["org", "Org chart", reports.length + (boss ? 1 : 0)], ["activity", "Activity", FEED.published.items.length + FEED.mentioned.items.length]];
+      const orgTree = () => `<section class="in-sec" aria-labelledby="h-org"><h2 id="h-org">Org chart <a href="org-chart.html?id=${p.id}">Open full chart →</a></h2>
+        <ul class="po-tree in-tree">
+          <li>${boss ? poNode(boss, "Reports to") : `<span class="po-top">Top of the organization</span>`}
+            <ul>
+              <li class="me">${poNode(p, "This person", true)}
+                ${reports.length ? `<ul>${reports.slice(0, 6).map((q) => `<li>${poNode(q, "")}</li>`).join("")}${reports.length > 6 ? `<li><a class="po-moretxt" href="org-chart.html?id=${p.id}">+ ${reports.length - 6} more direct reports</a></li>` : ""}</ul>` : ""}
+              </li>
+            </ul>
+          </li>
+        </ul>
+        ${reports.length ? "" : `<p class="po-none">No direct reports</p>`}
+      </section>`;
+      const contactSec = () => `<section class="in-sec" aria-labelledby="h-contact"><h2 id="h-contact">Contact</h2>
+        ${contactRows.length || e.timezone ? DETAIL_LIST("contact", [...contactRows.map(([k, text, href]) => `<div><dt>${k}</dt><dd>${href ? `<a href="${esc(href)}">${esc(text)}</a>` : esc(text)}<button type="button" class="p6-copy" data-copy="${esc(text)}" aria-label="Copy ${k.toLowerCase()}" title="Copy">${ICON.copy}</button></dd></div>`), ...(e.timezone ? [`<div><dt>Local time</dt><dd>${localTime()} <small>${esc(zoneShort)}</small></dd></div>`] : [])], "in-kv", 6) : `<p class="p6-empty">No contact details yet. <button type="button" data-edit>Add contact details</button></p>`}
+        ${socials.length ? `<div class="p6-social">${socials.map(([k, l]) => `<a class="soc" href="${esc(e["social_" + k])}" target="_blank" rel="noopener" aria-label="${l}" title="${l}">${SOC[k]}</a>`).join("")}</div>` : ""}
+      </section>`;
+      const moreSec = () => `<section class="in-sec" aria-labelledby="h-more"><h2 id="h-more">Additional</h2>
+        ${DET.additional.length ? DETAIL_LIST("additional", DET.additional.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`), "in-kv", 6) : `<p class="p6-empty">Nothing added yet. <button type="button" data-edit>Add details</button></p>`}
+      </section>`;
+      const pane = () => st.ptab === "contact" ? contactSec() : st.ptab === "org" ? orgTree() : st.ptab === "activity" ? `<div class="in-act">${activityCard()}</div>` : `<div class="in-two">${contactSec()}${moreSec()}</div>`;
+
+      // Who is around this person: manager, the team they sit in (this person first, then peers under the same manager), and direct reports
+      const peers = p.manager == null ? [] : PEOPLE.filter((q) => q.manager === p.manager && q.id !== p.id);
+      const ctxGroups = () => [
+        ...(boss ? [{ label: "Reports to", people: [boss] }] : []),
+        { label: peers.length ? `Team · ${peers.length + 1}` : "This person", people: [p, ...peers.slice(0, 4)], more: Math.max(0, peers.length - 4) },
+        ...(reports.length ? [{ label: `Direct reports · ${reports.length}`, people: reports.slice(0, 4), more: Math.max(0, reports.length - 4) }] : []),
+      ];
+      const ctxTile = (q, me) => `<a class="cx-tile${me ? " me" : ""}" href="profile.html?id=${q.id}"${me ? ' aria-current="page"' : ""}>${avatar(q)}<span><strong>${esc(q.name)}</strong><small>${esc(q.title)}</small></span></a>`;
+
+      const RT = [["activity", "Activity", FEED.published.items.length + FEED.mentioned.items.length], ["org", "Org chart", reports.length + (boss ? 1 : 0)], ["overview", "Additional", ""]];
+      const rtPane = () => st.ptab === "org" ? orgTree() : st.ptab === "overview" ? moreSec() : `<div class="in-act">${activityCard()}</div>`;
+
+      const TB = [["overview", "Overview", ""], ["org", "Org chart", reports.length + (boss ? 1 : 0)], ["activity", "Activity", FEED.published.items.length + FEED.mentioned.items.length]];
+      const tbPane = () => st.ptab === "org" ? `<div class="tb-org">${orgTree()}<aside class="tb-team"><h2>Around ${esc(p.name.split(" ")[0])}</h2><p>${boss ? `Reports to <a href="profile.html?id=${boss.id}">${esc(boss.name)}</a>.` : "Sits at the top of the organization."} ${reports.length ? `Leads ${reports.length} direct report${reports.length > 1 ? "s" : ""}.` : "No direct reports."}</p><a class="p6-btn" href="org-chart.html?id=${p.id}">${ICON.chart} Open full org chart</a></aside></div>`
+        : st.ptab === "activity" ? `<div class="in-act">${activityCard()}</div>`
+        : `<div class="in-two">${contactSec()}${moreSec()}</div>`;
+
+      // Published / Mentioned as their own cards (latest four each)
+      const msFeed = (key) => {
+        const { label, items } = FEED[key];
+        const rows = [...items].sort((x, y) => y.ms - x.ms).slice(0, 4).map((c) => `<li><a class="ms-thumb" href="#" data-stub aria-label="${esc(c.title)}"><img src="${IMG}${c.img}" alt="" loading="lazy"></a><div><span class="p6-cat">${c.lock ? ICON.lock : ""}${esc(c.site)}</span><h3><a href="#" data-stub>${esc(c.title)}</a></h3><p class="p6-date">${fmt(c.ms)}</p></div></li>`).join("");
+        return `<section class="ms-card in-sec" aria-labelledby="h-${key}"><h2 id="h-${key}">${label}<em>${items.length}</em></h2>${items.length ? `<ul class="ms-list">${rows}</ul>` : `<p class="p6-empty">Nothing ${label.toLowerCase()} yet.</p>`}</section>`;
+      };
+
+      // One chronological stream: published and mentioned items together (newest first), ending with the join date
+      const stream = () => {
+        const all = [...FEED.published.items.map((c) => ({ ...c, kind: "Published" })), ...FEED.mentioned.items.map((c) => ({ ...c, kind: "Mentioned" }))].sort((x, y) => y.ms - x.ms);
+        const month = (ms) => new Date(ms).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+        const groups = [];
+        all.forEach((c) => { const m = month(c.ms); (groups.at(-1)?.m === m ? groups.at(-1).rows : (groups.push({ m, rows: [] }), groups.at(-1).rows)).push(c); });
+        const rows = (list) => list.map((c) => `<li class="tl-item"><a class="tl-thumb" href="#" data-stub aria-label="${esc(c.title)}"><img src="${IMG}${c.img}" alt="" loading="lazy"></a><div><span class="p6-cat"><b class="st-kind st-${c.kind.toLowerCase()}">${c.kind}</b>${c.lock ? ICON.lock : ""}${esc(c.site)}</span><h3><a href="#" data-stub>${esc(c.title)}</a></h3><p class="p6-date">${fmt(c.ms)}</p></div></li>`).join("");
+        const joinedMonth = month(Date.parse(e.hire || p.joined));
+        return `<section class="st" aria-labelledby="h-stream"><h2 class="st-h" id="h-stream">Activity <em>${all.length}</em></h2>
+          ${all.length ? `<div class="tl">${groups.map((g) => `<div class="tl-group"><h3 class="tl-date">${g.m}</h3><ul class="tl-list">${rows(g.rows)}</ul></div>`).join("")}<div class="tl-group tl-join"><h3 class="tl-date">${joinedMonth}</h3><p class="st-joined">Joined ${esc(company)} as ${esc(p.title)}</p></div></div>` : `<p class="p6-empty">No activity yet.</p>`}
+        </section>`;
+      };
+
+      // Horizontal rows (scroll sideways): org chart tiles, then Published and Mentioned image cards
+      const hzRow = (title, extra, body) => `<section class="hz-row" aria-label="${title}"><div class="hz-rh"><h2>${title}</h2>${typeof extra === "number" ? `<em>${extra}</em>` : extra}</div><div class="hz-scroll" tabindex="0">${body}</div></section>`;
+      const hzOrg = () => `<div class="hz-track">${boss ? poNode(boss, "Reports to") : ""}${poNode(p, boss ? "This person" : "Top of the organization", true)}${reports.map((q, i) => poNode(q, i ? "" : "Direct reports")).join("")}</div>`;
+      const hzCards = (key) => {
+        const { label, items } = FEED[key];
+        if (!items.length) return `<p class="p6-empty">Nothing ${label.toLowerCase()} yet.</p>`;
+        return `<div class="hz-track">${[...items].sort((x, y) => y.ms - x.ms).map((c) => `<article class="hz-card"><a class="hz-img" href="#" data-stub aria-label="${esc(c.title)}"><img src="${IMG}${c.img}" alt="" loading="lazy"></a><span class="p6-cat">${c.lock ? ICON.lock : ""}${esc(c.site)}</span><h3><a href="#" data-stub>${esc(c.title)}</a></h3><p class="p6-date">${fmt(c.ms)}</p></article>`).join("")}</div>`;
+      };
+
+      const show = () => {
+        const focusId = document.activeElement && document.activeElement.id;
+        root.innerHTML = `${PROFILE_BANNER(p)}
+        <div class="hz-top">
+          <header class="hz-id">
+            ${avatar(p)}
+            <p class="hz-dept">${esc(dept)}<span aria-hidden="true">·</span>${esc(company)}</p>
+            <h1>${esc(p.name)}${e.pronouns ? `<small class="p6-pron">${esc(e.pronouns)}</small>` : ""}</h1>
+            <p class="hz-role">${esc(p.title)}</p>
+            <div class="hz-actions">
+              ${email ? `<a class="p6-btn primary" href="mailto:${esc(email)}">${ICON.mail} Message</a>` : ""}
+              <a class="p6-btn" href="org-chart.html?id=${p.id}">${ICON.chart} Org chart</a>
+              <button type="button" class="p6-btn quiet" data-edit>Edit profile</button>
+            </div>
+          </header>
+          <div class="hz-glance"><div>${contactSec()}</div><div>${moreSec()}</div></div>
+        </div>
+        ${hzRow("Org chart", `<a href="org-chart.html?id=${p.id}">Open full chart →</a>`, hzOrg())}
+        ${hzRow("Published", FEED.published.items.length, hzCards("published"))}
+        ${hzRow("Mentioned", FEED.mentioned.items.length, hzCards("mentioned"))}`;
+        if (focusId) document.getElementById(focusId)?.focus({ preventScroll: true });
+        watchHero();
+      };
+
+      root.addEventListener("click", (ev) => {
+        const pt = ev.target.closest("[data-ptab]");
+        if (pt) { st.ptab = pt.dataset.ptab; history.replaceState(null, "", "#" + st.ptab); show(); return; }
+        const tb = ev.target.closest("[data-tab]");
+        if (tb) { st.feed = tb.dataset.tab; show(); return; }
+        const pg = ev.target.closest("button[data-page]");
+        if (pg) { st[st.feed].page = +pg.dataset.page; show(); return; }
+        if (ev.target.closest("[data-stub]")) { ev.preventDefault(); return; }   // content links go to SharePoint pages in the real app
+        const cp = ev.target.closest("[data-copy]");
+        if (cp) {
+          navigator.clipboard?.writeText(cp.dataset.copy).catch(() => {});
+          document.querySelector(".p6-toast")?.remove();
+          const t = Object.assign(document.createElement("p"), { className: "p6-toast", textContent: "Copied to clipboard" });
+          t.setAttribute("role", "status"); document.body.append(t); setTimeout(() => t.remove(), 1800);
+        }
+      });
+      root.addEventListener("change", (ev) => {
+        const s = ev.target.closest("select[data-sort]");
+        if (s) { st[st.feed] = { page: 1, sort: s.value }; show(); }
+      });
+      show();
+      PHOTOS.then(show);
+    }
+  </script>
+</body>
+</html>

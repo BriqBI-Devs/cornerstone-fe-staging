@@ -6,6 +6,7 @@
   <title>People | Cornerstone</title>
   <link rel="stylesheet" href="assets/people.css">
   <link rel="stylesheet" href="assets/directory6.css">
+  <link rel="stylesheet" href="../assets/sort-menu.css">
 </head>
 <body>
   <div id="shell"></div>
@@ -19,13 +20,8 @@
     </div>
 
     <div class="dr-bar" role="search">
-      <input class="dr-search" id="search" type="search" placeholder="Search by name, title, team or location…" aria-label="Search people" autocomplete="off">
-      <select class="dr-sort" id="sort" aria-label="Sort by">
-        <option value="name-asc">Sort: Name, A–Z</option>
-        <option value="name-desc">Sort: Name, Z–A</option>
-        <option value="team">Sort: Team</option>
-        <option value="location">Sort: Location</option>
-      </select>
+      <input class="dr-search" id="search" type="search" placeholder="Search by name, title or team…" aria-label="Search people" autocomplete="off">
+      <div class="sortdd" id="sortdd" data-btn-class="dr-sort"><input type="hidden" id="sort" value="name-asc"></div>
     </div>
 
     <div class="dr-filters" id="filters" aria-label="Filters"></div>
@@ -36,7 +32,6 @@
       <div class="cols">
         <button type="button" data-sort="name" id="colName">Name</button>
         <button type="button" data-sort="team">Team</button>
-        <button type="button" data-sort="location">Location</button>
         <span></span>
       </div>
       <div id="list"></div>
@@ -45,12 +40,13 @@
   </main>
 
   <script src="assets/data.js"></script>
+  <script src="../assets/sort-menu.js"></script>
   <script>
     document.getElementById("shell").innerHTML = SHELL(true);
     const $ = (id) => document.getElementById(id);
     const esc = PE_ESC;
     const PAGE_SIZE = 14;
-    const SORTS = ["name-asc", "name-desc", "team", "location"];
+    const SORTS = Object.keys(SORT_COMPARE);
     let page = 1, openMenu = null;
     const sel = {};
 
@@ -95,17 +91,12 @@
       const i = text.toLowerCase().indexOf(q);
       return i < 0 ? t : `${esc(text.slice(0, i))}<mark>${esc(text.slice(i, i + q.length))}</mark>${esc(text.slice(i + q.length))}`;
     };
-    const sorters = {
-      "name-asc": (a, b) => a.name.localeCompare(b.name),
-      "name-desc": (a, b) => b.name.localeCompare(a.name),
-      team: (a, b) => a.team.localeCompare(b.team) || a.name.localeCompare(b.name),
-      location: (a, b) => a.location.localeCompare(b.location) || a.name.localeCompare(b.name),
-    };
+    const sorters = SORT_COMPARE;
 
     function render() {
       const q = $("search").value.trim().toLowerCase(), sortKey = $("sort").value;
       const shown = PEOPLE
-        .filter((p) => `${p.name} ${jobLine(p)}`.toLowerCase().includes(q))
+        .filter((p) => `${p.name} ${p.title} ${p.team}`.toLowerCase().includes(q))
         .filter((p) => FILTERS.every(([k]) => !sel[k] || FACETS[k](p) === sel[k]))
         .sort(sorters[sortKey]);
       const pages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
@@ -114,8 +105,8 @@
       $("count").textContent = `${shown.length} ${shown.length === 1 ? "person" : "people"}`;
       $("clear").hidden = !Object.values(sel).some(Boolean);
       document.querySelectorAll(".cols button").forEach((b) => {
-        const on = sortKey.startsWith(b.dataset.sort);
-        if (on) b.setAttribute("aria-sort", sortKey === "name-desc" ? "descending" : "ascending"); else b.removeAttribute("aria-sort");
+        const on = sortKey.startsWith((b.dataset.sort === "team" ? "department" : b.dataset.sort) + "-");
+        if (on) b.setAttribute("aria-sort", sortKey.endsWith("-desc") ? "descending" : "ascending"); else b.removeAttribute("aria-sort");
       });
       $("pager").hidden = pages === 1;
       $("pager").innerHTML =
@@ -126,7 +117,6 @@
         <div class="row">
           <span class="who">${avatar(p)}<span style="min-width:0"><strong><a href="profile.html?id=${p.id}">${hl(p.name, q)}</a></strong><small>${hl(p.title, q)}</small></span></span>
           <span class="cell">${hl(p.team, q)}</span>
-          <span class="cell">${hl(p.location, q)}</span>
           <a class="btn" href="org-chart.html?id=${p.id}" aria-label="Org chart for ${esc(p.name)}">Org chart</a>
         </div>`).join("") || `<div class="dr-empty"><strong>No people match</strong><p>Try a different name, or remove some filters.</p><button type="button" class="btn" data-reset>Reset search and filters</button></div>`;
       syncUrl();
@@ -138,8 +128,7 @@
     document.querySelector(".cols").addEventListener("click", (e) => {
       const b = e.target.closest("button[data-sort]");
       if (!b) return;
-      const k = b.dataset.sort, cur = $("sort").value;
-      $("sort").value = k === "name" ? (cur === "name-asc" ? "name-desc" : "name-asc") : k;
+      $("sort").value = nextSort($("sort").value, b.dataset.sort === "team" ? "department" : b.dataset.sort);
       page = 1; render();
     });
 

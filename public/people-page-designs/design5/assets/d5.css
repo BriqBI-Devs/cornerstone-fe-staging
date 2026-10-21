@@ -8,6 +8,7 @@ nav a { color: var(--text); }
 nav a.off { opacity: .55; }
 nav a.active { border-bottom-color: var(--yellow); }
 main { max-width: 1240px; }
+main.dir-page { max-width: 1100px; }   /* the directory is as wide as design 4's */
 h1 { color: var(--text); border-color: var(--line); }
 .avatar { background: #1b2a3a; color: #fff; }
 
@@ -26,6 +27,20 @@ h1 { color: var(--text); border-color: var(--line); }
 .tools input::placeholder { color: var(--muted); }
 .tools .field:focus, .filters select.field:focus { border-color: var(--yellow); box-shadow: 0 0 0 3px rgba(245,197,24,.18); outline: none; }
 .tools .sort option, .filters select option { background: var(--panel); color: var(--text); }
+/* Custom sort dropdown: "Sort by" choices and "Order" choices in one panel */
+.sortdd { position: relative; margin-left: auto; }
+.tools .sortdd-btn { display: inline-flex; align-items: center; gap: 10px; padding: 0 14px; font: inherit; font-size: 14px; cursor: pointer; }
+.sortdd-btn b { font-weight: 700; }
+.sortdd-btn svg { color: var(--muted); transition: transform .15s; }
+.sortdd-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.sortdd-panel { position: absolute; z-index: 30; top: calc(100% + 6px); right: 0; width: 220px; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 12px 28px -10px rgba(27,42,58,.25); }
+.sortdd-panel[hidden] { display: none; }
+.sortdd-h { margin: 6px 8px 4px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.sortdd-panel button[role=radio] { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 38px; padding: 0 10px; border: 0; border-radius: 6px; background: none; color: var(--text); font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
+.sortdd-panel button[role=radio]:hover, .sortdd-panel button[role=radio]:focus-visible { background: var(--panel); outline: none; }
+.sortdd-panel button[aria-checked="true"] { color: var(--link); font-weight: 700; }
+.sortdd-panel button[aria-checked="true"]::after { content: "✓"; }
+.sortdd-panel [role=radiogroup] + .sortdd-h { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
 .filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 26px; padding: 0; border: 0; background: none; }
 .filters label { display: grid; gap: 5px; flex: 1 1 150px; min-width: 0; color: var(--muted); font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .filters select.field { width: 100%; height: 40px; padding: 0 10px; font-size: 13.5px; font-weight: 600; letter-spacing: 0; text-transform: none; }
@@ -38,7 +53,7 @@ h1 { color: var(--text); border-color: var(--line); }
 .dir-left { min-width: 0; }
 .table { overflow: visible; border: 0; border-radius: 0; background: none; box-shadow: none; }
 .cols { height: 34px; padding: 0 16px; border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .1em; }
-.cols, .row { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) 100px 92px; }
+.cols, .row { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr) 96px; }
 .row { position: relative; min-height: 72px; margin: 0; padding: 0 16px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: none; box-shadow: none; transition: background .15s; }
 .row:last-child { border-bottom: 1px solid var(--line); }
 .row:hover { background: var(--panel); box-shadow: none; }
@@ -49,7 +64,7 @@ h1 { color: var(--text); border-color: var(--line); }
 .row .cell { color: var(--text); font-size: 13.5px; opacity: .88; }
 .row .cell:nth-of-type(2) { display: flex; align-items: center; gap: 10px; padding: 0; background: none; font-weight: 400; }
 .dc { flex: none; padding: 1px 6px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); color: var(--text); font: 600 10.5px ui-monospace, Consolas, monospace; letter-spacing: .04em; }
-.row .btn { white-space: nowrap; padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px; background: none; color: var(--link); font-size: 12.5px; font-weight: 600; }
+.row .btn { justify-self: end; white-space: nowrap; padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px; background: none; color: var(--link); font-size: 12.5px; font-weight: 600; }
 .row .btn:hover { border-color: var(--link); background: rgba(29,78,216,.08); }
 .pager { margin-top: 22px; justify-content: flex-start; }
 .pager button { border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--text); }
