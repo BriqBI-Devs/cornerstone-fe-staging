@@ -109,7 +109,7 @@
           </fieldset>
 
           <fieldset data-pane="4" hidden><legend>Org chart</legend>
-            <div class="f"><span>Manager</span><div class="mgr"><input type="hidden" name="manager" value="${boss ? boss.id : ""}"><button type="button" class="mgr-btn" data-mgr-toggle aria-haspopup="listbox" aria-expanded="false">${mgrFace(boss)}</button><div class="mgr-pop" hidden><input class="mgr-search" type="search" placeholder="Search people…" aria-label="Search people" autocomplete="off"><ul role="listbox" aria-label="Manager">${[null, ...PEOPLE.filter((q) => q.id !== p.id).sort((a, b) => a.name.localeCompare(b.name))].map((q) => `<li role="option" tabindex="-1" data-mgr-id="${q ? q.id : ""}" data-mgr-name="${q ? esc(q.name + " " + q.title).toLowerCase() : "no manager top of the organization"}">${mgrFace(q)}</li>`).join("")}</ul></div></div><small>The org chart is driven by this one field.</small></div>
+            <div class="f"><span>Manager</span><div class="mgr"><input type="hidden" name="manager" value="${boss ? boss.id : ""}"><button type="button" class="mgr-btn" data-mgr-toggle aria-haspopup="listbox" aria-expanded="false">${mgrFace(boss)}</button><div class="mgr-pop" hidden><ul role="listbox" aria-label="Manager">${[null, ...PEOPLE.filter((q) => q.id !== p.id).sort((a, b) => a.name.localeCompare(b.name))].map((q) => `<li role="option" tabindex="-1" data-mgr-id="${q ? q.id : ""}" data-mgr-name="${q ? esc(q.name + " " + q.title).toLowerCase() : "no manager top of the organization"}">${mgrFace(q)}</li>`).join("")}</ul></div></div><small>The org chart is driven by this one field.</small></div>
           </fieldset>
         </div>
         <div class="dlg-foot"><button type="button" class="btn-line" data-close>Cancel</button><button type="submit" class="btn-save">Save changes</button></div>
@@ -130,7 +130,7 @@
       if (e.target.closest("[data-mgr-toggle]")) {
         const pop = mgr.querySelector(".mgr-pop"); pop.hidden = !pop.hidden;
         mgr.querySelector("[data-mgr-toggle]").setAttribute("aria-expanded", String(!pop.hidden));
-        if (!pop.hidden) mgr.querySelector(".mgr-search").focus();
+        if (!pop.hidden) pop.querySelector("[data-mgr-id]")?.focus();
         return;
       }
       const opt = e.target.closest("[data-mgr-id]");
