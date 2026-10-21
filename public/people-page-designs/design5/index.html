@@ -9,7 +9,7 @@
 </head>
 <body>
   <div id="shell"></div>
-  <main>
+  <main class="dir-page">
     <div class="d2-head d4-head">
       <div>
         <p class="eyebrow">Directory</p>
@@ -19,13 +19,32 @@
     </div>
     <div class="tools">
       <input class="field" id="search" type="search" placeholder="Search people…" aria-label="Search people">
-      <select class="field sort" id="sort" aria-label="Sort by"><option value="asc">Sort by: Name, A-Z</option><option value="desc">Sort by: Name, Z-A</option></select>
+      <div class="sortdd" id="sortdd">
+        <button type="button" class="field sortdd-btn" id="sortBtn" aria-haspopup="true" aria-expanded="false">
+          <span>Sort by: <b id="sortLabel">Name, A–Z</b></span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="sortdd-panel" id="sortPanel" hidden>
+          <p class="sortdd-h">Sort by</p>
+          <div role="radiogroup" aria-label="Sort by">
+            <button type="button" role="radio" data-sort="name" aria-checked="true">Name</button>
+            <button type="button" role="radio" data-sort="company" aria-checked="false">Company</button>
+            <button type="button" role="radio" data-sort="title" aria-checked="false">Job title</button>
+            <button type="button" role="radio" data-sort="department" aria-checked="false">Department</button>
+          </div>
+          <p class="sortdd-h">Order</p>
+          <div role="radiogroup" aria-label="Order">
+            <button type="button" role="radio" data-order="asc" aria-checked="true">A to Z</button>
+            <button type="button" role="radio" data-order="desc" aria-checked="false">Z to A</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="filters" id="filters"></div>
     <div class="dir5">
     <div class="dir-left">
     <div class="table">
-      <div class="cols"><span id="count"></span><span>Team</span><span>Location</span><span></span></div>
+      <div class="cols"><span id="count"></span><span>Team</span><span></span></div>
       <div id="list"></div>
     </div>
     <nav class="pager" id="pager" aria-label="Pagination"></nav>
@@ -39,7 +58,9 @@
     const $ = (id) => document.getElementById(id);
 
     const PAGE_SIZE = 14;
-    let page = 1;
+    // What each "Sort by" option orders by (A to Z); people with the same value stay in name order.
+    const SORT_KEY = { name: (p) => p.name, company: FACETS.company, title: (p) => p.title, department: FACETS.department };
+    let page = 1, sortKey = "name", descending = false;
     const sel = {};
     $("filters").innerHTML = FILTERS.map(([k, label]) => `<label>${label}<select class="field" data-f="${k}"><option value="">Any</option>${[...new Set(PEOPLE.map(FACETS[k]))].sort().map((v) => `<option>${v}</option>`).join("")}</select></label>`).join("") + '<button type="button" class="clear" id="clear" hidden>Clear filters</button>';
 
@@ -53,9 +74,9 @@
     function render() {
       const query = $("search").value.trim().toLowerCase();
       const shown = PEOPLE
-        .filter((p) => `${p.name} ${jobLine(p)}`.toLowerCase().includes(query))
+        .filter((p) => `${p.name} ${p.title} ${p.team}`.toLowerCase().includes(query))
         .filter((p) => FILTERS.every(([k]) => !sel[k] || FACETS[k](p) === sel[k]))
-        .sort((a, b) => a.name.localeCompare(b.name) * ($("sort").value === "asc" ? 1 : -1));
+        .sort((a, b) => SORT_KEY[sortKey](a).localeCompare(SORT_KEY[sortKey](b)) * (descending ? -1 : 1) || a.name.localeCompare(b.name));
       const pages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
       page = Math.min(page, pages);
       const start = (page - 1) * PAGE_SIZE;
@@ -71,12 +92,28 @@
         <div class="row">
           <span class="who">${avatar(p)}
             <span style="min-width:0"><strong><a href="profile.html?id=${p.id}">${p.name}</a></strong><small>${p.title}</small></span></span>
-          <span class="cell"><i class="dc">${FACETS.entity(p)}</i>${p.team}</span>
-          <span class="cell">${p.location}</span>
+          <span class="cell">${p.team}</span>
           <a class="btn" href="org-chart.html?id=${p.id}">Org chart</a>
         </div>`).join("") || `<p class="job" style="padding:24px 12px">No people match your search or filters.</p>`;
     }
-    ["search", "sort"].forEach((id) => $(id).addEventListener("input", () => { page = 1; render(); }));
+    $("search").addEventListener("input", () => { page = 1; render(); });
+
+    // Custom sort dropdown: pick what to sort by, and the order (A to Z or Z to A). The panel stays open while you choose.
+    const NAMES = { name: "Name", company: "Company", title: "Job title", department: "Department" };
+    const setPanel = (open) => { $("sortPanel").hidden = !open; $("sortBtn").setAttribute("aria-expanded", String(open)); };
+    $("sortBtn").addEventListener("click", () => setPanel($("sortPanel").hidden));
+    $("sortPanel").addEventListener("click", (e) => {
+      const b = e.target.closest("button[role=radio]");
+      if (!b) return;
+      if (b.dataset.sort) sortKey = b.dataset.sort;
+      if (b.dataset.order) descending = b.dataset.order === "desc";
+      $("sortPanel").querySelectorAll("button[data-sort]").forEach((x) => x.setAttribute("aria-checked", String(x.dataset.sort === sortKey)));
+      $("sortPanel").querySelectorAll("button[data-order]").forEach((x) => x.setAttribute("aria-checked", String((x.dataset.order === "desc") === descending)));
+      $("sortLabel").textContent = `${NAMES[sortKey]}, ${descending ? "Z–A" : "A–Z"}`;
+      page = 1; render();
+    });
+    document.addEventListener("click", (e) => { if (!e.target.closest("#sortdd")) setPanel(false); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("sortPanel").hidden) { setPanel(false); $("sortBtn").focus(); } });
     $("filters").addEventListener("change", (e) => { const s = e.target.closest("select[data-f]"); if (s) { sel[s.dataset.f] = s.value; page = 1; render(); } });
     $("clear").addEventListener("click", () => { Object.keys(sel).forEach((k) => delete sel[k]); document.querySelectorAll("#filters select").forEach((s) => { s.value = ""; }); page = 1; render(); });
     $("pager").addEventListener("click", (e) => {

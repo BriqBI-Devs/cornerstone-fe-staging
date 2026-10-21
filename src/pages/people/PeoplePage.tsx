@@ -12,34 +12,41 @@ const DESIGN_OPTIONS: DesignOption[] = [
   {
     name: "Design 1 — Table Directory with Filter Sidebar",
     summary:
-      "A navy-header table directory with a filter sidebar (company, department, job title, time zone, management, entity), a card profile with contact and additional details, and an org chart that always loads every manager above the selected person.",
+      "A table directory with sortable columns and a filter sidebar (company, department, job title, time zone, management, entity), a profile with a header card, a contact and additional card beside an org chart card, and published and mentioned lists, plus a carousel org chart that opens on any person.",
     folder: "design1",
   },
   {
-    name: "Design 2 — Light List with Filter Chips",
+    name: "Design 2 — Light List with Filter Pills",
     summary:
-      "A light, divided people list with pill-shaped filters, a profile with a large portrait and an org section of person cards, and a vertical org chart with rectangular cards.",
+      "A light people list with pill-shaped filters, a profile with a sticky left rail (round photo, contact with copy buttons and social icons) beside a long page of reporting line, additional details and an Activity section with Published and Mentioned tabs, and a vertical org chart with rectangular cards.",
     folder: "design2",
   },
   {
-    name: "Design 3 — Tinted ID Profile",
+    name: "Design 3 — Title-Strip Profile",
     summary:
-      "A segmented filter bar over the list, a photo-card org chart, and a profile with a white identity panel, three info cards (contact, additional, org) and stacked published and mentioned content.",
+      "A directory with a tinted filter panel, a photo-card org chart, and a profile with a People / Profile title strip, a round-photo header, a contact rail with icon links, additional and org chart cards, and a full-width Activity section with tabs and sorting.",
     folder: "design3",
   },
   {
     name: "Design 4 — Flat Cornerstone Theme",
     summary:
-      "The Cornerstone navy, yellow and link-blue theme in a flat list, vertical org chart cards, and a profile with a navy hero, a reporting-line card and a sticky details card.",
+      "The Cornerstone navy, yellow and link-blue theme in a flat list, vertical org chart cards, and a profile with a navy hero showing company and department, an org chart card, Activity tabs and a sticky details card with icon social links.",
     folder: "design4",
   },
   {
     name: "Design 5 — Editorial Profile on White",
     summary:
-      "A clean white directory, a vertical org chart with a navy selected card, and an editorial profile with a round portrait, numbered sections and an Edit profile form (personal, about, contact, additional and manager).",
+      "A clean white directory, a vertical org chart with a navy selected card, and an editorial profile with a round portrait, numbered sections, Activity tabs, icon social links and an Edit profile form (personal, about, contact, additional, org chart).",
     folder: "design5",
   },
+  {
+    name: "Design 6 — Menu Filters and Poster Profile",
+    summary:
+      "A table directory with menu-style filter buttons (each with an Any option, selected values shown on the button), and a poster profile with a round photo beside a large name, contact lines with copy buttons, an indented org tree panel, an additional details grid and a full-width Activity section. The edit form follows the site theme with a yellow accent.",
+    folder: "design6",
+  },
 ];
+
 
 export function PeoplePage() {
   return (

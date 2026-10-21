@@ -6,6 +6,7 @@
   <title>People | Cornerstone</title>
   <link rel="stylesheet" href="assets/people.css">
   <link rel="stylesheet" href="assets/design2.css">
+  <link rel="stylesheet" href="../assets/sort-menu.css">
 </head>
 <body>
   <div id="shell"></div>
@@ -19,17 +20,18 @@
     </div>
     <div class="tools">
       <input class="field" id="search" type="search" placeholder="Search people…" aria-label="Search people">
-      <select class="field sort" id="sort" aria-label="Sort by"><option value="asc">Sort by: Name, A-Z</option><option value="desc">Sort by: Name, Z-A</option></select>
+      <div class="sortdd" id="sortdd" data-btn-class="field"><input type="hidden" id="sort" value="name-asc"></div>
     </div>
     <div class="filters" id="filters"></div>
     <div class="table">
-      <div class="cols"><span id="count"></span><span>Team</span><span>Location</span><span></span></div>
+      <div class="cols"><span id="count"></span><span>Team</span><span></span></div>
       <div id="list"></div>
     </div>
     <nav class="pager" id="pager" aria-label="Pagination"></nav>
   </main>
 
   <script src="assets/data.js"></script>
+  <script src="../assets/sort-menu.js"></script>
   <script>
     document.getElementById("shell").innerHTML = SHELL(true);
     const $ = (id) => document.getElementById(id);
@@ -49,9 +51,9 @@
     function render() {
       const query = $("search").value.trim().toLowerCase();
       const shown = PEOPLE
-        .filter((p) => `${p.name} ${jobLine(p)}`.toLowerCase().includes(query))
+        .filter((p) => `${p.name} ${p.title} ${p.team}`.toLowerCase().includes(query))
         .filter((p) => FILTERS.every(([k]) => !sel[k] || FACETS[k](p) === sel[k]))
-        .sort((a, b) => a.name.localeCompare(b.name) * ($("sort").value === "asc" ? 1 : -1));
+        .sort(SORT_COMPARE[$("sort").value]);
       const pages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
       page = Math.min(page, pages);
       const start = (page - 1) * PAGE_SIZE;
@@ -63,11 +65,10 @@
         pageNumbers(pages).map((n) => n === "…" ? `<span>…</span>` : `<button data-page="${n}" ${n === page ? 'aria-current="page"' : ""}>${n}</button>`).join("") +
         `<button ${page === pages ? "disabled" : ""} data-page="${page + 1}" aria-label="Next page">›</button>`;
       $("list").innerHTML = shown.slice(start, start + PAGE_SIZE).map((p) => `
-        <div class="row" data-dept="${FACETS.entity(p)}">
+        <div class="row">
           <span class="who">${avatar(p)}
             <span style="min-width:0"><strong><a href="profile.html?id=${p.id}">${p.name}</a></strong><small>${p.title}</small></span></span>
-          <span class="cell"><i class="dc">${FACETS.entity(p)}</i>${p.team}</span>
-          <span class="cell">${p.location}</span>
+          <span class="cell">${p.team}</span>
           <a class="btn" href="org-chart.html?id=${p.id}">Org chart</a>
         </div>`).join("") || `<p class="job" style="padding:24px 12px">No people match your search or filters.</p>`;
     }

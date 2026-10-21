@@ -17,7 +17,7 @@
 .f > span b { color: #c0392b; }
 .f small { color: var(--muted); font-size: 12px; }
 .f input[type=text], .f input[type=email], .f input[type=tel], .f input[type=url], .f input[type=date], .f select, .f input:not([type]) { width: 100%; height: 40px; padding: 0 12px; border: 1px solid #cfd6df; border-radius: 6px; background: #fff; color: var(--text); font: inherit; font-size: 14px; }
-.f input:focus, .f select:focus, .rte:focus-within { border-color: var(--link); box-shadow: 0 0 0 3px rgba(29,78,216,.14); outline: none; }
+.f input:focus, .f select:focus { border-color: var(--link); box-shadow: 0 0 0 3px rgba(29,78,216,.14); outline: none; }
 .f input:invalid:not(:placeholder-shown) { border-color: #c0392b; }
 .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
 .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 16px; }
@@ -33,13 +33,6 @@
 .rec-btn:hover, .btn-line:hover { border-color: var(--link); color: var(--link); }
 .rec-btn.on { border-color: #c0392b; color: #c0392b; }
 #recAudio { width: 100%; height: 34px; margin-top: 6px; }
-.rte { border: 1px solid #cfd6df; border-radius: 6px; background: #fff; }
-.rte-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; padding: 6px; border-bottom: 1px solid var(--line); background: var(--panel); border-radius: 6px 6px 0 0; }
-.rte-bar button { min-width: 32px; height: 30px; padding: 0 8px; border: 0; border-radius: 4px; background: none; color: var(--text); font: inherit; font-size: 14px; cursor: pointer; }
-.rte-bar button:hover { background: var(--panel2); }
-.rte-bar .sep { width: 1px; height: 18px; margin: 0 4px; background: var(--line); }
-.rte-area { min-height: 110px; padding: 10px 12px; font-size: 14px; line-height: 1.55; outline: none; }
-.rte-area:empty::before { content: attr(data-placeholder); color: #8a94a3; }
 .teams { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
 .teams span { font-weight: 600; }
 .teams em { flex: 1; color: var(--muted); font-size: 13px; font-style: normal; }
@@ -79,17 +72,6 @@
 .mgr .none { padding: 4px 0; }
 
 
-/* Bio editor popovers: emoji selector and link form */
-.rte { position: relative; }
-.rte-pop { position: absolute; z-index: 6; top: 46px; left: 6px; width: min(340px, calc(100% - 12px)); padding: 10px; border: 1px solid #cfd6df; border-radius: 8px; background: #fff; box-shadow: 0 18px 36px -12px rgba(27,42,58,.35); }
-.rte-pop[hidden] { display: none; }
-.emoji-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); gap: 2px; max-height: 190px; overflow-x: hidden; overflow-y: auto; }
-.emoji-grid button { height: 36px; border: 0; border-radius: 6px; background: none; font-size: 20px; line-height: 1; cursor: pointer; }
-.emoji-grid button:hover, .emoji-grid button:focus-visible { background: var(--panel2); outline: none; }
-.link-form { display: grid; gap: 10px; }
-.link-form label { display: grid; gap: 4px; color: var(--text); font-size: 12.5px; font-weight: 600; }
-.link-form input { height: 36px; padding: 0 10px; border: 1px solid #cfd6df; border-radius: 6px; font: inherit; font-size: 13.5px; font-weight: 400; }
-.link-form input:focus { border-color: var(--link); box-shadow: 0 0 0 3px rgba(29,78,216,.14); outline: none; }
 .link-actions { display: flex; justify-content: flex-end; gap: 8px; }
 .link-actions .btn-line, .link-actions .btn-save { height: 34px; padding: 0 14px; font-size: 13px; }
 
@@ -100,3 +82,40 @@
 .pe-banner button { padding: 7px 14px; border: 1px solid #1b2a3a; border-radius: 6px; background: #1b2a3a; color: #fff; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
 .pe-banner button:hover { background: #2b3f57; }
 .empty-note { margin: 6px 0; color: #6b7787; font-size: 13.5px; }
+
+/* One scrollbar only: the dialog never scrolls itself; the form body scrolls (and can shrink on short screens) */
+.p5-dlg { overflow: hidden; }
+.dlg-body { min-height: 0; }
+
+/* ===== Edit form refresh (React site theme + yellow accent): flat, 8px radius, Inter title, hairline borders, rounded-md buttons ===== */
+.p5-dlg { width: min(720px, calc(100vw - 32px)); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 24px 60px -24px rgba(27,42,58,.5); }
+.p5-dlg::backdrop { background: rgba(27,42,58,.5); }
+.dlg-head { padding: 18px 24px 16px; border-bottom: 0; }
+.dlg-head h2 { display: flex; align-items: center; gap: 10px; font: 700 20px/1.2 Inter, system-ui, sans-serif; letter-spacing: -.01em; }
+.dlg-head h2::before { content: ""; flex: none; width: 4px; height: 18px; border-radius: 2px; background: var(--yellow); }
+.dlg-x { border-radius: 6px; font-size: 22px; }
+.dlg-tabs { gap: 20px; padding: 0 24px; }
+.dlg-tabs button { padding: 10px 2px 11px; border-bottom-width: 2px; font-size: 14px; font-weight: 500; }
+.dlg-tabs button[aria-selected=true] { border-color: var(--yellow); font-weight: 600; }
+.dlg-body { padding: 4px 24px 20px; }
+.dlg-body fieldset { padding-top: 22px; }
+.f > span, .social i { color: rgba(27,42,58,.8); font-size: 12.5px; font-weight: 600; }
+.f input[type=text], .f input[type=email], .f input[type=tel], .f input[type=url], .f input[type=date], .f select, .f input:not([type]), .social input { height: 38px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-size: 14px; }
+.f input:hover, .f select:hover, .social input:hover { border-color: #c8cdd4; }
+.f input:focus, .f select:focus, .social input:focus { border-color: var(--text); box-shadow: 0 0 0 2px var(--yellow); outline: none; }
+.rte, .mgr-btn { border-color: var(--line); border-radius: 6px; }
+.rec-btn, .btn-line, .btn-save { height: auto; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: background-color .15s; }
+.rec-btn, .btn-line { border-color: var(--line); }
+.rec-btn:hover, .btn-line:hover { border-color: var(--line); background: var(--panel); color: var(--text); }
+.btn-save:hover { background: rgba(27,42,58,.9); }
+.dlg-foot { padding: 12px 24px; border-top: 1px solid var(--line); background: #fff; border-radius: 0 0 8px 8px; }
+.pk-clear:hover { background: #fdf3c8; }
+.show-more:focus-visible, .dlg-tabs button:focus-visible, .btn-save:focus-visible, .btn-line:focus-visible, .dlg-x:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+
+/* One scrollbar only: the dialog no longer scrolls itself (my 1px border made the form 2px taller than the dialog); the body scrolls */
+.p5-dlg { overflow: hidden; }
+.p5-dlg form { max-height: calc(100vh - 50px); }
+.dlg-body { min-height: 0; }
+
+/* Minimum height so the tabs do not jump in size, capped so it never forces a second scrollbar on short screens */
+.dlg-body { min-height: min(440px, calc(100vh - 270px)); }

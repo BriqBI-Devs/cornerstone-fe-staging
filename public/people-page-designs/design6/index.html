@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>People | Cornerstone</title>
+  <link rel="stylesheet" href="assets/people.css">
+  <link rel="stylesheet" href="assets/directory6.css">
+  <link rel="stylesheet" href="../assets/sort-menu.css">
+</head>
+<body>
+  <div id="shell"></div>
+  <main id="main" class="dr-page">
+    <div class="dr-head">
+      <div>
+        <p class="dr-label">Directory</p>
+        <h1>People</h1>
+        <p class="dr-sub">Find colleagues, see where they sit, and open their profile.</p>
+      </div>
+    </div>
+
+    <div class="dr-bar" role="search">
+      <input class="dr-search" id="search" type="search" placeholder="Search by name, title or team…" aria-label="Search people" autocomplete="off">
+      <div class="sortdd" id="sortdd" data-btn-class="dr-sort"><input type="hidden" id="sort" value="name-asc"></div>
+    </div>
+
+    <div class="dr-filters" id="filters" aria-label="Filters"></div>
+
+    <div class="dr-meta-row"><p id="count" aria-live="polite"></p><button type="button" class="dr-clear" id="clear" hidden>Clear all filters</button></div>
+
+    <div class="table">
+      <div class="cols">
+        <button type="button" data-sort="name" id="colName">Name</button>
+        <button type="button" data-sort="team">Team</button>
+        <span></span>
+      </div>
+      <div id="list"></div>
+    </div>
+    <nav class="pager" id="pager" aria-label="Pagination"></nav>
+  </main>
+
+  <script src="assets/data.js"></script>
+  <script src="../assets/sort-menu.js"></script>
+  <script>
+    document.getElementById("shell").innerHTML = SHELL(true);
+    const $ = (id) => document.getElementById(id);
+    const esc = PE_ESC;
+    const PAGE_SIZE = 14;
+    const SORTS = Object.keys(SORT_COMPARE);
+    let page = 1, openMenu = null;
+    const sel = {};
+
+    // State lives in the query string so reload and "back" from a profile restore the view.
+    const params = new URLSearchParams(location.search);
+    $("search").value = params.get("q") || "";
+    if (SORTS.includes(params.get("sort"))) $("sort").value = params.get("sort");
+    page = Math.max(1, +params.get("page") || 1);
+    FILTERS.forEach(([k]) => { if (params.get(k)) sel[k] = params.get(k); });
+    const syncUrl = () => {
+      const next = new URLSearchParams();
+      if ($("search").value.trim()) next.set("q", $("search").value.trim());
+      if ($("sort").value !== "name-asc") next.set("sort", $("sort").value);
+      if (page > 1) next.set("page", page);
+      Object.entries(sel).forEach(([k, v]) => v && next.set(k, v));
+      history.replaceState(null, "", next.toString() ? `?${next}` : location.pathname);
+    };
+
+    // Filters: one button per field; clicking opens a small menu with the options (searchable when long).
+    const options = (k) => [...new Set(PEOPLE.map(FACETS[k]))].sort();
+    const renderFilters = () => {
+      $("filters").innerHTML = FILTERS.map(([k, label]) => {
+        const on = !!sel[k], isOpen = openMenu === k, vals = options(k);
+        return `<div class="fm ${on ? "on" : ""}" data-fm="${k}">
+          <button type="button" class="fm-btn" aria-haspopup="listbox" aria-expanded="${isOpen}"><span class="fm-l">${label}</span>${on ? `<span class="fm-v">${esc(sel[k])}</span>` : ""}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          ${on ? `<button type="button" class="fm-x" data-clear-one="${k}" aria-label="Remove ${label} filter">×</button>` : ""}
+          ${isOpen ? `<div class="fm-menu" role="listbox" aria-label="${label}">            <ul><li><button type="button" role="option" aria-selected="${!sel[k]}" data-clear-one="${k}">Any</button></li>${vals.map((v) => `<li><button type="button" role="option" aria-selected="${sel[k] === v}" data-pick="${k}" data-value="${esc(v)}">${esc(v)}</button></li>`).join("")}</ul>
+          </div>` : ""}
+        </div>`;
+      }).join("");
+    };
+    const closeMenu = () => { if (openMenu) { openMenu = null; renderFilters(); } };
+
+    const pageNumbers = (total) => {
+      if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+      const around = [page - 1, page, page + 1].filter((n) => n > 1 && n < total);
+      return [1, ...(around[0] > 2 ? ["…"] : []), ...around, ...(around.at(-1) < total - 1 ? ["…"] : []), total];
+    };
+    const hl = (text, q) => {
+      const t = esc(text);
+      if (!q) return t;
+      const i = text.toLowerCase().indexOf(q);
+      return i < 0 ? t : `${esc(text.slice(0, i))}<mark>${esc(text.slice(i, i + q.length))}</mark>${esc(text.slice(i + q.length))}`;
+    };
+    const sorters = SORT_COMPARE;
+
+    function render() {
+      const q = $("search").value.trim().toLowerCase(), sortKey = $("sort").value;
+      const shown = PEOPLE
+        .filter((p) => `${p.name} ${p.title} ${p.team}`.toLowerCase().includes(q))
+        .filter((p) => FILTERS.every(([k]) => !sel[k] || FACETS[k](p) === sel[k]))
+        .sort(sorters[sortKey]);
+      const pages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
+      page = Math.min(page, pages);
+      const start = (page - 1) * PAGE_SIZE;
+      $("count").textContent = `${shown.length} ${shown.length === 1 ? "person" : "people"}`;
+      $("clear").hidden = !Object.values(sel).some(Boolean);
+      document.querySelectorAll(".cols button").forEach((b) => {
+        const on = sortKey.startsWith((b.dataset.sort === "team" ? "department" : b.dataset.sort) + "-");
+        if (on) b.setAttribute("aria-sort", sortKey.endsWith("-desc") ? "descending" : "ascending"); else b.removeAttribute("aria-sort");
+      });
+      $("pager").hidden = pages === 1;
+      $("pager").innerHTML =
+        `<button ${page === 1 ? "disabled" : ""} data-page="${page - 1}" aria-label="Previous page">‹</button>` +
+        pageNumbers(pages).map((n) => n === "…" ? `<span>…</span>` : `<button data-page="${n}" aria-label="Page ${n}" ${n === page ? 'aria-current="page"' : ""}>${n}</button>`).join("") +
+        `<button ${page === pages ? "disabled" : ""} data-page="${page + 1}" aria-label="Next page">›</button>`;
+      $("list").innerHTML = shown.slice(start, start + PAGE_SIZE).map((p) => `
+        <div class="row">
+          <span class="who">${avatar(p)}<span style="min-width:0"><strong><a href="profile.html?id=${p.id}">${hl(p.name, q)}</a></strong><small>${hl(p.title, q)}</small></span></span>
+          <span class="cell">${hl(p.team, q)}</span>
+          <a class="btn" href="org-chart.html?id=${p.id}" aria-label="Org chart for ${esc(p.name)}">Org chart</a>
+        </div>`).join("") || `<div class="dr-empty"><strong>No people match</strong><p>Try a different name, or remove some filters.</p><button type="button" class="btn" data-reset>Reset search and filters</button></div>`;
+      syncUrl();
+    }
+
+    let debounce;
+    $("search").addEventListener("input", () => { clearTimeout(debounce); debounce = setTimeout(() => { page = 1; render(); }, 150); });
+    $("sort").addEventListener("input", () => { page = 1; render(); });
+    document.querySelector(".cols").addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-sort]");
+      if (!b) return;
+      $("sort").value = nextSort($("sort").value, b.dataset.sort === "team" ? "department" : b.dataset.sort);
+      page = 1; render();
+    });
+
+    $("filters").addEventListener("click", (e) => {
+      const pick = e.target.closest("[data-pick]");
+      if (pick) { sel[pick.dataset.pick] = pick.dataset.value; openMenu = null; page = 1; renderFilters(); render(); return; }
+      const one = e.target.closest("[data-clear-one]");
+      if (one) { delete sel[one.dataset.clearOne]; openMenu = null; page = 1; renderFilters(); render(); return; }
+      const btn = e.target.closest(".fm-btn");
+      if (btn) { const k = btn.closest(".fm").dataset.fm; openMenu = openMenu === k ? null : k; renderFilters(); }
+    });
+    document.addEventListener("click", (e) => { if (openMenu && !e.target.closest(".fm")) closeMenu(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+    $("clear").addEventListener("click", () => { Object.keys(sel).forEach((k) => delete sel[k]); openMenu = null; page = 1; renderFilters(); render(); });
+    $("list").addEventListener("click", (e) => { if (e.target.closest("[data-reset]")) { $("search").value = ""; Object.keys(sel).forEach((k) => delete sel[k]); page = 1; renderFilters(); render(); } });
+    $("pager").addEventListener("click", (e) => {
+      const t = e.target.closest("button[data-page]"); if (!t) return;
+      page = +t.dataset.page; render();
+      document.querySelector(".table").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    renderFilters();
+    render();
+    PHOTOS.then(render);
+  </script>
+</body>
+</html>
