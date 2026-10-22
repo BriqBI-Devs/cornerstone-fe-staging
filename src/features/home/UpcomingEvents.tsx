@@ -49,9 +49,9 @@ export function UpcomingEvents() {
         {EVENTS.map((event) => (
           <div
             key={event.title}
-            className="flex items-start gap-4 rounded-card border border-border p-3 transition-colors hover:border-brand-navy/40 hover:bg-surface-subtle"
+            className="grid grid-cols-[3.5rem_minmax(0,1fr)] items-start gap-x-4 gap-y-3 rounded-card border border-border p-3 transition-colors hover:border-brand-navy/40 hover:bg-surface-subtle sm:grid-cols-[3.5rem_minmax(0,1fr)_auto]"
           >
-            <div className="flex w-14 shrink-0 flex-col items-center rounded-card bg-brand-navy py-1.5 text-white">
+            <div className="flex w-14 flex-col items-center rounded-card bg-brand-navy py-1.5 text-white">
               <span className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
                 {event.month}
               </span>
@@ -59,7 +59,7 @@ export function UpcomingEvents() {
               <span className="text-[10px] text-white/70">{event.weekday}</span>
             </div>
 
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0">
               <p className="text-sm font-semibold text-brand-navy">{event.title}</p>
               <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-brand-navy/65">
                 <span className="flex items-center gap-1.5">
@@ -81,7 +81,7 @@ export function UpcomingEvents() {
 
             <a
               href="#"
-              className="shrink-0 self-center rounded-md border border-border px-3 py-1.5 text-sm font-medium text-brand-navy hover:bg-white"
+              className="col-span-2 rounded-md border border-border px-3 py-1.5 text-center text-sm font-medium text-brand-navy hover:bg-white sm:col-span-1 sm:self-center"
             >
               Go to event
             </a>
@@ -89,7 +89,7 @@ export function UpcomingEvents() {
         ))}
       </div>
       <a
-        href="#"
+        href="/events"
         className="mt-auto block pt-3 text-right text-sm font-semibold text-brand-navy hover:underline"
       >
         View more →

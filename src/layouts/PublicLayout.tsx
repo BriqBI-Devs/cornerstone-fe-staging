@@ -48,6 +48,14 @@ export function PublicLayout() {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  // Autofocusing the search box pops the keyboard open on phones, so only do it on larger screens.
+  const [canAutoFocus] = useState(() => typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches);
+  const navRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    // The nav scrolls sideways on narrow screens; bring the current page into view.
+    navRef.current?.querySelector<HTMLElement>("[aria-current=page]")?.scrollIntoView({ inline: "center", block: "nearest" });
+  }, [pathname]);
+
   const appsRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
   useClickOutside(appsRef, () => setAppsOpen(false));
@@ -59,9 +67,9 @@ export function PublicLayout() {
           The whole block is one sticky element whose parent is the root
           column — sticky is bounded by its own parent's box, so the pieces
           cannot be stuck individually from in here. */}
-      <header className="sticky top-0 z-30 bg-surface">
-        <div className="grid grid-cols-3 items-center border-b border-border px-4 pb-2 pt-4 text-xs text-brand-navy/65 md:px-8">
-          <span>{dateAndWeather}</span>
+      <header className="bg-surface md:sticky md:top-0 md:z-30">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-border px-4 pb-2 pt-3 text-[11px] text-brand-navy/65 md:px-8 md:pt-4 md:text-xs">
+          <span className="truncate">{dateAndWeather}</span>
           <Link to="/" aria-label="Cornerstone home" className="justify-self-center">
             <img
               src="/cornerstone-assets/L+m-logo.avif"
@@ -69,26 +77,26 @@ export function PublicLayout() {
               className="h-6 w-auto object-contain"
             />
           </Link>
-          <div className="flex items-center justify-end gap-4">
-            <div ref={appsRef} className="relative flex h-7 w-7 items-center justify-center">
+          <div className="flex items-center justify-end gap-1 md:gap-4">
+            <div ref={appsRef} className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
               <button
                 onClick={() => setAppsOpen((open) => !open)}
                 aria-label="Apps"
-                className="flex h-7 w-7 items-center justify-center text-brand-navy/75 hover:text-brand-navy"
+                className="flex h-9 w-9 items-center justify-center text-brand-navy/75 hover:text-brand-navy md:h-7 md:w-7"
               >
                 <LayoutGrid className="h-4 w-4" />
               </button>
               {appsOpen && <AppLauncherPanel />}
             </div>
-            <div ref={notificationsRef} className="relative flex h-7 w-7 items-center justify-center">
+            <div ref={notificationsRef} className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
               <button
                 onClick={() => setNotificationsOpen((open) => !open)}
                 aria-label="Notifications"
-                className="flex h-7 w-7 items-center justify-center text-brand-navy/75 hover:text-brand-navy"
+                className="flex h-9 w-9 items-center justify-center text-brand-navy/75 hover:text-brand-navy md:h-7 md:w-7"
               >
                 <Bell className="h-4 w-4" />
               </button>
-              <span className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-brand-accent" />
+              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-brand-accent md:-right-0.5 md:-top-0.5" />
               {notificationsOpen && <NotificationsPanel />}
             </div>
             <Avatar name="Jordan Davis" size="sm" />
@@ -100,7 +108,7 @@ export function PublicLayout() {
             <div className="mx-auto flex max-w-[600px] items-center gap-2 rounded-full bg-surface-subtle px-4 py-2">
               <Search className="h-4 w-4 shrink-0 text-brand-navy/50" />
               <input
-                autoFocus
+                autoFocus={canAutoFocus}
                 type="text"
                 placeholder="Search Cornerstone — people, files, news..."
                 className="w-full bg-transparent text-sm text-brand-navy outline-none placeholder:text-brand-navy/50"
@@ -109,19 +117,19 @@ export function PublicLayout() {
           </div>
         )}
 
-        <div className="border-b border-brand-navy py-6 text-center">
-          <h1 className="font-serif text-5xl font-bold tracking-wide text-brand-navy">
+        <div className="border-b border-brand-navy px-4 py-3 text-center md:py-6">
+          <h1 className="font-serif text-[clamp(1.75rem,9vw,2.25rem)] font-bold tracking-wide text-brand-navy sm:text-4xl md:text-5xl">
             <Link to="/" className="transition-opacity hover:opacity-80">
               CORNERSTONE
             </Link>
           </h1>
-          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-brand-navy/55">
+          <p className="mt-0.5 text-[10px] uppercase tracking-[0.2em] text-brand-navy/55 md:mt-1 md:text-xs">
             The L+M Daily
           </p>
         </div>
 
         <div className="border-b border-border">
-          <nav className="mx-auto flex max-w-[1280px] justify-center gap-8 overflow-x-auto px-4 py-3 md:px-8">
+          <nav ref={navRef} className="mx-auto flex max-w-[1280px] justify-start gap-6 overflow-x-auto px-4 py-3 [scrollbar-width:none] md:justify-center md:gap-8 md:px-8 [&::-webkit-scrollbar]:hidden">
             {NAV_ITEMS.map((item) => (
               <NavLink
                 key={item.to}

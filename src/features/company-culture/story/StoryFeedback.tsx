@@ -42,7 +42,7 @@ export function StoryFeedback() {
         onClick={(event) => event.target === event.currentTarget && dialogRef.current?.close()}
         className="m-auto w-[min(460px,calc(100vw-32px))] rounded-card border border-border p-0 backdrop:bg-brand-navy/45"
       >
-        <form method="dialog" onSubmit={sent ? undefined : submit} className="p-6">
+        <form method="dialog" onSubmit={sent ? undefined : submit} className="p-4 sm:p-6">
           {sent ? (
             <>
               <h2 className="mb-1.5 text-base font-bold">Thanks for your feedback</h2>
@@ -66,13 +66,13 @@ export function StoryFeedback() {
                 placeholder="For example, ‘content needs to be updated’ or ‘there is a spelling mistake’"
                 className={`block min-h-[120px] w-full resize-y rounded-md border px-3 py-2.5 text-sm outline-none focus:border-brand-link ${error ? "border-red-700" : "border-border"}`}
               />
-              <div className="mt-1.5 flex justify-between text-xs text-brand-navy/45">
+              <div className="mt-1.5 flex flex-wrap justify-between gap-x-3 gap-y-1 text-xs text-brand-navy/45">
                 <span role="alert" className="font-semibold text-red-700">
                   {error && "Please add a few words."}
                 </span>
                 <span>{MAX_LENGTH - text.length} characters remaining</span>
               </div>
-              <div className="mt-5 flex justify-end gap-2">
+              <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                 <button type="button" onClick={() => dialogRef.current?.close()} className={secondary}>
                   Cancel
                 </button>

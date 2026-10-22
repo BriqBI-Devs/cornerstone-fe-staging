@@ -49,9 +49,9 @@ const tenure = (joined) => {
   return [years && `${years} yr${years > 1 ? "s" : ""}`, rest && `${rest} mo`].filter(Boolean).join(" ") || "New";
 };
 const SHELL = (active) => `
-  <header><div class="wordmark">CORNERSTONE</div><nav>
-    <a class="off" aria-disabled="true" tabindex="-1">News</a><a class="off" aria-disabled="true" tabindex="-1">Company + Culture</a><a class="off" aria-disabled="true" tabindex="-1">Events</a>
-    <a class="${active ? "active" : ""}" href="index.html">People</a><a class="off" aria-disabled="true" tabindex="-1">Departments</a><a class="off" aria-disabled="true" tabindex="-1">Policies + Resources</a>
+  <header><a class="wordmark" href="/">CORNERSTONE</a><nav>
+    <a href="/news">News</a><a href="/company-culture">Company + Culture</a><a href="/events">Events</a>
+    <a class="${active ? "active" : ""}" href="index.html">People</a><a href="/departments">Departments</a><a href="/policies-resources">Policies + Resources</a>
   </nav></header>`;
 
 // Directory filters, derived from the existing data. (Time zone is intentionally not offered.)

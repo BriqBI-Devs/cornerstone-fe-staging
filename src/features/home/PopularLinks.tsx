@@ -1,14 +1,12 @@
-import { Building2, ChevronRight, MapPin, Ticket } from "lucide-react";
+import { Building2, ChevronRight, MapPin } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Card } from "../../components/ui/Card";
 import { SectionHeading } from "../../components/ui/SectionHeading";
-import { SUBMIT_CASE_URL } from "../policies-resources/data";
 
 const LINKS: { label: string; icon: LucideIcon; href?: string }[] = [
   { label: "Deal Data + Construction", icon: Building2 },
   { label: "Building List", icon: Building2 },
   { label: "Offices, Space + Parking", icon: MapPin },
-  { label: "Raise a ticket", icon: Ticket, href: SUBMIT_CASE_URL },
 ];
 
 export function PopularLinks() {
