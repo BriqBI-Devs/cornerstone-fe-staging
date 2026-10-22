@@ -29,7 +29,7 @@ export function AppLauncherPanel() {
         : APPS;
 
   return (
-    <div className="absolute right-0 top-full z-10 mt-2 w-96 rounded-card border border-border bg-surface shadow-card">
+    <div className="fixed inset-x-4 top-14 z-40 max-h-[calc(100vh-5rem)] w-auto overflow-y-auto rounded-card border border-border bg-surface shadow-card md:absolute md:inset-x-auto md:right-0 md:top-full md:z-10 md:mt-2 md:max-h-none md:w-96 md:overflow-visible">
       <div className="flex items-center gap-4 border-b border-border px-5 pt-3.5">
         {(["apps", "favorites"] as const).map((key) => (
           <button
