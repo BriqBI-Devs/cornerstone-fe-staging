@@ -89,7 +89,7 @@ export function UpcomingEvents() {
         ))}
       </div>
       <a
-        href="#"
+        href="/events"
         className="mt-auto block pt-3 text-right text-sm font-semibold text-brand-navy hover:underline"
       >
         View more →

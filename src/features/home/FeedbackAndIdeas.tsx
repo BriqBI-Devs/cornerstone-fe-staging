@@ -1,5 +1,6 @@
-import { Lightbulb } from "lucide-react";
+import { Lightbulb, Ticket } from "lucide-react";
 import { Card } from "../../components/ui/Card";
+import { SUBMIT_CASE_URL } from "../policies-resources/data";
 
 interface FeedbackAndIdeasProps {
   title?: string;
@@ -16,14 +17,25 @@ export function FeedbackAndIdeas({ title = "Feedback and ideas" }: FeedbackAndId
       </div>
       <p className="text-sm text-white/70">
         We welcome your feedback about the intranet, as well as any story ideas you might have or
-        news you'd like to share.
+        news you'd like to share. Need help with something else? Raise a ticket.
       </p>
-      <a
-        href="mailto:intranet@lmdevelopmentpartners.com?subject=Cornerstone%20Feedback"
-        className="mt-auto w-fit self-start rounded-md bg-brand-accent px-3 py-1.5 text-sm font-medium text-brand-navy hover:bg-brand-accent/90"
-      >
-        Email the intranet team
-      </a>
+      <div className="mt-auto flex flex-wrap gap-2">
+        <a
+          href="mailto:intranet@lmdevelopmentpartners.com?subject=Cornerstone%20Feedback"
+          className="w-fit rounded-md bg-brand-accent px-3 py-1.5 text-sm font-medium text-brand-navy hover:bg-brand-accent/90"
+        >
+          Email the intranet team
+        </a>
+        <a
+          href={SUBMIT_CASE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex w-fit items-center gap-1.5 rounded-md border border-white/30 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10"
+        >
+          <Ticket className="h-3.5 w-3.5" />
+          Raise a ticket
+        </a>
+      </div>
     </Card>
   );
 }
