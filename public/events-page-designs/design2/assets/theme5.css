@@ -119,3 +119,4 @@ body { background: #eceef2; }
 .event-preview, .filter-panel { border-radius: 10px; box-shadow: var(--shadow-pop); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 @media (max-width: 760px) { .ev5-head { padding: 14px 16px; } }
+.toolbar { padding-top: 16px; padding-bottom: 16px; }
