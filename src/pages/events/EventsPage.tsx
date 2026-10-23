@@ -16,10 +16,10 @@ const DESIGN_OPTIONS: DesignOption[] = [
     folder: "design1",
   },
   {
-    name: "Design 2 — Calendar Hub with Dark Intro",
+    name: "Design 2 — Simpplr-Style Events",
     summary:
-      "The same calendar and list as Design 1 in a new look: a dark intro band, a floating panel, a bordered calendar grid, a simple divided list and boxy controls.",
-    folder: "design02",
+      "The Design 1 calendar and list in a simpler look, with a dark intro band. The event detail page follows the existing Simpplr site: banner, RSVP side card, related events, reactions and comments.",
+    folder: "design2",
   },
   {
     name: "Design 3 — Table List + Calendar",

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Events | Cornerstone</title>
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/calendar.css">
+  <link rel="stylesheet" href="assets/theme5.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="/news">News</a>
+      <a href="/company-culture">Company + Culture</a>
+      <a class="active" href="index.html" aria-current="page">Events</a>
+      <a href="/people">People</a>
+      <a href="/departments">Departments</a>
+      <a href="/policies-resources">Policies + Resources</a>
+    </nav>
+  </header>
+
+  <main class="page ev5">
+    <section class="ev5-card" aria-label="Events calendar">
+      <div class="ev5-head">
+        <h1>Events</h1>
+        <div class="ev5-head-right">
+          <nav class="ev5-view" aria-label="Event view">
+            <a class="active" href="index.html" aria-current="page" aria-label="Calendar view" title="Calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3.5v3M16 3.5v3"/></svg></a>
+            <a href="list.html" aria-label="List view" title="List"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M9 7h11M9 12h11M9 17h11"/><circle cx="4.5" cy="7" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="17" r="1" fill="currentColor"/></svg></a>
+          </nav>
+        </div>
+      </div>
+      <div class="ev5-bar">
+        <div role="search" style="display:contents">
+          <label class="search-field">
+            <span class="sr-only">Search all events</span>
+            <button type="button" class="search-icon-btn" id="searchButton" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+            <input id="searchInput" type="search" placeholder="Search events" autocomplete="off">
+          </label>
+        </div>
+        <div class="ev5-bar-right">
+        <div class="filter-wrap">
+          <button class="button" id="filterToggle" type="button" aria-expanded="false" aria-controls="filterPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"/></svg> Filters <span class="filter-count" id="filterCount" hidden>0</span></button>
+          <div class="filter-panel" id="filterPanel" hidden>
+            <div class="filter-heading"><strong>Show events I answered</strong><button class="text-button" id="clearFilters" type="button">Clear</button></div>
+            <fieldset>
+              <legend class="sr-only">RSVP status</legend>
+              <label><input type="checkbox" name="rsvpFilter" value="Yes"> Going</label>
+              <label><input type="checkbox" name="rsvpFilter" value="No"> Not going</label>
+              <label><input type="checkbox" name="rsvpFilter" value="Maybe"> Maybe</label>
+              <label><input type="checkbox" name="rsvpFilter" value="Pending"> Needs response</label>
+            </fieldset>
+          </div>
+        </div>
+        <a class="button" id="outlookCalendar" target="_blank" rel="noopener noreferrer" title="Add all events to your Outlook calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3.5v3M16 3.5v3"/></svg> Sync to Outlook</a>
+      </div>
+      </div>
+      <div class="ev5-period">
+        <div class="ev5-nav">
+          <button class="icon-control" id="previousPeriod" type="button" aria-label="Previous">‹</button>
+          <button class="icon-control" id="nextPeriod" type="button" aria-label="Next">›</button>
+          <h2 id="periodTitle"></h2>
+        </div>
+        <div class="ev5-period-right">
+          <div class="mode-switch" role="group" aria-label="Calendar view">
+            <button type="button" data-mode="month" class="active">Month</button>
+            <button type="button" data-mode="week">Week</button>
+          </div>
+          <button class="button" id="todayButton" type="button">Today</button>
+        </div>
+      </div>
+      <div id="eventsContent" class="events-content" aria-live="polite"></div>
+    </section>
+    <p class="prototype-note">Design concept · Sample event information</p>
+  </main>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/outlook-sync.js"></script>
+  <script src="assets/core.js"></script>
+  <script src="assets/calendar.js"></script>
+</body>
+</html>

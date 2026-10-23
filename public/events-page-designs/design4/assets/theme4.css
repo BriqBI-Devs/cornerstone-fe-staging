@@ -1,0 +1,44 @@
+/* Design 4 theme: the Cornerstone React site look (flat white, 1px #e5e5e0 borders, 8px radius, navy + yellow, Inter headings,
+   Georgia only for the wordmark). Loaded last, so it re-themes the shared calendar, list and detail styles without changing their layout. */
+:root {
+  --navy: #1b2a3a; --navy-2: #2b3f57; --ink: #1b2a3a; --ink-soft: rgba(27, 42, 58, .72); --muted: rgba(27, 42, 58, .55);
+  --accent: #f5c518; --accent-soft: #fff6cc; --link: #1d4ed8; --link-soft: #eef3ff;
+  --paper: #ffffff; --panel: #ffffff; --tile: #f7f7f5; --line: #e5e5e0;
+  --radius: 8px; --radius-lg: 8px; --pill: 6px;
+  --shadow-card: none; --shadow-panel: 0 14px 30px -14px rgba(27, 42, 58, .28); --shadow-pop: 0 18px 44px -12px rgba(27, 42, 58, .3);
+  --font-display: Inter, system-ui, sans-serif;
+}
+.wordmark { font-family: Georgia, "Times New Roman", serif; letter-spacing: .06em; }
+
+/* Title band: light, with a yellow accent bar, instead of the dark navy block */
+.band { background: #fff; color: var(--ink); border-bottom: 1px solid var(--line); }
+.band h1 { display: flex; align-items: center; gap: 10px; font-family: Inter, system-ui, sans-serif; font-weight: 700; }
+.band h1::before { content: ""; width: 4px; height: 24px; border-radius: 2px; background: var(--accent); }
+.band p { color: var(--ink-soft); }
+.view-switch { background: var(--tile); border-color: var(--line); }
+.view-switch a { color: var(--ink-soft); }
+.view-switch a:hover { color: var(--ink); }
+.view-switch a.active { background: var(--navy); color: #fff; box-shadow: inset 0 -3px 0 var(--accent); }
+
+/* Controls and surfaces */
+.panel, .card { border-color: var(--line); box-shadow: none; }
+.button, .btn, .icon-control, .mode-switch button, .segment button, .filter-panel { border-radius: var(--radius-sm, 6px); }
+.button:hover, .btn:hover, .icon-control:hover { border-color: var(--navy); background: var(--tile); }
+.btn-primary, .mode-switch button.active, .segment button.active, .pager-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; box-shadow: inset 0 -3px 0 var(--accent); }
+.filter-count { background: var(--navy); color: var(--accent); }
+
+/* Calendar: light weekday header instead of dark navy */
+.weekday, .week-head, .week-head > div:first-child { background: var(--tile); color: var(--ink-soft); }
+.weekday { border-bottom: 1px solid var(--line); }
+.day-cell.today .day-number { background: var(--navy); color: #fff; box-shadow: 0 0 0 2px var(--accent); }
+.multi-day-event, .week-all-day-row .week-all-day-event { background: var(--navy); }
+.multi-day-event:hover { background: var(--navy-2); }
+.calendar-event, .week-event { border-left-color: var(--accent); }
+.calendar-event:hover, .week-event:hover { background: var(--accent-soft); }
+
+/* List rows */
+.event-row:hover { background: linear-gradient(90deg, var(--accent-soft), transparent 70%); box-shadow: inset 3px 0 0 var(--accent); }
+
+/* Reserve the calendar's height while events load, so the page does not jump from short to tall when switching from List to Calendar */
+.events-content { min-height: 680px; }
+@media (max-width: 760px) { .events-content { min-height: 520px; } }

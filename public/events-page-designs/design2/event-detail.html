@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Event details | Cornerstone</title>
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/detail.css">
+  <link rel="stylesheet" href="assets/theme-story.css">
+  <link rel="stylesheet" href="assets/detail5.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="/news">News</a>
+      <a href="/company-culture">Company + Culture</a>
+      <a class="active" href="index.html" aria-current="page">Events</a>
+      <a href="/people">People</a>
+      <a href="/departments">Departments</a>
+      <a href="/policies-resources">Policies + Resources</a>
+    </nav>
+  </header>
+
+  <main class="d5 detail-main">
+    <div class="d5-backdrop">
+      <article class="d5-page">
+        <div class="d5-article">
+          <div class="d5-crumbs">
+            <a class="back-link" id="backLink" href="index.html" title="Back"><span aria-hidden="true">←</span> Back to events</a>
+            <nav aria-label="Breadcrumb"><a href="/">Cornerstone</a> / <a href="index.html">Events</a> / <span>Event</span></nav>
+          </div>
+
+          <header class="d5-head">
+            <div class="detail-date" id="detailDate"></div>
+            <div class="d5-headtext">
+              <h1 id="eventTitle"></h1>
+              <div class="d5-lines">
+                <p><b>Starts:</b> <span id="hdStarts"></span></p>
+                <p><b>Ends:</b> <span id="hdEnds"></span></p>
+                <p><b>Location:</b> <span id="hdWhere"></span></p>
+              </div>
+            </div>
+          </header>
+
+          <figure class="d5-hero">
+            <div class="d5-heroimg"><img class="detail-banner" id="eventImage" alt=""></div>
+            <figcaption id="eventMeta" class="detail-meta"></figcaption>
+          </figure>
+
+          <div class="d5-cols">
+            <div class="d5-text">
+          <div class="detail-description" id="eventDescription"></div>
+          <div class="detail-registration" id="eventRegistration" hidden></div>
+          <section class="d5-author" aria-label="Event authors">
+            <p class="d5-label">Author</p>
+            <div class="author-list" id="eventAuthors"></div>
+          </section>
+          <section class="d5-topics" aria-label="Topics">
+            <p class="d5-label">Topics</p>
+            <ul class="d5-chips" id="eventTopics"></ul>
+          </section>
+          <p class="d5-feedback"><button type="button" class="d5-pill" id="feedbackBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5Z"/></svg> Send feedback</button></p>
+            </div>
+            <aside class="d5-side" aria-label="Event details and response">
+          
+            <div hidden aria-hidden="true"><span id="factDate"></span><span id="factTime"></span><span id="factLocation"></span></div>
+            <div class="action-card" id="rsvpCard">
+              <p class="card-eyebrow">Your response</p>
+              <h2>Will you attend?</h2>
+              <div class="rsvp-actions" role="group" aria-label="Choose your RSVP">
+                <button type="button" data-rsvp="Yes">Yes</button>
+                <button type="button" data-rsvp="Maybe">Maybe</button>
+                <button type="button" data-rsvp="No">No</button>
+              </div>
+              <p class="rsvp-message" id="rsvpMessage" role="status"></p>
+              <div class="attendee-summary" id="attendeeSummary">
+                <div class="attendee-avatars" id="attendeeAvatars" aria-hidden="true"></div>
+                <button class="attendee-overflow" id="attendeeOverflow" type="button"></button>
+                <span><strong id="attendeeCount"></strong> attending</span>
+              </div>
+              <a class="calendar-action" id="outlookSync" target="_blank" rel="noopener noreferrer">Add to calendar</a>
+            </div>
+            </aside>
+          </div>
+        </div>
+
+        <section class="related">
+          <h2>Related content</h2>
+          <div class="related-list" id="relatedEvents"></div>
+        </section>
+
+        <div class="d5-actionbar" role="group" aria-label="Reactions">
+          <button type="button" aria-pressed="false" aria-label="Like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 11v9H4v-9h3Zm0 0 4-7c1.7 0 2.5 1.2 2.2 2.8L12.6 10H19a1.6 1.6 0 0 1 1.6 1.9l-1.3 6.5A2 2 0 0 1 17.3 20H7"/></svg><span id="likeCount">8</span></button>
+          <span class="d5-div" aria-hidden="true"></span>
+          <button type="button" aria-label="Comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5Z"/></svg><span>0</span></button>
+          <span class="d5-div" aria-hidden="true"></span>
+          <button type="button" aria-pressed="false" aria-label="Favourite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m12 4 2.4 5 5.4.7-4 3.7 1 5.4-4.8-2.7-4.8 2.7 1-5.4-4-3.7 5.4-.7L12 4Z"/></svg></button>
+          <span class="d5-div" aria-hidden="true"></span>
+          <button type="button" id="shareBtn" aria-label="Copy link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 13v6h14v-6"/></svg></button>
+        </div>
+        <p class="d5-copied" id="copied" role="status"></p>
+        <div class="d5-comments"><div class="d5-comment"><span class="d5-me" aria-hidden="true">JD</span><input type="text" placeholder="Share your thoughts or questions…" aria-label="Write a comment"></div></div>
+      </article>
+    </div>
+    <p class="prototype-note">Design concept · Sample event information</p>
+  </main>
+
+  <dialog class="attendee-dialog" id="attendeeDialog" aria-labelledby="attendeeDialogTitle">
+    <div class="attendee-dialog-content">
+      <header class="attendee-dialog-header">
+        <div>
+          <h2 id="attendeeDialogTitle">People attending</h2>
+          <p id="attendeeDialogCount"></p>
+        </div>
+        <button class="attendee-dialog-close" type="button" aria-label="Close attendee list">×</button>
+      </header>
+      <p class="attendee-load-status" id="attendeeLoadStatus" role="status">Loading sample attendee profiles…</p>
+      <ul class="attendee-list" id="attendeeList"></ul>
+    </div>
+  </dialog>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/outlook-sync.js"></script>
+  <script src="assets/core.js"></script>
+  <script src="assets/detail.js"></script>
+  <script>
+    document.querySelectorAll(".d5-actionbar [aria-pressed]").forEach((b) => b.addEventListener("click", () => b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true"))));
+    document.getElementById("shareBtn").addEventListener("click", () => { navigator.clipboard.writeText(location.href); const m = document.getElementById("copied"); m.textContent = "Link copied"; setTimeout(() => { m.textContent = ""; }, 2000); });
+  </script>
+  <script>
+    (async () => {
+      const id = new URLSearchParams(location.search).get("id");
+      const event = id && await EventsKit.api.getEvent(id);
+      if (!event) return;
+      const topics = ["Events", /online|zoom/i.test(event.location) ? "Online" : "In person", event.allDay ? "Deadline" : "Meeting", event.rsvpRequired ? "RSVP required" : "Open to all"];
+      // Header lines: Starts / Ends / Location (shown like the SharePoint event header)
+      const day = (d) => EventsKit.dateOf(d).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+      const clock = (t) => { const [h, m] = t.split(":").map(Number); return ((h % 12) || 12) + ":" + String(m).padStart(2, "0") + (h < 12 ? "am" : "pm"); };
+      document.getElementById("hdStarts").textContent = event.allDay ? day(event.date) + " (all day)" : day(event.date) + " at " + clock(event.start);
+      document.getElementById("hdEnds").textContent = event.allDay ? day(event.endDate || event.date) : day(event.endDate || event.date) + " at " + clock(event.end) + " (America/New_York)";
+      document.getElementById("hdWhere").innerHTML = EventsKit.locationMarkup(event.location);
+      document.getElementById("eventTopics").innerHTML = topics.map((t) => "<li>" + t + "</li>").join("");
+    })();
+  </script>
+</body>
+</html>

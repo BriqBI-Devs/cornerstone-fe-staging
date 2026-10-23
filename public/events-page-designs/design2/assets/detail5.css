@@ -1,0 +1,136 @@
+/* Design 5 event detail: laid out like the Company + Culture story page in the React app.
+   A soft backdrop, one large white rounded card, a centered 840px article (breadcrumb, headline, author row, hero image with caption,
+   text, details + response cards, feedback pill), then related content, a reaction bar and a comment box. */
+.d5 { width: 100%; padding: 0; }
+.d5-backdrop { padding: 28px 20px 36px; background: var(--paper); }
+.d5-page { max-width: 1180px; margin: 0 auto; padding: 40px 40px 36px; border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(27, 42, 58, .06), 0 12px 32px -8px rgba(27, 42, 58, .12); }
+.d5-article { max-width: 840px; margin: 0 auto; }
+
+/* Breadcrumb with a back arrow */
+.d5-crumbs { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.d5-crumbs .back-link { display: inline-grid; place-items: center; width: 28px; height: 28px; margin: 0; border: 0; border-radius: 6px; background: none; color: var(--muted); font-size: 0; line-height: 1; text-decoration: none; transition: color .15s, background-color .15s; }
+.d5-crumbs .back-link span { font-size: 15px; }
+.d5-crumbs .back-link:hover { background: var(--tile); color: var(--link); }
+.d5-crumbs nav { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.d5-crumbs nav a { color: inherit; text-decoration: none; }
+.d5-crumbs nav a:hover { color: var(--link); text-decoration: underline; }
+.d5-crumbs nav span { color: var(--ink); }
+
+.d5-article h1 { margin: 0 0 18px; font-size: 28px; font-weight: 800; line-height: 1.3; letter-spacing: -.02em; }
+
+/* Author row */
+.d5-authors { margin-bottom: 28px; gap: 12px 28px; }
+.author { display: flex; align-items: center; gap: 12px; font-size: 13.5px; font-weight: 700; }
+.author small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; font-weight: 400; }
+.avatar { width: 38px; height: 38px; background: var(--navy); color: #fff; font-size: 13px; font-weight: 700; }
+
+/* Hero image with a centered caption (the date, time and place) */
+.d5-hero { margin: 0; }
+.d5-heroimg { overflow: hidden; aspect-ratio: 16 / 9; border-radius: 8px; background: var(--tile); }
+.d5-heroimg img { display: block; width: 100%; height: 100%; max-height: none; margin: 0; border-radius: 0; object-fit: cover; }
+.d5-hero .detail-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 0; margin: 10px 0 32px; color: var(--muted); font-size: 12.5px; text-align: center; }
+.d5-hero .detail-meta > span + span::before { content: "•"; margin: 0 10px; color: #c3cad4; }
+.d5-hero .detail-meta a { color: var(--link); }
+
+/* Text */
+.detail-description { max-width: none; color: var(--ink); font-size: 15px; line-height: 1.7; }
+.detail-description p { margin: 0 0 18px; }
+.detail-description p:first-child { font-size: 17px; font-weight: 600; }
+.detail-registration { margin: 20px 0; padding: 14px 16px; border-radius: 8px; background: var(--link-soft); font-size: 14px; text-align: left; }
+
+/* Details + response: two soft cards */
+.d5-info { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; align-items: start; margin-top: 28px; }
+.action-card { padding: 18px 20px; border: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: 8px; background: var(--tile); box-shadow: none; }
+.event-facts { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: start; }
+.detail-date { display: flex; flex-direction: column; align-items: center; overflow: hidden; width: 56px; padding: 0 0 6px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+.detail-date span { align-self: stretch; padding: 3px 0; background: var(--navy); color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .06em; text-align: center; text-transform: uppercase; }
+.detail-date strong { margin-top: 2px; color: var(--ink); font-size: 24px; font-weight: 800; line-height: 1.1; }
+.action-card h2 { margin: 0 0 10px; font-size: 15px; font-weight: 700; }
+.card-eyebrow { display: none; }
+.event-facts p { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; margin: 0; padding: 8px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.event-facts p span { color: var(--muted); }
+.event-facts a.calendar-action { display: flex; align-items: center; justify-content: center; height: 36px; margin-top: 10px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 600; text-decoration: none; }
+.event-facts a.calendar-action:hover { border-color: var(--navy); }
+.rsvp-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+.rsvp-actions button { height: 38px; border: 0; border-radius: 0; background: #fff; font-size: 13px; font-weight: 700; }
+.rsvp-actions button + button { border-left: 1px solid var(--line); }
+.rsvp-actions button:hover { background: var(--tile); }
+.rsvp-actions button.selected { background: var(--navy); color: #fff; box-shadow: inset 0 -3px 0 var(--accent); }
+
+/* Send feedback pill, right aligned */
+.d5-feedback { display: flex; justify-content: flex-end; margin: 32px 0 0; }
+.d5-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border: 0; border-radius: 999px; background: var(--tile); color: var(--ink-soft); font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: background-color .15s, color .15s; }
+.d5-pill:hover { background: var(--link-soft); color: var(--link); }
+.d5-pill svg { width: 16px; height: 16px; }
+
+/* Related content: three image cards under a divider */
+.related { margin-top: 44px; padding-top: 30px; border-top: 1px solid var(--line); }
+.related h2 { margin: 0 0 16px; font-size: 14px; font-weight: 700; }
+.related-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.related-card { overflow: visible; border: 0; border-radius: 0; background: none; box-shadow: none; text-decoration: none; }
+.related-card:hover { box-shadow: none; }
+
+/* Reaction bar and comments */
+.d5-actionbar { display: flex; align-items: center; justify-content: center; margin-top: 36px; padding: 6px; border-radius: 12px; background: var(--tile); }
+.d5-actionbar button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; border: 0; border-radius: 8px; background: none; color: var(--ink-soft); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.d5-actionbar button:hover { background: #fff; color: var(--link); }
+.d5-actionbar button[aria-pressed="true"] { color: var(--link); }
+.d5-actionbar svg { width: 20px; height: 20px; }
+.d5-div { width: 1px; height: 20px; background: var(--line); }
+.d5-copied { min-height: 18px; margin: 6px 0 0; color: var(--link); font-size: 12px; font-weight: 600; text-align: right; }
+.d5-comments { margin-top: 12px; padding: 24px 16px; border-radius: 12px; background: var(--tile); }
+.d5-comment { display: flex; align-items: center; gap: 12px; max-width: 700px; margin: 0 auto; padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.d5-me { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #b45309; color: #fff; font-size: 12px; font-weight: 700; }
+.d5-comment input { flex: 1; min-width: 0; border: 0; background: none; outline: none; font-size: 14px; }
+
+@media (max-width: 860px) {
+  .d5-backdrop { padding: 12px 0 24px; }
+  .d5-page { padding: 24px 16px; border-radius: 12px; }
+  .d5-article h1 { font-size: 22px; }
+  .d5-info { grid-template-columns: 1fr; }
+  .related-list { grid-template-columns: 1fr; gap: 22px; }
+  .d5-actionbar button { padding: 10px 14px; }
+}
+@media (max-width: 480px) { .event-facts { grid-template-columns: 1fr; } }
+
+/* Related cards: text lines up with the image edge, like the story page */
+.related-card img { border-radius: 8px; }
+.related-card .rc-date { padding: 12px 0 2px; }
+.related-card strong { padding: 0 0 4px; font-size: 14.5px; }
+.related-card:hover strong { color: var(--link); text-decoration: underline; }
+
+/* Wide header and content: text on the left, a details + response box on the right; the image and its caption stay centered */
+.d5-article { max-width: none; }
+.d5-article h1 { font-size: 30px; }
+.d5-hero { max-width: 760px; margin: 0 auto 28px; }
+.d5-hero .detail-meta { margin: 10px 0 0; }
+.d5-cols { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 40px; align-items: start; }
+.d5-text { min-width: 0; }
+.d5-text .detail-description { max-width: 720px; }
+.d5-side { position: sticky; top: 100px; display: grid; gap: 16px; }
+.event-facts { grid-template-columns: 56px minmax(0, 1fr); gap: 14px; }
+.event-facts p { grid-template-columns: 56px minmax(0, 1fr); }
+.d5-feedback { justify-content: flex-start; margin-top: 28px; }
+@media (max-width: 900px) { .d5-cols { grid-template-columns: 1fr; gap: 24px; } .d5-side { position: static; } }
+
+/* Author and topics sit under the text, like the story page */
+.d5-label { margin: 0 0 10px; color: var(--muted); font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.d5-author { margin-top: 32px; }
+.d5-author .author-list { gap: 12px 28px; }
+.d5-topics { margin-top: 28px; }
+.d5-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.d5-chips li { padding: 5px 10px; border-radius: 6px; background: var(--tile); font-size: 12px; font-weight: 600; }
+
+/* Header shows the event details: date tile, title, then Starts / Ends / Location lines (like the SharePoint event page) */
+.d5-head { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: start; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.d5-head .detail-date { margin-top: 2px; }
+.d5-headtext h1 { margin: 0 0 8px; }
+.d5-lines p { margin: 0 0 2px; color: var(--ink-soft); font-size: 12.5px; line-height: 1.5; overflow-wrap: anywhere; }
+.d5-lines b { font-weight: 600; color: var(--ink); }
+.d5-lines a { color: var(--link); text-underline-offset: 2px; }
+.d5-side .action-card { background: #fff; border-color: var(--line); }
+.d5-side #rsvpCard .calendar-action { display: flex; align-items: center; justify-content: center; height: 36px; margin-top: 14px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 600; text-decoration: none; }
+.d5-side #rsvpCard .calendar-action:hover { border-color: var(--navy); background: var(--tile); }
+
+/* Under the image: only the date and time (the location is already in the header) */
+.d5-hero .detail-meta > span:nth-child(n+2) { display: none; }

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Events | Cornerstone</title>
+  <link rel="stylesheet" href="assets/tokens.css">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/theme4.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Cornerstone home">CORNERSTONE</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="/news">News</a>
+      <a href="/company-culture">Company + Culture</a>
+      <a class="active" href="index.html" aria-current="page">Events</a>
+      <a href="/people">People</a>
+      <a href="/departments">Departments</a>
+      <a href="/policies-resources">Policies + Resources</a>
+    </nav>
+  </header>
+
+  <section class="band">
+    <div class="band-inner">
+      <div>
+        <h1 id="pageTitle">Events</h1>
+        <p>Search and filter every event. Results are paged.</p>
+      </div>
+      <nav class="view-switch" aria-label="Event view"><a href="index.html">Calendar</a><a class="active" href="list.html" aria-current="page">List</a></nav>
+    </div>
+  </section>
+
+  <main class="page">
+
+    <section class="panel" aria-label="Events">
+      <form class="toolbar" id="searchForm" role="search">
+        <label class="search-field">
+          <span class="sr-only">Search events</span>
+          <button type="submit" class="search-icon-btn" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+          <input id="searchInput" type="search" placeholder="Search events" autocomplete="off">
+          <kbd>⌘ K</kbd>
+        </label>
+        <div class="segment" id="dateSegment" role="group" aria-label="Filter by date">
+          <button type="button" data-date="future">Upcoming</button>
+          <button type="button" data-date="past">Past</button>
+          <button type="button" data-date="all">All</button>
+        </div>
+        <div class="spacer"></div>
+        <button class="text-button" id="clearFilters" type="button">Clear filters</button>
+      </form>
+
+      <div class="list-body">
+        <p class="results-summary" id="resultsSummary" role="status"></p>
+        <div id="listContent" aria-live="polite"></div>
+        <nav class="pager" id="pager" aria-label="Event pages" hidden></nav>
+      </div>
+    </section>
+    <p class="prototype-note">Design concept · Sample event information</p>
+  </main>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/core.js"></script>
+  <script src="assets/list.js"></script>
+</body>
+</html>

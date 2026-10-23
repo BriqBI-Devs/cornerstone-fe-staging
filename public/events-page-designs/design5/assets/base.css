@@ -60,3 +60,6 @@ button { cursor: pointer; }
   .hero-inner, .main-content { width: calc(100% - 28px); }
   .hero-inner { flex-direction: column; align-items: flex-start; }
 }
+
+/* Always reserve the scrollbar space, so switching between short and tall pages (Calendar <-> List) does not shift the layout sideways. */
+html { scrollbar-gutter: stable; }

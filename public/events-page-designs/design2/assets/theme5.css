@@ -1,0 +1,89 @@
+/* Design 5 landing (calendar + list): the same look as the event page, i.e. the Cornerstone React site.
+   Soft backdrop, one large white rounded card, Inter, 1px #e5e5e0 lines, navy selections with a yellow edge. */
+:root {
+  --navy: #1b2a3a; --navy-2: #2b3f57; --ink: #1b2a3a; --ink-soft: rgba(27, 42, 58, .72); --muted: rgba(27, 42, 58, .5);
+  --accent: #f5c518; --accent-soft: #fff6cc; --link: #1d4ed8; --link-soft: #eef3ff;
+  --paper: #f7f7f5; --panel: #ffffff; --tile: #f7f7f5; --line: #e5e5e0;
+  --radius: 8px; --radius-lg: 12px; --pill: 6px;
+  --shadow-card: none; --shadow-panel: 0 12px 32px -8px rgba(27, 42, 58, .14); --shadow-pop: 0 18px 44px -12px rgba(27, 42, 58, .3);
+  --font-ui: Inter, system-ui, sans-serif; --font-display: Inter, system-ui, sans-serif;
+}
+body { background: var(--paper); }
+.wordmark { font-family: Georgia, "Times New Roman", serif; letter-spacing: .06em; }
+.page { width: min(100% - 40px, 1180px); padding-top: 28px; }
+
+/* One large white card for the whole page */
+.ev5-card { margin: 0; border: 0; border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(27, 42, 58, .06), 0 12px 32px -8px rgba(27, 42, 58, .12); }
+.ev5-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 28px 18px; border-bottom: 0; }
+.ev5-head h1 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -.02em; }
+.ev5-head-right { display: flex; align-items: center; gap: 8px; }
+.ev5-view { display: inline-flex; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.ev5-view a, .ev5-icon { display: grid; place-items: center; width: 40px; height: 34px; color: var(--ink-soft); transition: background-color .15s, color .15s; }
+.ev5-view a + a { border-left: 1px solid var(--line); }
+.ev5-view a.active { background: var(--navy); color: #fff; }
+.ev5-view a:hover:not(.active), .ev5-icon:hover { background: var(--tile); color: var(--ink); }
+.ev5-icon { border: 1px solid var(--line); border-radius: 8px; }
+.ev5-view svg, .ev5-icon svg { width: 18px; height: 18px; }
+
+.ev5-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 28px 14px; border-bottom: 1px solid var(--line); }
+.ev5-bar .search-field { max-width: 280px; }
+.search-field { border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.search-field:focus-within { border-color: var(--navy); outline: 1px solid var(--navy); outline-offset: 0; }
+.button, .filter-wrap .button { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 600; transition: background-color .15s, border-color .15s; }
+.button svg { width: 16px; height: 16px; }
+.button:hover { border-color: var(--navy); background: var(--tile); }
+.ev5-period { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 16px 28px 12px; }
+.ev5-nav { display: flex; align-items: center; gap: 8px; }
+.ev5-nav h2 { margin: 0 0 0 8px; font-size: 18px; font-weight: 700; }
+.icon-control { display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: #fff; font-size: 17px; line-height: 1; }
+.icon-control:hover { background: var(--tile); border-color: var(--navy); }
+.ev5-period-right { display: flex; align-items: center; gap: 10px; }
+.events-content { min-height: 560px; padding: 0 28px 28px; }
+
+/* Month / Week: grey track, white selected segment with a yellow edge */
+.mode-switch { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; background: var(--tile); }
+.mode-switch button { min-width: 70px; height: 28px; padding: 0 12px; border: 0; border-radius: 6px; background: transparent; color: var(--ink-soft); font-size: 13px; font-weight: 600; transition: background-color .15s, color .15s; }
+.mode-switch button + button { border-left: 0; }
+.mode-switch button:hover:not(.active) { background: #ececE6; color: var(--ink); }
+.mode-switch button.active { background: #fff; color: var(--navy); box-shadow: 0 1px 2px rgba(27, 42, 58, .18); }
+.mode-switch button:focus-visible { outline: 2px solid var(--navy); outline-offset: 1px; }
+
+/* Month grid */
+.weekday, .week-head, .week-head > div:first-child { background: var(--tile); color: var(--ink-soft); }
+.weekday { padding: 10px 8px; border-bottom: 1px solid var(--line); font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.day-cell { background: #fff; }
+.day-cell.outside { background: #fafaf8; }
+.day-cell.outside .day-number { color: #a3a8ae; }
+.day-number { font-size: 13px; font-weight: 700; }
+.day-cell.today { background: #fff; }
+.day-cell.today .day-number { display: inline-grid; place-items: center; min-width: 26px; height: 26px; border-radius: 50%; background: var(--navy); color: #fff; }
+.calendar-event { border: 1px solid var(--line); border-left: 3px solid var(--navy); border-radius: 4px; background: #fff; color: var(--ink); font-size: 11px; }
+.day-cell .calendar-event:first-of-type { border-color: var(--navy); background: var(--navy); color: #fff; }
+.calendar-event:hover { background: var(--tile); color: var(--ink); }
+.day-cell .calendar-event:first-of-type:hover { background: var(--navy-2); color: #fff; }
+.multi-day-event, .week-all-day-row .week-all-day-event { border-radius: 4px; background: var(--navy); color: #fff; }
+.multi-day-event:hover { background: var(--navy-2); }
+.week-event { border-left-color: var(--navy); }
+
+/* List */
+.event-row:hover { background: var(--tile); }
+.segment { border-radius: 8px; }
+.segment button.active, .pager-btn.active { border-color: var(--navy); background: var(--navy); color: #fff; }
+.filter-count { background: var(--navy); color: #fff; }
+.text-button { color: var(--link); }
+.toolbar { padding: 0 28px 14px; border-bottom: 1px solid var(--line); }
+.list-body { padding: 14px 28px 28px; }
+.prototype-note { margin-top: 18px; }
+
+@media (max-width: 760px) {
+  .page { width: min(100% - 24px, 1180px); padding-top: 14px; }
+  .ev5-head, .ev5-bar, .ev5-period, .toolbar { padding-left: 16px; padding-right: 16px; }
+  .ev5-head h1 { font-size: 24px; }
+  .events-content { padding: 0 8px 14px; min-height: 420px; }
+  .list-body { padding: 12px 16px 20px; }
+}
+
+/* Filters and Sync to Outlook sit together on the right of the search row, as in the other designs */
+.ev5-bar { flex-wrap: wrap; }
+.ev5-bar-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+@media (max-width: 560px) { .ev5-bar-right { width: 100%; margin-left: 0; } .ev5-bar-right > * { flex: 1; } .ev5-bar-right .button { justify-content: center; width: 100%; } .ev5-bar .search-field { max-width: none; width: 100%; } }
