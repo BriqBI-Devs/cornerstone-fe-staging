@@ -1,5 +1,6 @@
 import { EllipsisVertical, ExternalLink, Folder, User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useFavorites, type FavItem } from "../../lib/useFavorites";
 import type { ResourceItem } from "./data";
 
 const FILE_BADGE_CLASSES: Record<Exclude<ResourceItem["kind"], "link" | "folder">, string> = {
@@ -49,6 +50,9 @@ export function ResourceRow({ item, onOpen }: { item: ResourceItem; onOpen?: () 
   const [menuOpen, setMenuOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const menuRef = useRef<HTMLDetailsElement>(null);
+  const { has, toggle } = useFavorites();
+  // Links to the section until files have real URLs.
+  const fav: FavItem = { id: `file-${item.title}`, tab: "files", title: item.title, to: "/policies-resources", meta: [item.kind.toUpperCase(), item.size, item.created && `Updated ${formatDate(item.created)}`].filter(Boolean).join(" · ") };
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -175,9 +179,11 @@ export function ResourceRow({ item, onOpen }: { item: ResourceItem; onOpen?: () 
               Open
             </a>
           )}
-          <button type="button" onClick={closeMenu} className={menuItemClass}>
-            Favourite
-          </button>
+          {isFile && (
+            <button type="button" onClick={(event) => { toggle(fav); closeMenu(event); }} className={menuItemClass}>
+              {has(fav.id) ? "Unfavourite" : "Favourite"}
+            </button>
+          )}
         </div>
       </details>
 

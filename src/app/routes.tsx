@@ -4,6 +4,7 @@ import { ComingSoonPage } from "../pages/coming-soon/ComingSoonPage";
 import { CompanyCulturePage } from "../pages/company-culture/CompanyCulturePage";
 import { StoryDetailPage } from "../pages/company-culture/StoryDetailPage";
 import { EventsPage } from "../pages/events/EventsPage";
+import { FavoritesPage } from "../pages/favorites/FavoritesPage";
 import { HomePage } from "../pages/home/HomePage";
 import { PeoplePage } from "../pages/people/PeoplePage";
 import { PoliciesResourcesPage } from "../pages/policies-resources/PoliciesResourcesPage";
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
       { path: "company-culture/:slug", element: <StoryDetailPage /> },
       { path: "events", element: <EventsPage /> },
       { path: "people", element: <PeoplePage /> },
+      { path: "favorites", element: <FavoritesPage /> },
       ...COMING_SOON_ROUTES.map((route) => ({
         path: `/${route.path}`,
         element: <ComingSoonPage title={route.title} />,
