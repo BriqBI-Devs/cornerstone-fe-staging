@@ -1,0 +1,38 @@
+
+/* Reactions and comments (same pattern as the Company + Culture story page): soft grey bar with divided buttons, then a grey comment area */
+.engage { margin-top: 24px; }
+.engage-bar { display: flex; align-items: center; justify-content: center; padding: 6px; border: 1px solid var(--line); border-radius: 12px; background: var(--tile); }
+.engage-bar button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 26px; border: 0; border-radius: 8px; background: none; color: #475569; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: background-color .15s, color .15s; }
+.engage-bar button:hover { background: #fff; color: var(--link); }
+.engage-bar button[aria-pressed="true"] { color: var(--link); }
+.engage-bar button[aria-pressed="true"] svg { fill: currentColor; }
+.engage-bar svg { width: 20px; height: 20px; }
+.engage-div { width: 1px; height: 20px; background: var(--line); }
+.engage-status { min-height: 18px; margin: 6px 0 0; color: var(--link); font-size: 11px; font-weight: 600; text-align: right; }
+.comments { margin-top: 6px; padding: 22px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--tile); }
+.comment-form, .comment-card { max-width: 700px; margin: 0 auto; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.comment-form { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
+.comment-form input { flex: 1; min-width: 0; border: 0; background: none; outline: none; font: inherit; font-size: 13px; }
+.comment-me, .comment-avatar { display: grid; flex: none; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #b45309; color: #fff; font-size: 11px; font-weight: 700; }
+.comment-list { display: grid; gap: 12px; max-width: 700px; margin: 14px auto 0; padding: 0; list-style: none; }
+.comment-card { padding: 14px 16px 10px; }
+.comment-head { display: flex; align-items: center; gap: 10px; }
+.comment-head strong { display: block; font-size: 12px; }
+.comment-head small { display: block; color: var(--muted); font-size: 10.5px; }
+.comment-text { margin: 10px 0 0; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.comment-foot { display: flex; align-items: center; gap: 12px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); }
+.comment-foot button { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; background: none; color: #475569; font: inherit; font-size: 11px; font-weight: 600; cursor: pointer; }
+.comment-foot button:hover, .comment-foot button[aria-pressed="true"] { color: var(--link); }
+.comment-foot svg { width: 15px; height: 15px; }
+.comment-foot button[aria-pressed="true"] svg { fill: currentColor; }
+@media (max-width: 640px) { .engage-bar button { flex: 1; justify-content: center; padding: 10px 6px; } .comments { padding: 14px 10px; } }
+
+.engage { margin-top: 24px; }
+
+/* Same look as design 1: tinted strip and comment area, white cards that fill the width */
+.engage-bar, .comments { border-color: #d9e1ec; background: #e9eef6; }
+.engage-div { background: #cdd7e5; }
+.comment-form, .comment-card { width: 100%; border-color: #d9e1ec; }
+.comment-form { margin: 0 auto; }
+.comment-card { margin: 0; }
+.comment-list { grid-template-columns: minmax(0, 1fr); width: 100%; }

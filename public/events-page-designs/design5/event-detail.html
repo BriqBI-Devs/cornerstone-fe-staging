@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="assets/tokens.css">
   <link rel="stylesheet" href="assets/base.css">
   <link rel="stylesheet" href="assets/detail.css">
+  <link rel="stylesheet" href="assets/engage.css">
 </head>
 <body>
   <header class="site-header">
@@ -82,6 +83,25 @@
       <h2>Related events</h2>
       <div class="suggested-list" id="relatedEvents"></div>
     </section>
+    <section class="engage" aria-label="Reactions and comments">
+        <div class="engage-bar" role="group" aria-label="Reactions">
+          <button type="button" id="likeBtn" aria-pressed="false" aria-label="Like"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 11v9H4v-9h3Zm0 0 4-7c1.7 0 2.5 1.2 2.2 2.8L12.6 10H19a1.6 1.6 0 0 1 1.6 1.9l-1.3 6.5A2 2 0 0 1 17.3 20H7"/></svg><span id="likeCount">8</span></button>
+          <span class="engage-div" aria-hidden="true"></span>
+          <button type="button" id="commentBtn" aria-label="Comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5Z"/></svg><span id="commentCount">0</span></button>
+          <span class="engage-div" aria-hidden="true"></span>
+          <button type="button" id="favBtn" aria-pressed="false" aria-label="Favourite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m12 4 2.4 5 5.4.7-4 3.7 1 5.4-4.8-2.7-4.8 2.7 1-5.4-4-3.7 5.4-.7L12 4Z"/></svg></button>
+          <span class="engage-div" aria-hidden="true"></span>
+          <button type="button" id="shareBtn" aria-label="Copy link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 13v6h14v-6"/></svg></button>
+        </div>
+        <p class="engage-status" id="engageStatus" role="status"></p>
+        <div class="comments">
+          <form class="comment-form" id="commentForm">
+            <span class="comment-me" aria-hidden="true">JD</span>
+            <input id="commentInput" type="text" placeholder="Share your thoughts or questions…" aria-label="Write a comment" autocomplete="off">
+          </form>
+          <ul class="comment-list" id="commentList"></ul>
+        </div>
+      </section>
     <p class="prototype-note">Design concept · Sample event information</p>
   </main>
 
@@ -102,5 +122,6 @@
   <script src="assets/data.js"></script>
   <script src="assets/outlook-sync.js"></script>
   <script src="assets/detail-page.js"></script>
+  <script src="assets/engage.js"></script>
 </body>
 </html>

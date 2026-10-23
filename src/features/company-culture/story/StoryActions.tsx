@@ -1,6 +1,9 @@
 import { Check, MessageCircle, Share, Star, ThumbsUp } from "lucide-react";
 import { useState } from "react";
+import { useFavorites } from "../../../lib/useFavorites";
 import type { StoryDetail } from "../data";
+import { storyHref } from "../data";
+import { formatStoryDate } from "../format";
 import { COMMENT_INPUT_ID } from "./comments/StoryCommentFeed";
 
 const button =
@@ -17,7 +20,8 @@ const goToComments = () => {
 export function StoryActions({ story }: { story: StoryDetail }) {
   // Local state only for now; the like and favourite requests go here once the backend exists.
   const [liked, setLiked] = useState(false);
-  const [favourite, setFavourite] = useState(false);
+  const { has, toggle } = useFavorites();
+  const favourite = has(story.slug);
   const [copied, setCopied] = useState(false);
   const copyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -37,7 +41,7 @@ export function StoryActions({ story }: { story: StoryDetail }) {
         {story.feed.length}
       </button>
       <Divider />
-      <button type="button" onClick={() => setFavourite(!favourite)} aria-pressed={favourite} aria-label="Favourite" className={button}>
+      <button type="button" onClick={() => toggle({ id: story.slug, tab: "content", sub: "pages", title: story.title, to: storyHref(story), meta: formatStoryDate(story.publishedAt), image: story.image, category: story.categoryKey })} aria-pressed={favourite} aria-label="Favourite" className={button}>
         <Star className={icon} fill={favourite ? "currentColor" : "none"} />
       </button>
       <Divider />

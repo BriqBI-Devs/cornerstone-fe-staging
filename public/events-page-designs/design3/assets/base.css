@@ -109,3 +109,6 @@ a.event-row:hover .cell-title { color: var(--link); }
   .search-field { width: 100%; }
   .event-row { grid-template-columns: 72px minmax(0, 1fr); column-gap: 14px; padding-right: 14px; padding-left: 14px; }
 }
+
+/* Always reserve the scrollbar space, so switching between short and tall pages (Calendar <-> List) does not shift the layout sideways. */
+html { scrollbar-gutter: stable; }

@@ -1,0 +1,11 @@
+/* Tokens for the event detail page: the Cornerstone React site (company story page) look. */
+:root {
+  --navy: #1b2a3a; --navy-2: #2b3f57; --ink: #1b2a3a; --ink-soft: rgba(27, 42, 58, .72); --muted: rgba(27, 42, 58, .5);
+  --accent: #f5c518; --accent-soft: #fff6cc; --link: #1d4ed8; --link-soft: #eef3ff;
+  --paper: #f7f7f5; --panel: #ffffff; --tile: #f7f7f5; --line: #e5e5e0;
+  --radius: 8px; --radius-lg: 12px; --pill: 6px;
+  --shadow-card: none; --shadow-panel: 0 12px 32px -8px rgba(27, 42, 58, .12); --shadow-pop: 0 18px 44px -12px rgba(27, 42, 58, .3);
+  --font-ui: Inter, system-ui, sans-serif; --font-display: Inter, system-ui, sans-serif;
+}
+body { background: var(--paper); }
+.wordmark { font-family: Georgia, "Times New Roman", serif; letter-spacing: .06em; }
