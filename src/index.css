@@ -38,3 +38,18 @@ body {
   font-family: var(--font-sans);
   color: var(--color-brand-navy);
 }
+
+/* A new row of the org chart drops in from above. */
+@keyframes org-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Faces on the org chart fade in. */
+@keyframes org-fade {
+  from {
+    opacity: 0;
+  }
+}

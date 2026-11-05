@@ -1,3 +1,4 @@
+import { TempNote } from "../../../../components/ui/TempNote";
 import { cn } from "../../../../lib/cn";
 import { buildMonthWeeks, MAX_VISIBLE_PER_DAY } from "../../helpers/calendar";
 import { formatEventDateTime, formatTimeRange } from "../../helpers/format";
@@ -5,6 +6,8 @@ import type { EventItem } from "../../types";
 import { CalendarEvent } from "./CalendarEvent";
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+// TEMP: the multi-day event that carries the review note.
+const TAGGED_EVENT_ID = "cornerstone-leadership-summit";
 
 interface MonthViewProps {
   month: Date;
@@ -81,6 +84,26 @@ export function MonthView({ month, events, today, onSelect, onShowDay }: MonthVi
               {event.allDay ? "All day" : `${formatTimeRange(event)}${event.dailySchedule ? " daily" : ""}`} · {event.title}
             </a>
           ))}
+
+          {/* TEMP: review note on one multi-day event. Remove with TAGGED_EVENT_ID when it is no longer needed. */}
+          {week.bars
+            .filter((bar) => bar.event.id === TAGGED_EVENT_ID)
+            .map(({ event, firstDay, lane }) => (
+              <TempNote
+                key={event.id}
+                title="Why two formats?"
+                className="absolute z-[4] w-[320px] max-w-[85vw]"
+                style={{ top: 31 + lane * 20 + 18 + 12, left: `calc(${(firstDay / 7) * 100}% + 8px)` }}
+              >
+                <p>
+                  <strong>Multi-day events</strong> stay on a single line with the time and the event name, because they
+                  take up a lot of space across the calendar.
+                </p>
+                <p>
+                  <strong>Single-day events</strong> show the time on the first line and the event name on the second.
+                </p>
+              </TempNote>
+            ))}
         </div>
       ))}
     </div>

@@ -7,7 +7,9 @@ import { EventDetailPage } from "../pages/events/EventDetailPage";
 import { EventsPage } from "../pages/events/EventsPage";
 import { FavoritesPage } from "../pages/favorites/FavoritesPage";
 import { HomePage } from "../pages/home/HomePage";
+import { OrgChartPage } from "../pages/people/OrgChartPage";
 import { PeoplePage } from "../pages/people/PeoplePage";
+import { PersonProfilePage } from "../pages/people/PersonProfilePage";
 import { PoliciesResourcesPage } from "../pages/policies-resources/PoliciesResourcesPage";
 import { PolicyCategoryPage } from "../pages/policies-resources/PolicyCategoryPage";
 
@@ -29,6 +31,8 @@ export const router = createBrowserRouter([
       { path: "events", element: <EventsPage /> },
       { path: "events/:id", element: <EventDetailPage /> },
       { path: "people", element: <PeoplePage /> },
+      { path: "people/:id", element: <PersonProfilePage /> },
+      { path: "people/:id/org-chart", element: <OrgChartPage /> },
       { path: "favorites", element: <FavoritesPage /> },
       ...COMING_SOON_ROUTES.map((route) => ({
         path: `/${route.path}`,
