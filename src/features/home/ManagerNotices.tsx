@@ -15,7 +15,7 @@ export function ManagerNotices() {
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <h2 className="text-sm font-semibold text-brand-navy">Manager Monday</h2>
+          <h2 className="text-sm font-semibold text-brand-navy">Manager’s Corner</h2>
           <Badge variant="accent">Managers only</Badge>
         </div>
         <p className="mt-1 text-sm text-brand-navy/75">

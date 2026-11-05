@@ -14,6 +14,23 @@
 
   --radius-card: 0.5rem;
   --shadow-card: none;
+
+  /* Events pages (design 5): bg-ev-navy, text-ev-muted, shadow-ev-panel, ... */
+  --color-ev-navy: #15273c;
+  --color-ev-navy-2: #223a57;
+  --color-ev-ink: #14202e;
+  --color-ev-ink-soft: #44546a;
+  --color-ev-muted: #6b7a8d;
+  --color-ev-accent: #f5c518;
+  --color-ev-accent-soft: #fff4c9;
+  --color-ev-link: #2757d6;
+  --color-ev-link-soft: #e8eefc;
+  --color-ev-paper: #f5f3ee;
+  --color-ev-tile: #f6f5f1;
+  --color-ev-line: #e4e1d9;
+  --shadow-ev-card: 0 1px 2px rgb(21 39 60 / 6%);
+  --shadow-ev-panel: 0 12px 32px rgb(21 39 60 / 10%);
+  --shadow-ev-pop: 0 18px 44px rgb(21 39 60 / 24%);
 }
 
 body {
