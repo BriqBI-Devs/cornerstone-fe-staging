@@ -70,7 +70,7 @@ export function OrgRow({ ids, selectedId, focused, width, perView, offset, onPic
         )}
 
         <div className="-mx-1 -mt-1 -mb-2 overflow-hidden px-1 pb-2 pt-1">
-          <div role="list" className="flex gap-2 transition-transform duration-[250ms] ease-[ease] motion-reduce:transition-none" style={{ transform: `translateX(${x}px)` }}>
+          <div role="list" className="flex gap-2 transition-transform duration-500 ease-[cubic-bezier(0.22,0.61,0.36,1)] will-change-transform motion-reduce:transition-none" style={{ transform: `translateX(${x}px)` }}>
             {ids.map((id) => (
               <OrgCard
                 key={id}
