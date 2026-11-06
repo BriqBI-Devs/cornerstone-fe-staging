@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>News | Cornerstone</title>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Tokens taken from the Cornerstone app (src/index.css) */
+  :root {
+    --navy: #1b2a3a;
+    --link: #1d4ed8;
+    --yellow: #f5c518;
+    --subtle: #f7f7f5;
+    --border: #e5e5e0;
+    --t75: rgba(27, 42, 58, 0.75);
+    --t60: rgba(27, 42, 58, 0.6);
+    --t55: rgba(27, 42, 58, 0.55);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--navy); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  h1, h2, h3, p { margin: 0; }
+  button { font: inherit; color: inherit; }
+
+  /* ---------- Cornerstone header (same as the app's PublicLayout) ---------- */
+  .site-top { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; padding: 16px 32px 8px; border-bottom: 1px solid var(--border); font-size: 12px; color: rgba(27,42,58,0.65); }
+  .site-top .date { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .site-top .logo { justify-self: center; }
+  .site-top .logo img { display: block; height: 24px; width: auto; }
+  .site-top .tools { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
+  .site-top .tools svg { width: 16px; height: 16px; color: rgba(27,42,58,0.75); }
+  .avatar { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 11px; font-weight: 600; }
+  .site-search { padding: 12px 32px; border-bottom: 1px solid var(--border); }
+  .site-search label { display: flex; align-items: center; gap: 8px; max-width: 600px; margin: 0 auto; padding: 8px 16px; border-radius: 999px; background: var(--subtle); }
+  .site-search svg { width: 16px; height: 16px; flex-shrink: 0; color: rgba(27,42,58,0.5); }
+  .site-search input { width: 100%; border: 0; outline: 0; background: transparent; font: 400 14px "Inter", sans-serif; color: var(--navy); }
+  .site-search input::placeholder { color: rgba(27,42,58,0.5); }
+  .masthead { padding: 24px 16px; border-bottom: 1px solid var(--navy); text-align: center; }
+  .masthead .name { font-family: Georgia, "Times New Roman", Times, serif; font-size: 48px; font-weight: 700; letter-spacing: 0.025em; line-height: 1.1; }
+  .masthead .sub { margin-top: 4px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(27,42,58,0.55); }
+  .nav { border-bottom: 1px solid var(--border); }
+  .nav ul { display: flex; justify-content: center; gap: 32px; max-width: 1280px; margin: 0 auto; padding: 12px 32px; list-style: none; overflow-x: auto; scrollbar-width: none; }
+  .nav a { display: block; padding-bottom: 4px; border-bottom: 2px solid transparent; font-size: 12px; font-weight: 600; letter-spacing: 0.025em; text-transform: uppercase; white-space: nowrap; }
+  .nav a.is-active { border-bottom-color: var(--yellow); }
+
+  .page { max-width: 1280px; margin: 0 auto; padding: 32px 32px 64px; }
+  .ph { background: #e4edf7; overflow: hidden; }
+  .ph img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .cat { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--link); }
+
+  /* ---------- Page header ---------- */
+  .page-head { margin-bottom: 24px; }
+  .page-head h1 { margin-bottom: 8px; font-size: 34px; font-weight: 800; letter-spacing: -0.03em; }
+  .page-head p { max-width: 560px; font-size: 14.5px; line-height: 1.65; color: var(--t60); }
+
+  /* ---------- Hero: big images that scroll across, the next one peeking in ---------- */
+  .hero { position: relative; }
+  .reel { position: relative; display: flex; gap: 16px; padding: 0 7%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .reel::-webkit-scrollbar { display: none; }
+  .shot { position: relative; display: block; flex: 0 0 100%; aspect-ratio: 16 / 7; min-height: 320px; overflow: hidden; border-radius: 10px; background: var(--navy); scroll-snap-align: center; opacity: 0.45; transition: opacity 0.5s ease; }
+  .shot.is-current { opacity: 1; }
+  .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .shot::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(27,42,58,0.85) 0%, rgba(27,42,58,0) 55%); }
+  .shot .cap { position: absolute; z-index: 1; left: 0; bottom: 0; max-width: 720px; padding: 0 36px 32px; color: #fff; }
+  .shot .tag { display: inline-block; padding: 3px 9px; border-radius: 3px; background: var(--yellow); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--navy); }
+  .shot h2 { margin-top: 12px; font-size: clamp(24px, 3vw, 38px); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; }
+  .shot:hover h2 { text-decoration: underline; }
+  .shot .when { margin-top: 10px; font-size: 13px; color: rgba(255,255,255,0.7); }
+
+  .nav-btn { position: absolute; z-index: 2; top: 50%; display: grid; place-items: center; width: 44px; height: 44px; margin-top: -22px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 4px 14px rgba(27,42,58,0.28); cursor: pointer; transition: transform 0.15s; }
+  .nav-btn:hover { transform: scale(1.06); }
+  .nav-btn svg { width: 20px; height: 20px; }
+  .nav-btn.prev { left: 1.5%; }
+  .nav-btn.next { right: 1.5%; }
+  .count { position: absolute; z-index: 2; right: calc(7% + 20px); top: 18px; padding: 4px 10px; border-radius: 999px; background: rgba(27,42,58,0.65); font-size: 12px; font-weight: 600; color: #fff; }
+
+  /* ---------- All news: a centred heading, one plain line to filter on (count + category link, search), then a two-column list ---------- */
+  .all { margin-top: 56px; }
+  .sec-title { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+  .sec-title::before { content: ""; width: 4px; height: 20px; border-radius: 2px; background: var(--yellow); }
+  .sec-sub { margin-top: 6px; font-size: 14px; color: var(--t60); }
+
+  .all .sec-title { flex-direction: column; justify-content: center; gap: 12px; font-size: 30px; font-weight: 800; letter-spacing: -0.03em; }
+  .all .sec-title::before { width: 40px; height: 4px; }
+  .all .sec-sub { margin-top: 8px; font-size: 15px; text-align: center; }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 30px; padding: 12px 0; border-top: 2px solid var(--navy); border-bottom: 1px solid var(--border); }
+  .bar .find { flex: 1; max-width: 460px; height: 42px; padding: 0 16px; border: 1px solid var(--border); border-radius: 999px; background: var(--subtle); }
+  .bar .find:focus-within { border-color: var(--link); background: #fff; }
+  /* A plain dropdown: every category is an option, and the browser handles long lists */
+  .select { position: relative; flex-shrink: 0; }
+  .select select { height: 42px; min-width: 220px; padding: 0 42px 0 18px; appearance: none; border: 1px solid var(--border); border-radius: 999px; background: #fff; font: 600 14px "Inter", sans-serif; color: var(--navy); cursor: pointer; transition: border-color 0.15s; }
+  .select select:hover, .select select:focus { border-color: var(--navy); }
+  .select svg { position: absolute; right: 16px; top: 50%; width: 15px; height: 15px; transform: translateY(-50%); pointer-events: none; color: var(--t60); }
+  .bar + .list { margin-top: 0; border-top: 0; }
+
+  .find { display: flex; align-items: center; gap: 8px; width: 340px; height: 44px; padding: 0 18px; border: 1px solid var(--border); border-radius: 999px; background: var(--subtle); }
+  .find:focus-within { border-color: var(--link); background: #fff; }
+  .find svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--t55); }
+  .find input { width: 100%; border: 0; outline: 0; background: transparent; font: 400 14px "Inter", sans-serif; color: var(--navy); }
+  .find input::placeholder { color: var(--t55); }
+  .total { font-size: 13px; white-space: nowrap; color: var(--t55); }
+  .total b { color: var(--navy); font-weight: 800; }
+
+  /* The list runs in two columns: thumbnail, headline, and the date under it */
+  .list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; margin-top: 30px; border-top: 2px solid var(--navy); text-align: left; }
+  .line { position: relative; display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: 18px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .line .ph { aspect-ratio: 3 / 2; border-radius: 6px; }
+  .line .ph img { transition: transform 0.35s ease; }
+  .line:hover .ph img { transform: scale(1.05); }
+  .line h3 { display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-size: 17px; font-weight: 700; line-height: 1.38; letter-spacing: -0.012em; }
+  .line h3 a::after { content: ""; position: absolute; inset: 0; }
+  .line:hover h3 { color: var(--link); }
+  .line .when { margin-top: 8px; font-size: 13px; font-weight: 600; color: var(--t55); }
+
+  .empty { padding: 40px 0; font-size: 14px; color: var(--t60); }
+  .more { display: block; margin: 28px auto 0; padding: 11px 26px; border: 1px solid var(--border); border-radius: 6px; background: #fff; font-size: 13.5px; font-weight: 600; color: var(--link); cursor: pointer; }
+  .more:hover { border-color: var(--link); background: rgba(29, 78, 216, 0.06); }
+  .more[hidden], .empty[hidden] { display: none; }
+
+  @media (max-width: 1000px) {
+    .list { column-gap: 32px; }
+    .line { grid-template-columns: 104px minmax(0, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .site-top { padding: 12px 16px 8px; }
+    .site-top .date { font-size: 11px; }
+    .site-search { padding: 12px 16px; }
+    .masthead .name { font-size: 30px; }
+    .masthead { padding: 12px 16px; }
+    .nav ul { justify-content: flex-start; gap: 24px; padding: 12px 16px; }
+    .page { padding: 20px 16px 48px; }
+    .page-head h1 { font-size: 26px; }
+    .reel { padding: 0 5%; gap: 10px; }
+    .shot { aspect-ratio: 4 / 5; min-height: 0; }
+    .shot .cap { padding: 0 18px 20px; }
+    .nav-btn { display: none; }
+    .count { right: calc(5% + 12px); top: 12px; }
+    .all .sec-title { font-size: 24px; }
+    .bar { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 18px; }
+    .bar .find { max-width: none; }
+    .select, .select select { width: 100%; }
+    .list { grid-template-columns: 1fr; }
+    .line { grid-template-columns: 96px minmax(0, 1fr); gap: 14px; padding: 14px 0; }
+    .line h3 { font-size: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- Cornerstone header -->
+<header>
+  <div class="site-top">
+    <span class="date" id="today"></span>
+    <a class="logo" href="/" aria-label="Cornerstone home"><img src="../../cornerstone-assets/L+m-logo.avif" alt="L+M" onerror="this.style.display='none'"></a>
+    <div class="tools">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Apps"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Notifications"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span class="avatar" aria-label="Jordan Davis">JD</span>
+    </div>
+  </div>
+  <div class="site-search">
+    <label>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="text" placeholder="Search Cornerstone — people, files, news..." aria-label="Search Cornerstone">
+    </label>
+  </div>
+  <div class="masthead">
+    <h1 class="name"><a href="/">CORNERSTONE</a></h1>
+    <p class="sub">The L+M Daily</p>
+  </div>
+  <nav class="nav" aria-label="Main">
+    <ul>
+      <li><a class="is-active" href="index.html" aria-current="page">News</a></li>
+      <li><a href="/company-culture">Company + Culture</a></li>
+      <li><a href="/events">Events</a></li>
+      <li><a href="/people">People</a></li>
+      <li><a href="/departments">Departments</a></li>
+      <li><a href="/policies-resources">Policies + Resources</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+
+  <header class="page-head">
+    <h1>News</h1>
+    <p>Company announcements, milestones and stories from across L+M, with the latest at the top and everything else below, newest first.</p>
+  </header>
+
+  <section class="hero" id="hero" aria-roledescription="carousel" aria-label="Top stories">
+    <button class="nav-btn prev" id="prev" type="button" aria-label="Previous story">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <button class="nav-btn next" id="next" type="button" aria-label="Next story">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+    <span class="count" id="count" aria-hidden="true"></span>
+    <div class="reel" id="reel"></div>
+  </section>
+
+  <section class="all" aria-label="All news">
+    <h2 class="sec-title">All news</h2>
+    <p class="sec-sub">Everything published across L+M, newest first.</p>
+    <div class="bar">
+      <label class="find">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="text" placeholder="Search news" aria-label="Search news">
+      </label>
+      <label class="select">
+        <select id="cat" aria-label="Filter by category"></select>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </label>
+    </div>
+    <div class="list" id="list"></div>
+    <p class="empty" id="empty" hidden>No news matches your search.</p>
+    <button class="more" id="more" type="button">Load more news</button>
+  </section>
+
+
+
+
+</main>
+
+<script src="../data.js"></script>
+<script>
+  const IMG = "../../company&culture/assets/images/";
+  const $ = (id) => document.getElementById(id);
+
+  $("today").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+
+  // Top stories (auto-scroll)
+  const { TOP, NEWS, CATS } = window.NEWS_DATA.list; // the content comes from ../data.js, shared by every design
+
+  // All news, newest first
+
+  const PAGE = 8;
+
+  /* ---------- Hero: one big image at a time, centred, with the neighbours peeking in ---------- */
+  const reel = $("reel"), hero = $("hero");
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let current = 0, timer = null;
+
+  reel.innerHTML = TOP.map((s, i) => `
+    <a class="shot" href="article.html?s=${s.slug}" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${TOP.length}">
+      <img src="${IMG}${s.img}" alt="" ${i > 1 ? 'loading="lazy"' : ""}>
+      <div class="cap">
+        <span class="tag">${s.cat}</span>
+        <h2>${s.title}</h2>
+        <p class="when">${s.date}</p>
+      </div>
+    </a>`).join("");
+
+  const shots = [...reel.children];
+  const centreOf = (el) => el.offsetLeft - (reel.clientWidth - el.offsetWidth) / 2;
+
+  function mark(i) {
+    current = i;
+    shots.forEach((el, n) => el.classList.toggle("is-current", n === i));
+    $("count").textContent = `${i + 1} / ${TOP.length}`;
+  }
+  function go(i) {
+    const to = (i + TOP.length) % TOP.length; // wrap around at either end
+    reel.scrollTo({ left: centreOf(shots[to]), behavior: to === 0 && current === TOP.length - 1 ? "auto" : "smooth" });
+    mark(to);
+  }
+  // Follow the reel when the user swipes or drags it
+  let settle;
+  reel.addEventListener("scroll", () => {
+    clearTimeout(settle);
+    settle = setTimeout(() => {
+      const nearest = shots.reduce((a, el, n) => (Math.abs(centreOf(el) - reel.scrollLeft) < Math.abs(centreOf(shots[a]) - reel.scrollLeft) ? n : a), 0);
+      if (nearest !== current) mark(nearest);
+    }, 80);
+  }, { passive: true });
+
+  $("prev").addEventListener("click", () => go(current - 1));
+  $("next").addEventListener("click", () => go(current + 1));
+
+  const start = () => { if (!reduceMotion) { clearInterval(timer); timer = setInterval(() => go(current + 1), 4500); } };
+  const stop = () => clearInterval(timer);
+  ["mouseenter", "focusin", "touchstart"].forEach((ev) => hero.addEventListener(ev, stop, { passive: true }));
+  ["mouseleave", "focusout"].forEach((ev) => hero.addEventListener(ev, start));
+  mark(0);
+  start();
+
+  /* ---------- All news ---------- */
+  let category = "All", query = "", visible = PAGE;
+
+  // Dates read like "Sept 7"
+  const shortDate = (d) => d.replace(/^Sep\b/, "Sept");
+
+  function render() {
+    const q = query.trim().toLowerCase();
+    const list = NEWS.filter((n) => (category === "All" || n.cat === category) && (!q || n.title.toLowerCase().includes(q)));
+    $("list").innerHTML = list.slice(0, visible).map((n) => `
+      <article class="line">
+        <div class="ph"><img src="${IMG}${n.img}" alt="" loading="lazy"></div>
+        <div>
+          <h3><a href="article.html?s=${n.slug}">${n.title}</a></h3>
+          <p class="when">${shortDate(n.date)}</p>
+        </div>
+      </article>`).join("");
+    $("empty").hidden = list.length > 0;
+    $("more").hidden = visible >= list.length;
+  }
+
+  // A plain dropdown: every shared category is an option
+  $("cat").innerHTML = CATS.map((c) => `<option value="${c}">${c === "All" ? "All categories" : c}</option>`).join("");
+  $("cat").addEventListener("change", (e) => { category = e.target.value; visible = PAGE; render(); });
+  $("q").addEventListener("input", (e) => { query = e.target.value; visible = PAGE; render(); });
+  $("more").addEventListener("click", () => { visible += PAGE; render(); });
+  render();
+</script>
+</body>
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>News | Cornerstone</title>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Tokens taken from the Cornerstone app (src/index.css) */
+  :root {
+    --navy: #1b2a3a;
+    --link: #1d4ed8;
+    --yellow: #f5c518;
+    --subtle: #f7f7f5;
+    --border: #e5e5e0;
+    --t75: rgba(27, 42, 58, 0.75);
+    --t70: rgba(27, 42, 58, 0.7);
+    --t60: rgba(27, 42, 58, 0.6);
+    --t55: rgba(27, 42, 58, 0.55);
+    --t45: rgba(27, 42, 58, 0.45);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--navy); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  h1, h2, h3, p, ul { margin: 0; padding: 0; }
+  ul { list-style: none; }
+  button { font: inherit; color: inherit; }
+  svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- Cornerstone header (same as the app's PublicLayout) ---------- */
+  .site-top { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; padding: 16px 32px 8px; border-bottom: 1px solid var(--border); font-size: 12px; color: rgba(27,42,58,0.65); }
+  .site-top .date { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .site-top .logo { justify-self: center; }
+  .site-top .logo img { display: block; height: 24px; width: auto; }
+  .site-top .icons { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
+  .site-top .icons svg { width: 16px; height: 16px; color: rgba(27,42,58,0.75); }
+  .avatar { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 11px; font-weight: 600; }
+  .site-search { padding: 12px 32px; border-bottom: 1px solid var(--border); }
+  .site-search label { display: flex; align-items: center; gap: 8px; max-width: 600px; margin: 0 auto; padding: 8px 16px; border-radius: 999px; background: var(--subtle); }
+  .site-search svg { width: 16px; height: 16px; flex-shrink: 0; color: rgba(27,42,58,0.5); }
+  .site-search input { width: 100%; border: 0; outline: 0; background: transparent; font: 400 14px "Inter", sans-serif; color: var(--navy); }
+  .site-search input::placeholder { color: rgba(27,42,58,0.5); }
+  .masthead { padding: 24px 16px; border-bottom: 1px solid var(--navy); text-align: center; }
+  .masthead .name { font-family: Georgia, "Times New Roman", Times, serif; font-size: 48px; font-weight: 700; letter-spacing: 0.025em; line-height: 1.1; }
+  .masthead .sub { margin-top: 4px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(27,42,58,0.55); }
+  .nav { border-bottom: 1px solid var(--border); }
+  .nav ul { display: flex; justify-content: center; gap: 32px; max-width: 1280px; margin: 0 auto; padding: 12px 32px; overflow-x: auto; scrollbar-width: none; }
+  .nav a { display: block; padding-bottom: 4px; border-bottom: 2px solid transparent; font-size: 12px; font-weight: 600; letter-spacing: 0.025em; text-transform: uppercase; white-space: nowrap; }
+  .nav a.is-active { border-bottom-color: var(--yellow); }
+
+  /* ---------- The page: a grey backdrop with a white page box floating in the middle ---------- */
+  .backdrop { background: var(--subtle); padding: 32px 16px 48px; }
+  .sheet { max-width: 1180px; margin: 0 auto; padding: 40px 40px; border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(27,42,58,0.06), 0 12px 32px -8px rgba(27,42,58,0.12); }
+  .sheet > article { max-width: 840px; margin: 0 auto; } /* the story only; comment cards are articles too and must fill their column */
+
+  /* Story header: back arrow, breadcrumb, title, author */
+  .crumbs { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .back { flex-shrink: 0; padding: 4px; border: 0; background: none; color: var(--t45); cursor: pointer; transition: color 0.15s; }
+  .back:hover { color: var(--link); }
+  .back svg { display: block; width: 14px; height: 14px; stroke-width: 2; }
+  .crumbs nav { min-width: 0; font-size: 11px; font-weight: 700; line-height: 1.7; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t45); }
+  .crumbs nav a:hover { color: var(--link); text-decoration: underline; }
+  .crumbs nav .here { color: var(--navy); }
+  h1 { margin-bottom: 18px; font-size: 28px; font-weight: 800; line-height: 1.3; letter-spacing: -0.02em; }
+  .author { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+  .author .who { display: grid; place-items: center; flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; background: var(--navy); font-size: 13px; font-weight: 700; color: #fff; }
+  .author .name { font-size: 13.5px; font-weight: 700; }
+  .author .pub { margin-top: 2px; font-size: 12px; color: var(--t45); }
+
+  /* Hero picture */
+  figure { margin: 0; }
+  .hero { aspect-ratio: 16 / 9; overflow: hidden; border-radius: 8px; background: var(--subtle); }
+  .hero img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  figcaption { margin: 10px 0 32px; text-align: center; font-size: 12.5px; color: var(--t45); }
+
+  /* Body copy */
+  .body { display: grid; gap: 18px; font-size: 15px; line-height: 1.7; }
+  .body .lead { font-size: 17px; font-weight: 600; }
+
+  .topics { margin-top: 36px; }
+  .topics h2 { margin-bottom: 12px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t45); }
+  .topics ul { display: flex; flex-wrap: wrap; gap: 8px; }
+  .topics li { padding: 5px 10px; border-radius: 6px; background: var(--subtle); font-size: 12px; font-weight: 600; }
+
+  .feedback-row { display: flex; justify-content: flex-end; margin-top: 32px; }
+  .feedback-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border: 0; border-radius: 999px; background: var(--subtle); font-size: 14px; font-weight: 500; color: var(--t70); cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .feedback-btn:hover { background: rgba(29,78,216,0.1); color: var(--link); }
+  .feedback-btn svg { width: 16px; height: 16px; }
+
+  /* Related content */
+  .related { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+  .related h2 { margin-bottom: 16px; font-size: 14px; font-weight: 700; }
+  .related-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+  .rel .ph { aspect-ratio: 16 / 10; overflow: hidden; border-radius: 8px; background: var(--subtle); }
+  .rel .ph img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .rel .t { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; margin-top: 10px; overflow: hidden; font-size: 13.5px; font-weight: 700; line-height: 1.4; }
+  .rel:hover .t { text-decoration: underline; }
+  .rel .m { margin-top: 6px; font-size: 11.5px; color: var(--t45); }
+  .rel .m b { font-weight: 600; color: var(--link); }
+
+  /* Like / comment / favourite / share bar */
+  .actions { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 40px; padding: 6px; border-radius: 12px; background: var(--subtle); }
+  .act { display: flex; flex: none; align-items: center; justify-content: center; gap: 8px; padding: 10px 24px; border: 0; border-radius: 8px; background: none; font-size: 14px; font-weight: 600; color: var(--t70); cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .act:hover { background: #fff; color: var(--link); }
+  .act[aria-pressed="true"] { color: var(--link); }
+  .act[aria-pressed="true"] svg { fill: currentColor; }
+  .sep { width: 1px; height: 20px; background: var(--border); }
+  .copied { position: absolute; right: 8px; top: 100%; margin-top: 6px; font-size: 12px; font-weight: 600; color: var(--link); }
+  .copied[hidden] { display: none; }
+
+  /* Comments */
+  .comments { margin-top: 24px; padding: 24px; border-radius: 12px; background: var(--subtle); }
+  .comments-in { display: flex; flex-direction: column; gap: 16px; max-width: 700px; margin: 0 auto; }
+  .compose { display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+  .compose input { width: 100%; border: 0; outline: 0; background: transparent; font: 400 14px "Inter", sans-serif; color: var(--navy); }
+  .compose input::placeholder { color: rgba(27,42,58,0.5); }
+  .av { display: grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: #e4edf7; font-size: 13px; font-weight: 700; color: var(--navy); }
+  .av.sm { width: 32px; height: 32px; font-size: 11px; }
+  .feed-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .feed-bar label { display: flex; align-items: center; gap: 6px; }
+  .feed-bar svg { width: 16px; height: 16px; stroke-width: 2; color: var(--t60); }
+  .feed-bar input { width: 128px; border: 0; outline: 0; background: transparent; font: 400 13px "Inter", sans-serif; color: var(--navy); }
+  .feed-bar input::placeholder { color: var(--navy); }
+  .sort { position: relative; }
+  .sort select { padding-right: 16px; appearance: none; border: 0; outline: 0; background: transparent; font: 600 13px "Inter", sans-serif; color: var(--navy); cursor: pointer; }
+  .sort svg { position: absolute; right: 0; width: 14px; height: 14px; pointer-events: none; color: var(--navy); }
+  .cmt { overflow: hidden; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+  .cmt-main { padding: 16px; }
+  .cmt-head { display: flex; align-items: center; gap: 10px; }
+  .cmt-head .n { font-size: 13px; font-weight: 700; }
+  .cmt-head .d { font-size: 12px; color: var(--t55); }
+  .cmt p.text { margin-top: 12px; font-size: 14px; line-height: 1.6; }
+  .cmt .count { margin-top: 12px; font-size: 12px; color: var(--t55); }
+  .cmt .likebar { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .like { display: flex; align-items: center; gap: 6px; padding: 0; border: 0; background: none; font-size: 12px; font-weight: 600; color: var(--t70); cursor: pointer; }
+  .like:hover, .like[aria-pressed="true"] { color: var(--link); }
+  .like svg { width: 16px; height: 16px; }
+  .like[aria-pressed="true"] svg { fill: currentColor; }
+  .reply { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--subtle); }
+  .reply input { width: 100%; padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; outline: 0; background: #fff; font: 400 13px "Inter", sans-serif; color: var(--navy); }
+  .reply input:focus { border-color: var(--link); }
+  .end { padding-top: 8px; text-align: center; font-size: 12px; color: var(--t60); }
+
+  /* Feedback dialog */
+  dialog { width: min(460px, calc(100vw - 32px)); margin: auto; padding: 0; border: 1px solid var(--border); border-radius: 8px; color: var(--navy); }
+  dialog::backdrop { background: rgba(27,42,58,0.45); }
+  dialog form { padding: 24px; }
+  dialog h2 { margin-bottom: 8px; font-size: 17px; font-weight: 700; }
+  dialog .hint { margin-bottom: 16px; font-size: 13px; line-height: 1.55; color: var(--t60); }
+  dialog textarea { display: block; width: 100%; min-height: 120px; padding: 10px 12px; resize: vertical; border: 1px solid var(--border); border-radius: 6px; outline: 0; font: 400 14px "Inter", sans-serif; color: var(--navy); }
+  dialog textarea:focus { border-color: var(--link); }
+  dialog textarea.bad { border-color: #b91c1c; }
+  .fb-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin-top: 6px; font-size: 12px; color: var(--t45); }
+  .fb-meta .err { font-weight: 600; color: #b91c1c; }
+  .fb-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+  .btn { padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; background: #fff; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+  .btn:hover { background: var(--subtle); }
+  .btn.primary { border-color: var(--navy); background: var(--navy); color: #fff; }
+  .btn.primary:hover { background: rgba(27,42,58,0.9); }
+
+  [hidden] { display: none !important; }
+  .nf { padding: 8px 0 16px; }
+  .nf p { margin-bottom: 14px; font-size: 14px; color: var(--t60); }
+  .nf a { font-size: 14px; font-weight: 600; color: var(--link); }
+  .nf a:hover { text-decoration: underline; }
+
+  @media (max-width: 760px) {
+    .site-top { padding: 12px 16px 8px; }
+    .site-top .date { font-size: 11px; }
+    .site-search { padding: 12px 16px; }
+    .masthead .name { font-size: 30px; }
+    .masthead { padding: 12px 16px; }
+    .nav ul { justify-content: flex-start; gap: 24px; padding: 12px 16px; }
+    .backdrop { padding: 16px 8px 32px; }
+    .sheet { padding: 28px 16px; }
+    .crumbs { align-items: flex-start; margin-bottom: 16px; }
+    h1 { margin-bottom: 16px; font-size: 22px; }
+    .author { margin-bottom: 20px; }
+    .related-grid { grid-template-columns: 1fr; }
+    .actions { margin-top: 32px; }
+    .act { flex: 1; padding: 10px 4px; }
+    .comments { padding: 24px 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- Cornerstone header -->
+<header>
+  <div class="site-top">
+    <span class="date" id="today"></span>
+    <a class="logo" href="/" aria-label="Cornerstone home"><img src="../../cornerstone-assets/L+m-logo.avif" alt="L+M" onerror="this.style.display='none'"></a>
+    <div class="icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Apps"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Notifications"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span class="avatar" aria-label="Jordan Davis">JD</span>
+    </div>
+  </div>
+  <div class="site-search">
+    <label>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="text" placeholder="Search Cornerstone — people, files, news..." aria-label="Search Cornerstone">
+    </label>
+  </div>
+  <div class="masthead">
+    <div class="name"><a href="/">CORNERSTONE</a></div>
+    <p class="sub">The L+M Daily</p>
+  </div>
+  <nav class="nav" aria-label="Main">
+    <ul>
+      <li><a class="is-active" href="index.html">News</a></li>
+      <li><a href="/company-culture">Company + Culture</a></li>
+      <li><a href="/events">Events</a></li>
+      <li><a href="/people">People</a></li>
+      <li><a href="/departments">Departments</a></li>
+      <li><a href="/policies-resources">Policies + Resources</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="backdrop">
+  <div class="sheet">
+
+    <div class="nf" id="nf" hidden>
+      <h1>That story couldn't be found.</h1>
+      <p>It may have been moved or removed.</p>
+      <a href="index.html">← Back to News</a>
+    </div>
+
+    <article>
+      <header>
+        <div class="crumbs">
+          <button class="back" id="back" type="button" aria-label="Go back">
+            <svg class="i" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+          </button>
+          <nav aria-label="Breadcrumb">
+            <a href="/">Cornerstone</a> / <a href="index.html">News</a> / <span class="here" id="crumbCat"></span>
+          </nav>
+        </div>
+
+        <h1 id="title"></h1>
+
+        <div class="author">
+          <span class="who" id="who"></span>
+          <div>
+            <p class="name" id="aname"></p>
+            <p class="pub" id="pub"></p>
+          </div>
+        </div>
+      </header>
+
+      <figure>
+        <div class="hero"><img id="heroImg" src="" alt=""></div>
+        <figcaption id="cap"></figcaption>
+      </figure>
+
+      <div class="body" id="bodyBox"></div>
+
+      <section class="topics" aria-label="Topics">
+        <h2>Topics</h2>
+        <ul id="topicList"></ul>
+      </section>
+
+      <div class="feedback-row">
+        <button class="feedback-btn" id="fbOpen" type="button">
+          <svg class="i" viewBox="0 0 24 24" style="stroke-width: 2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Send feedback
+        </button>
+      </div>
+    </article>
+
+    <section class="related" aria-label="Related content">
+      <h2>Related content</h2>
+      <div class="related-grid" id="relGrid"></div>
+    </section>
+
+    <div class="actions" role="group" aria-label="Story actions">
+      <button class="act" id="like" type="button" aria-pressed="false" aria-label="Like">
+        <svg class="i" viewBox="0 0 24 24"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>
+        <span id="likeN">0</span>
+      </button>
+      <span class="sep" aria-hidden="true"></span>
+      <button class="act" id="goComments" type="button" aria-label="Comments">
+        <svg class="i" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+        <span id="commentN">0</span>
+      </button>
+      <span class="sep" aria-hidden="true"></span>
+      <button class="act" id="fav" type="button" aria-pressed="false" aria-label="Favourite">
+        <svg class="i" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </button>
+      <span class="sep" aria-hidden="true"></span>
+      <button class="act" id="share" type="button" aria-label="Copy link">
+        <svg class="i" id="shareIcon" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></svg>
+      </button>
+      <span class="copied" id="copied" role="status" hidden>Link copied</span>
+    </div>
+
+    <section class="comments" aria-label="Comments">
+      <div class="comments-in">
+        <form class="compose" id="compose">
+          <span class="av">JD</span>
+          <input id="commentInput" type="text" placeholder="Share your thoughts or questions…" aria-label="Write a comment" autocomplete="off">
+        </form>
+
+        <div class="feed-bar">
+          <label>
+            <svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input id="feedQ" type="text" placeholder="Search feed" aria-label="Search feed">
+          </label>
+          <label class="sort">
+            Sort by
+            <select id="sort"><option value="date">Post date</option><option value="reactions">Most reactions</option></select>
+            <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </label>
+        </div>
+
+        <div id="feed" style="display: contents"></div>
+        <p class="end" id="end"></p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<dialog id="fb">
+  <form method="dialog" id="fbForm">
+    <div id="fbAsk">
+      <h2>Send feedback</h2>
+      <p class="hint">Help make this page more useful. Feedback is visible only to the admins and the author.</p>
+      <textarea id="fbText" maxlength="255" aria-label="Feedback" placeholder="For example, ‘content needs to be updated’ or ‘there is a spelling mistake’"></textarea>
+      <div class="fb-meta"><span class="err" id="fbErr" role="alert"></span><span><span id="fbLeft">255</span> characters remaining</span></div>
+      <div class="fb-foot">
+        <button class="btn" id="fbCancel" type="button">Cancel</button>
+        <button class="btn primary" type="submit">Send</button>
+      </div>
+    </div>
+    <div id="fbDone" hidden>
+      <h2>Thanks for your feedback</h2>
+      <p class="hint">It is visible only to the admins and the author of this page.</p>
+      <button class="btn primary" id="fbClose" type="button">Done</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="../data.js"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  $("today").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+
+  /* ---------- Show the story named in the address: article.html?s=<slug> (the content is in ../data.js) ---------- */
+  const D = window.NEWS_DATA;
+  const escText = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const wanted = new URLSearchParams(location.search).get("s");
+  const story = D ? D.getStoryDetail(wanted || D.stories[0].slug) : undefined; // no address: show the first story
+
+  if (!story) {
+    document.title = "Story not found | Cornerstone";
+    $("nf").hidden = false;
+    document.querySelectorAll("article, .related, .actions, .comments").forEach((el) => (el.hidden = true));
+  } else {
+    document.title = story.title + " | Cornerstone";
+    $("crumbCat").textContent = D.categoryTitle(story.categoryKey);
+    $("title").textContent = story.title;
+    $("who").textContent = story.author.initials;
+    $("aname").textContent = story.author.name;
+    $("pub").textContent = "Published " + D.longDate(story.publishedAt) + " · " + story.readTime;
+    $("heroImg").src = story.image;
+    $("heroImg").alt = story.title;
+    $("cap").textContent = story.title;
+    $("bodyBox").innerHTML = '<p class="lead">' + escText(story.description) + "</p>" + story.body.map((p) => "<p>" + escText(p) + "</p>").join("");
+    $("topicList").innerHTML = story.topics.map((t) => "<li>" + escText(t) + "</li>").join("");
+    $("likeN").textContent = story.likes;
+    $("relGrid").innerHTML = story.related.map((x) => `
+      <a class="rel" href="${D.storyHref(x)}">
+        <div class="ph"><img src="${x.image}" alt="" loading="lazy"></div>
+        <p class="t">${escText(x.title)}</p>
+        <p class="m">In <b>${escText(D.categoryTitle(x.categoryKey))}</b> on ${D.longDate(x.publishedAt)}</p>
+      </a>`).join("");
+  }
+
+  // Go back to the news list (or the previous page, if there is one)
+  $("back").addEventListener("click", () => { history.length > 1 ? history.back() : (location.href = "index.html"); });
+
+  /* ---------- Like, favourite, share ---------- */
+  const LIKES = story ? story.likes : 0;
+  let liked = false;
+  $("like").addEventListener("click", () => {
+    liked = !liked;
+    $("like").setAttribute("aria-pressed", liked);
+    $("likeN").textContent = LIKES + (liked ? 1 : 0);
+  });
+  $("fav").addEventListener("click", () => $("fav").setAttribute("aria-pressed", $("fav").getAttribute("aria-pressed") !== "true"));
+
+  const SHARE = $("shareIcon").innerHTML;
+  const CHECK = '<polyline points="20 6 9 17 4 12"/>';
+  $("share").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(location.href); } catch (e) { /* the link is still shown as copied in this mockup */ }
+    $("shareIcon").innerHTML = CHECK;
+    $("copied").hidden = false;
+    setTimeout(() => { $("shareIcon").innerHTML = SHARE; $("copied").hidden = true; }, 2000);
+  });
+  $("goComments").addEventListener("click", () => {
+    $("commentInput").scrollIntoView({ behavior: "smooth", block: "center" });
+    $("commentInput").focus({ preventScroll: true });
+  });
+
+  /* ---------- Feedback dialog ---------- */
+  const fb = $("fb");
+  const resetFb = () => { $("fbText").value = ""; $("fbText").classList.remove("bad"); $("fbErr").textContent = ""; $("fbLeft").textContent = 255; $("fbAsk").hidden = false; $("fbDone").hidden = true; };
+  $("fbOpen").addEventListener("click", () => fb.showModal());
+  $("fbCancel").addEventListener("click", () => fb.close());
+  $("fbClose").addEventListener("click", () => fb.close());
+  fb.addEventListener("close", resetFb);
+  fb.addEventListener("click", (e) => { if (e.target === fb) fb.close(); }); // click on the dark area closes it
+  $("fbText").addEventListener("input", (e) => { $("fbLeft").textContent = 255 - e.target.value.length; e.target.classList.remove("bad"); $("fbErr").textContent = ""; });
+  $("fbForm").addEventListener("submit", (e) => {
+    e.preventDefault(); // nothing is sent in this mockup
+    if ($("fbText").value.trim()) { $("fbAsk").hidden = true; $("fbDone").hidden = false; }
+    else { $("fbText").classList.add("bad"); $("fbErr").textContent = "Please add a few words."; }
+  });
+
+  /* ---------- Comments: post, search, sort, like ---------- */
+  const ME = "Jordan Davis";
+  const initials = (name) => name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  const esc = (t) => t.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const when = (iso) => {
+    const d = new Date(iso);
+    const day = d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }).replace(" ", "").toLowerCase();
+    return day + " at " + time;
+  };
+
+  let comments = story ? story.feed.map((c) => ({ id: c.id, author: c.author, at: c.postedAt, text: c.text, reactions: c.reactions })) : []; // empty until a story has comments
+  const likedComments = new Set();
+  const LIKE_ICON = '<svg class="i" viewBox="0 0 24 24"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>';
+
+  function drawFeed() {
+    const q = $("feedQ").value.trim().toLowerCase();
+    const byReactions = $("sort").value === "reactions";
+    const shown = comments
+      .filter((c) => (c.author + " " + c.text).toLowerCase().includes(q))
+      .sort((a, b) => (byReactions ? b.reactions - a.reactions : b.at.localeCompare(a.at)));
+    $("feed").innerHTML = shown.map((c) => {
+      const isLiked = likedComments.has(c.id), n = c.reactions + (isLiked ? 1 : 0);
+      return `
+      <article class="cmt">
+        <div class="cmt-main">
+          <div class="cmt-head"><span class="av sm">${initials(c.author)}</span><div><p class="n">${esc(c.author)}</p><p class="d">${when(c.at)}</p></div></div>
+          <p class="text">${esc(c.text)}</p>
+          ${n > 0 ? `<p class="count">${n} ${n === 1 ? "reaction" : "reactions"}</p>` : ""}
+          <div class="likebar"><button class="like" type="button" data-id="${c.id}" aria-pressed="${isLiked}">${LIKE_ICON}Like</button></div>
+        </div>
+        <div class="reply"><span class="av sm">${initials(ME)}</span><input placeholder="Leave a reply…" aria-label="Reply to ${esc(c.author)}"></div>
+      </article>`;
+    }).join("");
+    $("end").textContent = shown.length === 0 ? "No comments yet" : "End of results";
+    $("commentN").textContent = comments.length;
+  }
+
+  $("compose").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const text = $("commentInput").value.trim();
+    if (!text) return;
+    comments.unshift({ id: "new-" + Date.now(), author: ME, at: new Date().toISOString(), text, reactions: 0 });
+    $("commentInput").value = "";
+    drawFeed();
+  });
+  $("feedQ").addEventListener("input", drawFeed);
+  $("sort").addEventListener("change", drawFeed);
+  $("feed").addEventListener("click", (e) => {
+    const b = e.target.closest(".like");
+    if (!b) return;
+    likedComments.has(b.dataset.id) ? likedComments.delete(b.dataset.id) : likedComments.add(b.dataset.id);
+    drawFeed();
+  });
+  drawFeed();
+</script>
+</body>
+</html>
