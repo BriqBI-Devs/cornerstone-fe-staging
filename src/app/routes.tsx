@@ -1,17 +1,21 @@
 import { createBrowserRouter } from "react-router-dom";
 import { PublicLayout } from "../layouts/PublicLayout";
+import { AdminPage } from "../pages/admin/AdminPage";
 import { ComingSoonPage } from "../pages/coming-soon/ComingSoonPage";
 import { CompanyCulturePage } from "../pages/company-culture/CompanyCulturePage";
 import { StoryDetailPage } from "../pages/company-culture/StoryDetailPage";
+import { EventDetailPage } from "../pages/events/EventDetailPage";
 import { EventsPage } from "../pages/events/EventsPage";
 import { FavoritesPage } from "../pages/favorites/FavoritesPage";
 import { HomePage } from "../pages/home/HomePage";
+import { NewsPage } from "../pages/news/NewsPage";
+import { OrgChartPage } from "../pages/people/OrgChartPage";
 import { PeoplePage } from "../pages/people/PeoplePage";
+import { PersonProfilePage } from "../pages/people/PersonProfilePage";
 import { PoliciesResourcesPage } from "../pages/policies-resources/PoliciesResourcesPage";
 import { PolicyCategoryPage } from "../pages/policies-resources/PolicyCategoryPage";
 
 const COMING_SOON_ROUTES: { path: string; title: string }[] = [
-  { path: "news", title: "News" },
   { path: "departments", title: "Departments" },
   { path: "documents", title: "Documents" },
 ];
@@ -26,7 +30,12 @@ export const router = createBrowserRouter([
       { path: "company-culture", element: <CompanyCulturePage /> },
       { path: "company-culture/:slug", element: <StoryDetailPage /> },
       { path: "events", element: <EventsPage /> },
+      { path: "events/:id", element: <EventDetailPage /> },
       { path: "people", element: <PeoplePage /> },
+      { path: "people/:id", element: <PersonProfilePage /> },
+      { path: "people/:id/org-chart", element: <OrgChartPage /> },
+      { path: "news", element: <NewsPage /> },
+      { path: "admin", element: <AdminPage /> },
       { path: "favorites", element: <FavoritesPage /> },
       ...COMING_SOON_ROUTES.map((route) => ({
         path: `/${route.path}`,

@@ -1,12 +1,18 @@
-import { Bell, LayoutGrid, Search } from "lucide-react";
+import { Bell, LayoutGrid, Search, Settings } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Avatar } from "../components/ui/Avatar";
+import { TempNote } from "../components/ui/TempNote";
+import { getPersonById } from "../features/people/data";
 import { cn } from "../lib/cn";
 import { useClickOutside } from "../lib/useClickOutside";
 import { useDateAndWeather } from "../lib/useDateAndWeather";
 import { AppLauncherPanel } from "./AppLauncherPanel";
 import { NotificationsPanel } from "./NotificationsPanel";
+import { ProfilePanel } from "./ProfilePanel";
+
+// Until sign-in exists, the signed-in person is fixed: person 8 in the people directory (/people/8).
+const CURRENT_USER_ID = 8;
 
 const NAV_ITEMS = [
   { to: "/news", label: "News" },
@@ -37,9 +43,11 @@ const FOOTER_COLUMNS = [
 ];
 
 export function PublicLayout() {
+  const currentUser = getPersonById(CURRENT_USER_ID)!;
   const dateAndWeather = useDateAndWeather();
   const [appsOpen, setAppsOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const { pathname } = useLocation();
   const isHome = pathname === "/";
 
@@ -60,6 +68,8 @@ export function PublicLayout() {
   const notificationsRef = useRef<HTMLDivElement>(null);
   useClickOutside(appsRef, () => setAppsOpen(false));
   useClickOutside(notificationsRef, () => setNotificationsOpen(false));
+  const profileRef = useRef<HTMLDivElement>(null);
+  useClickOutside(profileRef, () => setProfileOpen(false));
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-clip">
@@ -99,7 +109,49 @@ export function PublicLayout() {
               <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-brand-accent md:-right-0.5 md:-top-0.5" />
               {notificationsOpen && <NotificationsPanel />}
             </div>
-            <Avatar name="Jordan Davis" size="sm" />
+            {/* Gear before the profile picture: opens the admin dashboard. Shown to everyone until sign-in decides who is an admin. */}
+            <div className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
+              <NavLink
+                to="/admin"
+                aria-label="Admin dashboard"
+                title="Admin dashboard"
+                className={({ isActive }) =>
+                  cn(
+                    "flex h-9 w-9 items-center justify-center hover:text-brand-navy md:h-7 md:w-7",
+                    isActive ? "text-brand-link" : "text-brand-navy/75",
+                  )
+                }
+              >
+                <Settings className="h-4 w-4" />
+              </NavLink>
+              {/* TEMP: points at the gear while the admin dashboard is new; once closed it stays closed in this browser. */}
+              <TempNote
+                title="New! Admin panel options"
+                storageKey="admin-panel-note-shown"
+                arrow="top"
+                arrowOffset={237}
+                className="absolute right-0 top-full z-20 mt-3 w-[260px] max-w-[calc(100vw-2rem)]"
+              />
+            </div>
+            <div ref={profileRef} className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
+              <button
+                onClick={() => setProfileOpen((open) => !open)}
+                aria-label="Profile menu"
+                aria-haspopup="menu"
+                aria-expanded={profileOpen}
+                className="flex items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-link"
+              >
+                <Avatar name={currentUser.name} src={currentUser.photo} size="sm" />
+              </button>
+              {profileOpen && (
+                <ProfilePanel
+                  name={currentUser.name}
+                  photo={currentUser.photo}
+                  profilePath={`/people/${currentUser.id}`}
+                  onClose={() => setProfileOpen(false)}
+                />
+              )}
+            </div>
           </div>
         </div>
 
