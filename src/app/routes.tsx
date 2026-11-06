@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { PublicLayout } from "../layouts/PublicLayout";
+import { AdminPage } from "../pages/admin/AdminPage";
 import { ComingSoonPage } from "../pages/coming-soon/ComingSoonPage";
 import { CompanyCulturePage } from "../pages/company-culture/CompanyCulturePage";
 import { StoryDetailPage } from "../pages/company-culture/StoryDetailPage";
@@ -15,7 +16,6 @@ import { PoliciesResourcesPage } from "../pages/policies-resources/PoliciesResou
 import { PolicyCategoryPage } from "../pages/policies-resources/PolicyCategoryPage";
 
 const COMING_SOON_ROUTES: { path: string; title: string }[] = [
-  { path: "admin", title: "Admin dashboard" },
   { path: "departments", title: "Departments" },
   { path: "documents", title: "Documents" },
 ];
@@ -35,6 +35,7 @@ export const router = createBrowserRouter([
       { path: "people/:id", element: <PersonProfilePage /> },
       { path: "people/:id/org-chart", element: <OrgChartPage /> },
       { path: "news", element: <NewsPage /> },
+      { path: "admin", element: <AdminPage /> },
       { path: "favorites", element: <FavoritesPage /> },
       ...COMING_SOON_ROUTES.map((route) => ({
         path: `/${route.path}`,

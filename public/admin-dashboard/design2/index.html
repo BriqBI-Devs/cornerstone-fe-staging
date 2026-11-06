@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin Console | Cornerstone</title>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Admin Console, design 2 ("Option D"): a top navbar that stays at the top, a left sidebar that stays in place while
+     the page scrolls, and the content centred in the middle. Colors are the Cornerstone tokens (src/index.css)
+     plus the tints used in the design. */
+  :root {
+    --ink: #1b2a3a;
+    --navy: #17233b;
+    --line: #e6e8ec;
+    --soft: #f8f9fc;
+    --muted: #6b7280;
+    --faint: #98a1b0;
+    --tint: #fdf3da;      /* pale yellow: the active sidebar row and the active tab */
+    --tint-ink: #5a4300;
+    --yellow: #f5c518;
+    --link: #1d4ed8;
+    --danger: #ce4a38;
+    --top: 64px;          /* height of the top navbar */
+    --side: 272px;        /* width of the sidebar */
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--ink); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  h1, h2, h3, p, ul { margin: 0; padding: 0; }
+  ul { list-style: none; }
+  svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top navbar: always at the top ---------- */
+  .topbar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 20px; height: var(--top); padding: 0 24px; border-bottom: 1px solid var(--line); background: #fff; }
+  .burger { display: none; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 10px; background: none; }
+  .burger:hover { background: var(--soft); }
+  .brand { display: flex; align-items: center; gap: 14px; flex: 1 1 0; min-width: 0; }
+  .brand img { display: block; width: auto; height: 26px; }
+  .brand i { width: 1px; height: 24px; background: #d5d9e0; }
+  .brand .cc { font: italic 600 21px Georgia, "Times New Roman", serif; color: #2b7071; }
+  .gsearch { display: flex; flex: 0 1 480px; align-items: center; gap: 10px; height: 40px; margin: 0; padding: 0 14px; border: 1px solid #e9eaee; border-radius: 10px; background: var(--soft); color: var(--faint); }
+  .gsearch:focus-within { border-color: var(--link); background: #fff; }
+  .gsearch input { width: 100%; border: 0; outline: 0; background: transparent; font-size: 14px; color: var(--ink); }
+  .gsearch input::placeholder { color: var(--faint); }
+  .tools { display: flex; align-items: center; justify-content: flex-end; gap: 6px; flex: 1 1 0; min-width: 0; }
+  .ico { position: relative; display: grid; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 10px; background: none; color: #3a3f4c; transition: background 0.15s; }
+  .ico:hover { background: var(--soft); }
+  .ico.on { background: var(--navy); color: #fff; }
+  .ico .dot { position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border: 2px solid #fff; border-radius: 50%; background: var(--danger); }
+  .exit { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; border-radius: 10px; background: var(--navy); color: #fff; font-size: 13px; font-weight: 600; transition: opacity 0.15s; }
+  .exit:hover { opacity: 0.88; }
+  .av { display: grid; place-items: center; width: 36px; height: 36px; margin-left: 8px; border-radius: 50%; background: #d0d4e0; font-size: 12px; font-weight: 600; color: #6b7280; }
+
+  /* ---------- Sidebar (stays in place) + centred content ---------- */
+  .layout { display: grid; grid-template-columns: var(--side) minmax(0, 1fr); align-items: start; }
+  .side { position: sticky; top: var(--top); height: calc(100vh - var(--top)); overflow-y: auto; padding: 20px 14px 32px; border-right: 1px solid var(--line); background: var(--soft); overscroll-behavior: contain; }
+  .side-head { padding: 0 8px 14px; }
+  .side-head h2 { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+  /* floating note beside the sidebar's scrollbar, vertically centred, arrow points at the sidebar */
+  .nav-pop { position: fixed; z-index: 20; left: calc(var(--side) + 14px); top: calc(50% + var(--top) / 2); transform: translateY(-50%); display: flex; align-items: flex-start; gap: 10px; width: 236px; padding: 14px 10px 14px 12px; border: 1px solid var(--line); border-left: 3px solid var(--yellow); border-radius: 10px; background: #fff; box-shadow: 0 10px 28px rgba(23,35,59,0.14); color: var(--ink); }
+  /* little pointer on the left edge, aimed at the sidebar */
+  .nav-pop::before { content: ""; position: absolute; left: -9px; top: 50%; width: 14px; height: 14px; transform: translateY(-50%) rotate(45deg); border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #fff; }
+  .nav-pop .arr { width: 30px; height: 30px; padding: 6px; border-radius: 50%; background: var(--tint); color: #8a6d0b; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .nav-pop .txt { min-width: 0; }
+  .nav-pop b { display: block; font-size: 13px; font-weight: 700; line-height: 1.3; }
+  .nav-pop p { margin-top: 4px; font-size: 12px; line-height: 1.5; color: var(--muted, #5b6272); }
+  .nav-pop button { display: grid; place-items: center; width: 22px; height: 22px; margin-left: auto; border: 0; border-radius: 6px; background: none; color: var(--faint); font-size: 17px; line-height: 1; cursor: pointer; }
+  .nav-pop button:hover { background: var(--soft); color: var(--ink); }
+  @media (max-width: 960px) { .nav-pop { display: none; } }
+  .sec + .sec { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); }
+  .sec-t { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px; border: 0; border-radius: 8px; background: none; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); }
+  .sec-t:hover { background: #eef0f6; }
+  .sec-t svg.i { width: 15px; height: 15px; transition: transform 0.15s; }
+  .sec-t[aria-expanded="false"] svg.i { transform: rotate(-90deg); }
+  .grp { margin: 4px 0 8px; }
+  .grp-t { padding: 6px 8px 4px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6a7182; }
+  .item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 12px; border-radius: 6px; font-size: 14px; color: #1c253e; transition: background 0.15s; }
+  .item:hover { background: #eef0f6; }
+  .item.on { background: var(--tint); font-weight: 600; color: var(--tint-ink); box-shadow: inset 3px 0 0 var(--yellow); }
+  .item em { padding-left: 6px; font-size: 11px; font-style: normal; font-weight: 600; white-space: nowrap; color: #7a6420; }
+
+  .main { min-width: 0; min-height: calc(100vh - var(--top)); }
+  .main-in { max-width: 880px; margin: 0 auto; }   /* the content sits in the middle of the space beside the sidebar */
+  .crumbs { display: flex; flex-wrap: wrap; gap: 4px 8px; font-size: 13px; color: #707984; }
+  .crumbs a:hover { color: var(--link); text-decoration: underline; }
+  .crumbs .sep { color: #b4bac4; }
+  .main h1 { margin-top: 10px; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .lead { margin-top: 8px; max-width: 680px; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+
+  /* header band: a soft pale-yellow wash behind the breadcrumb, title and tabs */
+  .band { padding: 34px 48px 0; border-bottom: 1px solid var(--line); background: #fff; }
+  .band.no-tabs { padding-bottom: 32px; }
+  .titlerow { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+  .titlerow h1 { margin: 0; }
+  .t-ic { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid #f1e3b0; border-radius: 14px; background: #fff; box-shadow: 0 4px 12px rgba(138,109,11,0.12); color: #8a6d0b; flex-shrink: 0; }
+  .t-ic svg.i { width: 23px; height: 23px; }
+  .body-wrap { padding: 30px 48px 72px; }
+  .topbar { box-shadow: 0 6px 18px rgba(23,35,59,0.05); }
+  .item .lbl { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .item .lbl svg.i { width: 17px; height: 17px; color: #7d8697; transition: color 0.15s; }
+  .item:hover .lbl svg.i { color: var(--ink); }
+  .item.on .lbl svg.i { color: #8a6d0b; }
+  .item { padding: 8px 12px; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* Tabs: in a row under the title; the open one is pale yellow, as in the design */
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 26px; padding-bottom: 14px; }
+  .tab { padding: 8px 15px; border: 0; border-radius: 999px; background: none; font-size: 14px; font-weight: 500; color: #8791a0; transition: background 0.15s, color 0.15s; }
+  .tab:hover { background: rgba(255,255,255,0.8); color: var(--ink); }
+  .tab[aria-selected="true"] { background: #fff; font-weight: 600; color: var(--tint-ink); box-shadow: 0 1px 4px rgba(138,109,11,0.2), inset 0 0 0 1px #f1e3b0; }
+
+  /* ---------- The content of every page, until it is built ---------- */
+  .body { margin: 0; }
+  .placeholder { display: grid; place-items: center; align-content: center; gap: 12px; min-height: 340px; padding: 44px 24px; border: 1.5px dashed #d6dae4; border-radius: 16px; background: repeating-linear-gradient(135deg, #fbfbfd, #fbfbfd 12px, #f6f7fb 12px, #f6f7fb 24px); box-shadow: 0 1px 2px rgba(23,35,59,0.04); text-align: center; color: var(--muted); animation: rise 0.35s ease both; }
+  .ph-ic { display: grid; place-items: center; width: 60px; height: 60px; margin-bottom: 4px; border-radius: 18px; background: #fff; box-shadow: 0 6px 18px rgba(23,35,59,0.1); }
+  .chip { display: inline-flex; align-items: center; gap: 7px; margin-top: 6px; padding: 5px 12px; border-radius: 999px; background: var(--tint); font-size: 12px; font-weight: 600; color: var(--tint-ink); }
+  .chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--yellow); }
+  .placeholder svg.i { width: 28px; height: 28px; color: #7d8697; }
+  .placeholder b { font-size: 16px; color: var(--ink); }
+  .placeholder p { max-width: 460px; font-size: 14px; line-height: 1.65; }
+
+  .scrim { position: fixed; z-index: 39; inset: 0; background: rgba(23,35,59,0.45); }
+
+  @media (max-width: 960px) {
+    :root { --side: 288px; }
+    .topbar { gap: 12px; padding: 0 14px; }
+    .burger { display: grid; }
+    .gsearch { margin: 0; }
+    .tools .ico.hide-m { display: none; }
+    .layout { grid-template-columns: minmax(0, 1fr); }
+    /* the sidebar becomes a drawer that slides in over the page */
+    .side { position: fixed; z-index: 40; top: 0; bottom: 0; left: 0; width: var(--side); max-width: 86vw; height: 100%; padding-top: 16px; transform: translateX(-100%); visibility: hidden; transition: transform 0.25s ease, visibility 0.25s; box-shadow: 8px 0 30px rgba(23,35,59,0.18); }
+    .side.open { transform: none; visibility: visible; }
+    .band { padding: 24px 20px 0; }
+    .band.no-tabs { padding-bottom: 24px; }
+    .body-wrap { padding: 22px 20px 56px; }
+  }
+  @media (max-width: 640px) {
+    .brand .cc, .brand i { display: none; }
+    .main h1 { font-size: 24px; }
+    .placeholder { min-height: 220px; padding: 32px 18px; }
+  }
+  /* thin, quiet scrollbars (page and sidebar) */
+  html, .side { scrollbar-width: thin; scrollbar-color: #c9d0dc transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cfd5e0; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #aab3c2; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- Top navbar -->
+<header class="topbar">
+  <button class="burger" id="burger" type="button" aria-label="Open the admin menu" aria-expanded="false" aria-controls="side">
+    <svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+  <a class="brand" href="/" aria-label="Cornerstone home">
+    <img src="../../cornerstone-assets/L+m-logo.avif" alt="L+M" onerror="this.style.display='none'">
+  </a>
+  <label class="gsearch">
+    <svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="text" placeholder="Search Cornerstone…" aria-label="Search Cornerstone">
+  </label>
+  <div class="tools">
+    <button class="ico hide-m" type="button" aria-label="Apps"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></button>
+    <button class="ico" type="button" aria-label="Notifications"><svg class="i" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="dot"></span></button>
+    <a class="exit" href="/" aria-label="Exit the Admin Console" title="Exit the Admin Console"><svg class="i" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span>Exit</span></a>
+    <span class="av" aria-label="Signed in as SB">SB</span>
+  </div>
+</header>
+
+<!-- Floating note by the sidebar scrollbar (× removes it until the page is reloaded) -->
+<aside class="nav-pop" id="navPop" aria-label="Note about the sidebar">
+  <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+  <div class="txt">
+    <b>Sidebar links are provisional</b>
+    <p>The final navigation depends on the backend architecture. Links will be confirmed and updated once the features are finalized and development begins.</p>
+  </div>
+  <button type="button" id="navPopClose" aria-label="Close the note">×</button>
+</aside>
+
+<div class="layout">
+  <!-- Left sidebar: stays in place while the page scrolls -->
+  <nav class="side" id="side" aria-label="Admin Console"></nav>
+
+  <!-- Content, centred -->
+  <main class="main">
+    <div class="band" id="band">
+      <div class="main-in">
+        <nav class="crumbs" id="crumbs" aria-label="Breadcrumb"></nav>
+        <div class="titlerow"><span class="t-ic" id="ticon" aria-hidden="true"></span><h1 id="title"></h1></div>
+        <p class="lead" id="lead"></p>
+        <div class="tabs" id="tabs" role="tablist" aria-label="Sections" hidden></div>
+      </div>
+    </div>
+    <div class="body-wrap">
+      <div class="main-in"><div class="body" id="view"></div></div>
+    </div>
+  </main>
+</div>
+<div class="scrim" id="scrim" hidden></div>
+
+<script src="../data.js"></script>
+<script>
+  const D = window.ADMIN_DATA;
+  const $ = (id) => document.getElementById(id);
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const BOX_ICON = '<svg class="i" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/></svg>';
+  // the floating note: × removes it completely; it comes back on the next reload
+  $("navPopClose").addEventListener("click", () => $("navPop").remove());
+  // one small icon for each link (shown in the sidebar and beside the page title)
+  const ICON = {
+    content: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+    "onboarding-content": '<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 8l8 8"/>',
+    sites: '<path d="M4 9h16l-1.5 10a2 2 0 0 1-2 1.7H7.5a2 2 0 0 1-2-1.7z"/><path d="M7 9V6.5A2.5 2.5 0 0 1 9.5 4h5A2.5 2.5 0 0 1 17 6.5V9"/>',
+    alerts: '<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5h.01"/>',
+    branding: '<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.5-1.9-.3-1 .4-2.1 1.5-2.1H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="7" r="1"/><circle cx="15.5" cy="7.5" r="1"/>',
+    "custom-app-tiles": '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 14v7M14 17.5h7"/>',
+    "landing-pages": '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',
+    navigation: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>',
+    newsletters: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+    polls: '<path d="M6 20V11M12 20V4M18 20v-6"/>',
+    application: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+    "apps-and-links": '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+    "company-values": '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
+    topics: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/>',
+    "access-control": '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/>',
+    audiences: '<circle cx="9" cy="8" r="3.5"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3 6"/>',
+    users: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    "export-history": '<path d="M12 4v11M7 11l5 5 5-5M4 20h16"/>',
+    "analytics-application": '<path d="M3 21h18"/><rect x="5" y="11" width="3.6" height="7" rx="1.2"/><rect x="10.2" y="5" width="3.6" height="13" rx="1.2"/><rect x="15.4" y="8.5" width="3.6" height="9.5" rx="1.2"/>',
+  };
+  const icon = (id) => '<svg class="i" viewBox="0 0 24 24">' + (ICON[id] || '<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5"/><path d="M12 13v8"/>') + '</svg>';
+  const CHEVRON ='<svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>';
+
+  /* ---------- the sitemap: find a page, with its section and group ---------- */
+  const pages = {};
+  D.nav.forEach((sec) => sec.groups.forEach((g) => g.items.forEach((it) => { pages[it.id] = { ...it, section: sec.section, group: g.title }; })));
+
+  let current = { page: D.defaultPage, tab: null };
+  const collapsed = new Set(); // sidebar sections the user has folded away
+
+  // The address is #/<page> or #/<page>/<tab>; anything unknown opens the default page.
+  function parseHash() {
+    const [, id, tab] = (location.hash || "").split("/");
+    const page = pages[id] ? id : D.defaultPage;
+    const tabs = pages[page].tabs;
+    return { page, tab: tabs ? (tabs.some((t) => t.id === tab) ? tab : tabs[0].id) : null };
+  }
+
+  function drawSidebar() {
+    const keepScroll = $("side").scrollTop;
+    $("side").innerHTML = `<div class="side-head"><h2>${esc(D.title)}</h2></div>` + D.nav.map((sec, n) => {
+      const open = !collapsed.has(sec.section);
+      return `<section class="sec">
+        <button class="sec-t" type="button" data-sec="${esc(sec.section)}" aria-expanded="${open}" aria-controls="sec-${n}"><span>${esc(sec.section)}</span>${CHEVRON}</button>
+        <div id="sec-${n}"${open ? "" : " hidden"}>
+          ${sec.groups.map((g) => `<div class="grp">${g.title ? `<p class="grp-t">${esc(g.title)}</p>` : ""}<ul>
+            ${g.items.map((it) => `<li><a class="item${it.id === current.page ? " on" : ""}" href="#/${it.id}"${it.id === current.page ? ' aria-current="page"' : ""}>
+              <span class="lbl">${icon(it.id)}<span>${esc(it.label)}${it.note ? ` · ${esc(it.note)}` : ""}</span></span>${it.badge ? `<em>${esc(it.badge)}</em>` : ""}</a></li>`).join("")}</ul></div>`).join("")}
+        </div></section>`;
+    }).join("");
+    $("side").scrollTop = keepScroll;
+  }
+
+  function drawPage() {
+    const page = pages[current.page];
+    document.title = `${page.label} | ${D.title} | Cornerstone`;
+    $("crumbs").innerHTML = [`<a href="#/${D.defaultPage}">${esc(D.title)}</a>`, `<span>${esc(page.section)}</span>`, page.group ? `<span>${esc(page.group)}</span>` : "", `<span style="color:var(--ink)">${esc(page.label)}</span>`]
+      .filter(Boolean).join('<span class="sep">/</span>');
+    $("title").textContent = page.label;
+    $("ticon").innerHTML = icon(page.id);
+    $("lead").textContent = page.description;
+
+    const tabsEl = $("tabs");
+    tabsEl.hidden = !page.tabs;
+    $("band").classList.toggle("no-tabs", !page.tabs);
+    if (page.tabs) {
+      tabsEl.innerHTML = page.tabs.map((t) => `<button class="tab" role="tab" type="button" data-tab="${t.id}" aria-selected="${t.id === current.tab}">${esc(t.label)}</button>`).join("");
+    }
+
+    // Every page shows the same box until its content is built from the backend requirements.
+    const heading = current.tab ? page.tabs.find((t) => t.id === current.tab).label : page.label;
+    $("view").innerHTML = `<div class="placeholder"><span class="ph-ic">${BOX_ICON}</span><b>${esc(heading)}</b>
+      <p>The “${esc(page.label)}” configurable content will appear here. We will start building it according to the backend requirements.</p><span class="chip">Awaiting backend requirements</span></div>`;
+  }
+
+  function setDrawer(open) {
+    $("side").classList.toggle("open", open);
+    $("scrim").hidden = !open;
+    $("burger").setAttribute("aria-expanded", open);
+    document.body.style.overflow = open ? "hidden" : "";
+  }
+
+  function route() {
+    current = parseHash();
+    collapsed.delete(pages[current.page].section); // the section of the open page is always unfolded
+    drawSidebar();
+    drawPage();
+    setDrawer(false);
+  }
+
+  $("tabs").addEventListener("click", (e) => { const b = e.target.closest("[data-tab]"); if (b) location.hash = `#/${current.page}/${b.dataset.tab}`; });
+  $("side").addEventListener("click", (e) => {
+    const t = e.target.closest("[data-sec]");
+    if (!t) return;
+    const name = t.dataset.sec;
+    collapsed.has(name) ? collapsed.delete(name) : collapsed.add(name);
+    drawSidebar();
+  });
+  $("burger").addEventListener("click", () => setDrawer(!$("side").classList.contains("open")));
+  $("scrim").addEventListener("click", () => setDrawer(false));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && $("side").classList.contains("open")) { setDrawer(false); $("burger").focus(); } });
+  // a drawer left open when the window is made wider would trap scrolling
+  matchMedia("(min-width: 961px)").addEventListener("change", (e) => { if (e.matches) setDrawer(false); });
+
+  addEventListener("hashchange", route);
+  route();
+</script>
+</body>
+</html>
