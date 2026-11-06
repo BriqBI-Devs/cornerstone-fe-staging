@@ -5,7 +5,8 @@ import { cn } from "../../lib/cn";
 type Side = "top" | "bottom" | "left" | "right";
 
 interface TempNoteProps {
-  children: ReactNode;
+  /** Text under the heading; leave it out for a heading-only note. */
+  children?: ReactNode;
   /** Heading of the note. */
   title?: string;
   /** Which edge of the note the arrow sits on; it points away from the note. */
@@ -15,6 +16,8 @@ interface TempNoteProps {
   /** Place the note yourself, e.g. "absolute z-10 w-[300px]". */
   className?: string;
   style?: CSSProperties;
+  /** Once the note is closed it stays closed in this browser: remembered in localStorage under this key. */
+  storageKey?: string;
 }
 
 // The arrow is a rotated square; only the two edges that stick out get a border.
@@ -29,8 +32,13 @@ const ARROW: Record<Side, { position: (offset: number) => CSSProperties; border:
  * TEMP: a dismissible review note with an arrow, for pointing at something while a design is being agreed.
  * Position it with className/style and delete the usages once the question is settled.
  */
-export function TempNote({ children, title = "Note", arrow = "top", arrowOffset = 24, className, style }: TempNoteProps) {
-  const [open, setOpen] = useState(true);
+export function TempNote({ children, title = "Note", arrow = "top", arrowOffset = 24, className, style, storageKey }: TempNoteProps) {
+  const [open, setOpen] = useState(() => !storageKey || localStorage.getItem(storageKey) !== "true");
+  // Closing the note (the x or "Got it") is what gets remembered.
+  const dismiss = () => {
+    if (storageKey) localStorage.setItem(storageKey, "true");
+    setOpen(false);
+  };
   if (!open) return null;
 
   return (
@@ -61,7 +69,7 @@ export function TempNote({ children, title = "Note", arrow = "top", arrowOffset 
           </div>
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={dismiss}
             aria-label="Dismiss note"
             className="-mr-1.5 -mt-1 grid size-6 shrink-0 place-items-center rounded-md text-brand-navy/45 hover:bg-surface-subtle hover:text-brand-navy"
           >
@@ -69,14 +77,16 @@ export function TempNote({ children, title = "Note", arrow = "top", arrowOffset 
           </button>
         </div>
 
-        <div className="mt-2 grid gap-2.5 text-[13px] leading-relaxed text-brand-navy/75 [&_strong]:font-semibold [&_strong]:text-brand-navy">
-          {children}
-        </div>
+        {children && (
+          <div className="mt-2 grid gap-2.5 text-[13px] leading-relaxed text-brand-navy/75 [&_strong]:font-semibold [&_strong]:text-brand-navy">
+            {children}
+          </div>
+        )}
 
         <div className="mt-3 flex justify-end border-t border-border pt-2.5">
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={dismiss}
             className="rounded-md bg-brand-navy px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-brand-navy/90"
           >
             Got it

@@ -283,7 +283,7 @@
   $("prev").addEventListener("click", () => go(current - 1));
   $("next").addEventListener("click", () => go(current + 1));
 
-  const start = () => { if (!reduceMotion) { clearInterval(timer); timer = setInterval(() => go(current + 1), 4500); } };
+  const start = () => { if (!reduceMotion) { clearInterval(timer); timer = setInterval(() => go(current + 1), 2500); } };
   const stop = () => clearInterval(timer);
   ["mouseenter", "focusin", "touchstart"].forEach((ev) => hero.addEventListener(ev, stop, { passive: true }));
   ["mouseleave", "focusout"].forEach((ev) => hero.addEventListener(ev, start));

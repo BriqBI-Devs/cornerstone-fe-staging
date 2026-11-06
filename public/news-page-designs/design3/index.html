@@ -256,7 +256,7 @@
   $("prev").addEventListener("click", () => go(position() - 1));
   $("next").addEventListener("click", () => go(position() + 1));
 
-  const start = () => { if (!reduceMotion) { clearInterval(timer); timer = setInterval(() => go(position() + 1), 3500); } };
+  const start = () => { if (!reduceMotion) { clearInterval(timer); timer = setInterval(() => go(position() + 1), 2500); } };
   const stop = () => clearInterval(timer);
   ["mouseenter", "focusin"].forEach((ev) => section.addEventListener(ev, stop));
   ["mouseleave", "focusout"].forEach((ev) => section.addEventListener(ev, start));

@@ -2,6 +2,7 @@ import { Bell, LayoutGrid, Search, Settings } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Avatar } from "../components/ui/Avatar";
+import { TempNote } from "../components/ui/TempNote";
 import { getPersonById } from "../features/people/data";
 import { cn } from "../lib/cn";
 import { useClickOutside } from "../lib/useClickOutside";
@@ -109,19 +110,29 @@ export function PublicLayout() {
               {notificationsOpen && <NotificationsPanel />}
             </div>
             {/* Gear before the profile picture: opens the admin dashboard. Shown to everyone until sign-in decides who is an admin. */}
-            <NavLink
-              to="/admin"
-              aria-label="Admin dashboard"
-              title="Admin dashboard"
-              className={({ isActive }) =>
-                cn(
-                  "flex h-9 w-9 items-center justify-center hover:text-brand-navy md:h-7 md:w-7",
-                  isActive ? "text-brand-link" : "text-brand-navy/75",
-                )
-              }
-            >
-              <Settings className="h-4 w-4" />
-            </NavLink>
+            <div className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
+              <NavLink
+                to="/admin"
+                aria-label="Admin dashboard"
+                title="Admin dashboard"
+                className={({ isActive }) =>
+                  cn(
+                    "flex h-9 w-9 items-center justify-center hover:text-brand-navy md:h-7 md:w-7",
+                    isActive ? "text-brand-link" : "text-brand-navy/75",
+                  )
+                }
+              >
+                <Settings className="h-4 w-4" />
+              </NavLink>
+              {/* TEMP: points at the gear while the admin dashboard is new; once closed it stays closed in this browser. */}
+              <TempNote
+                title="New! Admin panel options"
+                storageKey="admin-panel-note-shown"
+                arrow="top"
+                arrowOffset={237}
+                className="absolute right-0 top-full z-20 mt-3 w-[260px] max-w-[calc(100vw-2rem)]"
+              />
+            </div>
             <div ref={profileRef} className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
               <button
                 onClick={() => setProfileOpen((open) => !open)}
