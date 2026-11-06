@@ -15,6 +15,7 @@ import { PoliciesResourcesPage } from "../pages/policies-resources/PoliciesResou
 import { PolicyCategoryPage } from "../pages/policies-resources/PolicyCategoryPage";
 
 const COMING_SOON_ROUTES: { path: string; title: string }[] = [
+  { path: "admin", title: "Admin dashboard" },
   { path: "departments", title: "Departments" },
   { path: "documents", title: "Documents" },
 ];

@@ -1,4 +1,4 @@
-import { Bell, LayoutGrid, Search } from "lucide-react";
+import { Bell, LayoutGrid, Search, Settings } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Avatar } from "../components/ui/Avatar";
@@ -99,6 +99,20 @@ export function PublicLayout() {
               <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-brand-accent md:-right-0.5 md:-top-0.5" />
               {notificationsOpen && <NotificationsPanel />}
             </div>
+            {/* Gear before the profile picture: opens the admin dashboard. Shown to everyone until sign-in decides who is an admin. */}
+            <NavLink
+              to="/admin"
+              aria-label="Admin dashboard"
+              title="Admin dashboard"
+              className={({ isActive }) =>
+                cn(
+                  "flex h-9 w-9 items-center justify-center hover:text-brand-navy md:h-7 md:w-7",
+                  isActive ? "text-brand-link" : "text-brand-navy/75",
+                )
+              }
+            >
+              <Settings className="h-4 w-4" />
+            </NavLink>
             <Avatar name="Jordan Davis" size="sm" />
           </div>
         </div>
