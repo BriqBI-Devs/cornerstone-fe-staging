@@ -2,11 +2,16 @@ import { Bell, LayoutGrid, Search, Settings } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Avatar } from "../components/ui/Avatar";
+import { getPersonById } from "../features/people/data";
 import { cn } from "../lib/cn";
 import { useClickOutside } from "../lib/useClickOutside";
 import { useDateAndWeather } from "../lib/useDateAndWeather";
 import { AppLauncherPanel } from "./AppLauncherPanel";
 import { NotificationsPanel } from "./NotificationsPanel";
+import { ProfilePanel } from "./ProfilePanel";
+
+// Until sign-in exists, the signed-in person is fixed: person 8 in the people directory (/people/8).
+const CURRENT_USER_ID = 8;
 
 const NAV_ITEMS = [
   { to: "/news", label: "News" },
@@ -37,9 +42,11 @@ const FOOTER_COLUMNS = [
 ];
 
 export function PublicLayout() {
+  const currentUser = getPersonById(CURRENT_USER_ID)!;
   const dateAndWeather = useDateAndWeather();
   const [appsOpen, setAppsOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const { pathname } = useLocation();
   const isHome = pathname === "/";
 
@@ -60,6 +67,8 @@ export function PublicLayout() {
   const notificationsRef = useRef<HTMLDivElement>(null);
   useClickOutside(appsRef, () => setAppsOpen(false));
   useClickOutside(notificationsRef, () => setNotificationsOpen(false));
+  const profileRef = useRef<HTMLDivElement>(null);
+  useClickOutside(profileRef, () => setProfileOpen(false));
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-clip">
@@ -113,7 +122,25 @@ export function PublicLayout() {
             >
               <Settings className="h-4 w-4" />
             </NavLink>
-            <Avatar name="Jordan Davis" size="sm" />
+            <div ref={profileRef} className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
+              <button
+                onClick={() => setProfileOpen((open) => !open)}
+                aria-label="Profile menu"
+                aria-haspopup="menu"
+                aria-expanded={profileOpen}
+                className="flex items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-link"
+              >
+                <Avatar name={currentUser.name} src={currentUser.photo} size="sm" />
+              </button>
+              {profileOpen && (
+                <ProfilePanel
+                  name={currentUser.name}
+                  photo={currentUser.photo}
+                  profilePath={`/people/${currentUser.id}`}
+                  onClose={() => setProfileOpen(false)}
+                />
+              )}
+            </div>
           </div>
         </div>
 

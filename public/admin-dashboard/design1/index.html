@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin Console | Cornerstone</title>
-<link rel="icon" href="../../cornerstone-assets/L+m-logo.avif" type="image/avif">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -117,10 +117,11 @@
   .note button { display: grid; place-items: center; width: 24px; height: 24px; border: 0; border-radius: 6px; background: none; font-size: 18px; line-height: 1; color: #8a6d0b; }
   .note button:hover { background: rgba(0,0,0,0.06); }
 
-  /* on desktop the note floats beside the links panel, vertically centred, with a pointer aimed at the panel (as in design 2);
-     on tablet and phone it stays the banner above */
-  @media (max-width: 960px) { .note > svg { display: none; } }
-  @media (min-width: 961px) {
+  /* on wide screens the note floats beside the links panel, vertically centred, with a pointer aimed at the panel (as in design 2),
+     and the page content moves over so nothing is covered; on narrower screens it stays the banner above */
+  @media (max-width: 1199px) { .note > svg { display: none; } }
+  @media (min-width: 1200px) {
+    .shell:has(#note) .work { padding-left: 264px; }
     .note { position: fixed; z-index: 20; left: calc(var(--rail-w) + var(--panel-w) + 16px); top: calc(50% + var(--top) / 2); transform: translateY(-50%); width: 232px; margin: 0; padding: 14px 10px 14px 12px; border: 1px solid var(--line); border-left: 3px solid var(--yellow); background: #fff; box-shadow: 0 10px 28px rgba(17,19,24,0.14); color: var(--ink); }
     .shell.panel-off .note { left: calc(var(--rail-w) + 16px); }
     .note::before { content: ""; position: absolute; left: -9px; top: 50%; width: 14px; height: 14px; transform: translateY(-50%) rotate(45deg); border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #fff; }
@@ -351,13 +352,17 @@
     document.body.style.overflow = open ? "hidden" : "";
   }
 
+  let lastPage = null;
   function route() {
+    const before = lastPage;
     current = parseHash();
+    lastPage = current.page || "s/" + current.sec;
+    const pageChanged = before !== lastPage;
     drawRail();
     drawPanel();
     drawMain();
     setDrawer(false);
-    scrollTo(0, 0);
+    if (pageChanged) scrollTo(0, 0); // opening another page starts at the top; switching a tab keeps the place
   }
 
   $("noteClose").addEventListener("click", () => $("note").remove());

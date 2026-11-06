@@ -74,7 +74,16 @@
   .nav-pop p { margin-top: 4px; font-size: 12px; line-height: 1.5; color: var(--muted, #5b6272); }
   .nav-pop button { display: grid; place-items: center; width: 22px; height: 22px; margin-left: auto; border: 0; border-radius: 6px; background: none; color: var(--faint); font-size: 17px; line-height: 1; cursor: pointer; }
   .nav-pop button:hover { background: var(--soft); color: var(--ink); }
-  @media (max-width: 960px) { .nav-pop { display: none; } }
+  /* on wide screens the page content moves over so the note never covers it; on narrower screens the note is a strip under the top bar */
+  @media (min-width: 1200px) { body:has(#navPop) .main { padding-left: 266px; } }
+  @media (max-width: 1199px) {
+    .nav-pop { position: static; transform: none; width: auto; align-items: center; padding: 10px 16px; border: 0; border-bottom: 1px solid #f1e3b0; border-radius: 0; background: var(--tint); box-shadow: none; color: var(--tint-ink); }
+    .nav-pop::before, .nav-pop .arr { display: none; }
+    .nav-pop .txt { font-size: 13px; line-height: 1.5; }
+    .nav-pop b { display: inline; margin-right: 6px; font-size: 13px; }
+    .nav-pop p { display: inline; margin: 0; font-size: 13px; color: var(--tint-ink); }
+    .nav-pop button { color: #8a6d0b; }
+  }
   .sec + .sec { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); }
   .sec-t { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px; border: 0; border-radius: 8px; background: none; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); }
   .sec-t:hover { background: #eef0f6; }
@@ -302,12 +311,15 @@
     document.body.style.overflow = open ? "hidden" : "";
   }
 
+  let lastPage = null;
   function route() {
     current = parseHash();
     collapsed.delete(pages[current.page].section); // the section of the open page is always unfolded
     drawSidebar();
     drawPage();
     setDrawer(false);
+    if (lastPage !== current.page) scrollTo(0, 0); // opening another page starts at the top; switching a tab keeps the place
+    lastPage = current.page;
   }
 
   $("tabs").addEventListener("click", (e) => { const b = e.target.closest("[data-tab]"); if (b) location.hash = `#/${current.page}/${b.dataset.tab}`; });
