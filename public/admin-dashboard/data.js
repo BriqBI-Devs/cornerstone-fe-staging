@@ -18,7 +18,7 @@ window.ADMIN_DATA = {
       section: "Manage",
       groups: [
         {
-          title: "Sites & content",
+          title: "Sites + content",
           items: [
             { id: "content", label: "Content", description: "Manage the pages, news and files published on Cornerstone." },
             { id: "onboarding-content", label: "Onboarding content", description: "Guides and checklists shown to new team members." },
@@ -46,7 +46,7 @@ window.ADMIN_DATA = {
                 { id: "logo", label: "Logo" },
                 { id: "color-palette", label: "Color palette" },
                 { id: "font", label: "Font" },
-                { id: "primary-and-link-colors", label: "Primary & link colors" },
+                { id: "primary-and-link-colors", label: "Primary + link colors" },
                 { id: "page", label: "Page" },
                 { id: "header", label: "Header" },
                 { id: "navigation", label: "Navigation" },
@@ -69,13 +69,13 @@ window.ADMIN_DATA = {
         {
           title: "Feature control",
           items: [
-            { id: "apps-and-links", label: "Apps & links", description: "The apps and links shown in the apps menu." },
+            { id: "apps-and-links", label: "Apps + links", description: "The apps and links shown in the apps menu." },
             { id: "company-values", label: "Company values", description: "The company values shown across Cornerstone." },
             { id: "topics", label: "Topics", description: "The topics used to tag content." },
           ],
         },
         {
-          title: "Users & groups",
+          title: "Users + groups",
           items: [
             { id: "access-control", label: "Access control", description: "Roles and what each role can do." },
             { id: "audiences", label: "Audiences", description: "Groups of people used to target content." },

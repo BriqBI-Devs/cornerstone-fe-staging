@@ -4,14 +4,14 @@ const PEOPLE = [
   { id: 2, name: "Jordan Ellis", title: "Chief Technology Officer", team: "Technology", location: "New York", manager: 1, joined: "2018-06-11", expertise: ["IT Strategy", "Security"] },
   { id: 3, name: "Priya Osei", title: "Chief Operating Officer", team: "Operations", location: "Boston", manager: 1, joined: "2015-01-19", expertise: ["Operations", "Process Improvement"] },
   { id: 4, name: "Marcus Field", title: "Chief Investment Officer", team: "Investments", location: "Boston", manager: 1, joined: "2016-09-05", expertise: ["Asset Management", "Finance"] },
-  { id: 5, name: "Margaret Carestia", title: "Controller", team: "Accounting & Finance", location: "New York", manager: 4, joined: "2014-10-20", expertise: ["Accounting", "Budgeting"] },
+  { id: 5, name: "Margaret Carestia", title: "Controller", team: "Accounting + Finance", location: "New York", manager: 4, joined: "2014-10-20", expertise: ["Accounting", "Budgeting"] },
   { id: 6, name: "Denise Ramirez", title: "Senior Property Manager", team: "Property Operations", location: "New York", manager: 3, joined: "2016-09-12", expertise: ["Property Management", "Vendors"] },
   { id: 7, name: "Tomás Rivera", title: "Project Coordinator", team: "Property Operations", location: "Saratoga", manager: 6, joined: "2026-09-08", expertise: ["Scheduling"] },
-  { id: 8, name: "Alex Kim", title: "Financial Analyst", team: "Accounting & Finance", location: "New York", manager: 5, joined: "2026-09-08", expertise: ["Forecasting"] },
-  { id: 9, name: "Priya Shah", title: "Marketing Specialist", team: "Communications & Marketing", location: "New York", manager: 28, joined: "2026-09-08", expertise: ["Content", "Social Media"] },
+  { id: 8, name: "Alex Kim", title: "Financial Analyst", team: "Accounting + Finance", location: "New York", manager: 5, joined: "2026-09-08", expertise: ["Forecasting"] },
+  { id: 9, name: "Priya Shah", title: "Marketing Specialist", team: "Communications + Marketing", location: "New York", manager: 28, joined: "2026-09-08", expertise: ["Content", "Social Media"] },
   { id: 10, name: "Sarah Hunt", title: "HR Generalist", team: "People Team", location: "New York", manager: 13, joined: "2026-09-08", expertise: ["Onboarding", "Benefits"] },
-  { id: 11, name: "Laura Reyes", title: "Risk Manager", team: "Risk & Insurance", location: "Saratoga", manager: 4, joined: "2019-04-22", expertise: ["Insurance", "Compliance"] },
-  { id: 12, name: "Connor Marsh", title: "Building Envelope Engineer", team: "Building Envelope & Sustainability", location: "Boston", manager: 3, joined: "2021-02-15", expertise: ["Roof Surveys", "Sustainability"] },
+  { id: 11, name: "Laura Reyes", title: "Risk Manager", team: "Risk + Insurance", location: "Saratoga", manager: 4, joined: "2019-04-22", expertise: ["Insurance", "Compliance"] },
+  { id: 12, name: "Connor Marsh", title: "Building Envelope Engineer", team: "Building Envelope + Sustainability", location: "Boston", manager: 3, joined: "2021-02-15", expertise: ["Roof Surveys", "Sustainability"] },
   { id: 13, name: "Riley Bennett", title: "Chief People Officer", team: "People Team", location: "New York", manager: 1, joined: "2017-05-08", expertise: ["Culture","Talent"] },
   { id: 14, name: "Taylor Brooks", title: "General Counsel", team: "Legal", location: "New York", manager: 1, joined: "2016-02-01", expertise: ["Contracts","Real Estate Law"] },
   { id: 15, name: "Casey Parker", title: "Senior Counsel", team: "Legal", location: "New York", manager: 14, joined: "2019-08-26", expertise: ["Leasing","Compliance"] },
@@ -25,9 +25,9 @@ const PEOPLE = [
   { id: 23, name: "Dakota James", title: "Director of Development", team: "Development", location: "Harlem", manager: 4, joined: "2017-10-23", expertise: ["Entitlements","Partnerships"] },
   { id: 24, name: "Peyton Russell", title: "Development Associate", team: "Development", location: "Harlem", manager: 23, joined: "2023-07-10", expertise: ["Underwriting"] },
   { id: 25, name: "Kendall Griffin", title: "Community Investment Lead", team: "Community Investment", location: "Harlem", manager: 3, joined: "2019-01-28", expertise: ["Volunteering","Partnerships"] },
-  { id: 26, name: "Charlie Barnes", title: "Accounting Manager", team: "Accounting & Finance", location: "New York", manager: 5, joined: "2018-02-12", expertise: ["Reporting","Audit"] },
-  { id: 27, name: "Jamie Foster", title: "Accounts Payable Specialist", team: "Accounting & Finance", location: "New York", manager: 26, joined: "2025-02-24", expertise: ["Payments"] },
-  { id: 28, name: "Cameron Hayes", title: "Communications Manager", team: "Communications & Marketing", location: "New York", manager: 3, joined: "2020-03-02", expertise: ["Internal Comms","Events"] },
+  { id: 26, name: "Charlie Barnes", title: "Accounting Manager", team: "Accounting + Finance", location: "New York", manager: 5, joined: "2018-02-12", expertise: ["Reporting","Audit"] },
+  { id: 27, name: "Jamie Foster", title: "Accounts Payable Specialist", team: "Accounting + Finance", location: "New York", manager: 26, joined: "2025-02-24", expertise: ["Payments"] },
+  { id: 28, name: "Cameron Hayes", title: "Communications Manager", team: "Communications + Marketing", location: "New York", manager: 3, joined: "2020-03-02", expertise: ["Internal Comms","Events"] },
   { id: 29, name: "Blake Cooper", title: "Recruiter", team: "People Team", location: "New York", manager: 13, joined: "2022-10-03", expertise: ["Hiring","Interviewing"] },
   { id: 30, name: "Alexandra Ross", title: "HR Business Partner", team: "People Team", location: "Boston", manager: 13, joined: "2021-05-17", expertise: ["Employee Relations"] },
 ];
@@ -56,9 +56,9 @@ const SHELL = (active) => `
 
 // Directory filters, derived from the existing data. (Time zone is intentionally not offered.)
 // Entity codes (LMBG, LMDP, LMFM, LMXD) for the sample teams (adjust the mapping when the real codes are known).
-const ENTITY_CODE = { "Executive Team": "LMBG", Investments: "LMBG", "Accounting & Finance": "LMBG", Legal: "LMBG", "Risk & Insurance": "LMBG", Development: "LMDP", Construction: "LMDP", "Building Envelope & Sustainability": "LMDP", "Community Investment": "LMDP", "Property Operations": "LMFM", Operations: "LMFM", Technology: "LMXD", "Communications & Marketing": "LMXD", "People Team": "LMXD" };
+const ENTITY_CODE = { "Executive Team": "LMBG", Investments: "LMBG", "Accounting + Finance": "LMBG", Legal: "LMBG", "Risk + Insurance": "LMBG", Development: "LMDP", Construction: "LMDP", "Building Envelope + Sustainability": "LMDP", "Community Investment": "LMDP", "Property Operations": "LMFM", Operations: "LMFM", Technology: "LMXD", "Communications + Marketing": "LMXD", "People Team": "LMXD" };
 const FACETS = {
-  company: (p) => ["Executive Team", "Investments", "Accounting & Finance"].includes(p.team) ? "Cornerstone Capital" : "Cornerstone Property Group",
+  company: (p) => ["Executive Team", "Investments", "Accounting + Finance"].includes(p.team) ? "Cornerstone Capital" : "Cornerstone Property Group",
   department: (p) => p.team,
   title: (p) => p.title,
   timezone: (p) => ({ "New York": "Eastern (ET)", Boston: "Eastern (ET)" })[p.location] || "Eastern (ET)",
