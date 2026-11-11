@@ -34,19 +34,19 @@
     },
     {
       "key": "projects",
-      "title": "Projects & Portfolio"
+      "title": "Projects + Portfolio"
     },
     {
       "key": "safety",
-      "title": "Safety & Compliance"
+      "title": "Safety + Compliance"
     },
     {
       "key": "it",
-      "title": "IT & Systems"
+      "title": "IT + Systems"
     },
     {
       "key": "benefits",
-      "title": "People & Benefits"
+      "title": "People + Benefits"
     },
     {
       "key": "community-investment",
@@ -54,7 +54,7 @@
     },
     {
       "key": "events",
-      "title": "Events & Town Halls"
+      "title": "Events + Town Halls"
     }
   ];
 
@@ -130,7 +130,7 @@
       "readTime": "3 min read",
       "body": [
         "Open enrollment runs for two weeks this fall. This year there are updates to the medical plan options, a new wellness benefit and a change to the commuter benefit limit.",
-        "The Benefits Team will host walk-through sessions in each office, and the full guide is available in Policies & Resources.",
+        "The Benefits Team will host walk-through sessions in each office, and the full guide is available in Policies + Resources.",
         "If you do nothing, your current elections carry over, apart from the flexible spending account, which must be renewed every year."
       ],
       "topics": [
@@ -292,7 +292,7 @@
       "readTime": "3 min read",
       "body": [
         "Over the coming months our logo, colors and templates will be updated. This post explains what is changing, what stays the same and when each piece will be available.",
-        "New email signatures and presentation templates will be posted in Policies & Resources, and the Communications team will run short sessions for anyone who wants help switching over."
+        "New email signatures and presentation templates will be posted in Policies + Resources, and the Communications team will run short sessions for anyone who wants help switching over."
       ],
       "topics": [
         "Brand",
