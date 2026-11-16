@@ -26,9 +26,7 @@ const buildPanes = (person: Person): { title: string; fields: FieldDef[] }[] => 
       { name: "last", label: "Last name", required: true },
       { name: "jobTitle", label: "Job title", required: true, wide: true },
       { name: "company", label: "Company name" },
-      { name: "entity", label: "Entity" },
       { name: "department", label: "Department" },
-      { name: "division", label: "Division" },
       { name: "pronouns", label: "Pronouns", options: PRONOUNS.map((p) => [p, p]), wide: true },
       { name: "address1", label: "Address 1", wide: true },
       { name: "address2", label: "Address 2", wide: true },
@@ -36,13 +34,6 @@ const buildPanes = (person: Person): { title: string; fields: FieldDef[] }[] => 
       { name: "state", label: "State/Province" },
       { name: "zip", label: "ZIP/Postal code" },
       { name: "country", label: "Country" },
-    ],
-  },
-  {
-    title: "About",
-    fields: [
-      { name: "birthday", label: "Birthday", type: "date" },
-      { name: "hire", label: "Hire date", type: "date" },
     ],
   },
   {
@@ -58,13 +49,8 @@ const buildPanes = (person: Person): { title: string; fields: FieldDef[] }[] => 
   {
     title: "Additional",
     fields: [
-      { name: "employeeNumber", label: "Employee number" },
-      { name: "userType", label: "User type" },
       { name: "language", label: "Language", options: Object.entries(LANGUAGE_LABELS), wide: true },
       { name: "cf_management", label: "Management" },
-      { name: "cf_entity", label: "Entity" },
-      { name: "cf_businessLine", label: "Department/Business Line", wide: true },
-      { name: "cf_officeDays", label: "Office Days", wide: true },
     ],
   },
   {
@@ -93,7 +79,7 @@ interface EditProfileDialogProps {
   onSave: (edits: SavedEdits) => void;
 }
 
-/** Edit profile form in five tabs. Saved in this browser for now. */
+/** Edit profile form in four tabs. Saved in this browser for now. */
 export function EditProfileDialog({ open, person, details, onClose, onSave }: EditProfileDialogProps) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [pane, setPane] = useState(0);
@@ -162,7 +148,7 @@ export function EditProfileDialog({ open, person, details, onClose, onSave }: Ed
             {panes.map(({ title, fields }, n) => (
               // Every tab stays in the form (hidden) so one save collects all of them.
               <fieldset key={title} data-pane={n} className={cn("pt-[18px]", pane !== n && "hidden")}>
-                <legend className="mb-3.5 text-xs font-bold uppercase tracking-[0.14em] text-brand-navy/60">{title}</legend>
+                <legend className="sr-only">{title}</legend>
                 <div className="grid gap-x-4 gap-y-3.5 sm:grid-cols-2">
                   {fields.map((field) => (
                     <label key={field.name} className={cn("grid min-w-0 gap-1.5", field.wide && "sm:col-span-2")}>
@@ -195,13 +181,25 @@ export function EditProfileDialog({ open, person, details, onClose, onSave }: Ed
             ))}
           </div>
 
-          <div className="flex justify-end gap-2.5 border-t border-border px-6 py-3.5">
-            <button type="button" onClick={onClose} className="h-10 rounded-md border border-[#cfd6df] px-4 text-sm font-semibold hover:border-brand-link hover:text-brand-link">
-              Cancel
-            </button>
-            <button type="submit" className="h-10 rounded-md bg-brand-navy px-4 text-sm font-semibold text-white hover:bg-[#2b3f57]">
-              Save changes
-            </button>
+          <div className="flex flex-col gap-3 border-t border-border px-6 py-3.5 sm:flex-row sm:items-center sm:justify-between">
+            {/* Profile data comes from Dayforce (via Aquera), so it can't be saved from here. */}
+            <p className="flex items-center gap-2 text-xs text-brand-navy/65">
+              <span aria-hidden className="grid size-5 shrink-0 place-items-center rounded-full bg-yellow-400 text-xs font-extrabold text-brand-navy">!</span>
+              This information comes from Dayforce and can't be edited here.
+            </p>
+            <div className="flex justify-end gap-2.5">
+              <button type="button" onClick={onClose} className="h-10 rounded-md border border-[#cfd6df] px-4 text-sm font-semibold hover:border-brand-link hover:text-brand-link">
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled
+                title="Profile information comes from Dayforce"
+                className="h-10 cursor-not-allowed rounded-md bg-brand-navy px-4 text-sm font-semibold text-white opacity-40"
+              >
+                Save changes
+              </button>
+            </div>
           </div>
         </form>
       )}

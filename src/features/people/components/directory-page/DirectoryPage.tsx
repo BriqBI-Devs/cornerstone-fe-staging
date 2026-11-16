@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { PageHeaderBanner } from "../../../../components/ui/PageHeaderBanner";
 import { FACETS, PEOPLE } from "../../data";
 import type { FilterKey, Person, SortKey } from "../../types";
 import { DirectoryFilters } from "./DirectoryFilters";
@@ -28,29 +29,31 @@ export function DirectoryPage() {
   const current = Math.min(page, pages);
 
   return (
-    <div className="mx-auto max-w-[1100px] pb-8">
-      <header className="mb-[26px] border-b border-border pb-[22px]">
-        <p className="mb-2.5 text-xs font-extrabold uppercase tracking-[0.16em]">Directory</p>
-        <h1 className="text-4xl font-extrabold tracking-[-0.02em]">People</h1>
-        <p className="mt-2 text-base text-brand-navy/60">Find colleagues, see where they sit, and open their profile.</p>
-      </header>
-
-      <DirectoryTools
-        query={query}
-        onQueryChange={setQuery}
-        sortKey={sortKey}
-        onSortKeyChange={setSortKey}
-        descending={descending}
-        onDescendingChange={setDescending}
-      />
-      <DirectoryFilters
-        selected={selected}
-        onChange={(key, value) => setSelected({ ...selected, [key]: value })}
-        onClear={() => setSelected({})}
+    <div className="flex flex-col gap-8 pb-8">
+      <PageHeaderBanner
+        eyebrow="Directory"
+        title="People"
+        description="Find colleagues, see where they sit, and open their profile."
       />
 
-      <PeopleTable people={shown.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE)} total={shown.length} />
-      <Pager page={current} pages={pages} onChange={setPage} />
+      <div className="w-full">
+        <DirectoryTools
+          query={query}
+          onQueryChange={setQuery}
+          sortKey={sortKey}
+          onSortKeyChange={setSortKey}
+          descending={descending}
+          onDescendingChange={setDescending}
+        />
+        <DirectoryFilters
+          selected={selected}
+          onChange={(key, value) => setSelected({ ...selected, [key]: value })}
+          onClear={() => setSelected({})}
+        />
+
+        <PeopleTable people={shown.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE)} total={shown.length} />
+        <Pager page={current} pages={pages} onChange={setPage} />
+      </div>
     </div>
   );
 }

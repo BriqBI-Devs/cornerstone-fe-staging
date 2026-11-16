@@ -13,7 +13,7 @@ export interface Person {
   expertise: string[];
 }
 
-export type FilterKey = "company" | "department" | "title" | "timezone" | "management" | "entity";
+export type FilterKey = "company" | "department" | "title" | "timezone" | "management";
 export type SortKey = "name" | "company" | "title" | "department";
 
 /** One published or mentioned item in a person's activity feed. */
@@ -44,17 +44,13 @@ export interface ProfileDetails {
   manager?: string;
   pronouns?: string;
   company?: string;
-  entity?: string;
   department?: string;
-  division?: string;
   address1?: string;
   address2?: string;
   city?: string;
   state?: string;
   zip?: string;
   country?: string;
-  birthday?: string;
-  hire?: string;
   email?: string;
   timezone?: string;
   phone?: string;
@@ -66,11 +62,6 @@ export interface ProfileDetails {
   social_facebook?: string;
   social_instagram?: string;
   social_youtube?: string;
-  employeeNumber?: string;
-  userType?: string;
   language?: string;
   cf_management?: string;
-  cf_entity?: string;
-  cf_businessLine?: string;
-  cf_officeDays?: string;
 }
