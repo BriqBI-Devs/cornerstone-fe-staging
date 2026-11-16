@@ -31,6 +31,19 @@
   --shadow-ev-card: 0 1px 2px rgb(21 39 60 / 6%);
   --shadow-ev-panel: 0 12px 32px rgb(21 39 60 / 10%);
   --shadow-ev-pop: 0 18px 44px rgb(21 39 60 / 24%);
+
+  /* Admin console (src/admin): bg-admin-soft, border-admin-line, text-admin-tint-ink, ... */
+  --color-admin-navy: #17233b;
+  --color-admin-line: #e6e8ec;
+  --color-admin-soft: #f8f9fc;
+  --color-admin-hover: #eef0f6;
+  --color-admin-muted: #6b7280;
+  --color-admin-faint: #98a1b0;
+  --color-admin-tint: #fdf3da;
+  --color-admin-tint-line: #f1e3b0;
+  --color-admin-tint-ink: #5a4300;
+  --color-admin-gold: #8a6d0b;
+  --color-admin-danger: #ce4a38;
 }
 
 body {
