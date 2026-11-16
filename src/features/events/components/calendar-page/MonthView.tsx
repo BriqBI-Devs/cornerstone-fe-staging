@@ -91,16 +91,13 @@ export function MonthView({ month, events, today, onSelect, onShowDay }: MonthVi
             .map(({ event, firstDay, lane }) => (
               <TempNote
                 key={event.id}
-                title="Why two formats?"
+                title="Multi-day events"
                 className="absolute z-[4] w-[320px] max-w-[85vw]"
                 style={{ top: 31 + lane * 20 + 18 + 12, left: `calc(${(firstDay / 7) * 100}% + 8px)` }}
               >
                 <p>
-                  <strong>Multi-day events</strong> stay on a single line with the time and the event name, because they
-                  take up a lot of space across the calendar.
-                </p>
-                <p>
-                  <strong>Single-day events</strong> show the time on the first line and the event name on the second.
+                  <strong>Multi-day events</strong> are configured from the admin panel. If only single-day events are
+                  added, multi-day events won't appear.
                 </p>
               </TempNote>
             ))}
