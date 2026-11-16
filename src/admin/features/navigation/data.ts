@@ -10,46 +10,19 @@ export const ADMIN_NAV: AdminNavSection[] = [
     section: "Manage",
     groups: [
       {
-        title: "Sites + content",
+        title: "Content",
         items: [
-          { id: "content", label: "Content", description: "Manage the pages, news and files published on Cornerstone." },
-          { id: "onboarding-content", label: "Onboarding content", description: "Guides and checklists shown to new team members." },
-          {
-            id: "sites",
-            label: "Sites",
-            description: "Create and manage sites, their categories and their subscriptions.",
-            tabs: [
-              { id: "site-categories", label: "Site categories" },
-              { id: "subscriptions", label: "Subscriptions" },
-            ],
-          },
+          { id: "company-culture", label: "Company + Culture", description: "Stories, categories and the featured carousel." },
+          { id: "news", label: "News", description: "News articles shown on the home page and the news page." },
+          { id: "events", label: "Events", description: "Events, locations and RSVPs, including multi-day events." },
         ],
       },
       {
         title: "Features",
         items: [
-          { id: "alerts", label: "Alerts", description: "Banners and notices shown across Cornerstone." },
-          {
-            id: "branding",
-            label: "Branding",
-            badge: "8 sections",
-            description: "Control how Cornerstone looks: the logo, colors, fonts, header and navigation.",
-            tabs: [
-              { id: "logo", label: "Logo" },
-              { id: "color-palette", label: "Color palette" },
-              { id: "font", label: "Font" },
-              { id: "primary-and-link-colors", label: "Primary + link colors" },
-              { id: "page", label: "Page" },
-              { id: "header", label: "Header" },
-              { id: "navigation", label: "Navigation" },
-              { id: "analytics", label: "Analytics" },
-            ],
-          },
-          { id: "custom-app-tiles", label: "Custom app tiles", description: "Add your own tiles to the apps menu and the home page." },
-          { id: "landing-pages", label: "Landing pages", description: "Build and publish landing pages." },
-          { id: "navigation", label: "Navigation", description: "The main menu and the order of its items." },
-          { id: "newsletters", label: "Newsletters", description: "Create, schedule and review newsletters." },
+          { id: "departments", label: "Departments", description: "Each team's description and lead." },
           { id: "polls", label: "Polls", description: "Create polls and see the results." },
+          { id: "alerts", label: "Alerts", description: "Banners and notices shown across Cornerstone." },
         ],
       },
     ],
@@ -74,9 +47,23 @@ export const ADMIN_NAV: AdminNavSection[] = [
       {
         title: "Feature control",
         items: [
+          {
+            id: "branding",
+            label: "Branding",
+            badge: "8 sections",
+            description: "Control how Cornerstone looks: the logo, colors, fonts, header and navigation.",
+            tabs: [
+              { id: "logo", label: "Logo" },
+              { id: "color-palette", label: "Color palette" },
+              { id: "font", label: "Font" },
+              { id: "primary-and-link-colors", label: "Primary + link colors" },
+              { id: "page", label: "Page" },
+              { id: "header", label: "Header" },
+              { id: "navigation", label: "Navigation" },
+              { id: "analytics", label: "Analytics" },
+            ],
+          },
           { id: "apps-and-links", label: "Apps + links", description: "The apps and links shown in the apps menu." },
-          { id: "company-values", label: "Company values", description: "The company values shown across Cornerstone." },
-          { id: "topics", label: "Topics", description: "The topics used to tag content." },
         ],
       },
       {
@@ -85,7 +72,6 @@ export const ADMIN_NAV: AdminNavSection[] = [
           { id: "access-control", label: "Access control", description: "Roles and what each role can do." },
           { id: "audiences", label: "Audiences", description: "Groups of people used to target content." },
           { id: "users", label: "Users", description: "Add, edit and deactivate users." },
-          { id: "export-history", label: "Export history", description: "Past data exports and their downloads." },
         ],
       },
     ],
