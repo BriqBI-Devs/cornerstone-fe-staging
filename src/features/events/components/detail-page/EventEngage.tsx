@@ -1,10 +1,9 @@
 import { Check, MessageCircle, Share, Star, ThumbsUp } from "lucide-react";
 import { useState } from "react";
-import { useFavorites } from "../../../../lib/useFavorites";
 // Same like bar and comment feed as the Company + Culture story page.
-import { COMMENT_INPUT_ID, StoryCommentFeed } from "../../../company-culture/story/comments/StoryCommentFeed";
-import { formatDate } from "../../helpers/format";
+import { FAVORITES } from "../../../favorites/data";
 import type { EventItem } from "../../types";
+import { COMMENT_INPUT_ID, StoryCommentFeed } from "../../../company-culture/story/comments/StoryCommentFeed";
 
 const STARTING_LIKES = 8;
 
@@ -19,12 +18,10 @@ const goToComments = () => {
   input?.focus({ preventScroll: true });
 };
 
-/** Like, comments, favourite and copy-link bar, then the comment feed (local state only). */
+/** Like, comments and copy-link bar, then the comment feed (local state only). */
 export function EventEngage({ event }: { event: EventItem }) {
-  // Local state only for now; the like and favourite requests go here once the backend exists.
+  // Local state only for now; the like request goes here once the backend exists.
   const [liked, setLiked] = useState(false);
-  const { has, toggle } = useFavorites();
-  const favourite = has(`event-${event.id}`);
   const [copied, setCopied] = useState(false);
 
   const copyLink = () => {
@@ -45,24 +42,8 @@ export function EventEngage({ event }: { event: EventItem }) {
           <MessageCircle className={icon} />0
         </button>
         <Divider />
-        <button
-          type="button"
-          onClick={() =>
-            toggle({
-              id: `event-${event.id}`,
-              tab: "apps",
-              sub: "events",
-              title: event.title,
-              to: `/events/${event.id}`,
-              image: event.image,
-              date: [formatDate(event.date, { month: "short" }), String(Number(event.date.slice(8)))],
-            })
-          }
-          aria-pressed={favourite}
-          aria-label="Favourite"
-          className={button}
-        >
-          <Star className={icon} fill={favourite ? "currentColor" : "none"} />
+        <button type="button" aria-label="Favourite" className={button}>
+          <Star className={icon} fill={FAVORITES.some((item) => item.id === `event-${event.id}`) ? "currentColor" : "none"} />
         </button>
         <Divider />
         <button type="button" onClick={copyLink} aria-label="Copy link" className={button}>

@@ -2,7 +2,7 @@ import { Clock, FileText, Star } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "../../lib/cn";
-import { useFavorites, type FavTab } from "../../lib/useFavorites";
+import { FAVORITES, type FavTab } from "../favorites/data";
 import { Card } from "../../components/ui/Card";
 
 const RECENT = [
@@ -16,9 +16,8 @@ const RECENT = [
 const TABS: FavTab[] = ["apps", "content", "files"];
 
 export function CustomizableWorkspace() {
-  const { items } = useFavorites();
   const [tab, setTab] = useState<FavTab>("apps");
-  const shown = items.filter((i) => i.tab === tab);
+  const shown = FAVORITES.filter((i) => i.tab === tab);
   return (
     <Card className="border-t-2 border-t-brand-accent">
       <h2 className="text-base font-semibold text-brand-navy">My workspace</h2>
