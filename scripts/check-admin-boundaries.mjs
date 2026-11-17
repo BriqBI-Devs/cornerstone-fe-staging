@@ -2,7 +2,7 @@
 // (also part of `npm run lint`). Prints every broken rule and exits with 1 if there is any.
 //
 // 1. Files in src/admin may import only: src/admin itself, src/components/ui and src/lib.
-// 2. Admin features (src/admin/features/<name>) must not import each other; shared code goes in src/admin/components or src/admin/lib.
+// 2. Admin features (src/admin/features/<section>/<group>/<page>) must not import each other; shared code goes in src/admin/components or src/admin/lib.
 // 3. Files outside src/admin may import only src/admin/index.ts.
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
@@ -23,13 +23,16 @@ function* walk(dir) {
   }
 }
 
-// Relative specifiers from import/export ... from "x", import("x") and side-effect imports.
+// Relative ("./x") and alias ("@/x" = src/x) specifiers from import/export ... from "x", import("x") and side-effect imports.
 const specifiers = (code) =>
-  [...code.matchAll(/(?:from|import)\s*\(?\s*["']([^"']+)["']/g)].map((m) => m[1]).filter((s) => s.startsWith("."));
+  [...code.matchAll(/(?:from|import)\s*\(?\s*["']([^"']+)["']/g)].map((m) => m[1]).filter((s) => s.startsWith(".") || s.startsWith("@/"));
 
+const resolveSpecifier = (file, spec) => (spec.startsWith("@/") ? join(src, spec.slice(2)) : resolve(dirname(file), spec));
+
+// A feature is the section/group/page folder under src/admin/features, e.g. manage/content/news.
 const featureOf = (file) => {
   const rel = relative(join(admin, "features"), file);
-  return rel.startsWith("..") ? null : rel.split(sep)[0];
+  return rel.startsWith("..") ? null : rel.split(sep).slice(0, 3).join("/");
 };
 
 const problems = [];
@@ -37,7 +40,7 @@ for (const file of walk(src)) {
   const code = readFileSync(file, "utf8");
   const fromAdmin = inside(file, admin);
   for (const spec of specifiers(code)) {
-    const target = resolve(dirname(file), spec);
+    const target = resolveSpecifier(file, spec);
     const name = relative(root, file);
     if (fromAdmin) {
       if (!inside(target, admin) && !sharedRoots.some((dir) => inside(target, dir))) {

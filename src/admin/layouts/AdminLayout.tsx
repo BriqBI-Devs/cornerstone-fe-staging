@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { AdminGuard } from "./AdminGuard";
-import { Sidebar } from "./Sidebar";
+import { Sidebar } from "./sidebar/Sidebar";
 import { TopNav } from "./TopNav";
 
 /** The shell of every /admin page: top navbar, sticky sidebar and the page in the middle. No employee header or footer. */

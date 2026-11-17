@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { cn } from "../../../../lib/cn";
+import { cn } from "@/lib/cn";
 import { loadProfileFields, saveProfileFields } from "../api";
 import type { ProfileFieldSetting } from "../types";
 

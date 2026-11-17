@@ -12,17 +12,33 @@ export const ADMIN_NAV: AdminNavSection[] = [
       {
         title: "Content",
         items: [
-          { id: "company-culture", label: "Company + Culture", description: "Stories, categories and the featured carousel." },
-          { id: "news", label: "News", description: "News articles shown on the home page and the news page." },
-          { id: "events", label: "Events", description: "Events, locations and RSVPs, including multi-day events." },
+          {
+            id: "company-culture",
+            label: "Company + Culture",
+            description: "Stories, categories and the featured carousel.",
+            tabs: [
+              { id: "content", label: "Content", action: "Create story" },
+              { id: "categories", label: "Categories", action: "Create category" },
+            ],
+          },
+          {
+            id: "news",
+            label: "News",
+            description: "News articles shown on the home page and the news page.",
+            tabs: [
+              { id: "content", label: "Content", action: "Create article" },
+              { id: "categories", label: "Categories", action: "Create category" },
+            ],
+          },
+          { id: "events", label: "Events", description: "Events, locations and RSVPs, including multi-day events.", action: "Create event" },
         ],
       },
       {
         title: "Features",
         items: [
           { id: "departments", label: "Departments", description: "Each team's description and lead." },
-          { id: "polls", label: "Polls", description: "Create polls and see the results." },
-          { id: "alerts", label: "Alerts", description: "Banners and notices shown across Cornerstone." },
+          { id: "polls", label: "Polls", description: "Create polls and see the results.", action: "Create poll" },
+          { id: "alerts", label: "Alerts", description: "Banners and notices shown across Cornerstone.", action: "Create alert" },
         ],
       },
     ],

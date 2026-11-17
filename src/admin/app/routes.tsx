@@ -1,6 +1,12 @@
+import type { ComponentType } from "react";
 import { Navigate, type RouteObject } from "react-router-dom";
-import { DEFAULT_ADMIN_PAGE } from "../features/navigation/data";
+import { DEFAULT_ADMIN_PAGE } from "../layouts/sidebar/data";
 import { AdminPage } from "../pages/console/AdminPage";
+
+/** A page loaded on demand. */
+const page = (load: () => Promise<{ default: ComponentType }>) => ({
+  lazy: async () => ({ Component: (await load()).default }),
+});
 
 /** Everything under /admin: built pages are listed here, any other sitemap page falls through to the placeholder. */
 export const adminRoutes: RouteObject = {
@@ -9,13 +15,41 @@ export const adminRoutes: RouteObject = {
   children: [
     { index: true, element: <Navigate to={`/admin/${DEFAULT_ADMIN_PAGE}`} replace /> },
 
-    // Built pages: AdminPage draws the header and the matching child route is the content.
+    {
+      path: "company-culture",
+      element: <AdminPage />,
+      children: [
+        { path: "content", ...page(() => import("../pages/manage/content/company-culture/ContentPage")) },
+        { path: "categories", ...page(() => import("../pages/manage/content/company-culture/CategoriesPage")) },
+      ],
+    },
+    {
+      path: "news",
+      element: <AdminPage />,
+      children: [
+        { path: "content", ...page(() => import("../pages/manage/content/news/ContentPage")) },
+        { path: "categories", ...page(() => import("../pages/manage/content/news/CategoriesPage")) },
+      ],
+    },
+    {
+      path: "events",
+      element: <AdminPage />,
+      children: [{ index: true, ...page(() => import("../pages/manage/content/events/EventsPage")) }],
+    },
+    {
+      path: "alerts",
+      element: <AdminPage />,
+      children: [{ index: true, ...page(() => import("../pages/manage/features/alerts/AlertsPage")) }],
+    },
+    {
+      path: "polls",
+      element: <AdminPage />,
+      children: [{ index: true, ...page(() => import("../pages/manage/features/polls/PollsPage")) }],
+    },
     {
       path: "application",
       element: <AdminPage />,
-      children: [
-        { path: "profile-fields", lazy: async () => ({ Component: (await import("../pages/profile-fields/ProfileFieldsPage")).default }) },
-      ],
+      children: [{ path: "profile-fields", ...page(() => import("../pages/application-settings/app-configuration/application/ProfileFieldsPage")) }],
     },
 
     // Everything else in the sitemap: header plus the "awaiting backend requirements" placeholder.

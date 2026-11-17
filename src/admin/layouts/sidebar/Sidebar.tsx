@@ -1,9 +1,8 @@
 import { ChevronDown } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { TempNote } from "../../components/ui/TempNote";
-import { cn } from "../../lib/cn";
-import { NavIcon } from "../features/navigation/components/NavIcon";
-import { ADMIN_NAV, ADMIN_TITLE } from "../features/navigation/data";
+import { cn } from "../../../lib/cn";
+import { NavIcon } from "./NavIcon";
+import { ADMIN_NAV, ADMIN_TITLE } from "./data";
 
 interface SidebarProps {
   /** On phones the sidebar is a drawer; this says whether it is slid in. */
@@ -65,11 +64,6 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
           ))}
         </details>
       ))}
-
-      {/* TEMP: review note; delete once the final navigation is confirmed. */}
-      <TempNote title="Sidebar links are provisional" arrow="top" arrowOffset={28} storageKey="admin-nav-note" className="relative mt-4">
-        <p>The final navigation depends on the backend architecture. Links will be confirmed once the features are finalized and development begins.</p>
-      </TempNote>
     </nav>
   );
 }
