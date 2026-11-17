@@ -80,7 +80,14 @@ export const ADMIN_NAV: AdminNavSection[] = [
               { id: "primary-and-link-colors", label: "Primary + link colors" },
             ],
           },
-          { id: "apps-and-links", label: "Apps + links" },
+          {
+            id: "apps-and-links",
+            label: "Apps + links",
+            tabs: [
+              { id: "apps", label: "Apps" },
+              { id: "links", label: "Links" },
+            ],
+          },
         ],
       },
       {

@@ -67,6 +67,14 @@ export const adminRoutes: RouteObject = {
       ],
     },
     {
+      path: "apps-and-links",
+      element: <AdminPage />,
+      children: [
+        { path: "apps", ...page(() => import("../pages/apps-and-links/AppsPage")) },
+        { path: "links", ...page(() => import("../pages/apps-and-links/LinksPage")) },
+      ],
+    },
+    {
       path: "application",
       element: <AdminPage />,
       children: [{ path: "profile-fields", ...page(() => import("../pages/application/ProfileFieldsPage")) }],
