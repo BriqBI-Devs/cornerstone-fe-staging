@@ -1,7 +1,8 @@
 import type { ComponentType } from "react";
 import { Navigate, type RouteObject } from "react-router-dom";
+import { NotFound } from "@/components/ui/NotFound";
 import { DEFAULT_ADMIN_PAGE } from "../layouts/sidebar/data";
-import { AdminPage } from "../pages/console/AdminPage";
+import { AdminPage } from "../layouts/AdminPage";
 
 /** A page loaded on demand. */
 const page = (load: () => Promise<{ default: ComponentType }>) => ({
@@ -19,49 +20,61 @@ export const adminRoutes: RouteObject = {
       path: "company-culture",
       element: <AdminPage />,
       children: [
-        { path: "content", ...page(() => import("../pages/manage/content/company-culture/ContentPage")) },
-        { path: "categories", ...page(() => import("../pages/manage/content/company-culture/CategoriesPage")) },
+        { path: "content", ...page(() => import("../pages/company-culture/ContentPage")) },
+        { path: "categories", ...page(() => import("../pages/company-culture/CategoriesPage")) },
       ],
     },
     {
       path: "news",
       element: <AdminPage />,
       children: [
-        { path: "content", ...page(() => import("../pages/manage/content/news/ContentPage")) },
-        { path: "categories", ...page(() => import("../pages/manage/content/news/CategoriesPage")) },
+        { path: "content", ...page(() => import("../pages/news/ContentPage")) },
+        { path: "categories", ...page(() => import("../pages/news/CategoriesPage")) },
       ],
     },
     {
       path: "events",
       element: <AdminPage />,
-      children: [{ index: true, ...page(() => import("../pages/manage/content/events/EventsPage")) }],
+      children: [{ index: true, ...page(() => import("../pages/events/EventsPage")) }],
     },
     {
       path: "alerts",
       element: <AdminPage />,
-      children: [{ index: true, ...page(() => import("../pages/manage/features/alerts/AlertsPage")) }],
+      children: [{ index: true, ...page(() => import("../pages/alerts/AlertsPage")) }],
     },
     {
       path: "policies-resources",
       element: <AdminPage />,
       children: [
-        { path: "categories", ...page(() => import("../pages/manage/features/policies-resources/CategoriesPage")) },
-        { path: "links", ...page(() => import("../pages/manage/features/policies-resources/LinksPage")) },
+        { path: "categories", ...page(() => import("../pages/policies-resources/CategoriesPage")) },
+        { path: "links", ...page(() => import("../pages/policies-resources/LinksPage")) },
       ],
     },
     {
       path: "polls",
       element: <AdminPage />,
-      children: [{ index: true, ...page(() => import("../pages/manage/features/polls/PollsPage")) }],
+      children: [{ index: true, ...page(() => import("../pages/polls/PollsPage")) }],
+    },
+    {
+      path: "branding",
+      element: <AdminPage />,
+      children: [
+        { path: "logo", ...page(() => import("../pages/branding/LogoPage")) },
+        { path: "name-and-tagline", ...page(() => import("../pages/branding/NamePage")) },
+        { path: "footer", ...page(() => import("../pages/branding/FooterPage")) },
+        { path: "font", ...page(() => import("../pages/branding/FontPage")) },
+        { path: "primary-and-link-colors", ...page(() => import("../pages/branding/PrimaryColorsPage")) },
+      ],
     },
     {
       path: "application",
       element: <AdminPage />,
-      children: [{ path: "profile-fields", ...page(() => import("../pages/application-settings/app-configuration/application/ProfileFieldsPage")) }],
+      children: [{ path: "profile-fields", ...page(() => import("../pages/application/ProfileFieldsPage")) }],
     },
 
     // Everything else in the sitemap: header plus the "awaiting backend requirements" placeholder.
     { path: ":id", element: <AdminPage /> },
     { path: ":id/:tab", element: <AdminPage /> },
+    { path: "*", element: <NotFound to="/admin" label="Back to admin" /> },
   ],
 };

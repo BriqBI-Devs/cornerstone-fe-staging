@@ -236,7 +236,14 @@ export function PublicLayout() {
 
           <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-4 text-xs text-white/60 md:flex-row md:items-center md:justify-between">
             <span>© 2026 L+M Development Partners · Cornerstone intranet</span>
-            <span>Privacy · Terms · Accessibility · Site map</span>
+            <div className="flex items-center gap-5">
+              <a href="#" className="hover:text-white">
+                Terms of service
+              </a>
+              <a href="#" className="hover:text-white">
+                Privacy policy
+              </a>
+            </div>
           </div>
         </div>
       </footer>

@@ -1,8 +1,7 @@
 # Admin console (`src/admin`)
 
-The admin console is part of this React app but kept apart from the employee site. It is laid out like the main
-`src/` folder (`app`, `layouts`, `pages`, `features`, `components`), and is served at `/admin`. Only `index.ts` is
-extra: it is the one door the employee site uses.
+The admin console is part of this React app but kept apart from the employee site, and is served at `/admin`. Only
+`index.ts` is the door the employee site uses.
 
 ## Structure
 
@@ -12,38 +11,41 @@ src/admin/
   app/
     routes.tsx                 built pages are listed here; every other sitemap page uses /admin/:id[/:tab]
   layouts/
-    AdminLayout, TopNav, AdminGuard
+    AdminLayout, AdminPage, TopNav, AdminGuard     AdminPage draws the header band and the page content
     sidebar/                   Sidebar, NavIcon, and the sitemap (data.ts, types.ts)
   pages/
-    console/AdminPage.tsx      the page for any sitemap id: header band + content or placeholder
-    <section>/<group>/<page>/  route-level pages, folders named like the sidebar (manage/content/news/ContentPage.tsx)
+    <name>/                    thin route-level pages, one file per tab (news/ContentPage.tsx), like src/pages
   features/
-    <section>/<group>/<page>/  data.ts (or api.ts), types.ts, components/ for that page
-  components/ui/               admin UI used by more than one page (PageHeader, PlaceholderPage, RowMenu)
+    <name>/                    what the pages are built from, like src/features:
+      components/              the page's UI
+      data.ts (or api.ts)      the only place that loads or stores the feature's data
+      types.ts
+  components/ui/               admin UI used by more than one feature (PageHeader, PlaceholderPage, RowMenu)
 ```
 
-Folders are the kebab-case of the sidebar section, group and page, so a page is easy to find from the sidebar. URLs stay
-flat (`/admin/news`). Use the `@/` alias (= `src/`) for imports that leave a feature's own folder, for example
+This mirrors the employee site: `pages/<name>` holds the route files and `features/<name>` holds the components and data.
+Both folders are named like the page's URL (`/admin/news` is `pages/news` and `features/news`), so moving a page in the
+sidebar never moves code. Use the `@/` alias (= `src/`) for imports that leave a feature's own folder, for example
 `@/components/ui/PlaceholderImage` or `@/admin/components/ui/RowMenu`.
 
 ## Rules (checked by `npm run lint`)
 
 - `src/admin` may import only itself, `src/components/ui` and `src/lib`. Never `src/features`, `src/pages` or `src/layouts`.
-- A feature (a `<section>/<group>/<page>` folder) must not import another feature. Put shared code in `components/` or `lib/`.
+- A page or feature must not import another name’s page or feature (`news` cannot import `company-culture`). Put shared code in `components/`.
 - The employee site may import only `src/admin/index.ts`.
-- A feature's `api.ts` is the only place that stores or loads data (localStorage today, the backend later).
+- A feature's `api.ts` (or `data.ts` while it is sample data) is the only place that loads or stores its data.
 - Colors come from the `admin-*` tokens in `src/index.css`.
 
 ## Add a page
 
-1. Add it to `layouts/sidebar/data.ts` (id, label, description, optional tabs, optional `action` for the header button). It already works with the placeholder.
-2. Build the feature in `features/<section>/<group>/<page>/` (components, data.ts or api.ts, types.ts) and a thin
-   default-exported page in `pages/<section>/<group>/<page>/`.
-3. List it in `app/routes.tsx`, before the `:id` fallback. For a tab of a page that already has a route (like
-   `application`), add a child: `{ path: "<tab>", lazy: ... }`. For a page with no tabs, add
+1. Add it to `layouts/sidebar/data.ts` (id, label, optional tabs). It already works with the placeholder.
+2. Build the UI in `features/<name>/` (`components/`, `data.ts`) and a thin default-exported page per tab in
+   `pages/<name>/`. Put the Create button in the list's own toolbar so it can open that feature's form.
+3. List it in `app/routes.tsx`, before the `:id` fallback. For a page with tabs, add a child per tab:
+   `{ path: "<tab>", ...page(() => import("../pages/<name>/<Page>")) }`. For a page with no tabs, add
    `{ path: "<id>", element: <AdminPage />, children: [{ index: true, lazy: ... }] }`.
 
 ## Still to do
 
 - Real sign-in and roles: put the check in `layouts/AdminGuard.tsx`. Until then nobody is blocked.
-- Replace each feature's localStorage `api.ts` with backend calls.
+- Replace each feature's sample data with backend calls.

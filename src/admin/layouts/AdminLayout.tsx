@@ -17,7 +17,7 @@ export function AdminLayout() {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-white text-brand-navy">
+      <div className="admin-shell min-h-screen bg-white text-brand-navy">
         <TopNav drawerOpen={drawerOpen} onToggleDrawer={() => setDrawerOpen(!drawerOpen)} />
         <div className="grid min-[961px]:grid-cols-[272px_minmax(0,1fr)] min-[961px]:items-start">
           <Sidebar open={drawerOpen} onNavigate={() => setDrawerOpen(false)} />

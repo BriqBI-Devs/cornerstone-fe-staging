@@ -35,7 +35,7 @@ export function PageHeader({ breadcrumbs, icon, title, tabs }: PageHeaderProps) 
         </div>
 
         {tabs && (
-          <div role="tablist" aria-label="Sections" className="mt-10 flex flex-wrap gap-6">
+          <div role="tablist" aria-label="Sections" className="mt-10 flex flex-wrap gap-x-8 gap-y-2">
             {tabs.map((tab) => (
               <Link
                 key={tab.to}
@@ -43,7 +43,7 @@ export function PageHeader({ breadcrumbs, icon, title, tabs }: PageHeaderProps) 
                 role="tab"
                 aria-selected={tab.selected}
                 // The open tab shows a line along the bottom, sitting on the header's own bottom border.
-                className="-mb-px border-b-2 border-transparent pb-3 text-sm font-medium text-admin-muted hover:text-brand-navy aria-selected:border-brand-accent aria-selected:font-semibold aria-selected:text-brand-navy"
+                className="-mb-px border-b-2 border-transparent pb-3 text-base text-admin-muted hover:text-brand-navy aria-selected:border-brand-accent aria-selected:text-brand-navy"
               >
                 {tab.label}
               </Link>

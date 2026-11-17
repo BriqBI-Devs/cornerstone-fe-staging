@@ -9,7 +9,7 @@ interface TopNavProps {
 /** The navbar that stays at the top: menu button (phones), logo, search, tools, Exit and the signed-in avatar. */
 export function TopNav({ drawerOpen, onToggleDrawer }: TopNavProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-admin-line bg-white px-3.5 shadow-[0_6px_18px_rgba(23,35,59,0.05)] min-[961px]:gap-5 min-[961px]:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-admin-line bg-white px-3.5 min-[961px]:gap-5 min-[961px]:px-6">
       <button
         type="button"
         onClick={onToggleDrawer}

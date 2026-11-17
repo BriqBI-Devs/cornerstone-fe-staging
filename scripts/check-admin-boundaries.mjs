@@ -2,7 +2,7 @@
 // (also part of `npm run lint`). Prints every broken rule and exits with 1 if there is any.
 //
 // 1. Files in src/admin may import only: src/admin itself, src/components/ui and src/lib.
-// 2. Admin features (src/admin/features/<section>/<group>/<page>) must not import each other; shared code goes in src/admin/components or src/admin/lib.
+// 2. Admin pages and features (src/admin/pages/<name>, src/admin/features/<name>) must not reach into another name; shared code goes in src/admin/components or src/admin/lib.
 // 3. Files outside src/admin may import only src/admin/index.ts.
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
@@ -29,10 +29,13 @@ const specifiers = (code) =>
 
 const resolveSpecifier = (file, spec) => (spec.startsWith("@/") ? join(src, spec.slice(2)) : resolve(dirname(file), spec));
 
-// A feature is the section/group/page folder under src/admin/features, e.g. manage/content/news.
+// A unit is one sidebar page: its folder under src/admin/pages and under src/admin/features share a name, e.g. news.
 const featureOf = (file) => {
-  const rel = relative(join(admin, "features"), file);
-  return rel.startsWith("..") ? null : rel.split(sep).slice(0, 3).join("/");
+  for (const folder of ["pages", "features"]) {
+    const rel = relative(join(admin, folder), file);
+    if (!rel.startsWith("..")) return rel.split(sep)[0];
+  }
+  return null;
 };
 
 const problems = [];

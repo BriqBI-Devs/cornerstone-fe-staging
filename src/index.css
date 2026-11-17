@@ -37,8 +37,8 @@
   --color-admin-line: #e6e8ec;
   --color-admin-soft: #f8f9fc;
   --color-admin-hover: #eef0f6;
-  --color-admin-muted: #6b7280;
-  --color-admin-faint: #98a1b0;
+  --color-admin-muted: #4b5563;
+  --color-admin-faint: #6b7280;
   --color-admin-tint: #fdf3da;
   --color-admin-tint-line: #f1e3b0;
   --color-admin-tint-ink: #5a4300;
@@ -65,4 +65,11 @@ body {
   from {
     opacity: 0;
   }
+}
+
+/* Admin console: thin grey scrollbars for the page and everything scrolling inside it. */
+html:has(.admin-shell),
+.admin-shell * {
+  scrollbar-width: thin;
+  scrollbar-color: #c9ced6 transparent;
 }

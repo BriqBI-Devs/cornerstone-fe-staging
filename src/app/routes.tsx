@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { PublicLayout } from "../layouts/PublicLayout";
 import { adminRoutes } from "../admin";
+import { NotFound } from "../components/ui/NotFound";
 import { ComingSoonPage } from "../pages/coming-soon/ComingSoonPage";
 import { CompanyCulturePage } from "../pages/company-culture/CompanyCulturePage";
 import { StoryDetailPage } from "../pages/company-culture/StoryDetailPage";
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
         path: `/${route.path}`,
         element: <ComingSoonPage title={route.title} />,
       })),
+      { path: "*", element: <NotFound /> },
     ],
   },
   // The admin console has its own layout (no employee header or footer) and its own code under src/admin.

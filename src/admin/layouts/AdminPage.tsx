@@ -1,8 +1,8 @@
 import { Navigate, useLocation, useOutlet } from "react-router-dom";
-import { PageHeader } from "../../components/ui/PageHeader";
-import { PlaceholderPage } from "../../components/ui/PlaceholderPage";
-import { ADMIN_TITLE, DEFAULT_ADMIN_PAGE, getAdminPage } from "../../layouts/sidebar/data";
-import { NavIcon } from "../../layouts/sidebar/NavIcon";
+import { PageHeader } from "../components/ui/PageHeader";
+import { PlaceholderPage } from "../components/ui/PlaceholderPage";
+import { ADMIN_TITLE, DEFAULT_ADMIN_PAGE, getAdminPage } from "./sidebar/data";
+import { NavIcon } from "./sidebar/NavIcon";
 
 /** One admin page: the header band (breadcrumb, title, tabs) and the page's content, or the placeholder if it is not built yet. */
 export function AdminPage() {
