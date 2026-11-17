@@ -29,9 +29,7 @@ export function AdminPage() {
         ]}
         icon={<NavIcon id={page.id} className="size-5" />}
         title={page.label}
-        description={page.description}
         tabs={page.tabs?.map((t) => ({ label: t.label, to: `/admin/${page.id}/${t.id}`, selected: t.id === activeTab?.id }))}
-        action={page.tabs ? activeTab?.action : page.action}
       />
       <div className="px-6 pb-8 pt-6 md:px-12 md:pb-10 md:pt-8">
         {/* A built page is a child route (see app/routes.tsx); without one, the placeholder shows. */}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
 import { RowMenu } from "@/admin/components/ui/RowMenu";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { SearchInput } from "@/components/ui/SearchInput";
@@ -12,6 +13,7 @@ export function EventList() {
     <div>
       <div className="mb-5 flex items-center justify-between gap-3">
         <SearchInput value={query} onChange={setQuery} placeholder="Search events" className="w-full max-w-sm border border-admin-line bg-white" />
+        <Button className="h-10 shrink-0 px-4">Create event</Button>
       </div>
 
       <div className="divide-y divide-admin-line">

@@ -1,22 +1,18 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "../../../components/ui/Button";
 import { cn } from "../../../lib/cn";
 
 interface PageHeaderProps {
   breadcrumbs: { label: string; to?: string }[];
   icon: ReactNode;
   title: string;
-  description: string;
   tabs?: { label: string; to: string; selected: boolean }[];
-  /** Text of the button beside the title, e.g. "Create story". */
-  action?: string;
 }
 
-/** The header band of an admin page: breadcrumb, icon and title, description, action button and tabs. */
-export function PageHeader({ breadcrumbs, icon, title, description, tabs, action }: PageHeaderProps) {
+/** The header band of an admin page: breadcrumb, icon and title, and tabs. */
+export function PageHeader({ breadcrumbs, icon, title, tabs }: PageHeaderProps) {
   return (
-    <div className={cn("border-b border-admin-line px-6 pt-8 md:px-12", !tabs && "pb-8")}>
+    <div className={cn("border-b border-admin-line px-6 pt-10 md:px-12", !tabs && "pb-10")}>
       <div className="mx-auto max-w-[1080px]">
         <nav aria-label="Breadcrumb" className="flex flex-wrap gap-x-2 text-sm text-admin-muted">
           {breadcrumbs.map((crumb, index) => (
@@ -33,15 +29,13 @@ export function PageHeader({ breadcrumbs, icon, title, description, tabs, action
           ))}
         </nav>
 
-        <div className="mt-4 flex items-center gap-3">
+        <div className="mt-5 flex items-center gap-3">
           <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-admin-tint text-admin-gold">{icon}</span>
           <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-          {action && <Button className="ml-auto">{action}</Button>}
         </div>
-        <p className="mt-2 max-w-[680px] text-sm leading-relaxed text-admin-muted">{description}</p>
 
         {tabs && (
-          <div role="tablist" aria-label="Sections" className="mt-6 flex flex-wrap gap-6">
+          <div role="tablist" aria-label="Sections" className="mt-10 flex flex-wrap gap-6">
             {tabs.map((tab) => (
               <Link
                 key={tab.to}

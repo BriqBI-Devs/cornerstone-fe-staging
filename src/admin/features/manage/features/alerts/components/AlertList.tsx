@@ -1,5 +1,6 @@
 import { Link2 } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
 import { RowMenu } from "@/admin/components/ui/RowMenu";
 import { Avatar } from "@/components/ui/Avatar";
 import { SearchInput } from "@/components/ui/SearchInput";
@@ -20,7 +21,10 @@ export function AlertList() {
 
   return (
     <div>
-      <SearchInput value={query} onChange={setQuery} placeholder="Search alerts" className="mb-4 w-full max-w-sm border border-admin-line bg-white" />
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <SearchInput value={query} onChange={setQuery} placeholder="Search alerts" className="w-full max-w-sm border border-admin-line bg-white" />
+        <Button className="h-10 shrink-0 px-4">Create alert</Button>
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[700px] text-left text-sm">
           <thead>

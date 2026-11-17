@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
 import { RowMenu } from "@/admin/components/ui/RowMenu";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { cn } from "@/lib/cn";
@@ -17,8 +18,8 @@ export function PollList() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <SearchInput value={query} onChange={setQuery} placeholder="Search polls" className="w-full max-w-sm border border-admin-line bg-white" />
+      <div className="mb-4 flex items-center gap-3">
+        <SearchInput value={query} onChange={setQuery} placeholder="Search polls" className="mr-auto w-full max-w-sm border border-admin-line bg-white" />
         <select
           value={status}
           onChange={(event) => setStatus(event.target.value)}
@@ -32,6 +33,7 @@ export function PollList() {
             </option>
           ))}
         </select>
+        <Button className="h-10 shrink-0 px-4">Create poll</Button>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

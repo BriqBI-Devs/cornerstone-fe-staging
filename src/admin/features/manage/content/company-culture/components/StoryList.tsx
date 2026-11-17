@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
 import { RowMenu } from "@/admin/components/ui/RowMenu";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { SearchInput } from "@/components/ui/SearchInput";
@@ -13,8 +14,8 @@ export function StoryList() {
 
   return (
     <div>
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <SearchInput value={query} onChange={setQuery} placeholder="Search stories" className="w-full max-w-sm border border-admin-line bg-white" />
+      <div className="mb-5 flex items-center gap-3">
+        <SearchInput value={query} onChange={setQuery} placeholder="Search stories" className="mr-auto w-full max-w-sm border border-admin-line bg-white" />
         <select
           value={category}
           onChange={(event) => setCategory(event.target.value)}
@@ -28,6 +29,7 @@ export function StoryList() {
             </option>
           ))}
         </select>
+        <Button className="h-10 shrink-0 px-4">Create story</Button>
       </div>
 
       <div className="divide-y divide-admin-line">

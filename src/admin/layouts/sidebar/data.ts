@@ -15,30 +15,36 @@ export const ADMIN_NAV: AdminNavSection[] = [
           {
             id: "company-culture",
             label: "Company + Culture",
-            description: "Stories, categories and the featured carousel.",
             tabs: [
-              { id: "content", label: "Content", action: "Create story" },
-              { id: "categories", label: "Categories", action: "Create category" },
+              { id: "content", label: "Content" },
+              { id: "categories", label: "Categories" },
             ],
           },
           {
             id: "news",
             label: "News",
-            description: "News articles shown on the home page and the news page.",
             tabs: [
-              { id: "content", label: "Content", action: "Create article" },
-              { id: "categories", label: "Categories", action: "Create category" },
+              { id: "content", label: "Content" },
+              { id: "categories", label: "Categories" },
             ],
           },
-          { id: "events", label: "Events", description: "Events, locations and RSVPs, including multi-day events.", action: "Create event" },
+          { id: "events", label: "Events" },
         ],
       },
       {
         title: "Features",
         items: [
-          { id: "departments", label: "Departments", description: "Each team's description and lead." },
-          { id: "polls", label: "Polls", description: "Create polls and see the results.", action: "Create poll" },
-          { id: "alerts", label: "Alerts", description: "Banners and notices shown across Cornerstone.", action: "Create alert" },
+          { id: "departments", label: "Departments" },
+          {
+            id: "policies-resources",
+            label: "Policies + Resources",
+            tabs: [
+              { id: "categories", label: "Categories" },
+              { id: "links", label: "Ticket link" },
+            ],
+          },
+          { id: "polls", label: "Polls" },
+          { id: "alerts", label: "Alerts" },
         ],
       },
     ],
@@ -52,7 +58,6 @@ export const ADMIN_NAV: AdminNavSection[] = [
           {
             id: "application",
             label: "Application",
-            description: "General settings for this Cornerstone site, and which profile fields employees can see.",
             tabs: [
               { id: "profile-fields", label: "Profile fields" },
               { id: "general", label: "General" },
@@ -67,7 +72,6 @@ export const ADMIN_NAV: AdminNavSection[] = [
             id: "branding",
             label: "Branding",
             badge: "8 sections",
-            description: "Control how Cornerstone looks: the logo, colors, fonts, header and navigation.",
             tabs: [
               { id: "logo", label: "Logo" },
               { id: "color-palette", label: "Color palette" },
@@ -79,15 +83,15 @@ export const ADMIN_NAV: AdminNavSection[] = [
               { id: "analytics", label: "Analytics" },
             ],
           },
-          { id: "apps-and-links", label: "Apps + links", description: "The apps and links shown in the apps menu." },
+          { id: "apps-and-links", label: "Apps + links" },
         ],
       },
       {
         title: "Users + groups",
         items: [
-          { id: "access-control", label: "Access control", description: "Roles and what each role can do." },
-          { id: "audiences", label: "Audiences", description: "Groups of people used to target content." },
-          { id: "users", label: "Users", description: "Add, edit and deactivate users." },
+          { id: "access-control", label: "Access control" },
+          { id: "audiences", label: "Audiences" },
+          { id: "users", label: "Users" },
         ],
       },
     ],
@@ -97,7 +101,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
     groups: [
       {
         title: null,
-        items: [{ id: "analytics-application", label: "Application", note: "11 reports", description: "Usage reports for Cornerstone." }],
+        items: [{ id: "analytics-application", label: "Application", note: "11 reports" }],
       },
     ],
   },
