@@ -13,6 +13,10 @@ const src = join(root, "src");
 const admin = join(src, "admin");
 const sharedRoots = [join(src, "components", "ui"), join(src, "lib")];
 
+// The one exception: the admin top bar reuses the site header's panels (apps, notifications, profile) and the sample user.
+const topNav = join(admin, "layouts", "TopNav.tsx");
+const topNavShared = [join(src, "layouts"), join(src, "features", "people", "data")];
+
 const inside = (file, dir) => file === dir || file.startsWith(dir + sep);
 
 function* walk(dir) {
@@ -46,7 +50,8 @@ for (const file of walk(src)) {
     const target = resolveSpecifier(file, spec);
     const name = relative(root, file);
     if (fromAdmin) {
-      if (!inside(target, admin) && !sharedRoots.some((dir) => inside(target, dir))) {
+      const allowed = file === topNav && topNavShared.some((dir) => inside(target, dir));
+      if (!inside(target, admin) && !allowed && !sharedRoots.some((dir) => inside(target, dir))) {
         problems.push(`${name}: "${spec}" reaches employee code. Admin may import only src/components/ui and src/lib.`);
       }
       const from = featureOf(file);
