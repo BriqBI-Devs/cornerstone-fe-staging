@@ -43,7 +43,6 @@ export interface ProfileDetails {
   jobTitle?: string;
   manager?: string;
   pronouns?: string;
-  company?: string;
   department?: string;
   address1?: string;
   address2?: string;

@@ -10,7 +10,6 @@ const DEFAULT_FIELDS: ProfileFieldSetting[] = [
   { id: "jobTitle", label: "Job title", source: "dayforce", visible: true },
   { id: "department", label: "Department", source: "dayforce", visible: true },
   { id: "manager", label: "Manager", source: "dayforce", visible: true },
-  { id: "company", label: "Company name", source: "dayforce", visible: false },
   { id: "email", label: "Email", source: "microsoft", visible: true },
   { id: "phone", label: "Phone", source: "microsoft", visible: true },
   { id: "extension", label: "Extension", source: "microsoft", visible: true },

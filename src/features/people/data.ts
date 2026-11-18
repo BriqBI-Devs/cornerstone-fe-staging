@@ -126,7 +126,6 @@ export function getProfileDetails(person: Person): ProfileDetails {
     social_facebook: `https://www.facebook.com/${slug}`,
     social_instagram: `https://www.instagram.com/${slug}`,
     social_youtube: `https://www.youtube.com/@${slug}`,
-    company: FACETS.company(person),
     department: FACETS.department(person),
     language: "en-US",
     cf_management: FACETS.management(person),
