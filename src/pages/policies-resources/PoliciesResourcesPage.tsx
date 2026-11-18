@@ -2,6 +2,7 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card } from "../../components/ui/Card";
+import { PageHeaderBanner } from "../../components/ui/PageHeaderBanner";
 import { SearchInput } from "../../components/ui/SearchInput";
 import { RESOURCE_CATEGORIES, SUBMIT_CASE_URL } from "../../features/policies-resources/data";
 
@@ -37,16 +38,11 @@ export function PoliciesResourcesPage() {
   const hasResults = Boolean(helpCenter) || visibleCategories.length > 0;
 
   return (
-    <div className="flex flex-col gap-8 py-6">
-      <div>
-        <h1 className="mb-[10px] text-[32px] font-extrabold tracking-[-0.02em] text-brand-navy">
-          Policies + Resources
-        </h1>
-        <p className="max-w-[460px] text-sm leading-[1.6] text-brand-navy/60">
-          Help centers, brand resources, and the policies that keep L+M running — HR, safety, IT, and
-          facilities guidance in one place.
-        </p>
-      </div>
+    <div className="flex flex-col gap-8 pb-8">
+      <PageHeaderBanner
+        title="Policies + Resources"
+        description="Help centers, brand resources, and the policies that keep L+M running — HR, safety, IT, and facilities guidance in one place."
+      />
 
       <SearchInput
         value={query}
