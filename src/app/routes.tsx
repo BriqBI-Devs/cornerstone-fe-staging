@@ -41,9 +41,10 @@ export const router = createBrowserRouter([
         path: `/${route.path}`,
         element: <ComingSoonPage title={route.title} />,
       })),
-      { path: "*", element: <NotFound /> },
     ],
   },
   // The admin console has its own layout (no employee header or footer) and its own code under src/admin.
   adminRoutes,
+  // Anything else: a full-page 404 with no header or footer.
+  { path: "*", element: <NotFound /> },
 ]);

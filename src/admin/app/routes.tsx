@@ -1,6 +1,5 @@
 import type { ComponentType } from "react";
 import { Navigate, type RouteObject } from "react-router-dom";
-import { NotFound } from "@/components/ui/NotFound";
 import { DEFAULT_ADMIN_PAGE } from "../layouts/sidebar/data";
 import { AdminPage } from "../layouts/AdminPage";
 
@@ -83,6 +82,5 @@ export const adminRoutes: RouteObject = {
     // Everything else in the sitemap: header plus the "awaiting backend requirements" placeholder.
     { path: ":id", element: <AdminPage /> },
     { path: ":id/:tab", element: <AdminPage /> },
-    { path: "*", element: <NotFound to="/admin" label="Back to admin" /> },
   ],
 };
