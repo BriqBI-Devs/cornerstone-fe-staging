@@ -1,4 +1,4 @@
-import { Building2, Clock, Hash, Mail, Pencil, Phone, Smartphone, Users } from "lucide-react";
+import { Clock, Hash, Mail, Pencil, Phone, Smartphone, Users } from "lucide-react";
 import type { ReactNode } from "react";
 import { Avatar } from "../../../../components/ui/Avatar";
 import { TempNote } from "../../../../components/ui/TempNote";
@@ -11,11 +11,10 @@ const action =
 const icon = "size-[15px] shrink-0";
 const link = "hover:text-brand-link hover:underline hover:underline-offset-[3px]";
 
-/** Photo, name, role, the company, department and contact details as light tag rows, and the profile actions. */
+/** Photo, name, role, the department and contact details as light tag rows, and the profile actions. */
 export function ProfileHeader({ person, details, onEdit }: { person: Person; details: ProfileDetails; onEdit: () => void }) {
-  // Everything shown as a tag, in order: company and department, then the contact details. Empty ones are left out.
+  // Everything shown as a tag, in order: department, then the contact details. Empty ones are left out.
   const tags: { label: string; icon: ReactNode; value: ReactNode }[] = [
-    { label: "Company", icon: <Building2 className={icon} />, value: details.company },
     { label: "Department", icon: <Users className={icon} />, value: details.department },
     { label: "Phone", icon: <Phone className={icon} />, value: details.phone && <a href={`tel:${details.phone}`} className={link}>{details.phone}</a> },
     { label: "Extension", icon: <Hash className={icon} />, value: details.ext && `Ext. ${details.ext}` },
@@ -33,7 +32,7 @@ export function ProfileHeader({ person, details, onEdit }: { person: Person; det
     { label: "Time zone", icon: <Clock className={icon} />, value: details.timezone && ZONE_LABELS[details.timezone]?.replace(/^\(GMT[^)]*\)\s*/, "") },
   ];
 
-  // One row of light tags; the contact details get their own row below company and department.
+  // One row of light tags; the contact details get their own row below the department.
   const tagRow = (items: typeof tags) => (
     <ul className="mt-3 flex flex-wrap gap-x-[18px] gap-y-1.5 text-sm text-brand-navy/60 [&+ul]:mt-2">
       {items
@@ -61,8 +60,8 @@ export function ProfileHeader({ person, details, onEdit }: { person: Person; det
             {details.pronouns && <span className="text-sm font-medium tracking-normal text-brand-navy/60">{details.pronouns}</span>}
           </h1>
           <p className="mt-1 text-base">{person.title}</p>
-          {tagRow(tags.slice(0, 2))}
-          {tagRow(tags.slice(2))}
+          {tagRow(tags.slice(0, 1))}
+          {tagRow(tags.slice(1))}
         </div>
         <div className="relative self-start max-sm:w-full">
           <button type="button" onClick={onEdit} className={action}>
