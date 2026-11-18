@@ -1,6 +1,5 @@
 import { Link, useParams } from "react-router-dom";
 import { getStoryDetail } from "../../features/company-culture/data";
-import { RelatedStories } from "../../features/company-culture/story/RelatedStories";
 import { StoryActions } from "../../features/company-culture/story/StoryActions";
 import { StoryCommentFeed } from "../../features/company-culture/story/comments/StoryCommentFeed";
 import { StoryBody } from "../../features/company-culture/story/StoryBody";
@@ -38,7 +37,6 @@ export function StoryDetailPage() {
             <StoryFeedback />
           </div>
         </article>
-        <RelatedStories stories={story.related} />
         <StoryActions story={story} />
         <StoryCommentFeed feed={story.feed} />
       </div>

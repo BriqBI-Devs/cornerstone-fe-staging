@@ -64,14 +64,6 @@ export const getReports = (id: number) => PEOPLE.filter((person) => person.manag
 
 // ---- Directory filters and sorting ----
 
-// Entity codes for the sample teams (adjust the mapping when the real codes are known).
-const ENTITY_CODE: Record<string, string> = {
-  "Executive Team": "LMBG", Investments: "LMBG", "Accounting + Finance": "LMBG", Legal: "LMBG", "Risk + Insurance": "LMBG",
-  Development: "LMDP", Construction: "LMDP", "Building Envelope + Sustainability": "LMDP", "Community Investment": "LMDP",
-  "Property Operations": "LMFM", Operations: "LMFM",
-  Technology: "LMXD", "Communications + Marketing": "LMXD", "People Team": "LMXD",
-};
-
 /** The value a person has for each directory filter. */
 export const FACETS: Record<FilterKey, (person: Person) => string> = {
   company: (p) => (["Executive Team", "Investments", "Accounting + Finance"].includes(p.team) ? "Cornerstone Capital" : "Cornerstone Property Group"),
@@ -79,7 +71,6 @@ export const FACETS: Record<FilterKey, (person: Person) => string> = {
   title: (p) => p.title,
   timezone: () => "Eastern (ET)",
   management: (p) => (getReports(p.id).length ? "Yes" : "No"),
-  entity: (p) => ENTITY_CODE[p.team] ?? "LMBG",
 };
 
 export const FILTERS: [FilterKey, string][] = [
@@ -137,14 +128,8 @@ export function getProfileDetails(person: Person): ProfileDetails {
     social_youtube: `https://www.youtube.com/@${slug}`,
     company: FACETS.company(person),
     department: FACETS.department(person),
-    entity: FACETS.entity(person),
-    employeeNumber: `E-${1000 + person.id}`,
-    userType: "Employee",
     language: "en-US",
-    cf_officeDays: ["Mon, Wed, Thu", "Tue, Wed, Thu", "Mon, Tue, Fri", "Wed, Thu"][person.id % 4],
     cf_management: FACETS.management(person),
-    cf_entity: FACETS.entity(person),
-    cf_businessLine: FACETS.department(person),
   };
 }
 

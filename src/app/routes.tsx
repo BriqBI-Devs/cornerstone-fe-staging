@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { PublicLayout } from "../layouts/PublicLayout";
-import { AdminPage } from "../pages/admin/AdminPage";
+import { adminRoutes } from "../admin";
+import { NotFound } from "../components/ui/NotFound";
 import { ComingSoonPage } from "../pages/coming-soon/ComingSoonPage";
 import { CompanyCulturePage } from "../pages/company-culture/CompanyCulturePage";
 import { StoryDetailPage } from "../pages/company-culture/StoryDetailPage";
@@ -35,7 +36,6 @@ export const router = createBrowserRouter([
       { path: "people/:id", element: <PersonProfilePage /> },
       { path: "people/:id/org-chart", element: <OrgChartPage /> },
       { path: "news", element: <NewsPage /> },
-      { path: "admin", element: <AdminPage /> },
       { path: "favorites", element: <FavoritesPage /> },
       ...COMING_SOON_ROUTES.map((route) => ({
         path: `/${route.path}`,
@@ -43,4 +43,8 @@ export const router = createBrowserRouter([
       })),
     ],
   },
+  // The admin console has its own layout (no employee header or footer) and its own code under src/admin.
+  adminRoutes,
+  // Anything else: a full-page 404 with no header or footer.
+  { path: "*", element: <NotFound /> },
 ]);

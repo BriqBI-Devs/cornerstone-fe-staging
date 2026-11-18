@@ -284,17 +284,14 @@ const COMMENTS: Record<string, Comment[]> = {
 };
 
 export interface StoryDetail extends Story {
-  related: Story[];
   feed: Comment[];
 }
 
-/** Stands in for GET /stories/:slug. Related = same category first, then the rest, newest first. */
+/** Stands in for GET /stories/:slug. */
 export const getStoryDetail = (slug: string): StoryDetail | undefined => {
   const story = STORIES.find((item) => item.slug === slug);
   if (!story) return undefined;
-  const others = STORIES.filter((item) => item.slug !== slug).sort(byNewest);
-  const related = [...others.filter((item) => item.categoryKey === story.categoryKey), ...others.filter((item) => item.categoryKey !== story.categoryKey)];
-  return { ...story, related: related.slice(0, 3), feed: COMMENTS[slug] ?? [] };
+  return { ...story, feed: COMMENTS[slug] ?? [] };
 };
 
 export const storyHref = (story: Story) => `/company-culture/${story.slug}`;

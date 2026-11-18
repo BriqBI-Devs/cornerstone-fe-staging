@@ -12,7 +12,7 @@ interface PageHeaderBannerProps {
   className?: string;
 }
 
-/** Full-width navy header at the top of the section landing pages (Company + Culture, Events). */
+/** Full-width navy header at the top of the section landing pages (Company + Culture, Events, People directory). */
 export function PageHeaderBanner({ title, description, eyebrow, action, className }: PageHeaderBannerProps) {
   return (
     // Breaks out of the centred page column so the band spans the full window width.

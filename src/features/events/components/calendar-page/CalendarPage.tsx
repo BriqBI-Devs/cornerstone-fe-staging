@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { PageHeaderBanner } from "../../../../components/ui/PageHeaderBanner";
-import { EVENTS } from "../../data";
+import { PageHeaderBanner } from "../../../../components/ui/PageHeaderBanner";import { EVENTS } from "../../data";
 import { formatPeriodTitle, shiftPeriod } from "../../helpers/calendar";
 import { toISODate } from "../../helpers/dates";
 import type { CalendarMode, DateFilter, EventItem, EventsView, Rsvp } from "../../types";

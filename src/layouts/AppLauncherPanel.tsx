@@ -1,8 +1,8 @@
 import { ChevronsUpDown, FileText, Search } from "lucide-react";
-import { FavoriteButton } from "../components/ui/FavoriteButton";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useFavorites, type FavTab } from "../lib/useFavorites";
+import { FavoriteButton } from "../components/ui/FavoriteButton";
+import { FAVORITES, type FavTab } from "../features/favorites/data";
 import { cn } from "../lib/cn";
 
 const APPS = [
@@ -25,7 +25,7 @@ function AppTile({ app }: { app: (typeof APPS)[number] }) {
         href="#"
         className="group relative flex flex-col items-center gap-2 rounded-card border border-border p-3 text-center hover:border-transparent hover:shadow-card"
       >
-        <span onClick={(e) => e.preventDefault()} className="absolute right-0.5 top-0.5"><FavoriteButton className="h-6 w-6" item={{ id: `app-${app.label}`, tab: "apps", title: app.label, image: `/cornerstone-assets/apps/${app.image}` }} /></span>
+        <span onClick={(e) => e.preventDefault()} className="absolute right-0.5 top-0.5"><FavoriteButton className="h-6 w-6" id={`app-${app.label}`} title={app.label} /></span>
         <span className="mt-2 flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-border bg-white">
           <img
             src={`/cornerstone-assets/apps/${app.image}`}
@@ -42,7 +42,6 @@ export function AppLauncherPanel() {
   const [tab, setTab] = useState<"apps" | "favorites">("apps");
   const [sort, setSort] = useState<SortOption>("Default");
   const [sortOpen, setSortOpen] = useState(false);
-  const { items, has } = useFavorites();
   const [fav, setFav] = useState<FavTab>("apps");
 
   const apps =
@@ -51,8 +50,8 @@ export function AppLauncherPanel() {
       : sort === "Name Z-A"
         ? [...APPS].sort((a, b) => b.label.localeCompare(a.label))
         : APPS;
-  const starred = APPS.filter((app) => has(`app-${app.label}`)).slice(0, 8);
-  const saved = items.filter((i) => i.tab === fav).slice(0, 5);
+  const starred = APPS.filter((app) => FAVORITES.some((i) => i.id === `app-${app.label}`)).slice(0, 8);
+  const saved = FAVORITES.filter((i) => i.tab === fav).slice(0, 5);
 
   return (
     <div className="fixed inset-x-4 top-14 z-40 max-h-[calc(100vh-5rem)] w-auto overflow-y-auto rounded-card border border-border bg-surface shadow-card md:absolute md:inset-x-auto md:right-0 md:top-full md:z-10 md:mt-2 md:max-h-none md:w-96 md:overflow-visible">
@@ -140,7 +139,7 @@ export function AppLauncherPanel() {
                 <div key={item.id} className={cn("flex items-center gap-2.5 py-2 text-sm text-brand-navy", i > 0 && "border-t border-border")}>
                   <FileText className="h-7 w-7 shrink-0 rounded-md bg-brand-navy/10 p-1.5" />
                   <Link to={item.to ?? "/favorites"} className="min-w-0 flex-1 truncate hover:text-brand-link">{item.title}</Link>
-                  <FavoriteButton item={item} className="h-6 w-6" />
+                  <FavoriteButton id={item.id} title={item.title} className="h-6 w-6" />
                 </div>
               ))
             )}

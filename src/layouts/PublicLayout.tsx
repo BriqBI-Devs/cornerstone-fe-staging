@@ -88,52 +88,52 @@ export function PublicLayout() {
             />
           </Link>
           <div className="flex items-center justify-end gap-1 md:gap-4">
-            <div ref={appsRef} className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
+            <div ref={appsRef} className="relative flex h-9 w-9 items-center justify-center md:h-9 md:w-9">
               <button
                 onClick={() => setAppsOpen((open) => !open)}
                 aria-label="Apps"
-                className="flex h-9 w-9 items-center justify-center text-brand-navy/75 hover:text-brand-navy md:h-7 md:w-7"
+                className="flex h-9 w-9 items-center justify-center text-brand-navy/75 hover:text-brand-navy md:h-9 md:w-9"
               >
-                <LayoutGrid className="h-4 w-4" />
+                <LayoutGrid className="h-5 w-5" />
               </button>
               {appsOpen && <AppLauncherPanel />}
             </div>
-            <div ref={notificationsRef} className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
+            <div ref={notificationsRef} className="relative flex h-9 w-9 items-center justify-center md:h-9 md:w-9">
               <button
                 onClick={() => setNotificationsOpen((open) => !open)}
                 aria-label="Notifications"
-                className="flex h-9 w-9 items-center justify-center text-brand-navy/75 hover:text-brand-navy md:h-7 md:w-7"
+                className="flex h-9 w-9 items-center justify-center text-brand-navy/75 hover:text-brand-navy md:h-9 md:w-9"
               >
-                <Bell className="h-4 w-4" />
+                <Bell className="h-5 w-5" />
               </button>
-              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-brand-accent md:-right-0.5 md:-top-0.5" />
+              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-brand-accent md:right-1 md:top-1" />
               {notificationsOpen && <NotificationsPanel />}
             </div>
             {/* Gear before the profile picture: opens the admin dashboard. Shown to everyone until sign-in decides who is an admin. */}
-            <div className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
+            <div className="relative flex h-9 w-9 items-center justify-center md:h-9 md:w-9">
               <NavLink
                 to="/admin"
                 aria-label="Admin dashboard"
                 title="Admin dashboard"
                 className={({ isActive }) =>
                   cn(
-                    "flex h-9 w-9 items-center justify-center hover:text-brand-navy md:h-7 md:w-7",
+                    "flex h-9 w-9 items-center justify-center hover:text-brand-navy md:h-9 md:w-9",
                     isActive ? "text-brand-link" : "text-brand-navy/75",
                   )
                 }
               >
-                <Settings className="h-4 w-4" />
+                <Settings className="h-5 w-5" />
               </NavLink>
               {/* TEMP: points at the gear while the admin dashboard is new; once closed it stays closed in this browser. */}
               <TempNote
                 title="New! Admin panel options"
                 storageKey="admin-panel-note-shown"
                 arrow="top"
-                arrowOffset={237}
+                arrowOffset={235}
                 className="absolute right-0 top-full z-20 mt-3 w-[260px] max-w-[calc(100vw-2rem)]"
               />
             </div>
-            <div ref={profileRef} className="relative flex h-9 w-9 items-center justify-center md:h-7 md:w-7">
+            <div ref={profileRef} className="relative flex h-9 w-9 items-center justify-center md:h-9 md:w-9">
               <button
                 onClick={() => setProfileOpen((open) => !open)}
                 aria-label="Profile menu"
@@ -141,7 +141,7 @@ export function PublicLayout() {
                 aria-expanded={profileOpen}
                 className="flex items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-link"
               >
-                <Avatar name={currentUser.name} src={currentUser.photo} size="sm" />
+                <Avatar name={currentUser.name} src={currentUser.photo} size="md" />
               </button>
               {profileOpen && (
                 <ProfilePanel
@@ -236,7 +236,14 @@ export function PublicLayout() {
 
           <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-4 text-xs text-white/60 md:flex-row md:items-center md:justify-between">
             <span>© 2026 L+M Development Partners · Cornerstone intranet</span>
-            <span>Privacy · Terms · Accessibility · Site map</span>
+            <div className="flex items-center gap-5">
+              <a href="#" className="hover:text-white">
+                Terms of service
+              </a>
+              <a href="#" className="hover:text-white">
+                Privacy policy
+              </a>
+            </div>
           </div>
         </div>
       </footer>
