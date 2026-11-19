@@ -1,9 +1,10 @@
 import { ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { categoryTitle, type Story } from "../data";
+import type { Story } from "../data";
 import { formatStoryDate } from "../format";
+import type { StorySection } from "./StoryDetailView";
 
-export function StoryHeader({ story }: { story: Story }) {
+export function StoryHeader({ story, section, categoryTitle }: { story: Story; section: StorySection; categoryTitle: string }) {
   const navigate = useNavigate();
 
   return (
@@ -25,11 +26,11 @@ export function StoryHeader({ story }: { story: Story }) {
             Cornerstone
           </Link>
           {" / "}
-          <Link to="/company-culture" className="hover:text-brand-link hover:underline">
-            Company + Culture
+          <Link to={section.to} className="hover:text-brand-link hover:underline">
+            {section.label}
           </Link>
           {" / "}
-          <span className="text-brand-navy">{categoryTitle(story.categoryKey)}</span>
+          <span className="text-brand-navy">{categoryTitle}</span>
         </nav>
       </div>
 

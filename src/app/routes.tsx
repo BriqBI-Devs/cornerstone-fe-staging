@@ -9,6 +9,7 @@ import { EventDetailPage } from "../pages/events/EventDetailPage";
 import { EventsPage } from "../pages/events/EventsPage";
 import { FavoritesPage } from "../pages/favorites/FavoritesPage";
 import { HomePage } from "../pages/home/HomePage";
+import { NewsDetailPage } from "../pages/news/NewsDetailPage";
 import { NewsPage } from "../pages/news/NewsPage";
 import { OrgChartPage } from "../pages/people/OrgChartPage";
 import { PeoplePage } from "../pages/people/PeoplePage";
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
       { path: "people/:id", element: <PersonProfilePage /> },
       { path: "people/:id/org-chart", element: <OrgChartPage /> },
       { path: "news", element: <NewsPage /> },
+      { path: "news/:id", element: <NewsDetailPage /> },
       { path: "favorites", element: <FavoritesPage /> },
       ...COMING_SOON_ROUTES.map((route) => ({
         path: `/${route.path}`,
