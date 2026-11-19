@@ -74,6 +74,15 @@ export const adminRoutes: RouteObject = {
       ],
     },
     {
+      path: "users",
+      element: <AdminPage />,
+      children: [
+        { path: "users", ...page(() => import("../pages/users/UsersPage")) },
+        { path: "sessions", ...page(() => import("../pages/users/SessionsPage")) },
+        { path: "export-history", ...page(() => import("../pages/users/ExportHistoryPage")) },
+      ],
+    },
+    {
       path: "application",
       element: <AdminPage />,
       children: [{ path: "profile-fields", ...page(() => import("../pages/application/ProfileFieldsPage")) }],

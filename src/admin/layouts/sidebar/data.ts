@@ -95,7 +95,15 @@ export const ADMIN_NAV: AdminNavSection[] = [
         items: [
           { id: "access-control", label: "Access control" },
           { id: "audiences", label: "Audiences" },
-          { id: "users", label: "Users" },
+          {
+            id: "users",
+            label: "Users",
+            tabs: [
+              { id: "users", label: "Users" },
+              { id: "sessions", label: "Sessions" },
+              { id: "export-history", label: "Export history" },
+            ],
+          },
         ],
       },
     ],
