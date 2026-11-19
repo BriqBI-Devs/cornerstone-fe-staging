@@ -66,11 +66,9 @@ export const getReports = (id: number) => PEOPLE.filter((person) => person.manag
 
 /** The value a person has for each directory filter. */
 export const FACETS: Record<FilterKey, (person: Person) => string> = {
-  company: (p) => (["Executive Team", "Investments", "Accounting + Finance"].includes(p.team) ? "Cornerstone Capital" : "Cornerstone Property Group"),
   department: (p) => p.team,
   title: (p) => p.title,
   timezone: () => "Eastern (ET)",
-  management: (p) => (getReports(p.id).length ? "Yes" : "No"),
 };
 
 export const FILTERS: [FilterKey, string][] = [
@@ -81,7 +79,6 @@ export const FILTERS: [FilterKey, string][] = [
 
 export const SORT_OPTIONS: [SortKey, string][] = [
   ["name", "Name"],
-  ["company", "Company"],
   ["title", "Job title"],
   ["department", "Department"],
 ];
@@ -128,7 +125,6 @@ export function getProfileDetails(person: Person): ProfileDetails {
     social_youtube: `https://www.youtube.com/@${slug}`,
     department: FACETS.department(person),
     language: "en-US",
-    cf_management: FACETS.management(person),
   };
 }
 

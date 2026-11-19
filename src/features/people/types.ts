@@ -13,8 +13,8 @@ export interface Person {
   expertise: string[];
 }
 
-export type FilterKey = "company" | "department" | "title" | "timezone" | "management";
-export type SortKey = "name" | "company" | "title" | "department";
+export type FilterKey = "department" | "title" | "timezone";
+export type SortKey = "name" | "title" | "department";
 
 /** One published or mentioned item in a person's activity feed. */
 export interface ActivityItem {
@@ -62,5 +62,4 @@ export interface ProfileDetails {
   social_instagram?: string;
   social_youtube?: string;
   language?: string;
-  cf_management?: string;
 }

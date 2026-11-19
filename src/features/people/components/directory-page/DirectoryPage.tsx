@@ -9,7 +9,7 @@ import { PeopleTable } from "./PeopleTable";
 const PAGE_SIZE = 14;
 
 const sortValue = (person: Person, key: SortKey) =>
-  key === "name" ? person.name : key === "company" ? FACETS.company(person) : key === "title" ? person.title : person.team;
+  key === "name" ? person.name : key === "title" ? person.title : person.team;
 
 /** The /people page: header, search and sort, filters, then the list, which loads more as you scroll. */
 export function DirectoryPage() {

@@ -49,7 +49,6 @@ const buildPanes = (person: Person): { title: string; fields: FieldDef[] }[] => 
     title: "Additional",
     fields: [
       { name: "language", label: "Language", options: Object.entries(LANGUAGE_LABELS), wide: true },
-      { name: "cf_management", label: "Management" },
     ],
   },
   {
