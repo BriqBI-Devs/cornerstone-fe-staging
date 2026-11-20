@@ -94,7 +94,6 @@ export const ADMIN_NAV: AdminNavSection[] = [
       {
         title: "Users + groups",
         items: [
-          { id: "access-control", label: "Access control" },
           { id: "audiences", label: "Audiences" },
           {
             id: "users",

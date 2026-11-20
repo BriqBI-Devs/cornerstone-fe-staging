@@ -46,6 +46,11 @@
   --color-admin-danger: #ce4a38;
 }
 
+/* A little larger text everywhere: Tailwind sizes and spacing are in rem, so this one value scales the whole app (16px -> 16.5px). */
+html {
+  font-size: 103.125%;
+}
+
 body {
   background-color: var(--color-surface);
   font-family: var(--font-sans);

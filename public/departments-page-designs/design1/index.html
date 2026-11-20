@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Departments | Cornerstone</title>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Tokens taken from the Cornerstone app (src/index.css) */
+  :root {
+    --navy: #1b2a3a;
+    --link: #1d4ed8;
+    --yellow: #f5c518;
+    --subtle: #f7f7f5;
+    --border: #e5e5e0;
+    --t75: rgba(27, 42, 58, 0.75);
+    --t60: rgba(27, 42, 58, 0.6);
+    --t55: rgba(27, 42, 58, 0.55);
+    --t45: rgba(27, 42, 58, 0.45);
+    --green: #3f6212;
+    --green-bg: #ecf3dc;
+    --amber: #92400e;
+    --amber-bg: #fdf0d5;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--navy); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  h1, h2, h3, p { margin: 0; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Cornerstone header (same as the app's PublicLayout) ---------- */
+  .site-top { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; padding: 16px 32px 8px; border-bottom: 1px solid var(--border); font-size: 12px; color: rgba(27,42,58,0.65); }
+  .site-top .date { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .site-top .logo { justify-self: center; }
+  .site-top .logo img { display: block; height: 24px; width: auto; }
+  .site-top .tools { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
+  .site-top .tools svg { width: 16px; height: 16px; color: rgba(27,42,58,0.75); }
+  .avatar-top { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 11px; font-weight: 600; }
+  .site-search { padding: 12px 32px; border-bottom: 1px solid var(--border); }
+  .site-search label { display: flex; align-items: center; gap: 8px; max-width: 600px; margin: 0 auto; padding: 8px 16px; border-radius: 999px; background: var(--subtle); }
+  .site-search svg { width: 16px; height: 16px; flex-shrink: 0; color: rgba(27,42,58,0.5); }
+  .site-search input { width: 100%; border: 0; outline: 0; background: transparent; font: 400 14px "Inter", sans-serif; color: var(--navy); }
+  .site-search input::placeholder { color: rgba(27,42,58,0.5); }
+  .masthead { padding: 24px 16px; border-bottom: 1px solid var(--navy); text-align: center; }
+  .masthead .name { font-family: Georgia, "Times New Roman", Times, serif; font-size: 48px; font-weight: 700; letter-spacing: 0.025em; line-height: 1.1; }
+  .masthead .sub { margin-top: 4px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(27,42,58,0.55); }
+  .nav { border-bottom: 1px solid var(--border); }
+  .nav ul { display: flex; justify-content: center; gap: 32px; max-width: 1280px; margin: 0 auto; padding: 12px 32px; list-style: none; overflow-x: auto; scrollbar-width: none; }
+  .nav a { display: block; padding-bottom: 4px; border-bottom: 2px solid transparent; font-size: 12px; font-weight: 600; letter-spacing: 0.025em; text-transform: uppercase; white-space: nowrap; }
+  .nav a.is-active { border-bottom-color: var(--yellow); }
+
+  /* ---------- Page banner (same as the app's PageHeaderBanner) ---------- */
+  .banner { border-top: 5px solid var(--yellow); background: var(--navy); color: #fff; }
+  .banner-in { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; max-width: 1280px; margin: 0 auto; padding: 48px 32px; }
+  .banner .eyebrow { margin-bottom: 12px; font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--yellow); }
+  .banner h1 { font-size: clamp(34px, 4.6vw, 56px); font-weight: 800; line-height: 1.05; letter-spacing: -0.035em; }
+  .banner p.desc { max-width: 600px; margin-top: 12px; font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.75); text-wrap: balance; }
+  .crumbs { margin-bottom: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+  .crumbs a:hover { color: #fff; text-decoration: underline; }
+  .crumbs b { color: #fff; font-weight: 700; }
+
+  .page { max-width: 1280px; margin: 0 auto; padding: 36px 32px 112px; }
+
+  /* ---------- People avatars ---------- */
+  .av { position: relative; display: inline-grid; place-items: center; flex: none; overflow: hidden; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 600; }
+  .av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* ---------- LIST ---------- */
+  .list-tools { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+  .list-tools .count { font-size: 13.5px; color: var(--t60); }
+  .find { display: flex; align-items: center; gap: 8px; width: min(320px, 100%); padding: 8px 16px; border-radius: 999px; background: var(--subtle); }
+  .find svg { width: 15px; height: 15px; color: var(--t55); flex: none; }
+  .find input { width: 100%; border: 0; outline: 0; background: transparent; font: 400 14px "Inter", sans-serif; color: var(--navy); }
+  .find input::placeholder { color: var(--t55); }
+
+  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .tile { position: relative; display: flex; flex-direction: column; padding: 22px 22px 18px; border: 1px solid var(--border); border-radius: 8px; background: #fff; transition: border-color .15s, box-shadow .15s, transform .15s; }
+  .tile:hover { border-color: var(--navy); box-shadow: 0 10px 28px -14px rgba(27,42,58,0.35); transform: translateY(-2px); }
+  .tile .meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t55); }
+  .tile .meta .go { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border); color: var(--navy); font-size: 13px; letter-spacing: 0; transition: background .15s, border-color .15s, color .15s; }
+  .tile:hover .meta .go { background: var(--yellow); border-color: var(--yellow); }
+  .tile h3 { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+  .tile p { margin-top: 8px; font-size: 14px; line-height: 1.6; color: var(--t60); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .tile .foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 20px; }
+  .tile .foot .lead { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .tile .foot .lead .av { width: 34px; height: 34px; font-size: 12px; }
+  .tile .foot .lead b { display: block; font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile .foot .lead small { display: block; font-size: 11.5px; color: var(--t55); }
+  .stack { display: flex; flex: none; }
+  .stack .av { width: 26px; height: 26px; margin-left: -8px; border: 2px solid #fff; font-size: 9px; }
+  .stack .av:first-child { margin-left: 0; }
+  .stack .more { margin-left: -8px; display: grid; place-items: center; width: 26px; height: 26px; border: 2px solid #fff; border-radius: 50%; background: var(--subtle); font-size: 10px; font-weight: 700; color: var(--t75); }
+  .empty { padding: 48px 0; text-align: center; color: var(--t55); font-size: 14px; }
+  .note { margin-top: 28px; font-size: 12.5px; color: var(--t55); }
+
+  /* ---------- DETAIL ---------- */
+  .detail { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 48px; align-items: start; }
+  .sec-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; font-size: 20px; font-weight: 800; letter-spacing: -0.015em; }
+  .sec-title::before { content: ""; align-self: center; width: 4px; height: 20px; border-radius: 2px; background: var(--yellow); }
+  .sec-title small { font-size: 13px; font-weight: 500; color: var(--t55); letter-spacing: 0; }
+  .about { max-width: 66ch; font-size: 16px; line-height: 1.75; color: var(--t75); }
+  .about p + p { margin-top: 14px; }
+  .people { margin-top: 44px; }
+  .grid-people { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; border-top: 1px solid var(--border); }
+  .person { display: flex; align-items: center; gap: 14px; padding: 14px 4px; border-bottom: 1px solid var(--border); }
+  .person:hover .nm { color: var(--link); }
+  .person .av { width: 46px; height: 46px; font-size: 14px; }
+  .person .nm { font-size: 14.5px; font-weight: 700; }
+  .person .tt { margin-top: 1px; font-size: 13px; color: var(--t60); }
+  .person .lc { margin-top: 1px; font-size: 12px; color: var(--t45); }
+  .tag { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; vertical-align: 1px; }
+  .tag.lead { background: var(--navy); color: #fff; }
+  .tag.mgr { background: #fff4c9; color: #6b5200; }
+
+  .side { position: sticky; top: 24px; display: grid; gap: 16px; }
+  .panel { border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+  .panel-h { padding: 18px 20px 14px; }
+  .panel-h .k { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t55); }
+  .panel-h h3 { margin-top: 4px; font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+  .panel-h .path { margin-top: 3px; font-size: 12.5px; color: var(--t55); }
+  .folders { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--border); }
+  .folders li { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--border); }
+  .folders li:last-child { border-bottom: 0; }
+  .folders svg { width: 18px; height: 18px; flex: none; color: var(--t55); }
+  .folders .fn { flex: 1; min-width: 0; font-size: 14px; font-weight: 600; }
+  .pill { flex: none; padding: 2px 9px; border-radius: 999px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em; white-space: nowrap; }
+  .pill.everyone { background: var(--green-bg); color: var(--green); }
+  .pill.dept { background: #e7edf6; color: #1f3a5f; }
+  .hidden-note { padding: 10px 20px; border-top: 1px dashed var(--border); background: var(--subtle); border-radius: 0 0 8px 8px; font-size: 12px; color: var(--t60); }
+  .panel-f { padding: 16px 20px 18px; border-top: 1px solid var(--border); }
+  .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px 16px; border: 1px solid var(--navy); border-radius: 8px; background: var(--navy); color: #fff; font-size: 14px; font-weight: 700; transition: background .15s, color .15s; }
+  .btn:hover { background: #fff; color: var(--navy); }
+  .btn.ghost { background: #fff; color: var(--navy); }
+  .btn.ghost:hover { background: var(--subtle); }
+  .help { margin-top: 10px; font-size: 12px; line-height: 1.5; color: var(--t55); }
+  .leadcard { display: flex; align-items: center; gap: 14px; padding: 18px 20px; }
+  .leadcard .av { width: 52px; height: 52px; font-size: 16px; }
+  .leadcard b { display: block; font-size: 15px; font-weight: 700; }
+  .leadcard small { display: block; margin-top: 1px; font-size: 12.5px; color: var(--t60); }
+  .leadcard a.org { display: inline-block; margin-top: 6px; font-size: 12.5px; font-weight: 600; color: var(--link); }
+  .leadcard a.org:hover { text-decoration: underline; }
+  /* One department: a single readable column, and one button in the banner that opens its policy folders */
+  .bmeta { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 18px; font-size: 13px; color: rgba(255,255,255,0.65); }
+  .bmeta span + span::before { content: ""; display: inline-block; width: 4px; height: 4px; margin: 0 12px 2px -2px; border-radius: 50%; background: var(--yellow); }
+  .bmeta b { font-weight: 600; color: #fff; }
+  .mfind { width: min(340px, 100%); margin-bottom: 12px; }
+  .grid-people .person[hidden] { display: none; }
+  /* Contacts panel: team lead, then content managers */
+  .contacts .grp { padding: 18px 20px 16px; }
+  .contacts .grp + .grp { border-top: 1px solid var(--border); }
+  .contacts .k { margin-bottom: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t55); }
+  .contacts .person { padding: 8px 0; border: 0; }
+  .contacts .person .av { width: 44px; height: 44px; font-size: 14px; }
+  .contacts .org { display: inline-block; margin: 2px 0 0 58px; font-size: 12.5px; font-weight: 600; color: var(--link); }
+  .contacts .org:hover { text-decoration: underline; }
+  .contacts .k .n { margin-left: 4px; padding: 0 7px; border-radius: 999px; background: var(--subtle); font-size: 10.5px; letter-spacing: 0; color: var(--t60); }
+  .contacts .person { padding: 7px 0; }
+  .more-list summary { margin: 4px 0; font-size: 12.5px; font-weight: 600; color: var(--link); cursor: pointer; list-style: none; }
+  .more-list summary::-webkit-details-marker { display: none; }
+  .more-list summary:hover { text-decoration: underline; }
+  .more-list[open] summary { margin-bottom: 0; }
+  .contacts .hint { margin-top: 8px; font-size: 12.5px; line-height: 1.5; color: var(--t55); }
+  .banner-act { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 8px; background: var(--yellow); color: var(--navy); font-size: 14px; font-weight: 700; transition: background .15s; }
+  .banner-act:hover { background: #fff; }
+  @media (max-width: 640px) { .banner-in:has(.banner-act) { flex-direction: column; align-items: flex-start; } }
+  /* Files panel: just a title, one small button and a plain list */
+  .files-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; }
+  .files-h h3 { font-size: 16px; font-weight: 800; letter-spacing: -0.01em; }
+  .files-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--navy); border-radius: 6px; background: var(--navy); color: #fff; font-size: 12.5px; font-weight: 700; transition: background .15s, color .15s; }
+  .files-btn:hover { background: #fff; color: var(--navy); }
+  .files-btn.ghost { background: #fff; color: var(--navy); }
+  .files-btn.ghost:hover { background: var(--subtle); }
+  .files .folders li { padding: 10px 20px; }
+  .files .folders .fn { font-size: 13.5px; font-weight: 500; }
+  .files .acc { flex: none; font-size: 12px; color: var(--t55); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 12px; padding: 12px 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--t60); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { font-style: normal; }
+
+  /* ---------- Footer (same as the app's PublicLayout) ---------- */
+  footer { border-top: 2px solid var(--yellow); background: var(--navy); color: #fff; }
+  .sfoot { max-width: 1280px; margin: 0 auto; padding: 32px; }
+  .sfoot-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr 1fr; gap: 32px; }
+  .sfoot .brand { display: block; line-height: 28px; font-size: 18px; font-weight: 700; color: var(--yellow); }
+  .sfoot .brand-p { margin-top: 8px; line-height: 20px; font-size: 14px; color: rgba(255,255,255,0.7); }
+  .sfoot h3 { line-height: 20px; font-size: 14px; font-weight: 600; }
+  .sfoot ul { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .sfoot ul li { line-height: 24px; font-size: 14px; color: rgba(255,255,255,0.7); }
+  .sfoot-bot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); line-height: 16px; font-size: 12px; color: rgba(255,255,255,0.6); }
+  .sfoot-bot div { display: flex; gap: 20px; }
+
+  @media (max-width: 1000px) {
+    .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .detail { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+    .side { position: static; }
+  }
+  @media (max-width: 640px) {
+    .site-top, .site-search { padding-left: 16px; padding-right: 16px; }
+    .masthead .name { font-size: clamp(28px, 9vw, 36px); }
+    .nav ul { justify-content: flex-start; gap: 24px; padding: 12px 16px; }
+    .banner-in, .page { padding-left: 16px; padding-right: 16px; }
+    .sfoot { padding-left: 16px; padding-right: 16px; }
+    .sfoot-grid { grid-template-columns: 1fr; }
+    .sfoot-bot { flex-direction: column; align-items: flex-start; }
+    .banner-in { padding-top: 36px; padding-bottom: 36px; }
+    .tiles, .grid-people { grid-template-columns: minmax(0, 1fr); }
+    .list-tools { flex-direction: column; align-items: stretch; }
+    .find { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cornerstone header -->
+<header>
+  <div class="site-top">
+    <span class="date" id="today"></span>
+    <a class="logo" href="/" aria-label="Cornerstone home"><img src="../../cornerstone-assets/L+m-logo.avif" alt="L+M" onerror="this.style.display='none'"></a>
+    <div class="tools">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Apps"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Notifications"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span class="avatar-top" aria-label="Alex Kim">AK</span>
+    </div>
+  </div>
+  <div class="site-search">
+    <label>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="text" placeholder="Search Cornerstone — people, files, news..." aria-label="Search Cornerstone">
+    </label>
+  </div>
+  <div class="masthead">
+    <h1 class="name"><a href="/">CORNERSTONE</a></h1>
+    <p class="sub">The L+M Daily</p>
+  </div>
+  <nav class="nav" aria-label="Main">
+    <ul>
+      <li><a href="/news">News</a></li>
+      <li><a href="/company-culture">Company + Culture</a></li>
+      <li><a href="/events">Events</a></li>
+      <li><a href="/people">People</a></li>
+      <li><a class="is-active" href="#/" aria-current="page">Departments</a></li>
+      <li><a href="/policies-resources">Policies + Resources</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- The page: filled in by the script below (list or one department) -->
+<div id="banner"></div>
+<main class="page" id="view"></main>
+
+<footer>
+  <div class="sfoot">
+    <div class="sfoot-grid">
+      <div><span class="brand">Cornerstone</span><p class="brand-p">The home for everything L+M — news, people, tools, and the work we build together.</p></div>
+      <div><h3>News</h3><ul><li>Newsletters</li><li>News archive</li></ul></div>
+      <div><h3>Departments</h3><ul><li>Builders</li><li>Community Investment</li><li>HR Central</li><li>Operations</li></ul></div>
+      <div><h3>Resources</h3><ul><li>Document center</li><li>Building list</li><li>Company guide</li><li>Brand assets</li></ul></div>
+      <div><h3>Help</h3><ul><li>IT help desk</li><li>HR questions</li><li>Facilities</li><li>Accessibility</li></ul></div>
+    </div>
+    <div class="sfoot-bot"><span>© 2026 L+M Development Partners · Cornerstone intranet</span><div><span>Terms of service</span><span>Privacy policy</span></div></div>
+  </div>
+</footer>
+
+<script>
+  // ---------- Sample content (replace with the backend later) ----------
+  var P = function (id, photo, name, title, loc, flag) { return { id: id, photo: photo, name: name, title: title, loc: loc, flag: flag || "" }; };
+  var U = "https://randomuser.me/api/portraits/";
+
+  var DEPARTMENTS = [
+    {
+      slug: "people-team", name: "People Team", category: "employee-policies",
+      summary: "Hiring, onboarding, benefits and culture, from a new hire's first day to their next milestone.",
+      about: [
+        "The People Team looks after the whole employee experience at L+M. We recruit and onboard new colleagues, run benefits and learning, and help managers support their teams.",
+        "Bring us questions about policies, leave, benefits or career development. We are happy to point you to the right place."
+      ],
+      lead: 13,
+      people: [
+        P(13, U + "women/23.jpg", "Riley Bennett", "Chief People Officer", "New York", "lead"),
+        P(30, U + "women/40.jpg", "Alexandra Ross", "HR Business Partner", "Boston", "mgr"),
+        P(10, U + "women/20.jpg", "Sarah Hunt", "HR Generalist", "New York", "mgr"),
+        P(29, U + "men/39.jpg", "Blake Cooper", "Recruiter", "New York", "mgr"),
+        P(41, U + "women/51.jpg", "Shiloh Kelly", "Learning + Development Specialist", "New York", "mgr"),
+        P(42, U + "men/52.jpg", "Logan Sanders", "Benefits Administrator", "Boston", "mgr")
+      ],
+      folders: [["Employee Handbook", "everyone"], ["Benefits Guides", "everyone"], ["Hiring Playbook", "dept"], ["Compensation Reviews", "dept"]]
+    },
+    {
+      slug: "technology", name: "Technology", category: "operations-it",
+      summary: "Keeps our systems, networks and devices running, and helps everyone work securely.",
+      about: [
+        "Technology runs the tools the company relies on every day: Microsoft 365, networks, devices, security and the IT help desk.",
+        "If something is not working, raise a ticket with the help desk. For access requests and new equipment, start with your manager."
+      ],
+      lead: 2,
+      people: [
+        P(2, U + "men/12.jpg", "Jordan Ellis", "Chief Technology Officer", "New York", "lead"),
+        P(17, U + "men/27.jpg", "Drew Sullivan", "IT Manager", "New York", "mgr"),
+        P(18, U + "women/28.jpg", "Skyler Price", "Systems Administrator", "Boston", "mgr"),
+        P(19, U + "men/29.jpg", "Reese Coleman", "Help Desk Analyst", "Boston", "mgr"),
+        P(36, U + "men/46.jpg", "Noah Flores", "Network Engineer", "Boston", "mgr"),
+        P(37, U + "men/47.jpg", "Milan Rogers", "Security Analyst", "New York", "mgr")
+      ],
+      folders: [["IT Acceptable Use", "everyone"], ["Password + MFA Guide", "everyone"], ["Network Diagrams", "dept"], ["Vendor Licences", "dept"]]
+    },
+    {
+      slug: "accounting-finance", name: "Accounting + Finance", category: "accounting-finance",
+      summary: "Payables, reporting, payroll and budgets, plus the procedures that keep our money moving safely.",
+      about: [
+        "Accounting + Finance manages the company's books, payments and payroll. We prepare reporting, support audits and help teams plan their budgets.",
+        "Questions about expenses or vendor payments? The approval steps and forms are in our shared files."
+      ],
+      lead: 31,
+      people: [
+        P(31, U + "women/41.jpg", "Avery Morgan", "Chief Financial Officer", "New York", "lead"),
+        P(5, U + "women/15.jpg", "Margaret Carestia", "Controller", "New York", "mgr"),
+        P(26, U + "men/36.jpg", "Charlie Barnes", "Accounting Manager", "New York", "mgr"),
+        P(43, U + "men/53.jpg", "Cory Bennett", "Senior Accountant", "New York", "mgr"),
+        P(44, U + "women/54.jpg", "Samira Brooks", "Tax Analyst", "New York", "mgr"),
+        P(8, U + "men/18.jpg", "Alex Kim", "Financial Analyst", "New York", "mgr"),
+        P(45, U + "men/55.jpg", "Devon Murphy", "Staff Accountant", "New York"),
+        P(46, U + "men/56.jpg", "Lee Parker", "Payroll Specialist", "Boston"),
+        P(27, U + "women/37.jpg", "Jamie Foster", "Accounts Payable Specialist", "New York")
+      ],
+      folders: [["Expense Approvals", "everyone"], ["Vendor Payment Procedures", "everyone"], ["Month-End Close", "dept"], ["Audit Workpapers", "dept"]]
+    },
+    {
+      slug: "communications-marketing", name: "Communications + Marketing", category: "marketing-resources",
+      summary: "Our brand, internal communications and the stories we tell inside and outside the company.",
+      about: [
+        "Communications + Marketing looks after the L+M brand, this site and the news you read on it. We also run campaigns, social channels and company events.",
+        "Need a logo, a template or help with an announcement? Brand assets and templates are in our shared files."
+      ],
+      lead: 32,
+      people: [
+        P(32, U + "women/42.jpg", "Sage Peterson", "Chief Marketing Officer", "New York", "lead"),
+        P(28, U + "men/38.jpg", "Cameron Hayes", "Communications Manager", "New York", "mgr"),
+        P(33, U + "men/43.jpg", "Elliot Richardson", "Marketing Manager", "New York", "mgr"),
+        P(9, U + "women/19.jpg", "Priya Shah", "Marketing Specialist", "New York", "mgr"),
+        P(34, U + "women/44.jpg", "Remy Cox", "Graphic Designer", "Boston", "mgr"),
+        P(35, U + "women/45.jpg", "Harper Howard", "Social Media Coordinator", "New York", "mgr")
+      ],
+      folders: [["Brand Assets", "everyone"], ["Letterhead Templates", "everyone"], ["Campaign Plans", "dept"], ["Press Contacts", "dept"]]
+    },
+    {
+      slug: "property-operations", name: "Property Operations", category: "facilities-forms",
+      summary: "Day-to-day running of our buildings: tenants, facilities, building systems and vendors.",
+      about: [
+        "Property Operations keeps our properties safe, comfortable and running well. We manage tenant requests, facilities, building systems and the vendors who support them.",
+        "Parking, badge access and common forms are in our shared files."
+      ],
+      lead: 6,
+      people: [
+        P(6, U + "women/16.jpg", "Denise Ramirez", "Senior Property Manager", "New York", "lead"),
+        P(47, U + "men/57.jpg", "Amari Watson", "Property Manager", "Harlem", "mgr"),
+        P(7, U + "men/17.jpg", "Tomás Rivera", "Project Coordinator", "Saratoga", "mgr"),
+        P(48, U + "women/58.jpg", "Ellis Turner", "Facilities Coordinator", "New York", "mgr"),
+        P(49, U + "women/59.jpg", "Dana Mitchell", "Building Engineer", "Saratoga", "mgr"),
+        P(11, U + "women/21.jpg", "Laura Reyes", "Risk Manager", "Saratoga", "mgr")
+      ],
+      folders: [["Parking + Badge Access", "everyone"], ["Common Forms", "everyone"], ["Vendor Contacts", "dept"], ["Tenant Escalations", "dept"]]
+    },
+    {
+      slug: "construction", name: "Construction", category: "safety-compliance",
+      summary: "Builds our projects on schedule and on budget, and keeps every site safe.",
+      about: [
+        "Construction delivers our projects from preconstruction through handover. Our project managers, engineers and site teams coordinate schedules, budgets and subcontractors.",
+        "Site safety protocols and emergency procedures apply to everyone who visits a site. You will find them in our shared files."
+      ],
+      lead: 20,
+      people: [
+        P(20, U + "men/30.jpg", "Rowan Murphy", "Director of Construction", "Boston", "lead"),
+        P(21, U + "women/31.jpg", "Emerson Hughes", "Senior Project Manager", "Boston", "mgr"),
+        P(22, U + "men/32.jpg", "Finley Ward", "Site Superintendent", "Saratoga", "mgr"),
+        P(38, U + "men/48.jpg", "Ari Simmons", "Project Engineer", "Boston", "mgr"),
+        P(39, U + "women/49.jpg", "Robin Bell", "Assistant Project Manager", "Saratoga", "mgr"),
+        P(40, U + "men/50.jpg", "Micah Cook", "Safety Coordinator", "Saratoga", "mgr")
+      ],
+      folders: [["Site Safety Protocols", "everyone"], ["Emergency Procedures", "everyone"], ["Subcontractor Files", "dept"], ["Incident Reports", "dept"]]
+    }
+  ];
+
+  // Sample people for content managers (from the app's people data). Content managers can come from any team.
+  var POOL = {
+    1: {"id":1,"photo":"https://randomuser.me/api/portraits/men/11.jpg","name":"Morgan Hale","title":"Chief Executive Officer","loc":"New York"},
+    2: {"id":2,"photo":"https://randomuser.me/api/portraits/men/12.jpg","name":"Jordan Ellis","title":"Chief Technology Officer","loc":"New York"},
+    3: {"id":3,"photo":"https://randomuser.me/api/portraits/women/13.jpg","name":"Priya Osei","title":"Chief Operating Officer","loc":"Boston"},
+    4: {"id":4,"photo":"https://randomuser.me/api/portraits/men/14.jpg","name":"Marcus Field","title":"Chief Investment Officer","loc":"Boston"},
+    5: {"id":5,"photo":"https://randomuser.me/api/portraits/women/15.jpg","name":"Margaret Carestia","title":"Controller","loc":"New York"},
+    6: {"id":6,"photo":"https://randomuser.me/api/portraits/women/16.jpg","name":"Denise Ramirez","title":"Senior Property Manager","loc":"New York"},
+    7: {"id":7,"photo":"https://randomuser.me/api/portraits/men/17.jpg","name":"Tomás Rivera","title":"Project Coordinator","loc":"Saratoga"},
+    8: {"id":8,"photo":"https://randomuser.me/api/portraits/men/18.jpg","name":"Alex Kim","title":"Financial Analyst","loc":"New York"},
+    9: {"id":9,"photo":"https://randomuser.me/api/portraits/women/19.jpg","name":"Priya Shah","title":"Marketing Specialist","loc":"New York"},
+    10: {"id":10,"photo":"https://randomuser.me/api/portraits/women/20.jpg","name":"Sarah Hunt","title":"HR Generalist","loc":"New York"},
+    11: {"id":11,"photo":"https://randomuser.me/api/portraits/women/21.jpg","name":"Laura Reyes","title":"Risk Manager","loc":"Saratoga"},
+    12: {"id":12,"photo":"https://randomuser.me/api/portraits/men/22.jpg","name":"Connor Marsh","title":"Building Envelope Engineer","loc":"Boston"},
+    13: {"id":13,"photo":"https://randomuser.me/api/portraits/women/23.jpg","name":"Riley Bennett","title":"Chief People Officer","loc":"New York"},
+    14: {"id":14,"photo":"https://randomuser.me/api/portraits/men/24.jpg","name":"Taylor Brooks","title":"General Counsel","loc":"New York"},
+    15: {"id":15,"photo":"https://randomuser.me/api/portraits/women/25.jpg","name":"Casey Parker","title":"Senior Counsel","loc":"New York"},
+    16: {"id":16,"photo":"https://randomuser.me/api/portraits/men/26.jpg","name":"Quinn Bailey","title":"Paralegal","loc":"Boston"},
+    17: {"id":17,"photo":"https://randomuser.me/api/portraits/men/27.jpg","name":"Drew Sullivan","title":"IT Manager","loc":"New York"},
+    18: {"id":18,"photo":"https://randomuser.me/api/portraits/women/28.jpg","name":"Skyler Price","title":"Systems Administrator","loc":"Boston"},
+    19: {"id":19,"photo":"https://randomuser.me/api/portraits/men/29.jpg","name":"Reese Coleman","title":"Help Desk Analyst","loc":"Boston"},
+    20: {"id":20,"photo":"https://randomuser.me/api/portraits/men/30.jpg","name":"Rowan Murphy","title":"Director of Construction","loc":"Boston"},
+    21: {"id":21,"photo":"https://randomuser.me/api/portraits/women/31.jpg","name":"Emerson Hughes","title":"Senior Project Manager","loc":"Boston"},
+    22: {"id":22,"photo":"https://randomuser.me/api/portraits/men/32.jpg","name":"Finley Ward","title":"Site Superintendent","loc":"Saratoga"},
+    23: {"id":23,"photo":"https://randomuser.me/api/portraits/women/33.jpg","name":"Dakota James","title":"Director of Development","loc":"Harlem"},
+    24: {"id":24,"photo":"https://randomuser.me/api/portraits/men/34.jpg","name":"Peyton Russell","title":"Development Associate","loc":"Harlem"},
+    25: {"id":25,"photo":"https://randomuser.me/api/portraits/women/35.jpg","name":"Kendall Griffin","title":"Community Investment Lead","loc":"Harlem"},
+    26: {"id":26,"photo":"https://randomuser.me/api/portraits/men/36.jpg","name":"Charlie Barnes","title":"Accounting Manager","loc":"New York"},
+    27: {"id":27,"photo":"https://randomuser.me/api/portraits/women/37.jpg","name":"Jamie Foster","title":"Accounts Payable Specialist","loc":"New York"},
+    28: {"id":28,"photo":"https://randomuser.me/api/portraits/men/38.jpg","name":"Cameron Hayes","title":"Communications Manager","loc":"New York"},
+    29: {"id":29,"photo":"https://randomuser.me/api/portraits/men/39.jpg","name":"Blake Cooper","title":"Recruiter","loc":"New York"},
+    30: {"id":30,"photo":"https://randomuser.me/api/portraits/women/40.jpg","name":"Alexandra Ross","title":"HR Business Partner","loc":"Boston"},
+    31: {"id":31,"photo":"https://randomuser.me/api/portraits/women/41.jpg","name":"Avery Morgan","title":"Chief Financial Officer","loc":"New York"},
+    32: {"id":32,"photo":"https://randomuser.me/api/portraits/women/42.jpg","name":"Sage Peterson","title":"Chief Marketing Officer","loc":"New York"},
+    33: {"id":33,"photo":"https://randomuser.me/api/portraits/men/43.jpg","name":"Elliot Richardson","title":"Marketing Manager","loc":"New York"},
+    34: {"id":34,"photo":"https://randomuser.me/api/portraits/women/44.jpg","name":"Remy Cox","title":"Graphic Designer","loc":"Boston"},
+    35: {"id":35,"photo":"https://randomuser.me/api/portraits/women/45.jpg","name":"Harper Howard","title":"Social Media Coordinator","loc":"New York"},
+    36: {"id":36,"photo":"https://randomuser.me/api/portraits/men/46.jpg","name":"Noah Flores","title":"Network Engineer","loc":"Boston"},
+    37: {"id":37,"photo":"https://randomuser.me/api/portraits/men/47.jpg","name":"Milan Rogers","title":"Security Analyst","loc":"New York"},
+    38: {"id":38,"photo":"https://randomuser.me/api/portraits/men/48.jpg","name":"Ari Simmons","title":"Project Engineer","loc":"Boston"},
+    39: {"id":39,"photo":"https://randomuser.me/api/portraits/women/49.jpg","name":"Robin Bell","title":"Assistant Project Manager","loc":"Saratoga"},
+    40: {"id":40,"photo":"https://randomuser.me/api/portraits/men/50.jpg","name":"Micah Cook","title":"Safety Coordinator","loc":"Saratoga"},
+    41: {"id":41,"photo":"https://randomuser.me/api/portraits/women/51.jpg","name":"Shiloh Kelly","title":"Learning + Development Specialist","loc":"New York"},
+    42: {"id":42,"photo":"https://randomuser.me/api/portraits/men/52.jpg","name":"Logan Sanders","title":"Benefits Administrator","loc":"Boston"},
+    43: {"id":43,"photo":"https://randomuser.me/api/portraits/men/53.jpg","name":"Cory Bennett","title":"Senior Accountant","loc":"New York"},
+    44: {"id":44,"photo":"https://randomuser.me/api/portraits/women/54.jpg","name":"Samira Brooks","title":"Tax Analyst","loc":"New York"},
+    45: {"id":45,"photo":"https://randomuser.me/api/portraits/men/55.jpg","name":"Devon Murphy","title":"Staff Accountant","loc":"New York"},
+    46: {"id":46,"photo":"https://randomuser.me/api/portraits/men/56.jpg","name":"Lee Parker","title":"Payroll Specialist","loc":"Boston"},
+    47: {"id":47,"photo":"https://randomuser.me/api/portraits/men/57.jpg","name":"Amari Watson","title":"Property Manager","loc":"Harlem"},
+    48: {"id":48,"photo":"https://randomuser.me/api/portraits/women/58.jpg","name":"Ellis Turner","title":"Facilities Coordinator","loc":"New York"},
+    49: {"id":49,"photo":"https://randomuser.me/api/portraits/women/59.jpg","name":"Dana Mitchell","title":"Building Engineer","loc":"Saratoga"},
+    50: {"id":50,"photo":"https://randomuser.me/api/portraits/women/60.jpg","name":"Jules Ramirez","title":"Development Analyst","loc":"Harlem"},
+    51: {"id":51,"photo":"https://randomuser.me/api/portraits/men/61.jpg","name":"Frankie Bailey","title":"Contracts Manager","loc":"New York"},
+    52: {"id":52,"photo":"https://randomuser.me/api/portraits/men/62.jpg","name":"Terry Morgan","title":"Compliance Analyst","loc":"Boston"}
+  };
+  // 11 to 15 content managers per department.
+  var MANAGER_IDS = {
+    "people-team": [10, 29, 30, 41, 42, 9, 28, 33, 34, 35, 26],
+    "technology": [17, 18, 19, 36, 37, 12, 38, 39, 40, 22, 21, 23],
+    "accounting-finance": [5, 26, 27, 43, 44, 45, 46, 8, 11, 14, 15, 16, 51, 52, 4],
+    "communications-marketing": [28, 33, 34, 35, 9, 10, 29, 30, 41, 42, 25, 23, 24],
+    "property-operations": [47, 7, 48, 49, 22, 40, 21, 12, 20, 3, 11],
+    "construction": [21, 22, 38, 39, 40, 12, 47, 7, 48, 49, 6, 25, 23, 24]
+  };
+
+  var ACCESS = {
+    everyone: { label: "Everyone", cls: "everyone", rank: 0 },
+    dept: { label: "Department only", cls: "dept", rank: 1 }
+  };
+  // What each viewer can see: folders with a rank up to this number.
+  var SEES = { employee: 0, member: 1, manager: 2, admin: 2 };
+  var CAN_MANAGE = { manager: true, admin: true };
+
+  var role = "manager";
+  var query = "";
+
+  // ---------- Helpers ----------
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function initials(name) { return name.split(" ").map(function (w) { return w[0]; }).slice(0, 2).join(""); }
+  function avatar(p) {
+    return '<span class="av">' + esc(initials(p.name)) + '<img src="' + esc(p.photo) + '" alt="" loading="lazy" onerror="this.remove()"></span>';
+  }
+  function byId(dept, id) { return dept.people.filter(function (p) { return p.id === id; })[0]; }
+  // A department page shows only its team lead and its content managers.
+  function managersOf(dept) { return (MANAGER_IDS[dept.slug] || []).map(function (id) { return POOL[id]; }); }
+
+  var ICON_FOLDER = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+
+  // ---------- List ----------
+  function renderList() {
+    document.title = "Departments | Cornerstone";
+    document.getElementById("banner").innerHTML =
+      '<header class="banner"><div class="banner-in"><div>' +
+      '<p class="eyebrow">Teams</p><h1>Departments</h1>' +
+      '<p class="desc">What each team does, who leads it and who to contact. Open a department to see its team lead, content managers and files.</p>' +
+      '</div></div></header>';
+
+    var q = query.trim().toLowerCase();
+    var shown = DEPARTMENTS.filter(function (d) { return !q || (d.name + " " + d.summary).toLowerCase().indexOf(q) > -1; });
+
+    var tiles = shown.map(function (d) {
+      var lead = byId(d, d.lead);
+      var others = managersOf(d);
+      var extra = others.length - 3;
+      return '<a class="tile" href="#/' + d.slug + '" aria-label="' + esc(d.name) + ' department">' +
+        '<div class="meta"><span>' + others.length + (others.length === 1 ? ' content manager' : ' content managers') + '</span><span class="go" aria-hidden="true">→</span></div>' +
+        '<h3>' + esc(d.name) + '</h3><p>' + esc(d.summary) + '</p>' +
+        '<div class="foot"><div class="lead">' + avatar(lead).replace('class="av"', 'class="av"') +
+        '<div style="min-width:0"><b>' + esc(lead.name) + '</b><small>Team lead</small></div></div>' +
+        '<div class="stack" aria-hidden="true">' + others.slice(0, 3).map(avatar).join("") +
+        (extra > 0 ? '<span class="more">+' + extra + '</span>' : "") + '</div></div></a>';
+    }).join("");
+
+    document.getElementById("view").innerHTML =
+      '<div class="list-tools"><p class="count">' + shown.length + ' departments</p>' +
+      '<label class="find"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
+      '<input id="find" type="text" value="' + esc(query) + '" placeholder="Find a department" aria-label="Find a department"></label></div>' +
+      (shown.length ? '<div class="tiles">' + tiles + '</div>' : '<p class="empty">No department matches your search.</p>') +
+      '<p class="note">Sample content: descriptions come from the Company Guide once it is ready.</p>';
+
+    var input = document.getElementById("find");
+    input.addEventListener("input", function () {
+      query = input.value;
+      var pos = input.selectionStart;
+      renderList();
+      var again = document.getElementById("find");
+      again.focus();
+      again.setSelectionRange(pos, pos);
+    });
+  }
+
+  // ---------- One department ----------
+  function renderDetail(d) {
+    document.title = d.name + " | Departments | Cornerstone";
+    var lead = byId(d, d.lead);
+    // The same button for every viewer; content managers get their add and edit controls on the policy page itself.
+    var cta = "View files";
+
+    document.getElementById("banner").innerHTML =
+      '<header class="banner"><div class="banner-in"><div>' +
+      '<p class="eyebrow">Department</p><h1>' + esc(d.name) + '</h1>' +
+      '<p class="bmeta"><span>Led by <b>' + esc(lead.name) + '</b></span><span>' + managersOf(d).length + ' content managers</span></p></div>' +
+      '<a class="banner-act" href="policy-category.html#/' + d.slug + '">' + cta + ' <span aria-hidden="true">→</span></a></div></header>';
+
+    function contact(p) {
+      return '<a class="person" href="/people/' + p.id + '">' + avatar(p) +
+        '<div style="min-width:0"><div class="nm">' + esc(p.name) + '</div><div class="tt">' + esc(p.title) + '</div></div></a>';
+    }
+
+    var managers = managersOf(d);
+
+    // Left: what the team does, then the content managers (11 to 15 of them, so a two-column list with a search).
+    // Right: the team lead.
+    document.getElementById("view").innerHTML =
+      '<div class="detail">' +
+        '<div>' +
+          '<section><h2 class="sec-title">About</h2><div class="about">' + d.about.map(function (t) { return "<p>" + esc(t) + "</p>"; }).join("") + '</div></section>' +
+          '<section class="people"><h2 class="sec-title">Content managers <small>' + managers.length + ' people to contact about ' + esc(d.name) + ' stories, events and files</small></h2>' +
+            (managers.length > 8 ? '<label class="find mfind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="mfind" type="text" placeholder="Find a content manager" aria-label="Find a content manager"></label>' : "") +
+            '<div class="grid-people" id="mgrid">' + managers.map(function (p) {
+              return '<a class="person" data-q="' + esc((p.name + " " + p.title).toLowerCase()) + '" href="/people/' + p.id + '">' + avatar(p) +
+                '<div style="min-width:0"><div class="nm">' + esc(p.name) + '</div><div class="tt">' + esc(p.title) + '</div></div></a>';
+            }).join("") + '</div>' +
+            '<p class="empty" id="mnone" hidden>No content manager matches your search.</p>' +
+          '</section>' +
+        '</div>' +
+        '<aside class="side" aria-label="Team lead"><div class="panel contacts">' +
+          '<div class="grp"><p class="k">Team lead</p>' + contact(lead) +
+            '<a class="org" href="/people/' + lead.id + '/org-chart">View org chart →</a></div>' +
+        '</div></aside>' +
+      '</div>';
+
+    var mf = document.getElementById("mfind");
+    if (mf) mf.addEventListener("input", function () {
+      var q = mf.value.trim().toLowerCase(), shown = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("#mgrid .person"), function (el) {
+        var hit = !q || el.dataset.q.indexOf(q) > -1;
+        el.hidden = !hit;
+        if (hit) shown++;
+      });
+      document.getElementById("mnone").hidden = shown > 0;
+    });
+  }
+
+  // ---------- Router ----------
+  function render() {
+    var slug = location.hash.replace(/^#\/?/, "");
+    var dept = DEPARTMENTS.filter(function (d) { return d.slug === slug; })[0];
+    if (dept) renderDetail(dept); else renderList();
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener("hashchange", render);
+
+  document.getElementById("today").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  render();
+</script>
+</body>
+</html>

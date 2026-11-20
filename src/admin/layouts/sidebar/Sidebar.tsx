@@ -37,16 +37,16 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
           </summary>
 
           {section.groups.map((group) => (
-            <div key={group.title ?? "ungrouped"} className="mb-2 mt-1">
-              {group.title && <p className="px-2 pb-1 pt-1.5 text-[10.5px] font-bold uppercase tracking-[0.08em] text-[#6a7182]">{group.title}</p>}
-              <ul>
+            <div key={group.title ?? "ungrouped"} className="mb-4 mt-2">
+              {group.title && <p className="px-2 pb-2 pt-1.5 text-[10.5px] font-bold uppercase tracking-[0.08em] text-[#6a7182]">{group.title}</p>}
+              <ul className="space-y-1">
                 {group.items.map((item) => (
                   <li key={item.id}>
                     <NavLink
                       to={`/admin/${item.id}`}
                       onClick={onNavigate}
                       // The open page gets aria-current="page", which tints its row.
-                      className="group/link flex items-center justify-between gap-2 rounded-md px-3 py-2 text-sm text-[#1c253e] hover:bg-admin-hover aria-[current=page]:bg-admin-tint aria-[current=page]:font-semibold aria-[current=page]:text-admin-tint-ink"
+                      className="group/link flex items-center justify-between gap-2 rounded-md px-3 py-2.5 text-sm text-[#1c253e] hover:bg-admin-hover aria-[current=page]:bg-admin-tint aria-[current=page]:font-semibold aria-[current=page]:text-admin-tint-ink"
                     >
                       <span className="flex min-w-0 items-center gap-[11px]">
                         <NavIcon id={item.id} className="size-[17px] shrink-0 text-[#7d8697] group-hover/link:text-brand-navy group-aria-[current=page]/link:text-admin-gold" />
