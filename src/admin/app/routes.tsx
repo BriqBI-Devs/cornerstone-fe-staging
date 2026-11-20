@@ -85,7 +85,10 @@ export const adminRoutes: RouteObject = {
     {
       path: "application",
       element: <AdminPage />,
-      children: [{ path: "profile-fields", ...page(() => import("../pages/application/ProfileFieldsPage")) }],
+      children: [
+        { path: "profile-fields", ...page(() => import("../pages/application/ProfileFieldsPage")) },
+        { path: "page-headers", ...page(() => import("../pages/application/PageHeadersPage")) },
+      ],
     },
 
     // Everything else in the sitemap: header plus the "awaiting backend requirements" placeholder.

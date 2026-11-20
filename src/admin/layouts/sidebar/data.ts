@@ -60,6 +60,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
             label: "Application",
             tabs: [
               { id: "profile-fields", label: "Profile fields" },
+              { id: "page-headers", label: "Page headers" },
               { id: "general", label: "General" },
             ],
           },
