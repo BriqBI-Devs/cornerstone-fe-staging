@@ -57,7 +57,6 @@ export function ProfileHeader({ person, details, onEdit }: { person: Person; det
         <div className="min-w-[240px] flex-1">
           <h1 className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-2xl font-extrabold leading-tight tracking-[-0.02em] sm:text-3xl">
             {person.name}
-            {details.pronouns && <span className="text-sm font-medium tracking-normal text-brand-navy/60">{details.pronouns}</span>}
           </h1>
           <p className="mt-1 text-base">{person.title}</p>
           {tagRow(tags.slice(0, 1))}

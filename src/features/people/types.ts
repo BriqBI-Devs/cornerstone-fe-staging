@@ -42,7 +42,6 @@ export interface ProfileDetails {
   last?: string;
   jobTitle?: string;
   manager?: string;
-  pronouns?: string;
   department?: string;
   address1?: string;
   address2?: string;
