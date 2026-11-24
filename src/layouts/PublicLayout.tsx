@@ -4,6 +4,7 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Avatar } from "../components/ui/Avatar";
 import { TempNote } from "../components/ui/TempNote";
 import { getPersonById } from "../features/people/data";
+import { SUBMIT_CASE_URL } from "../features/policies-resources/data";
 import { cn } from "../lib/cn";
 import { useClickOutside } from "../lib/useClickOutside";
 import { useDateAndWeather } from "../lib/useDateAndWeather";
@@ -23,22 +24,31 @@ const NAV_ITEMS = [
   { to: "/policies-resources", label: "Policies + Resources" },
 ];
 
+// Links starting with "/" are pages in this app; anything else opens as an external or mail link.
 const FOOTER_COLUMNS = [
   {
-    heading: "News",
-    links: ["Newsletters", "News archive"],
-  },
-  {
-    heading: "Departments",
-    links: ["Builders", "Community Investment", "HR Central", "Operations"],
+    heading: "Help",
+    links: [
+      { label: "Raise a ticket", href: SUBMIT_CASE_URL },
+      { label: "Email the intranet team", href: "mailto:intranet@lmdevelopmentpartners.com" },
+    ],
   },
   {
     heading: "Resources",
-    links: ["Document center", "Building list", "Company guide", "Brand assets"],
+    links: [
+      { label: "Policies + Resources", href: "/policies-resources" },
+      { label: "Departments", href: "/departments" },
+      { label: "Favorites", href: "/favorites" },
+    ],
   },
   {
-    heading: "Help",
-    links: ["IT help desk", "HR questions", "Facilities", "Accessibility"],
+    heading: "Explore",
+    links: [
+      { label: "News", href: "/news" },
+      { label: "Company + Culture", href: "/company-culture" },
+      { label: "Events", href: "/events" },
+      { label: "People", href: "/people" },
+    ],
   },
 ];
 
@@ -209,7 +219,7 @@ export function PublicLayout() {
 
       <footer className="border-t-2 border-brand-accent bg-brand-navy text-white">
         <div className="mx-auto max-w-[1280px] px-4 py-8 md:px-8">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.3fr_1fr_1fr_1fr_1fr]">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.3fr_1fr_1fr_1fr]">
             <div>
               <span className="text-lg font-bold text-brand-accent">Cornerstone</span>
               <p className="mt-2 text-sm text-white/70">
@@ -222,11 +232,21 @@ export function PublicLayout() {
               <div key={col.heading}>
                 <h3 className="text-sm font-semibold">{col.heading}</h3>
                 <ul className="mt-3 space-y-2">
-                  {col.links.map((link) => (
-                    <li key={link}>
-                      <a href="#" className="text-sm text-white/70 hover:text-white">
-                        {link}
-                      </a>
+                  {col.links.map(({ label, href }) => (
+                    <li key={label}>
+                      {href.startsWith("/") ? (
+                        <Link to={href} className="text-sm text-white/70 hover:text-white">
+                          {label}
+                        </Link>
+                      ) : (
+                        <a
+                          href={href}
+                          {...(href.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
+                          className="text-sm text-white/70 hover:text-white"
+                        >
+                          {label}
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>
