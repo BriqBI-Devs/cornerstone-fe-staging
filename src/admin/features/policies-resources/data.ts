@@ -13,6 +13,3 @@ export const CATEGORIES = [
   { name: "Training + Onboarding", description: "New hire checklists, LMS access, and role-specific training paths.", access: "HR team", featured: false },
   { name: "Vendor + Contracts", description: "Vendor agreements, procurement forms, and contract templates.", access: "", featured: false },
 ];
-
-/** The raise-a-ticket button shown on the featured card and the home page. */
-export const TICKET = { label: "Raise a ticket", url: "https://lmdevpartners.sysaidit.com/sysai/ui/#/ui/" };

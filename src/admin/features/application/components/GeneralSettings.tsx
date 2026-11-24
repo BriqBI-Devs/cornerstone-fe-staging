@@ -5,9 +5,15 @@ import { SettingsNav } from "./SettingsNav";
 
 const OPTIONS = [
   { id: "feedback", label: "Feedback" },
+  { id: "ticket", label: "Ticket link" },
   { id: "linkedin", label: "LinkedIn" },
   { id: "email", label: "Email" },
 ];
+
+const inputClass = "h-10 w-full rounded-lg border border-admin-line bg-white px-3 text-sm font-normal outline-none focus:border-brand-link";
+
+/** The raise-a-ticket button shown on the featured Policies + Resources card and the home page. */
+const TICKET = { label: "Raise a ticket", url: "https://lmdevpartners.sysaidit.com/sysai/ui/#/ui/" };
 
 export function GeneralSettings() {
   const [active, setActive] = useState("feedback");
@@ -20,7 +26,19 @@ export function GeneralSettings() {
         <form onSubmit={(event) => event.preventDefault()} className="grid content-start gap-5">
           <section className="rounded-xl border border-admin-line bg-white p-5">
             <h2 className="text-sm font-semibold">Home feedback section</h2>
-            <p className="mt-0.5 text-xs text-admin-muted">The "Feedback and ideas" card on the home page.</p>
+            <p className="mt-0.5 text-xs text-admin-muted">The feedback card on the home page, where employees send feedback, story ideas and news. Set its heading, message and contact email here.</p>
+            <label className="mt-5 grid gap-1.5 text-sm font-semibold">
+              Title
+              <input defaultValue="Feedback and ideas" className={inputClass} />
+            </label>
+            <label className="mt-5 grid gap-1.5 text-sm font-semibold">
+              Description
+              <textarea
+                rows={4}
+                defaultValue="We welcome your feedback about the intranet, as well as any story ideas you might have or news you'd like to share. Need help with something else? Raise a ticket."
+                className="w-full rounded-lg border border-admin-line bg-white px-3 py-2 text-sm font-normal outline-none focus:border-brand-link"
+              />
+            </label>
             <label className="mt-5 grid gap-1.5 text-sm font-semibold">
               Intranet team email
               <span className="text-xs font-normal text-admin-muted">
@@ -35,6 +53,26 @@ export function GeneralSettings() {
                 />
               </span>
             </label>
+          </section>
+          <Button type="submit" className="justify-self-end">
+            Save
+          </Button>
+        </form>
+      ) : active === "ticket" ? (
+        <form onSubmit={(event) => event.preventDefault()} className="grid content-start gap-5">
+          <section className="rounded-xl border border-admin-line bg-white p-5">
+            <h2 className="text-sm font-semibold">Ticket button</h2>
+            <p className="mt-0.5 text-xs text-admin-muted">The "Raise a ticket" button employees use to reach the IT help desk. It appears on the featured card in Policies + Resources and in the feedback section on the home page.</p>
+            <div className="mt-5 grid gap-4">
+              <label className="grid gap-1.5 text-sm font-semibold">
+                Button label
+                <input defaultValue={TICKET.label} className={inputClass} />
+              </label>
+              <label className="grid gap-1.5 text-sm font-semibold">
+                Link
+                <input type="url" defaultValue={TICKET.url} className={inputClass} />
+              </label>
+            </div>
           </section>
           <Button type="submit" className="justify-self-end">
             Save

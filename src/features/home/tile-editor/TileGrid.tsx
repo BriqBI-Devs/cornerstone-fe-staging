@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom";
 import { Responsive, WidthProvider, type Layout } from "react-grid-layout/legacy";
 import "react-grid-layout/css/styles.css";
 import "./tile-grid.css";
-import { Button } from "../../../components/ui/Button";
 import { cn } from "../../../lib/cn";
 import { NEW_CARD } from "./StaticCards";
 import { TileSettingsSidebar } from "./TileSettingsSidebar";
@@ -90,39 +89,53 @@ export function TileGrid({ tiles, initial, onSave }: { tiles: TileSet; initial: 
   return (
     <>
       {editMode ? (
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-card border border-border bg-surface-subtle px-4 py-3">
-          <p className="text-sm text-brand-navy/70">Editing layout. Drag cards to move them and drag their edges to resize. Changes apply when you press Save.</p>
-          <div className="flex gap-2">
-            <Button
-              onClick={() => setDraft((s) => ({ ...s, layout: [...s.layout, { i: CUSTOM + Date.now(), x: 0, y: 9999, w: 3, h: 1 }] }))}
-              className="flex items-center gap-1.5"
-            >
-              <Plus className="h-4 w-4" />
-              Add card
-            </Button>
-            <Button variant="secondary" onClick={() => setEditMode(false)}>
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                onSave(draft);
-                setEditMode(false);
-              }}
-            >
-              Save
-            </Button>
-          </div>
-        </div>
+        <aside
+          title="Drag cards to move them and pull their edges to resize. Changes are kept only when you save."
+          className="fixed bottom-4 left-1/2 z-40 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-1 rounded-full border border-border bg-surface py-1.5 pl-4 pr-1.5 text-[13px] font-semibold text-brand-navy shadow-xl"
+        >
+          <span className="mr-2 flex items-center gap-2 whitespace-nowrap">
+            <span className="h-2 w-2 rounded-full bg-amber-400" />
+            Editing layout
+          </span>
+          <button
+            type="button"
+            onClick={() => setDraft((s) => ({ ...s, layout: [...s.layout, { i: CUSTOM + Date.now(), x: 0, y: 9999, w: 3, h: 1 }] }))}
+            className="flex items-center gap-1 rounded-full px-3 py-1.5 transition-colors hover:bg-surface-subtle"
+          >
+            <Plus className="h-4 w-4" />
+            Add card
+          </button>
+          <button type="button" onClick={() => setDraft({ layout: [], content: {} })} className="rounded-full px-3 py-1.5 transition-colors hover:bg-surface-subtle">
+            Reset
+          </button>
+          <button type="button" onClick={() => setEditMode(false)} className="rounded-full px-3 py-1.5 transition-colors hover:bg-surface-subtle">
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              onSave(draft);
+              setEditMode(false);
+            }}
+            className="rounded-full bg-brand-navy px-4 py-1.5 text-white transition-colors hover:bg-brand-navy/90"
+          >
+            Save
+          </button>
+        </aside>
       ) : (
-        <Button
+        <button
+          type="button"
           onClick={() => {
             setDraft(initial);
             setEditMode(true);
           }}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 shadow-card">
-          <Pencil className="h-4 w-4" />
+          className="group fixed bottom-4 right-4 z-50 flex items-center gap-2.5 rounded-full bg-brand-navy py-1.5 pl-1.5 pr-5 text-[13px] font-semibold text-white shadow-xl transition-colors hover:bg-brand-navy/90"
+        >
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 transition-colors group-hover:bg-white/25">
+            <Pencil className="h-4 w-4" />
+          </span>
           Edit layout
-        </Button>
+        </button>
       )}
 
       <Grid

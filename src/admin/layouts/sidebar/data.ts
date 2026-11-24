@@ -35,14 +35,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
         title: "Features",
         items: [
           { id: "departments", label: "Departments" },
-          {
-            id: "policies-resources",
-            label: "Policies + Resources",
-            tabs: [
-              { id: "categories", label: "Categories" },
-              { id: "links", label: "Ticket link" },
-            ],
-          },
+          { id: "policies-resources", label: "Policies + Resources" },
           { id: "polls", label: "Polls" },
           { id: "alerts", label: "Alerts" },
         ],
