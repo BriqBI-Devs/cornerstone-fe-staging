@@ -1,0 +1,53 @@
+/* In edit mode the resize handles are always visible, as brand-colored grips on the right and
+   bottom edges (the default ones only show on hover). */
+.tile-grid.is-editing > .react-grid-item > .react-resizable-handle {
+  opacity: 1;
+}
+
+.tile-grid.is-editing > .react-grid-item > .react-resizable-handle-e {
+  right: -3px;
+  width: 14px;
+  height: 48px;
+  margin-top: -24px;
+  transform: none;
+}
+
+.tile-grid.is-editing > .react-grid-item > .react-resizable-handle-s {
+  bottom: -3px;
+  width: 48px;
+  height: 14px;
+  margin-left: -24px;
+  transform: none;
+}
+
+.tile-grid.is-editing > .react-grid-item > .react-resizable-handle-e::after,
+.tile-grid.is-editing > .react-grid-item > .react-resizable-handle-s::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: none;
+  border-radius: 2px;
+  background: var(--color-brand-link);
+  transform: translate(-50%, -50%);
+}
+
+.tile-grid.is-editing > .react-grid-item > .react-resizable-handle-e::after {
+  width: 4px;
+  height: 28px;
+}
+
+.tile-grid.is-editing > .react-grid-item > .react-resizable-handle-s::after {
+  width: 28px;
+  height: 4px;
+}
+
+/* Dragging a card must not select its text or drag out its images and links. */
+.tile-grid.is-editing {
+  user-select: none;
+}
+
+.tile-grid.is-editing img,
+.tile-grid.is-editing a {
+  -webkit-user-drag: none;
+}

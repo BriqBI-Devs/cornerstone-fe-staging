@@ -17,7 +17,7 @@ export function KPICards() {
   return (
     <Card>
       <SectionHeading title="L+M at a glance" />
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2">
         {STATS.map((stat, index) => {
           const Icon = ICONS[index];
           return (
@@ -26,12 +26,12 @@ export function KPICards() {
                 <Icon className="h-3.5 w-3.5" />
               </span>
               <p className="mt-2 text-lg font-bold text-brand-navy">{stat.value}</p>
-              <p className="mt-1 text-[11px] leading-tight text-brand-navy/65">{stat.label}</p>
+              <p className="mt-1 text-[13px] leading-tight text-brand-navy/65">{stat.label}</p>
             </div>
           );
         })}
       </div>
-      <p className="mt-3 text-xs text-brand-navy/45">
+      <p className="mt-3 text-[13px] text-brand-navy/45">
         Live figures pending Dataverse integration — shown here as representative placeholders.
       </p>
     </Card>

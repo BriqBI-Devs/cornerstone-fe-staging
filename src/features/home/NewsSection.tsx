@@ -108,7 +108,7 @@ export function NewsSection() {
                   {article.title}
                 </h2>
                 <p className="mt-2 text-sm text-brand-navy/75">{article.excerpt}</p>
-                <p className="mt-1 text-xs text-brand-navy/55">
+                <p className="mt-1 text-sm text-brand-navy/55">
                   {article.meta} ·{" "}
                   <a href="#" className="font-semibold text-brand-navy hover:underline">
                     Read the story →

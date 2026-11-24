@@ -35,12 +35,12 @@ export function LinkedInFeed({ title = "Latest from LinkedIn" }: LinkedInFeedPro
             <PlaceholderImage label="post" className="h-12 w-12 shrink-0" />
             <div className="min-w-0">
               <p className="line-clamp-2 text-sm text-brand-navy">{post.text}</p>
-              <p className="mt-0.5 text-xs text-brand-navy/55">{post.date} ago</p>
+              <p className="mt-0.5 text-[13px] text-brand-navy/55">{post.date} ago</p>
             </div>
           </a>
         ))}
       </div>
-      <p className="mt-auto pt-3 text-xs text-brand-navy/45">
+      <p className="mt-auto pt-3 text-[13px] text-brand-navy/45">
         Placeholder — pending confirmation of company-wide LinkedIn access
       </p>
     </Card>

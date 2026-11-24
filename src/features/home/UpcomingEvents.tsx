@@ -52,16 +52,16 @@ export function UpcomingEvents() {
             className="grid grid-cols-[3.5rem_minmax(0,1fr)] items-start gap-x-4 gap-y-3 rounded-card border border-border p-3 transition-colors hover:border-brand-navy/40 hover:bg-surface-subtle sm:grid-cols-[3.5rem_minmax(0,1fr)_auto]"
           >
             <div className="flex w-14 flex-col items-center rounded-card bg-brand-navy py-1.5 text-white">
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-white/70">
+              <span className="text-xs font-semibold uppercase tracking-wide text-white/70">
                 {event.month}
               </span>
               <span className="text-lg font-bold leading-none">{event.day}</span>
-              <span className="text-[10px] text-white/70">{event.weekday}</span>
+              <span className="text-xs text-white/70">{event.weekday}</span>
             </div>
 
             <div className="min-w-0">
               <p className="text-sm font-semibold text-brand-navy">{event.title}</p>
-              <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-brand-navy/65">
+              <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-brand-navy/65">
                 <span className="flex items-center gap-1.5">
                   <span className="flex h-4 w-4 items-center justify-center rounded-full bg-brand-navy/10 text-[8px] font-semibold text-brand-navy">
                     {initials(event.host)}
@@ -90,7 +90,7 @@ export function UpcomingEvents() {
       </div>
       <a
         href="/events"
-        className="mt-auto block pt-3 text-right text-sm font-semibold text-brand-navy hover:underline"
+        className="mt-auto block pt-[9.5px] text-right text-sm font-semibold text-brand-navy hover:underline"
       >
         View more →
       </a>

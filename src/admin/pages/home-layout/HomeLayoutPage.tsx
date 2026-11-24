@@ -7,7 +7,7 @@ export default function HomeLayoutPage() {
     <section className="rounded-xl border border-admin-line bg-white p-5">
       <h2 className="text-base font-bold">Home layout</h2>
       <p className="mt-1 max-w-[460px] text-sm leading-relaxed text-admin-muted">
-        Drag, resize and edit the tiles on the home page. Changes apply to everyone once you save.
+        Drag, resize and edit the cards on the home page. Changes apply once you finish editing.
       </p>
       <Link
         to="/?editLayout=1"

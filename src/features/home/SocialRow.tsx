@@ -60,7 +60,7 @@ export function PulsePoll({ title = "Pulse poll" }: PulsePollProps = {}) {
             ))}
       </div>
       <div className="mt-auto flex items-center justify-between gap-2 pt-3">
-        <p className="text-xs text-brand-navy/55">
+        <p className="text-[13px] text-brand-navy/55">
           {POLL.votes} votes so far · closes in {POLL.closesIn}
         </p>
         <a href="#" className="shrink-0 text-sm font-semibold text-brand-navy hover:underline">

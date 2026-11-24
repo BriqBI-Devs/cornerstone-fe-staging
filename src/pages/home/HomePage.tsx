@@ -1,13 +1,7 @@
 import { Search } from "lucide-react";
-import { AdjustableHomeTiles } from "../../features/home/tile-editor/AdjustableHomeTiles";
-import { CustomizableWorkspace } from "../../features/home/CustomizableWorkspace";
-import { HowWeWork } from "../../features/home/HowWeWork";
-import { KPICards } from "../../features/home/KPICards";
-import { ManagerNotices } from "../../features/home/ManagerNotices";
-import { NewsSection } from "../../features/home/NewsSection";
-import { PopularLinks } from "../../features/home/PopularLinks";
-import { UpcomingEvents } from "../../features/home/UpcomingEvents";
-import { WhereWeWork } from "../../features/home/WhereWeWork";
+import { HOME_TILES, HOME_TILES_STORAGE_KEY } from "../../features/home/tile-editor/homeTiles";
+import { TileGrid, type TileGridData } from "../../features/home/tile-editor/TileGrid";
+import { useLocalStorage } from "../../lib/useLocalStorage";
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -17,6 +11,9 @@ function getGreeting() {
 }
 
 export function HomePage() {
+  // Browser storage for now; swap this for loading and saving through the API.
+  const [saved, setSaved] = useLocalStorage<TileGridData>(HOME_TILES_STORAGE_KEY, { layout: [], content: {} });
+
   return (
     <div className="flex flex-col gap-6">
       {/* top-[217px] clears the pinned header in PublicLayout
@@ -35,34 +32,7 @@ export function HomePage() {
         </div>
       </div>
 
-      <NewsSection />
-
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <PopularLinks />
-        <div className="lg:col-span-2">
-          <UpcomingEvents />
-        </div>
-      </div>
-
-      {/* Reference marker only — shows where "above the fold" ends on a
-          typical laptop viewport. Not real site UI; remove before ship. */}
-      <div className="relative border-t border-dashed border-brand-navy/30">
-        <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-brand-navy/30 bg-surface px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-navy/50">
-          Fold
-        </span>
-      </div>
-
-      <ManagerNotices />
-      <KPICards />
-
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <WhereWeWork />
-        <HowWeWork />
-      </div>
-
-      <AdjustableHomeTiles />
-
-      <CustomizableWorkspace />
+      <TileGrid tiles={HOME_TILES} initial={saved} onSave={setSaved} />
     </div>
   );
 }
