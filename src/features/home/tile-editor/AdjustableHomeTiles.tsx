@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { Settings } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import { Responsive, WidthProvider, type Layout } from "react-grid-layout/legacy";
 import "react-grid-layout/css/styles.css";
 import { Button } from "../../../components/ui/Button";
@@ -25,7 +26,9 @@ const MOBILE_LAYOUT: Layout = [
 
 export function AdjustableHomeTiles() {
   const [state, setState] = useLocalStorage(HOME_TILES_STORAGE_KEY, DEFAULT_STATE);
-  const [editMode, setEditMode] = useState(false);
+  // The admin console's "Home layout" page links here with ?editLayout=1 to open straight into editing.
+  const [searchParams] = useSearchParams();
+  const [editMode, setEditMode] = useState(searchParams.get("editLayout") === "1");
   const [openSettingsFor, setOpenSettingsFor] = useState<TileId | null>(null);
 
   function updateTile(id: TileId, patch: Partial<TileContent>) {

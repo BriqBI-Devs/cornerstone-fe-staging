@@ -81,6 +81,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
               { id: "primary-and-link-colors", label: "Primary + link colors" },
             ],
           },
+          { id: "home-layout", label: "Home layout", badge: "Live editor" },
           {
             id: "apps-and-links",
             label: "Apps + links",

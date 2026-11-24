@@ -50,6 +50,11 @@ export const adminRoutes: RouteObject = {
       ],
     },
     {
+      path: "audiences",
+      element: <AdminPage />,
+      children: [{ index: true, ...page(() => import("../pages/audiences/AudiencesPage")) }],
+    },
+    {
       path: "polls",
       element: <AdminPage />,
       children: [{ index: true, ...page(() => import("../pages/polls/PollsPage")) }],
@@ -64,6 +69,11 @@ export const adminRoutes: RouteObject = {
         { path: "font", ...page(() => import("../pages/branding/FontPage")) },
         { path: "primary-and-link-colors", ...page(() => import("../pages/branding/PrimaryColorsPage")) },
       ],
+    },
+    {
+      path: "home-layout",
+      element: <AdminPage />,
+      children: [{ index: true, ...page(() => import("../pages/home-layout/HomeLayoutPage")) }],
     },
     {
       path: "apps-and-links",
