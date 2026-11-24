@@ -59,8 +59,8 @@ export const ADMIN_NAV: AdminNavSection[] = [
             id: "application",
             label: "Application",
             tabs: [
-              { id: "profile-fields", label: "Profile fields" },
-              { id: "page-headers", label: "Page headers" },
+              { id: "people", label: "People" },
+              { id: "pages", label: "Pages" },
               { id: "general", label: "General" },
             ],
           },

@@ -44,8 +44,6 @@ const PAGES = [
 export function PageHeaderSettings() {
   return (
     <form onSubmit={(event) => event.preventDefault()} className="grid gap-5">
-      <p className="text-sm text-admin-muted">Manage the introductory text shown in the banner at the top of each page. Changes apply to the page named on each card.</p>
-
       {PAGES.map((page) => (
         <section key={page.path} aria-label={`${page.name} page header`} className="rounded-xl border border-admin-line bg-white">
           <header className="flex flex-wrap items-center justify-between gap-2 border-b border-admin-line px-5 py-3.5">
