@@ -132,6 +132,7 @@ export function TileGrid({ tiles, initial, onSave }: { tiles: TileSet; initial: 
         cols={{ lg: 6, sm: 1 }}
         rowHeight={24}
         margin={[24, 24]}
+        containerPadding={[0, 0]}
         isDraggable={editMode}
         resizeHandles={["e", "s", "se"]}
         draggableCancel=".rgl-no-drag"
