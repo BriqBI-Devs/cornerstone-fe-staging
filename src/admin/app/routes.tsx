@@ -52,6 +52,15 @@ export const adminRoutes: RouteObject = {
       children: [{ index: true, ...page(() => import("../pages/audiences/AudiencesPage")) }],
     },
     {
+      path: "newsletters",
+      element: <AdminPage />,
+      children: [
+        { path: "newsletters", ...page(() => import("../pages/newsletters/NewslettersPage")) },
+        { path: "categories", ...page(() => import("../pages/newsletters/CategoriesPage")) },
+        { path: "templates", ...page(() => import("../pages/newsletters/TemplatesPage")) },
+      ],
+    },
+    {
       path: "polls",
       element: <AdminPage />,
       children: [{ index: true, ...page(() => import("../pages/polls/PollsPage")) }],
