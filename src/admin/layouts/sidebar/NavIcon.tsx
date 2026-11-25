@@ -1,16 +1,15 @@
 import {
   Box,
   Building2,
-  CalendarDays,
   ChartNoAxesColumn,
   CircleAlert,
   FolderOpen,
-  Heart,
   LayoutDashboard,
   Link2,
   Mail,
   Newspaper,
   Palette,
+  Handshake,
   SlidersHorizontal,
   User,
   UsersRound,
@@ -19,9 +18,8 @@ import {
 
 /** One icon for each sitemap page, by page id. */
 const ICONS: Record<string, LucideIcon> = {
-  "company-culture": Heart,
-  news: Newspaper,
-  events: CalendarDays,
+  content: Newspaper,
+  "onboarding-content": Handshake,
   departments: Building2,
   newsletters: Mail,
   polls: ChartNoAxesColumn,

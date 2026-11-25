@@ -13,22 +13,15 @@ export const ADMIN_NAV: AdminNavSection[] = [
         title: "Content",
         items: [
           {
-            id: "company-culture",
-            label: "Company + Culture",
+            id: "content",
+            label: "Content",
             tabs: [
               { id: "content", label: "Content" },
               { id: "categories", label: "Categories" },
             ],
           },
-          {
-            id: "news",
-            label: "News",
-            tabs: [
-              { id: "content", label: "Content" },
-              { id: "categories", label: "Categories" },
-            ],
-          },
-          { id: "events", label: "Events" },
+          // The same page as Content, opened on Pending approval (like Simpplr's /manage/content?status=...).
+          { id: "onboarding-content", label: "Onboarding content", to: "/admin/content/content?status=pending-approval" },
         ],
       },
       {

@@ -5,13 +5,11 @@ import { NewsFilters } from "../../features/news/NewsFilters";
 import { NewsRow } from "../../features/news/NewsRow";
 
 const PAGE_SIZE = 8;
-const DAY = 24 * 60 * 60 * 1000;
 
 /** The News archive: every news item, newest first, with search and filters above the list. */
 export function NewsPage() {
   const [query, setQuery] = useState("");
   const [categoryKey, setCategoryKey] = useState("");
-  const [days, setDays] = useState(0);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const matches = useMemo(() => {
@@ -19,10 +17,9 @@ export function NewsPage() {
     return NEWS_ITEMS.filter(
       (item) =>
         (!categoryKey || item.categoryKey === categoryKey) &&
-        (!days || Date.now() - new Date(item.publishedAt).getTime() <= days * DAY) &&
         (!text || `${item.title} ${item.description}`.toLowerCase().includes(text)),
     );
-  }, [query, categoryKey, days]);
+  }, [query, categoryKey]);
 
   // Any filter change starts the list again from the first page.
   const updateFilter = (apply: () => void) => {
@@ -55,10 +52,8 @@ export function NewsPage() {
       <NewsFilters
         query={query}
         categoryKey={categoryKey}
-        days={days}
         onQueryChange={(value) => updateFilter(() => setQuery(value))}
         onCategoryChange={(value) => updateFilter(() => setCategoryKey(value))}
-        onDaysChange={(value) => updateFilter(() => setDays(value))}
       />
 
       <section aria-label="News list">

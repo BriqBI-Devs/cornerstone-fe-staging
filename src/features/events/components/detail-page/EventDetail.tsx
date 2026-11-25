@@ -4,7 +4,6 @@ import { EventAbout } from "./EventAbout";
 import { EventEngage } from "./EventEngage";
 import { EventFacts } from "./EventFacts";
 import { EventHero } from "./EventHero";
-import { RelatedEvents } from "./RelatedEvents";
 import { RsvpCard } from "./RsvpCard";
 
 const frame = "mx-auto w-[calc(100%-28px)] md:w-[min(100%-40px,1240px)]";
@@ -31,7 +30,6 @@ export function EventDetail({ event }: { event: EventItem }) {
           </aside>
         </div>
 
-        <RelatedEvents currentId={event.id} />
         <EventEngage event={event} />
       </div>
     </div>

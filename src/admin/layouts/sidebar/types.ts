@@ -7,6 +7,8 @@ export interface AdminNavItem {
   id: string;
   label: string;
   tabs?: AdminTab[];
+  /** Where the sidebar link goes when that isn't the page's own address, e.g. the same list opened with a filter set. */
+  to?: string;
   /** Shown after the name in the sidebar, e.g. "11 reports". */
   note?: string;
   /** Shown at the right of the sidebar row. */

@@ -1,5 +1,5 @@
 import { ChevronDown } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "../../../lib/cn";
 import { NavIcon } from "./NavIcon";
 import { ADMIN_NAV, ADMIN_TITLE } from "./data";
@@ -13,6 +13,11 @@ interface SidebarProps {
 
 /** The left sidebar: sections that fold, groups and page links. Stays in place while the page scrolls. */
 export function Sidebar({ open, onNavigate }: SidebarProps) {
+  const { pathname, search } = useLocation();
+  // Onboarding content is the Content page opened on Pending approval, so they share a path and are told apart by the query.
+  const onboarding = search.includes("status=pending-approval");
+  const isCurrent = (id: string) => (id === "onboarding-content" ? onboarding : pathname.split("/")[2] === id && !(id === "content" && onboarding));
+
   return (
     <nav
       id="admin-sidebar"
@@ -42,9 +47,10 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
               <ul className="space-y-1">
                 {group.items.map((item) => (
                   <li key={item.id}>
-                    <NavLink
-                      to={`/admin/${item.id}`}
+                    <Link
+                      to={item.to ?? `/admin/${item.id}`}
                       onClick={onNavigate}
+                      aria-current={isCurrent(item.id) ? "page" : undefined}
                       // The open page gets aria-current="page", which tints its row.
                       className="group/link flex items-center justify-between gap-2 rounded-md px-3 py-2.5 text-sm text-[#1c253e] hover:bg-admin-hover aria-[current=page]:bg-admin-tint aria-[current=page]:font-semibold aria-[current=page]:text-admin-tint-ink"
                     >
@@ -56,7 +62,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
                         </span>
                       </span>
                       {item.badge && <span className="whitespace-nowrap text-[11px] font-semibold text-[#7a6420]">{item.badge}</span>}
-                    </NavLink>
+                    </Link>
                   </li>
                 ))}
               </ul>

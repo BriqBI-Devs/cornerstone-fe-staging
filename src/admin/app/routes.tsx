@@ -16,25 +16,12 @@ export const adminRoutes: RouteObject = {
     { index: true, element: <Navigate to={`/admin/${DEFAULT_ADMIN_PAGE}`} replace /> },
 
     {
-      path: "company-culture",
+      path: "content",
       element: <AdminPage />,
       children: [
-        { path: "content", ...page(() => import("../pages/company-culture/ContentPage")) },
-        { path: "categories", ...page(() => import("../pages/company-culture/CategoriesPage")) },
+        { path: "content", ...page(() => import("../pages/content/ContentPage")) },
+        { path: "categories", ...page(() => import("../pages/content/CategoriesPage")) },
       ],
-    },
-    {
-      path: "news",
-      element: <AdminPage />,
-      children: [
-        { path: "content", ...page(() => import("../pages/news/ContentPage")) },
-        { path: "categories", ...page(() => import("../pages/news/CategoriesPage")) },
-      ],
-    },
-    {
-      path: "events",
-      element: <AdminPage />,
-      children: [{ index: true, ...page(() => import("../pages/events/EventsPage")) }],
     },
     {
       path: "alerts",
