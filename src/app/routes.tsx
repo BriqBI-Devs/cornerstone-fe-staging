@@ -4,6 +4,7 @@ import { adminRoutes } from "../admin";
 import { NotFound } from "../components/ui/NotFound";
 import { ComingSoonPage } from "../pages/coming-soon/ComingSoonPage";
 import { CompanyCulturePage } from "../pages/company-culture/CompanyCulturePage";
+import { DepartmentsPage } from "../pages/departments/DepartmentsPage";
 import { StoryDetailPage } from "../pages/company-culture/StoryDetailPage";
 import { EventDetailPage } from "../pages/events/EventDetailPage";
 import { EventsPage } from "../pages/events/EventsPage";
@@ -18,7 +19,6 @@ import { PoliciesResourcesPage } from "../pages/policies-resources/PoliciesResou
 import { PolicyCategoryPage } from "../pages/policies-resources/PolicyCategoryPage";
 
 const COMING_SOON_ROUTES: { path: string; title: string }[] = [
-  { path: "departments", title: "Departments" },
   { path: "documents", title: "Documents" },
 ];
 
@@ -39,6 +39,7 @@ export const router = createBrowserRouter([
       { path: "news", element: <NewsPage /> },
       { path: "news/:id", element: <NewsDetailPage /> },
       { path: "favorites", element: <FavoritesPage /> },
+      { path: "departments", element: <DepartmentsPage /> },
       ...COMING_SOON_ROUTES.map((route) => ({
         path: `/${route.path}`,
         element: <ComingSoonPage title={route.title} />,

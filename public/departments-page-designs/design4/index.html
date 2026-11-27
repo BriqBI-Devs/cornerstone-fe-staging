@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Departments | Cornerstone</title>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Tokens taken from the Cornerstone app (src/index.css) */
+  :root {
+    --navy: #1b2a3a;
+    --link: #1d4ed8;
+    --yellow: #f5c518;
+    --subtle: #f7f7f5;
+    --border: #e5e5e0;
+    --t75: rgba(27, 42, 58, 0.75);
+    --t60: rgba(27, 42, 58, 0.6);
+    --t55: rgba(27, 42, 58, 0.55);
+    --t45: rgba(27, 42, 58, 0.45);
+    --green: #3f6212;
+    --green-bg: #ecf3dc;
+    --amber: #92400e;
+    --amber-bg: #fdf0d5;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--navy); font-family: "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  h1, h2, h3, p { margin: 0; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Cornerstone header (same as the app's PublicLayout) ---------- */
+  .site-top { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; padding: 16px 32px 8px; border-bottom: 1px solid var(--border); font-size: 12px; color: rgba(27,42,58,0.65); }
+  .site-top .date { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .site-top .logo { justify-self: center; }
+  .site-top .logo img { display: block; height: 24px; width: auto; }
+  .site-top .tools { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
+  .site-top .tools svg { width: 16px; height: 16px; color: rgba(27,42,58,0.75); }
+  .avatar-top { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 11px; font-weight: 600; }
+  .site-search { padding: 12px 32px; border-bottom: 1px solid var(--border); }
+  .site-search label { display: flex; align-items: center; gap: 8px; max-width: 600px; margin: 0 auto; padding: 8px 16px; border-radius: 999px; background: var(--subtle); }
+  .site-search svg { width: 16px; height: 16px; flex-shrink: 0; color: rgba(27,42,58,0.5); }
+  .site-search input { width: 100%; border: 0; outline: 0; background: transparent; font: 400 14px "Inter", sans-serif; color: var(--navy); }
+  .site-search input::placeholder { color: rgba(27,42,58,0.5); }
+  .masthead { padding: 24px 16px; border-bottom: 1px solid var(--navy); text-align: center; }
+  .masthead .name { font-family: Georgia, "Times New Roman", Times, serif; font-size: 48px; font-weight: 700; letter-spacing: 0.025em; line-height: 1.1; }
+  .masthead .sub { margin-top: 4px; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(27,42,58,0.55); }
+  .nav { border-bottom: 1px solid var(--border); }
+  .nav ul { display: flex; justify-content: center; gap: 32px; max-width: 1280px; margin: 0 auto; padding: 12px 32px; list-style: none; overflow-x: auto; scrollbar-width: none; }
+  .nav a { display: block; padding-bottom: 4px; border-bottom: 2px solid transparent; font-size: 12px; font-weight: 600; letter-spacing: 0.025em; text-transform: uppercase; white-space: nowrap; }
+  .nav a.is-active { border-bottom-color: var(--yellow); }
+
+  /* ---------- Page banner (same as the app's PageHeaderBanner) ---------- */
+  .banner { border-top: 5px solid var(--yellow); background: var(--navy); color: #fff; }
+  .banner-in { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; max-width: 1280px; margin: 0 auto; padding: 48px 32px; }
+  .banner .eyebrow { margin-bottom: 12px; font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--yellow); }
+  .banner h1 { font-size: clamp(34px, 4.6vw, 56px); font-weight: 800; line-height: 1.05; letter-spacing: -0.035em; }
+  .banner p.desc { max-width: 600px; margin-top: 12px; font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.75); text-wrap: balance; }
+  .crumbs { margin-bottom: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+  .crumbs a:hover { color: #fff; text-decoration: underline; }
+  .crumbs b { color: #fff; font-weight: 700; }
+
+  .page { max-width: 1280px; margin: 0 auto; padding: 36px 32px 112px; }
+
+  /* ---------- People avatars ---------- */
+  .av { position: relative; display: inline-grid; place-items: center; flex: none; overflow: hidden; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 600; }
+  .av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* ---------- Shared page parts ---------- */
+  .list-tools { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+  .count { font-size: 13.5px; color: var(--t60); }
+  .find { display: flex; align-items: center; gap: 8px; width: min(320px, 100%); padding: 8px 16px; border-radius: 999px; background: var(--subtle); }
+  .find svg { width: 15px; height: 15px; color: var(--t55); flex: none; }
+  .find input { width: 100%; border: 0; outline: 0; background: transparent; font: 400 14px "Inter", sans-serif; color: var(--navy); }
+  .find input::placeholder { color: var(--t55); }
+  .empty { padding: 48px 0; text-align: center; color: var(--t55); font-size: 14px; }
+  .note { margin-top: 28px; font-size: 12.5px; color: var(--t60); }
+  .who { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .who b { display: block; font-size: 14px; font-weight: 700; }
+  .who small { display: block; margin-top: 1px; font-size: 12.5px; color: var(--t60); }
+  .org { font-size: 13px; font-weight: 600; color: var(--link); white-space: nowrap; }
+  .org:hover { text-decoration: underline; }
+  .k { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--t55); }
+  .sec-title { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 20px; font-weight: 800; letter-spacing: -0.015em; }
+  .sec-title::before { content: ""; width: 4px; height: 20px; border-radius: 2px; background: var(--yellow); }
+  .about { max-width: 66ch; font-size: 16px; line-height: 1.75; color: var(--t75); }
+  .about p + p { margin-top: 14px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; border: 1px solid var(--navy); border-radius: 8px; font-size: 13.5px; font-weight: 700; white-space: nowrap; transition: background .15s, color .15s; }
+  .btn:hover { background: var(--navy); color: #fff; }
+
+  /* ---------- Design 4: one list; a department opens in place ---------- */
+  .acc { border-top: 2px solid var(--navy); }
+  .item { border-bottom: 1px solid var(--border); }
+  .item summary { display: grid; grid-template-columns: minmax(0, 1fr) 300px 32px; align-items: center; gap: 32px; padding: 24px 0; cursor: pointer; list-style: none; }
+  .item summary::-webkit-details-marker { display: none; }
+  .item summary:hover h2 { color: var(--link); }
+  .item summary:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }
+  .item h2 { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; }
+  .item summary p { max-width: 62ch; margin-top: 6px; font-size: 14.5px; line-height: 1.6; color: var(--t75); }
+  .item summary .av { width: 42px; height: 42px; font-size: 13px; }
+  .sign { position: relative; justify-self: end; width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 50%; }
+  .sign::before, .sign::after { content: ""; position: absolute; top: 50%; left: 50%; width: 12px; height: 2px; background: var(--navy); transform: translate(-50%, -50%); }
+  .sign::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .item[open] .sign { border-color: var(--yellow); background: var(--yellow); }
+  .item[open] .sign::after { display: none; }
+  .panel-body { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin: 0 0 24px; padding: 24px 28px; border-left: 4px solid var(--yellow); background: var(--subtle); }
+  .panel-body h3 { margin-bottom: 10px; }
+  .panel-body .btn { background: #fff; }
+  .panel-body .btn:hover { background: var(--navy); }
+  /* ---------- Footer (same as the app's PublicLayout) ---------- */
+  footer { border-top: 2px solid var(--yellow); background: var(--navy); color: #fff; }
+  .sfoot { max-width: 1280px; margin: 0 auto; padding: 32px; }
+  .sfoot-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr 1fr; gap: 32px; }
+  .sfoot .brand { display: block; line-height: 28px; font-size: 18px; font-weight: 700; color: var(--yellow); }
+  .sfoot .brand-p { margin-top: 8px; line-height: 20px; font-size: 14px; color: rgba(255,255,255,0.7); }
+  .sfoot h3 { line-height: 20px; font-size: 14px; font-weight: 600; }
+  .sfoot ul { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .sfoot ul li { line-height: 24px; font-size: 14px; color: rgba(255,255,255,0.7); }
+  .sfoot-bot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); line-height: 16px; font-size: 12px; color: rgba(255,255,255,0.6); }
+  .sfoot-bot div { display: flex; gap: 20px; }
+
+  @media (max-width: 900px) {
+    .item summary { grid-template-columns: minmax(0, 1fr) 32px; gap: 14px 16px; }
+    .item summary > div:first-child { grid-column: 1; }
+    .item summary .who { grid-column: 1 / -1; }
+    .item .sign { grid-column: 2; grid-row: 1; }
+    .panel-body { flex-direction: column; align-items: flex-start; gap: 20px; padding: 20px; }
+  }
+  @media (max-width: 640px) {
+    .site-top, .site-search { padding-left: 16px; padding-right: 16px; }
+    .masthead .name { font-size: clamp(28px, 9vw, 36px); }
+    .nav ul { justify-content: flex-start; gap: 24px; padding: 12px 16px; }
+    .banner-in, .page { padding-left: 16px; padding-right: 16px; }
+    .banner-in { padding-top: 36px; padding-bottom: 36px; }
+    .sfoot { padding-left: 16px; padding-right: 16px; }
+    .sfoot-grid { grid-template-columns: 1fr; }
+    .sfoot-bot { flex-direction: column; align-items: flex-start; }
+    .list-tools { flex-direction: column; align-items: stretch; }
+    .find { width: 100%; }
+    .tile { padding: 22px 18px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cornerstone header -->
+<header>
+  <div class="site-top">
+    <span class="date" id="today"></span>
+    <a class="logo" href="/" aria-label="Cornerstone home"><img src="../../cornerstone-assets/L+m-logo.avif" alt="L+M" onerror="this.style.display='none'"></a>
+    <div class="tools">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Apps"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Notifications"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span class="avatar-top" aria-label="Alex Kim">AK</span>
+    </div>
+  </div>
+  <div class="site-search">
+    <label>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="text" placeholder="Search Cornerstone — people, files, news..." aria-label="Search Cornerstone">
+    </label>
+  </div>
+  <div class="masthead">
+    <h1 class="name"><a href="/">CORNERSTONE</a></h1>
+    <p class="sub">The L+M Daily</p>
+  </div>
+  <nav class="nav" aria-label="Main">
+    <ul>
+      <li><a href="/news">News</a></li>
+      <li><a href="/company-culture">Company + Culture</a></li>
+      <li><a href="/events">Events</a></li>
+      <li><a href="/people">People</a></li>
+      <li><a class="is-active" href="#/" aria-current="page">Departments</a></li>
+      <li><a href="/policies-resources">Policies + Resources</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- The page: filled in by the script below (list or one department) -->
+<div id="banner"></div>
+<main class="page" id="view"></main>
+
+<footer>
+  <div class="sfoot">
+    <div class="sfoot-grid">
+      <div><span class="brand">Cornerstone</span><p class="brand-p">The home for everything L+M — news, people, tools, and the work we build together.</p></div>
+      <div><h3>News</h3><ul><li>Newsletters</li><li>News archive</li></ul></div>
+      <div><h3>Departments</h3><ul><li>Builders</li><li>Community Investment</li><li>HR Central</li><li>Operations</li></ul></div>
+      <div><h3>Resources</h3><ul><li>Document center</li><li>Building list</li><li>Company guide</li><li>Brand assets</li></ul></div>
+      <div><h3>Help</h3><ul><li>IT help desk</li><li>HR questions</li><li>Facilities</li><li>Accessibility</li></ul></div>
+    </div>
+    <div class="sfoot-bot"><span>© 2026 L+M Development Partners · Cornerstone intranet</span><div><span>Terms of service</span><span>Privacy policy</span></div></div>
+  </div>
+</footer>
+
+<script>
+  // ---------- Sample content (replace with the backend later) ----------
+  var P = function (id, photo, name, title, loc, flag) { return { id: id, photo: photo, name: name, title: title, loc: loc, flag: flag || "" }; };
+  var U = "https://randomuser.me/api/portraits/";
+
+  var DEPARTMENTS = [
+    {
+      slug: "people-team", name: "People Team", category: "employee-policies",
+      summary: "Hiring, onboarding, benefits and culture, from a new hire's first day to their next milestone.",
+      about: [
+        "The People Team looks after the whole employee experience at L+M. We recruit and onboard new colleagues, run benefits and learning, and help managers support their teams.",
+        "Bring us questions about policies, leave, benefits or career development. We are happy to point you to the right place."
+      ],
+      lead: 13,
+      people: [
+        P(13, U + "women/23.jpg", "Riley Bennett", "Chief People Officer", "New York", "lead"),
+        P(30, U + "women/40.jpg", "Alexandra Ross", "HR Business Partner", "Boston", "mgr"),
+        P(10, U + "women/20.jpg", "Sarah Hunt", "HR Generalist", "New York", "mgr"),
+        P(29, U + "men/39.jpg", "Blake Cooper", "Recruiter", "New York", "mgr"),
+        P(41, U + "women/51.jpg", "Shiloh Kelly", "Learning + Development Specialist", "New York", "mgr"),
+        P(42, U + "men/52.jpg", "Logan Sanders", "Benefits Administrator", "Boston", "mgr")
+      ]
+    },
+    {
+      slug: "technology", name: "Technology", category: "operations-it",
+      summary: "Keeps our systems, networks and devices running, and helps everyone work securely.",
+      about: [
+        "Technology runs the tools the company relies on every day: Microsoft 365, networks, devices, security and the IT help desk.",
+        "If something is not working, raise a ticket with the help desk. For access requests and new equipment, start with your manager."
+      ],
+      lead: 2,
+      people: [
+        P(2, U + "men/12.jpg", "Jordan Ellis", "Chief Technology Officer", "New York", "lead"),
+        P(17, U + "men/27.jpg", "Drew Sullivan", "IT Manager", "New York", "mgr"),
+        P(18, U + "women/28.jpg", "Skyler Price", "Systems Administrator", "Boston", "mgr"),
+        P(19, U + "men/29.jpg", "Reese Coleman", "Help Desk Analyst", "Boston", "mgr"),
+        P(36, U + "men/46.jpg", "Noah Flores", "Network Engineer", "Boston", "mgr"),
+        P(37, U + "men/47.jpg", "Milan Rogers", "Security Analyst", "New York", "mgr")
+      ]
+    },
+    {
+      slug: "accounting-finance", name: "Accounting + Finance", category: "accounting-finance",
+      summary: "Payables, reporting, payroll and budgets, plus the procedures that keep our money moving safely.",
+      about: [
+        "Accounting + Finance manages the company's books, payments and payroll. We prepare reporting, support audits and help teams plan their budgets.",
+        "Questions about expenses or vendor payments? Our team can walk you through the approval steps."
+      ],
+      lead: 31,
+      people: [
+        P(31, U + "women/41.jpg", "Avery Morgan", "Chief Financial Officer", "New York", "lead"),
+        P(5, U + "women/15.jpg", "Margaret Carestia", "Controller", "New York", "mgr"),
+        P(26, U + "men/36.jpg", "Charlie Barnes", "Accounting Manager", "New York", "mgr"),
+        P(43, U + "men/53.jpg", "Cory Bennett", "Senior Accountant", "New York", "mgr"),
+        P(44, U + "women/54.jpg", "Samira Brooks", "Tax Analyst", "New York", "mgr"),
+        P(8, U + "men/18.jpg", "Alex Kim", "Financial Analyst", "New York", "mgr"),
+        P(45, U + "men/55.jpg", "Devon Murphy", "Staff Accountant", "New York"),
+        P(46, U + "men/56.jpg", "Lee Parker", "Payroll Specialist", "Boston"),
+        P(27, U + "women/37.jpg", "Jamie Foster", "Accounts Payable Specialist", "New York")
+      ]
+    },
+    {
+      slug: "communications-marketing", name: "Communications + Marketing", category: "marketing-resources",
+      summary: "Our brand, internal communications and the stories we tell inside and outside the company.",
+      about: [
+        "Communications + Marketing looks after the L+M brand, this site and the news you read on it. We also run campaigns, social channels and company events.",
+        "Need a logo, a template or help with an announcement? Get in touch with our team."
+      ],
+      lead: 32,
+      people: [
+        P(32, U + "women/42.jpg", "Sage Peterson", "Chief Marketing Officer", "New York", "lead"),
+        P(28, U + "men/38.jpg", "Cameron Hayes", "Communications Manager", "New York", "mgr"),
+        P(33, U + "men/43.jpg", "Elliot Richardson", "Marketing Manager", "New York", "mgr"),
+        P(9, U + "women/19.jpg", "Priya Shah", "Marketing Specialist", "New York", "mgr"),
+        P(34, U + "women/44.jpg", "Remy Cox", "Graphic Designer", "Boston", "mgr"),
+        P(35, U + "women/45.jpg", "Harper Howard", "Social Media Coordinator", "New York", "mgr")
+      ]
+    },
+    {
+      slug: "property-operations", name: "Property Operations", category: "facilities-forms",
+      summary: "Day-to-day running of our buildings: tenants, facilities, building systems and vendors.",
+      about: [
+        "Property Operations keeps our properties safe, comfortable and running well. We manage tenant requests, facilities, building systems and the vendors who support them.",
+        "We can also help with parking, badge access and common forms."
+      ],
+      lead: 6,
+      people: [
+        P(6, U + "women/16.jpg", "Denise Ramirez", "Senior Property Manager", "New York", "lead"),
+        P(47, U + "men/57.jpg", "Amari Watson", "Property Manager", "Harlem", "mgr"),
+        P(7, U + "men/17.jpg", "Tomás Rivera", "Project Coordinator", "Saratoga", "mgr"),
+        P(48, U + "women/58.jpg", "Ellis Turner", "Facilities Coordinator", "New York", "mgr"),
+        P(49, U + "women/59.jpg", "Dana Mitchell", "Building Engineer", "Saratoga", "mgr"),
+        P(11, U + "women/21.jpg", "Laura Reyes", "Risk Manager", "Saratoga", "mgr")
+      ]
+    },
+    {
+      slug: "construction", name: "Construction", category: "safety-compliance",
+      summary: "Builds our projects on schedule and on budget, and keeps every site safe.",
+      about: [
+        "Construction delivers our projects from preconstruction through handover. Our project managers, engineers and site teams coordinate schedules, budgets and subcontractors.",
+        "Site safety protocols and emergency procedures apply to everyone who visits a site."
+      ],
+      lead: 20,
+      people: [
+        P(20, U + "men/30.jpg", "Rowan Murphy", "Director of Construction", "Boston", "lead"),
+        P(21, U + "women/31.jpg", "Emerson Hughes", "Senior Project Manager", "Boston", "mgr"),
+        P(22, U + "men/32.jpg", "Finley Ward", "Site Superintendent", "Saratoga", "mgr"),
+        P(38, U + "men/48.jpg", "Ari Simmons", "Project Engineer", "Boston", "mgr"),
+        P(39, U + "women/49.jpg", "Robin Bell", "Assistant Project Manager", "Saratoga", "mgr"),
+        P(40, U + "men/50.jpg", "Micah Cook", "Safety Coordinator", "Saratoga", "mgr")
+      ]
+    }
+  ];
+
+  var query = "";
+
+  // ---------- Helpers ----------
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function initials(name) { return name.split(" ").map(function (w) { return w[0]; }).slice(0, 2).join(""); }
+  function avatar(p) {
+    return '<span class="av">' + esc(initials(p.name)) + '<img src="' + esc(p.photo) + '" alt="" loading="lazy" onerror="this.remove()"></span>';
+  }
+  function byId(dept, id) { return dept.people.filter(function (p) { return p.id === id; })[0]; }
+
+  var SEARCH_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+  var SORTED = DEPARTMENTS.slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
+  var NOTE = '<p class="note">Sample content: descriptions come from the Company Guide once it is ready.</p>';
+
+  function matches() {
+    var q = query.trim().toLowerCase();
+    return SORTED.filter(function (d) { return !q || (d.name + " " + d.summary).toLowerCase().indexOf(q) > -1; });
+  }
+  function who(p) { return '<div class="who">' + avatar(p) + '<div style="min-width:0"><b>' + esc(p.name) + '</b><small>' + esc(p.title) + '</small></div></div>'; }
+  function orgLink(p, text, cls) {
+    return '<a class="' + (cls || "org") + '" href="/people/' + p.id + '/org-chart" aria-label="' + esc(p.name) + ' in the org chart">' + text + '</a>';
+  }
+  function aboutText(d) { return '<div class="about">' + d.about.map(function (t) { return "<p>" + esc(t) + "</p>"; }).join("") + '</div>'; }
+  function selected() {
+    var slug = location.hash.replace(/^#\/?/, "");
+    return SORTED.filter(function (d) { return d.slug === slug; })[0];
+  }
+  function banner(inner) { document.getElementById("banner").innerHTML = '<header class="banner"><div class="banner-in">' + inner + '</div></header>'; }
+  function view(html) { document.getElementById("view").innerHTML = html; }
+
+  function item(d, open) {
+    var lead = byId(d, d.lead);
+    return '<details class="item" id="' + d.slug + '"' + (open ? " open" : "") + '>' +
+      '<summary><div><h2>' + esc(d.name) + '</h2><p>' + esc(d.summary) + '</p></div>' + who(lead) + '<span class="sign" aria-hidden="true"></span></summary>' +
+      '<div class="panel-body"><div><h3 class="k">About</h3>' + aboutText(d) + '</div>' + orgLink(lead, "View org chart", "btn") + '</div></details>';
+  }
+  // A link such as #/technology opens that department.
+  function openFromAddress() {
+    var d = selected();
+    if (!d) return;
+    var el = document.getElementById(d.slug);
+    if (!el) return;
+    el.open = true;
+  }
+  function fill() {
+    var shown = matches();
+    document.getElementById("count").textContent = shown.length + (shown.length === 1 ? " department" : " departments");
+    document.getElementById("results").innerHTML = shown.length
+      ? '<div class="acc">' + shown.map(function (d) { return item(d, d === selected()); }).join("") + '</div>'
+      : '<p class="empty">No department matches your search.</p>';
+  }
+  function render() {
+    banner('<div><p class="eyebrow">Teams</p><h1>Departments</h1><p class="desc">What each team does and who leads it. Select a department to read more.</p></div>');
+    view('<div class="list-tools"><p class="count" id="count"></p><label class="find">' + SEARCH_ICON +
+      '<input id="find" type="text" placeholder="Find a department" aria-label="Find a department"></label></div>' +
+      '<div id="results"></div>' + NOTE);
+    document.getElementById("find").addEventListener("input", function () { query = this.value; fill(); });
+    fill();
+    openFromAddress();
+  }
+  window.addEventListener("hashchange", openFromAddress);
+
+  document.getElementById("today").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  render();
+</script>
+</body>
+</html>
