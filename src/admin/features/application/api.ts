@@ -13,6 +13,7 @@ const DEFAULT_FIELDS: ProfileFieldSetting[] = [
   { id: "email", label: "Email", source: "microsoft", visible: true },
   { id: "phone", label: "Phone", source: "microsoft", visible: true },
   { id: "extension", label: "Extension", source: "microsoft", visible: true },
+  { id: "mobile", label: "Mobile phone", source: "microsoft", visible: true },
   { id: "teams", label: "Microsoft Teams button", source: "microsoft", visible: true },
   { id: "timezone", label: "Time zone", source: "microsoft", visible: true },
   { id: "hireDate", label: "Hire date", source: "dayforce", visible: false, locked: true },

@@ -212,6 +212,22 @@
     .list-tools { flex-direction: column; align-items: stretch; }
     .find { width: 100%; }
   }
+
+  /* Review note under the View files button, same look as the app's TempNote */
+  .act-wrap { position: relative; flex: none; }
+  .tnote { position: absolute; bottom: calc(100% + 14px); right: 0; z-index: 20; width: 300px; max-width: calc(100vw - 32px); padding: 16px 20px 14px; border: 1px solid var(--border); border-radius: 12px; background: #fff; color: var(--navy); text-align: left; box-shadow: 0 16px 40px -12px rgba(27,42,58,0.35), 0 2px 6px rgba(27,42,58,0.08); }
+  .tnote::before { content: ""; position: absolute; inset: -1px auto -1px -1px; width: 4px; border-radius: 12px 0 0 12px; background: var(--yellow); }
+  .tnote .arw { position: absolute; bottom: -8px; right: 40px; width: 14px; height: 14px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); background: #fff; transform: rotate(45deg); }
+  .tnote .pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 99px; background: rgba(245,197,24,0.25); font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+  .tnote .pill svg { width: 12px; height: 12px; }
+  .tnote h4 { margin: 6px 0 0; padding-right: 20px; font-size: 14px; font-weight: 700; line-height: 1.35; }
+  .tnote p { margin: 8px 0 0; font-size: 13px; font-weight: 400; line-height: 1.6; color: rgba(27,42,58,0.75); }
+  .tnote p b { font-weight: 600; color: var(--navy); }
+  .tnote .x { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 24px; height: 24px; border: 0; border-radius: 6px; background: transparent; color: rgba(27,42,58,0.45); font-size: 16px; line-height: 1; cursor: pointer; }
+  .tnote .x:hover { background: var(--subtle); color: var(--navy); }
+  .tnote .foot { display: flex; justify-content: flex-end; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .tnote .ok { padding: 5px 12px; border: 0; border-radius: 6px; background: var(--navy); color: #fff; font: 600 12px "Inter", sans-serif; cursor: pointer; }
+  @media (max-width: 640px) { .tnote { right: auto; left: 0; } .tnote .arw { right: auto; left: 40px; } }
 </style>
 </head>
 <body>
@@ -527,7 +543,7 @@
       '<header class="banner"><div class="banner-in"><div>' +
       '<p class="eyebrow">Department</p><h1>' + esc(d.name) + '</h1>' +
       '<p class="bmeta"><span>Led by <b>' + esc(lead.name) + '</b></span><span>' + managersOf(d).length + ' content managers</span></p></div>' +
-      '<a class="banner-act" href="policy-category.html#/' + d.slug + '">' + cta + ' <span aria-hidden="true">→</span></a></div></header>';
+      '<div class="act-wrap"><a class="banner-act" href="policy-category.html#/' + d.slug + '">' + cta + ' <span aria-hidden="true">→</span></a>' + fileNote(d) + '</div></div></header>';
 
     function contact(p) {
       return '<a class="person" href="/people/' + p.id + '">' + avatar(p) +
@@ -577,6 +593,23 @@
     window.scrollTo(0, 0);
   }
   window.addEventListener("hashchange", render);
+
+  // ---------- Review note under View files (stays closed until the page is reloaded) ----------
+  var noteClosed;
+  function fileNote(d) {
+    if (noteClosed) return "";
+    return '<div class="tnote" role="note"><span class="arw" aria-hidden="true"></span>' +
+      '<span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Note</span>' +
+      '<button type="button" class="x" aria-label="Dismiss note">×</button>' +
+      '<h4>Opens your department’s policy category</h4>' +
+      '<p><b>View files</b> links to the Policies + Resources category the admin has assigned to ' + esc(d.name) + '.</p>' +
+      '<div class="foot"><button type="button" class="ok">Got it</button></div></div>';
+  }
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".tnote .x, .tnote .ok")) return;
+    noteClosed = true;
+    e.target.closest(".tnote").remove();
+  });
 
   document.getElementById("today").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
   render();
