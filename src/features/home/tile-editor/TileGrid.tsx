@@ -105,7 +105,14 @@ export function TileGrid({ tiles, initial, onSave }: { tiles: TileSet; initial: 
             <Plus className="h-4 w-4" />
             Add card
           </button>
-          <button type="button" onClick={() => setDraft({ layout: [], content: {} })} className="rounded-full px-3 py-1.5 transition-colors hover:bg-surface-subtle">
+          <button
+            type="button"
+            onClick={() =>
+              confirm("Reset the home page to its default layout? Added cards and text edits will be removed.") &&
+              setDraft({ layout: [], content: {} })
+            }
+            className="rounded-full px-3 py-1.5 transition-colors hover:bg-surface-subtle"
+          >
             Reset
           </button>
           <button type="button" onClick={() => setEditMode(false)} className="rounded-full px-3 py-1.5 transition-colors hover:bg-surface-subtle">

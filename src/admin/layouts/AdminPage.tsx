@@ -33,7 +33,7 @@ export function AdminPage() {
       />
       <div className="px-6 pb-8 pt-6 md:px-12 md:pb-10 md:pt-8">
         {/* A built page is a child route (see app/routes.tsx); without one, the placeholder shows. */}
-        <div className="mx-auto max-w-[1080px]">{outlet ?? <PlaceholderPage heading={activeTab?.label ?? page.label} pageLabel={page.label} />}</div>
+        <div className="mx-auto max-w-[1090px]">{outlet ?? <PlaceholderPage heading={activeTab?.label ?? page.label} pageLabel={page.label} />}</div>
       </div>
     </>
   );

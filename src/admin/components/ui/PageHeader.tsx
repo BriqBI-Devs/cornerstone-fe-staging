@@ -13,7 +13,7 @@ interface PageHeaderProps {
 export function PageHeader({ breadcrumbs, icon, title, tabs }: PageHeaderProps) {
   return (
     <div className={cn("border-b border-admin-line px-6 pt-10 md:px-12", !tabs && "pb-10")}>
-      <div className="mx-auto max-w-[1080px]">
+      <div className="mx-auto max-w-[1090px]">
         <nav aria-label="Breadcrumb" className="flex flex-wrap gap-x-2 text-sm text-admin-muted">
           {breadcrumbs.map((crumb, index) => (
             <span key={crumb.label}>
