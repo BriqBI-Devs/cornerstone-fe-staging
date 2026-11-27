@@ -24,12 +24,6 @@ const buildPanes = (person: Person): { title: string; fields: FieldDef[] }[] => 
       { name: "last", label: "Last name", required: true },
       { name: "jobTitle", label: "Job title", required: true, wide: true },
       { name: "department", label: "Department", wide: true },
-      { name: "address1", label: "Address 1", wide: true },
-      { name: "address2", label: "Address 2", wide: true },
-      { name: "city", label: "City" },
-      { name: "state", label: "State/Province" },
-      { name: "zip", label: "ZIP/Postal code" },
-      { name: "country", label: "Country" },
     ],
   },
   {

@@ -117,12 +117,12 @@ export function EventsToolbar(props: EventsToolbarProps) {
         )}
       </div>
 
-      <a href={OUTLOOK_URL} target="_blank" rel="noopener noreferrer" title="Add all events to your Outlook calendar" className={`${button} no-underline md:ml-auto max-md:px-3`}>
+      <a href={OUTLOOK_URL} target="_blank" rel="noopener noreferrer" title="Add all events to your Outlook calendar" className={`${button} no-underline max-sm:ml-auto md:ml-auto max-md:px-3`}>
         <svg className="size-4 text-ev-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18M12 13v5M9.5 15.5 12 18l2.5-2.5" /></svg>
         <span className="max-md:hidden">Sync to Outlook</span>
       </a>
 
-      <div className="inline-flex rounded-lg border border-ev-line bg-ev-tile p-1" role="group" aria-label="Event view">
+      <div className="inline-flex rounded-lg border border-ev-line bg-ev-tile p-1 max-sm:w-full" role="group" aria-label="Event view">
         {(
           [
             { value: "calendar", label: "Calendar", icon: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /></> },
@@ -134,7 +134,7 @@ export function EventsToolbar(props: EventsToolbarProps) {
             type="button"
             aria-pressed={view === item.value}
             onClick={() => onViewChange(item.value)}
-            className={`inline-flex h-8 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold ${view === item.value ? "bg-ev-navy text-white" : "text-ev-ink-soft"}`}
+            className={`inline-flex h-8 items-center max-sm:flex-1 justify-center gap-2 rounded-lg px-4 text-sm font-semibold ${view === item.value ? "bg-ev-navy text-white" : "text-ev-ink-soft"}`}
           >
             <svg className="size-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">{item.icon}</svg>
             <span>{item.label}</span>

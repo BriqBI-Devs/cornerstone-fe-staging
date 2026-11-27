@@ -1,4 +1,4 @@
-import { Bell, LayoutGrid, Search, Settings } from "lucide-react";
+import { Bell, LayoutGrid, Menu, Search, Settings, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Avatar } from "../components/ui/Avatar";
@@ -58,22 +58,18 @@ export function PublicLayout() {
   const [appsOpen, setAppsOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const isHome = pathname === "/";
 
-  // Every page change starts at the top.
+  // Every page change starts at the top, with the phone menu closed.
   useEffect(() => {
     window.scrollTo(0, 0);
+    setMenuOpen(false);
   }, [pathname]);
 
   // Autofocusing the search box pops the keyboard open on phones, so only do it on larger screens.
   const [canAutoFocus] = useState(() => typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches);
-  const navRef = useRef<HTMLElement>(null);
-  useEffect(() => {
-    // The nav scrolls sideways on narrow screens; bring the current page into view.
-    navRef.current?.querySelector<HTMLElement>("[aria-current=page]")?.scrollIntoView({ inline: "center", block: "nearest" });
-  }, [pathname]);
-
   const appsRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
   useClickOutside(appsRef, () => setAppsOpen(false));
@@ -88,9 +84,20 @@ export function PublicLayout() {
           column — sticky is bounded by its own parent's box, so the pieces
           cannot be stuck individually from in here. */}
       <header className="bg-surface md:sticky md:top-0 md:z-30">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-border px-4 pb-2 pt-3 text-[11px] text-brand-navy/65 md:px-8 md:pt-4 md:text-xs">
-          <span className="truncate">{dateAndWeather}</span>
-          <Link to="/" aria-label="Cornerstone home" className="justify-self-center">
+        {/* Phones: menu button and logo on the left, icons on the right. From sm up there is room for the date and a centred logo. */}
+        <div className="flex items-center justify-between gap-2 border-b border-border px-4 pb-2 pt-3 text-[11px] text-brand-navy/65 sm:grid sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:px-8 md:pt-4 md:text-xs">
+          <span className="hidden truncate sm:block">{dateAndWeather}</span>
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Menu"
+            aria-expanded={menuOpen}
+            aria-controls="site-nav"
+            className="-ml-2 flex h-9 w-9 items-center justify-center text-brand-navy/75 hover:text-brand-navy sm:hidden"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <Link to="/" aria-label="Cornerstone home" className="mr-auto sm:mr-0 sm:justify-self-center">
             <img
               src="/cornerstone-assets/L+m-logo.avif"
               alt="L+M"
@@ -190,18 +197,38 @@ export function PublicLayout() {
           </p>
         </div>
 
-        <div className="border-b border-border">
-          <nav ref={navRef} className="mx-auto flex max-w-[1280px] justify-start gap-6 overflow-x-auto px-4 py-3 [scrollbar-width:none] md:justify-center md:gap-8 md:px-8 [&::-webkit-scrollbar]:hidden">
+        {/* On phones the links are a drawer opened by the Menu button; from sm up they are always shown in a row. */}
+        <div
+          // A tap on the dimmed area beside the drawer closes it.
+          onClick={(event) => event.target === event.currentTarget && setMenuOpen(false)}
+          className={cn(
+            "sm:border-b sm:border-border max-sm:fixed max-sm:inset-0 max-sm:z-[60] max-sm:bg-brand-navy/50 max-sm:transition-all",
+            !menuOpen && "max-sm:invisible max-sm:opacity-0",
+          )}
+        >
+          <nav
+            id="site-nav"
+            className={cn(
+              "mx-auto flex max-w-[1280px] flex-col sm:flex-row sm:justify-center sm:gap-5 sm:px-4 sm:py-3 md:gap-8 md:px-8",
+              "max-sm:mx-0 max-sm:h-full max-sm:w-72 max-sm:max-w-[84vw] max-sm:overflow-y-auto max-sm:bg-surface max-sm:shadow-xl max-sm:transition-transform",
+              !menuOpen && "max-sm:-translate-x-full",
+            )}
+          >
+            <div className="flex items-center justify-between border-b border-border px-5 py-3 sm:hidden">
+              <span className="font-serif text-lg font-bold tracking-wide">CORNERSTONE</span>
+              <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu" className="-mr-2 flex h-9 w-9 items-center justify-center text-brand-navy/75 hover:text-brand-navy">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
             {NAV_ITEMS.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
+                onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
                   cn(
-                    "whitespace-nowrap border-b-2 pb-1 text-xs font-semibold uppercase tracking-wide",
-                    isActive
-                      ? "border-brand-accent text-brand-navy"
-                      : "border-transparent text-brand-navy hover:text-brand-navy",
+                    "whitespace-nowrap border-l-4 py-3.5 pl-4 text-xs font-semibold uppercase tracking-wide text-brand-navy sm:border-b-2 sm:border-l-0 sm:pb-1 sm:pl-0 sm:pt-0",
+                    isActive ? "border-brand-accent max-sm:bg-surface-subtle" : "border-transparent",
                   )
                 }
               >

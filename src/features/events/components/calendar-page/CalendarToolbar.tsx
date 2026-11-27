@@ -16,12 +16,12 @@ export function CalendarToolbar({ title, mode, onModeChange, onPrevious, onNext,
   const unit = mode === "week" ? "week" : "month";
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 px-3.5 pb-3 pt-1 md:px-5 md:pb-3.5">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 max-sm:w-full max-sm:justify-between">
         <button type="button" aria-label={`Previous ${unit}`} onClick={onPrevious} className={arrow}>‹</button>
         <h2 className="mx-1 min-w-0 text-lg font-bold md:min-w-[170px] md:text-xl">{title}</h2>
         <button type="button" aria-label={`Next ${unit}`} onClick={onNext} className={arrow}>›</button>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 max-sm:w-full max-sm:justify-between">
         <button type="button" onClick={onToday} className="px-1.5 py-1 text-sm font-bold text-ev-link hover:underline">
           Today
         </button>

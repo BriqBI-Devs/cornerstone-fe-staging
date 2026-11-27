@@ -43,12 +43,6 @@ export interface ProfileDetails {
   jobTitle?: string;
   manager?: string;
   department?: string;
-  address1?: string;
-  address2?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-  country?: string;
   email?: string;
   timezone?: string;
   phone?: string;

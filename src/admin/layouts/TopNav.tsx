@@ -40,11 +40,12 @@ export function TopNav({ drawerOpen, onToggleDrawer }: TopNavProps) {
         <Menu className="size-[18px]" />
       </button>
 
-      <Link to="/" aria-label="Cornerstone home" className="flex min-w-0 flex-1 items-center">
+      <Link to="/" aria-label="Cornerstone home" className="flex shrink-0 items-center max-sm:mr-auto min-[961px]:flex-1">
         <img src="/cornerstone-assets/L+m-logo.avif" alt="L+M" className="block h-[26px] w-auto" />
       </Link>
 
-      <label className="flex h-10 flex-[0_1_480px] items-center gap-2.5 rounded-[10px] border border-[#e9eaee] bg-admin-soft px-3.5 text-admin-faint focus-within:border-brand-link focus-within:bg-white">
+      {/* No room for search on phones; below the desktop width it takes whatever is left between the logo and the tools. */}
+      <label className="flex h-10 min-w-0 flex-1 max-sm:hidden min-[961px]:flex-[0_1_480px] items-center gap-2.5 rounded-[10px] border border-[#e9eaee] bg-admin-soft px-3.5 text-admin-faint focus-within:border-brand-link focus-within:bg-white">
         <Search className="size-[18px] shrink-0" aria-hidden="true" />
         <input
           type="text"
@@ -54,7 +55,7 @@ export function TopNav({ drawerOpen, onToggleDrawer }: TopNavProps) {
         />
       </label>
 
-      <div className="flex min-w-0 flex-1 items-center justify-end gap-1 md:gap-4">
+      <div className="flex shrink-0 items-center justify-end gap-1 md:gap-4 min-[961px]:flex-1">
         <div ref={appsRef} className="relative flex h-9 w-9 items-center justify-center">
           <button
             type="button"

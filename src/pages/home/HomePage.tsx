@@ -16,9 +16,9 @@ export function HomePage() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* top-[217px] clears the pinned header in PublicLayout
-          (utility bar 53 + masthead 117 + nav 47). */}
-      <div className="flex flex-col gap-3 border-b border-border bg-surface pb-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 md:sticky md:top-[217px] md:z-20 md:-mt-6 md:pt-6">
+      {/* top-[14rem] clears the pinned header in PublicLayout (utility bar + masthead + nav).
+          In rem, so it follows the app's text size. */}
+      <div className="flex flex-col gap-3 border-b border-border bg-surface pb-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 md:sticky md:top-[14rem] md:z-20 md:-mt-6 md:pt-6">
         <h1 className="shrink-0 text-lg font-semibold text-brand-navy">
           {getGreeting()}, Jordan
         </h1>
