@@ -1,11 +1,20 @@
-import { ChevronDown, ChevronRight, Folder, FolderPlus, Upload } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { ChevronRight, Folder, FolderPlus, Upload } from "lucide-react";
+import { CreateDialog, type CreateGroup } from "@/admin/components/ui/CreateDialog";
 import { RowMenu } from "@/admin/components/ui/RowMenu";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { AUDIENCE_CATEGORIES } from "../data";
 
 // Every row uses the same columns, so they line up under the header. Updated is hidden on phones.
 const ROW = "grid grid-cols-[minmax(0,1fr)_64px_36px] items-center gap-4 sm:grid-cols-[minmax(0,1fr)_80px_120px_36px]";
+
+const CREATE_OPTIONS: CreateGroup[] = [
+  {
+    options: [
+      { id: "audience", label: "Audience from CSV", hint: "Upload a CSV file of users to make a new audience.", icon: Upload },
+      { id: "category", label: "Category", hint: "A folder to group related audiences.", icon: FolderPlus },
+    ],
+  },
+];
 
 /** Admin > Users + groups > Audiences: a static list of categories that fold into audiences. */
 export function AudienceList() {
@@ -18,25 +27,7 @@ export function AudienceList() {
 
       <div className="mb-4 flex items-center justify-between gap-3">
         <SearchInput value="" onChange={() => {}} placeholder="Search audiences" className="w-full max-w-sm border border-admin-line bg-white" />
-        {/* The menu stays open while the button or an item has focus, so it needs no state. */}
-        <div className="group relative shrink-0">
-          <Button className="inline-flex h-10 items-center gap-2 px-4">
-            Create
-            <ChevronDown className="size-4" aria-hidden="true" />
-          </Button>
-          <div className="absolute right-0 top-full z-10 hidden w-64 pt-1 group-focus-within:block">
-            <div className="rounded-lg border border-admin-line bg-white py-1 text-sm shadow-lg">
-              <button type="button" className="flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-admin-hover">
-                <Upload className="size-4 text-admin-muted" aria-hidden="true" />
-                Create audience using CSV
-              </button>
-              <button type="button" className="flex w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-admin-hover">
-                <FolderPlus className="size-4 text-admin-muted" aria-hidden="true" />
-                Create category
-              </button>
-            </div>
-          </div>
-        </div>
+        <CreateDialog label="Create" question="What would you like to create?" groups={CREATE_OPTIONS} />
       </div>
 
       <div className="rounded-xl border border-admin-line bg-white">
